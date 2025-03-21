@@ -11,3 +11,8 @@ npx create-expo-app@latest ./
 https://docs.expo.dev/get-started/set-up-your-environment/?platform=ios&device=physical
 then run npx run start
 scan QR code --> you can see the app on the mobile screen
+
+3.reset
+npm run reset-project ##实用工具
+IcontFont 阿里巴巴
+appwrite
