@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-21 20:49:52
+ * @LastEditTime: 2025-03-21 21:31:19
  * @FilePath: /Money_Recorder/app/index.tsx
  */
 import { Text, View } from "react-native";
