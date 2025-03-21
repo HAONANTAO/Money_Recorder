@@ -7,10 +7,11 @@ module.exports = {
     extend: {
       // customize colors
       colors: {
-        primary: "#007AFF",
-        secondary: "#606060",
-        tertiary: "#F5F5F5",
-        quaternary: "#E0E0E0",
+        // 第一个是深蓝，第二个浅蓝，第三个紫色，第四个黑色，第五个白色
+        primary: "#1E40AF",
+        secondary: "#60A5FA",
+        tertiary: "#7C3AED",
+        quaternary: "#171717",
         quinary: "#FFFFFF",
       },
     },
