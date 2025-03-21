@@ -16,3 +16,5 @@ scan QR code --> you can see the app on the mobile screen
 npm run reset-project ##实用工具
 IcontFont 阿里巴巴
 appwrite
+
+rnfes ==快捷键创建 == rafce
