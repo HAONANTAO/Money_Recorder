@@ -1,12 +1,13 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-21 21:31:36
+ * @LastEditTime: 2025-03-22 19:38:39
  * @FilePath: /Money_Recorder/app/_layout.tsx
  */
 import { Tabs } from "expo-router";
 import "./globals.css";
 import { Ionicons } from "@expo/vector-icons";
+import { View, Text } from "react-native";
 
 // 主页面的基础配置
 export default function RootLayout() {
@@ -18,7 +19,7 @@ export default function RootLayout() {
           justifyContent: "space-around",
           alignItems: "center",
           backgroundColor: "#FFFFFF",
-          paddingVertical: 8,
+          paddingVertical: 4,
           borderTopWidth: 1,
           borderTopColor: "#E5E7EB",
         },
@@ -28,7 +29,7 @@ export default function RootLayout() {
           paddingVertical: 4,
         },
         tabBarLabelStyle: {
-          fontSize: 12,
+          fontSize: 10,
           marginTop: 4,
         },
         tabBarActiveTintColor: "#1E40AF",
@@ -40,7 +41,12 @@ export default function RootLayout() {
         options={{
           title: "Home",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" size={size} color={color} />
+            <View className="flex flex-col items-center">
+              <Ionicons name="home-outline" size={size} color={color} />
+              <Text className="font-bold text-xs" numberOfLines={1}>
+                Main
+              </Text>
+            </View>
           ),
         }}
       />
@@ -49,7 +55,12 @@ export default function RootLayout() {
         options={{
           title: "Stats",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="stats-chart-outline" size={size} color={color} />
+            <View className="flex flex-col items-center">
+              <Ionicons name="stats-chart-outline" size={size} color={color} />
+              <Text className="font-bold text-xs" numberOfLines={1}>
+                Stats
+              </Text>
+            </View>
           ),
         }}
       />
@@ -58,7 +69,9 @@ export default function RootLayout() {
         options={{
           title: "Record",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="add-circle-outline" size={size} color={color} />
+            <View className="flex flex-col items-center">
+              <Ionicons name="add-circle-outline" size={size} color={color} />
+            </View>
           ),
         }}
       />
@@ -67,7 +80,12 @@ export default function RootLayout() {
         options={{
           title: "Goal",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="trophy-outline" size={size} color={color} />
+            <View className="flex flex-col items-center">
+              <Ionicons name="trophy-outline" size={size} color={color} />
+              <Text className="font-bold text-xs" numberOfLines={1}>
+                Goal
+              </Text>
+            </View>
           ),
         }}
       />
@@ -76,7 +94,12 @@ export default function RootLayout() {
         options={{
           title: "My",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" size={size} color={color} />
+            <View className="flex flex-col items-center">
+              <Ionicons name="person-outline" size={size} color={color} />
+              <Text className="font-bold text-xs" numberOfLines={1}>
+                My
+              </Text>
+            </View>
           ),
         }}
       />
