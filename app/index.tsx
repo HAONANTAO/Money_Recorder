@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 15:01:18
+ * @LastEditTime: 2025-03-23 15:12:50
  * @FilePath: /Money_Recorder/app/index.tsx
  */
 import { useState } from "react";
@@ -14,12 +14,13 @@ import {
   Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { createUser } from "@/services/userManagement";
 
 export default function Index() {
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = () => {
     if (isLogin) {
@@ -27,7 +28,8 @@ export default function Index() {
       console.log("Login:", { username, password });
     } else {
       // 处理注册逻辑
-      console.log("Register:", { username, password, confirmPassword });
+      console.log("Register:", { username, email, password });
+      // createUser();
     }
   };
 
@@ -49,6 +51,8 @@ export default function Index() {
       <Text className="justify-center mb-12 text-lg font-extrabold text-center text-secondary">
         Start to record the money you spent and earned every day.
       </Text>
+
+      {/* 主要body */}
       <View className="w-full max-w-sm">
         {/* 切换显示*/}
         <Text className="mb-8 text-3xl font-bold text-center text-quaternary">
@@ -66,12 +70,34 @@ export default function Index() {
             />
             <TextInput
               placeholder="Email..."
-              value={username}
-              onChangeText={setUsername}
+              value={email}
+              onChangeText={setEmail}
               className="py-3 pr-4 pl-10 text-gray-800 bg-gray-100 rounded-lg"
+              // 自动填充禁用
+              autoComplete="off"
+              textContentType="none"
+              keyboardType="email-address"
             />
           </View>
 
+          {!isLogin && (
+            <View className="relative mb-4">
+              <Ionicons
+                name="lock-closed-outline"
+                size={20}
+                color="#9CA3AF"
+                style={{ position: "absolute", left: 12, top: 12 }}
+              />
+              <TextInput
+                placeholder="Username..."
+                value={username}
+                onChangeText={setUsername}
+                className="py-3 pr-4 pl-10 text-gray-800 bg-gray-100 rounded-lg"
+                autoComplete="off"
+                textContentType="none"
+              />
+            </View>
+          )}
           <View className="relative mb-4">
             <Ionicons
               name="lock-closed-outline"
@@ -85,31 +111,14 @@ export default function Index() {
               onChangeText={setPassword}
               secureTextEntry
               className="py-3 pr-4 pl-10 text-gray-800 bg-gray-100 rounded-lg"
+              autoComplete="off"
+              textContentType="none"
             />
           </View>
 
-          {/* 二次检查输入的密码 */}
-          {/* {!isLogin && (
-            <View className="relative">
-              <Ionicons
-                name="lock-closed-outline"
-                size={20}
-                color="#9CA3AF"
-                style={{ position: "absolute", left: 12, top: 12 }}
-              />
-              <TextInput
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                secureTextEntry
-                className="py-3 pr-4 pl-10 text-gray-800 bg-gray-100 rounded-lg"
-              />
-            </View>
-          )} */}
-
           <TouchableOpacity
             onPress={handleSubmit}
-            className="py-3 mt-6 rounded-lg bg-primary">
+            className="py-3 mt-6 rounded-lg bg-tertiary">
             <Text className="font-semibold text-center text-white">
               {isLogin ? "LogIn" : "SignUp"}
             </Text>
