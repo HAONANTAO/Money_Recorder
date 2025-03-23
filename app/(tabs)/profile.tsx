@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 22:39:29
+ * @LastEditTime: 2025-03-23 22:42:28
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -37,13 +37,24 @@ const Profile = () => {
   return (
     <>
       <View className="flex-1 justify-center items-center">
+        {/* title */}
         <Text className="text-5xl font-bold text-primary">User profile</Text>
+        
+        {/* TODO:avatar */}
+
+        {/* username */}
+
+        {/* email */}
+
+        {/* edit button */}
       </View>
+
+      {/* logout button */}
       <View className="flex justify-center items-center mb-4">
         <TouchableOpacity
           onPress={() => handleLogOut()}
           className="py-3 mt-6 rounded-lg w-[180px] bg-tertiary ">
-          <Text className="font-semibold text-center text-white">Log out</Text>
+          <Text className="font-bold text-center text-white">Log out</Text>
         </TouchableOpacity>
       </View>
     </>
