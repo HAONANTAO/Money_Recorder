@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 16:57:01
+ * @LastEditTime: 2025-03-23 17:00:58
  * @FilePath: /Money_Recorder/app/index.tsx
  */
 import { useEffect, useState } from "react";
@@ -24,6 +24,13 @@ export default function Index() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isValidEmail, setIsValidEmail] = useState(true);
+
+  // format email checker
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const [loading, setLoading] = useState(false);
 
@@ -62,7 +69,6 @@ export default function Index() {
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      // setAutojump(true);
 
       if (isLogin) {
         // 如果是登录按钮被点击
@@ -135,13 +141,21 @@ export default function Index() {
             <TextInput
               placeholder="Email..."
               value={email}
-              onChangeText={setEmail}
+              onChangeText={(text) => {
+                setEmail(text);
+                setIsValidEmail(validateEmail(text));
+              }}
               className="py-3 pr-4 pl-10 text-gray-800 bg-gray-100 rounded-lg"
               // 自动填充禁用
               autoComplete="off"
               textContentType="none"
               keyboardType="email-address"
             />
+            {!isValidEmail && email.length > 0 && (
+              <Text className="mt-1 text-sm text-red-500">
+                Please enter a valid email address
+              </Text>
+            )}
           </View>
 
           {!isLogin && (
