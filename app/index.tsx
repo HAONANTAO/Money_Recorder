@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 16:53:06
+ * @LastEditTime: 2025-03-23 16:57:01
  * @FilePath: /Money_Recorder/app/index.tsx
  */
 import { useEffect, useState } from "react";
@@ -28,22 +28,36 @@ export default function Index() {
   const [loading, setLoading] = useState(false);
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
- 
-  // auto jump 3s when login success
+  // 初始化3s设置
+  const [countdown, setCountdown] = useState(3);
+
+  // auto jump with countdown when login success
   useEffect(() => {
     let timer: NodeJS.Timeout;
-    if (showSuccessModal && isLogin) {
-      timer = setTimeout(() => {
+    if (showSuccessModal) {
+      if (isLogin && countdown > 0) {
+        timer = setInterval(() => {
+          // 依次-1
+          setCountdown((prev) => prev - 1);
+        }, 1000);
+      } else if (isLogin && countdown === 0) {
         setShowSuccessModal(false);
         router.replace("/(tabs)/home");
-      }, 3000);
+      }
     }
     return () => {
       if (timer) {
-        clearTimeout(timer);
+        clearInterval(timer);
       }
     };
-  }, [showSuccessModal, isLogin]);
+  }, [showSuccessModal, isLogin, countdown]);
+
+  // Reset countdown when modal closes
+  useEffect(() => {
+    if (!showSuccessModal) {
+      setCountdown(3);
+    }
+  }, [showSuccessModal]);
 
   const handleSubmit = async () => {
     try {
@@ -212,7 +226,7 @@ export default function Index() {
             </Text>
             <Text className="mb-6 text-center text-gray-600">
               {isLogin
-                ? "Redirecting to the Main page in 3s..."
+                ? `Redirecting to the Main page in ${countdown}s...`
                 : "Please proceed to login"}
             </Text>
 
