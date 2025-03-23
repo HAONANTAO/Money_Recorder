@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 16:47:21
+ * @LastEditTime: 2025-03-23 16:53:06
  * @FilePath: /Money_Recorder/app/index.tsx
  */
 import { useEffect, useState } from "react";
@@ -28,25 +28,22 @@ export default function Index() {
   const [loading, setLoading] = useState(false);
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  // const [autojump, setAutojump] = useState(false);
-
-  // auto jump 3s
-  // useEffect(() => {
-  //   let timer: NodeJS.Timeout;
-  //   if (showSuccessModal) {
-  //     timer = setTimeout(() => {
-  //       setShowSuccessModal(false);
-  //       if (isLogin) {
-  //         router.replace("/(tabs)/home");
-  //       }
-  //     }, 3000);
-  //   }
-  //   return () => {
-  //     if (timer) {
-  //       clearTimeout(timer);
-  //     }
-  //   };
-  // }, [showSuccessModal, isLogin]);
+ 
+  // auto jump 3s when login success
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (showSuccessModal && isLogin) {
+      timer = setTimeout(() => {
+        setShowSuccessModal(false);
+        router.replace("/(tabs)/home");
+      }, 3000);
+    }
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [showSuccessModal, isLogin]);
 
   const handleSubmit = async () => {
     try {
@@ -215,8 +212,8 @@ export default function Index() {
             </Text>
             <Text className="mb-6 text-center text-gray-600">
               {isLogin
-                ? " redirect to the Main page within 3s"
-                : "switch to Login within 3s"}
+                ? "Redirecting to the Main page in 3s..."
+                : "Please proceed to login"}
             </Text>
 
             <TouchableOpacity
