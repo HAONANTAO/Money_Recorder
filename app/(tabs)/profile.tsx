@@ -5,15 +5,20 @@
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import { Button, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { StorageService } from "@/utils/storageService";
 import { router } from "expo-router";
+import { getUserByEmail } from "@/services/userManagement";
 const Profile = () => {
   const handleLogOut = async () => {
     // 清除缓存
     await StorageService.clearUserId();
     router.replace("/");
   };
+
+  useEffect(() => {
+   
+  }, []);
   return (
     <>
       <View className="flex-1 justify-center items-center">
