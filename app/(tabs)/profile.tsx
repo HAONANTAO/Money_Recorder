@@ -1,10 +1,17 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 22:56:19
+ * @LastEditTime: 2025-03-23 23:01:46
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { StorageService } from "@/utils/storageService";
 import { router } from "expo-router";
@@ -58,7 +65,9 @@ const Profile = () => {
             My Profile
           </Text>
         </View>
-        {username && email && (
+
+        {/* 本来 */}
+        {edit && username && email && (
           <>
             <View className="mb-4">
               <Text className="mb-1 text-gray-500">Username</Text>
@@ -67,6 +76,37 @@ const Profile = () => {
             <View className="mb-4">
               <Text className="mb-1 text-gray-500">Email:</Text>
               <Text className="text-lg font-semibold">{email}</Text>
+            </View>
+            {edit ? (
+              <Button
+                title="Edit "
+                onPress={() => handleEdit()}
+                color="bg-deepBlue"
+              />
+            ) : (
+              <Button
+                title="Save "
+                onPress={() => handleSave()}
+                color="bg-deepBlue"
+              />
+            )}
+          </>
+        )}
+
+        {/* 点击完edit */}
+        {!edit && username && email && (
+          <>
+            <View className="mb-4">
+              <Text className="mb-1 font-bold text-quaternary">Username</Text>
+              <TextInput
+                value={username}
+                className="p-2 text-lg bg-white rounded-lg border border-gray-300"></TextInput>
+            </View>
+            <View className="mb-4">
+              <Text className="mb-1 font-bold text-quaternary">Email:</Text>
+              <TextInput
+                value={email}
+                className="p-2 text-lg bg-white rounded-lg border border-gray-300"></TextInput>
             </View>
             {edit ? (
               <Button
