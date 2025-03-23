@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 17:07:32
+ * @LastEditTime: 2025-03-23 22:32:22
  * @FilePath: /Money_Recorder/app/index.tsx
  */
 import { useEffect, useState } from "react";
@@ -32,8 +32,8 @@ export default function Index() {
     const checkUserId = async () => {
       try {
         // 先看有没有本地存储
-        const userId = await StorageService.getUserId();
-        if (userId) {
+        const email = await StorageService.getEmail();
+        if (email) {
           router.replace("/(tabs)/home");
         }
       } catch (error) {
@@ -95,7 +95,7 @@ export default function Index() {
         }
         const user = await loginUser(email, password);
         console.log("Login successful:", user);
-        await StorageService.saveUserId(user.userId);
+        await StorageService.saveEmail(email);
         setShowSuccessModal(true);
       } else {
         // 注册按钮
@@ -158,6 +158,7 @@ export default function Index() {
             />
             <TextInput
               placeholder="Email..."
+              placeholderTextColor="#9CA3AF" // 添加这行来设置 placeholder 的颜色
               value={email}
               onChangeText={(text) => {
                 setEmail(text);
@@ -186,6 +187,7 @@ export default function Index() {
               />
               <TextInput
                 placeholder="Username..."
+                placeholderTextColor="#9CA3AF" // 添加这行来设置 placeholder 的颜色
                 value={username}
                 onChangeText={setUsername}
                 className="py-3 pr-4 pl-10 text-gray-800 bg-gray-100 rounded-lg"
@@ -203,6 +205,7 @@ export default function Index() {
             />
             <TextInput
               placeholder="Password..."
+              placeholderTextColor="#9CA3AF" // 添加这行来设置 placeholder 的颜色
               value={password}
               onChangeText={setPassword}
               secureTextEntry

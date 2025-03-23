@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-20 18:36:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 22:09:16
+ * @LastEditTime: 2025-03-23 22:17:30
  * @FilePath: /Money_Recorder/services/userManagement.ts
  */
 
@@ -93,20 +93,6 @@ export const getUserByEmail = async (email: string) => {
   }
 };
 
-// 根据用户ID获取用户信息
-export const getUserById = async (userId: string) => {
-  try {
-    const result = await database.listDocuments(
-      DATABASE_ID!,
-      USERS_COLLECTION_ID!,
-      [Query.equal("userId", userId)],
-    );
-    return result.documents[0] || null;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-};
 // 更新用户信息
 export const updateUser = async (userId: string, data: Partial<User>) => {
   try {
