@@ -16,7 +16,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.MoneyRecorder"
     },
     "web": {
       "bundler": "metro",
@@ -29,7 +30,7 @@
         "expo-splash-screen",
         {
           "image": "./assets/images/First.png",
-          "resizeMode": "cover",
+          "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
       ]
