@@ -17,7 +17,7 @@ import {
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { createUser, loginUser } from "@/services/userManagement";
-import { StorageService } from "@/services/storageService";
+import { StorageService } from "@/utils/storageService";
 
 export default function Index() {
   // 默认登录状态

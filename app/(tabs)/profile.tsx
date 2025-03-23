@@ -6,7 +6,7 @@
  */
 import { Button, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { StorageService } from "@/services/storageService";
+import { StorageService } from "@/utils/storageService";
 import { router } from "expo-router";
 const Profile = () => {
   const handleLogOut = async () => {
