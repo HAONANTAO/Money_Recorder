@@ -8,8 +8,6 @@ import { Tabs } from "expo-router";
 import ".././globals.css";
 import { Ionicons } from "@expo/vector-icons";
 import { View, Text } from "react-native";
-import { Stack } from "expo-router";
-
 import { SafeAreaProvider } from "react-native-safe-area-context";
 // 主页面的基础配置
 export default function RootLayout() {
@@ -39,13 +37,13 @@ export default function RootLayout() {
           tabBarInactiveTintColor: "#9CA3AF",
         }}>
         <Tabs.Screen
-          name="index"
+          name="home"
           options={{
             title: "Home",
             tabBarIcon: ({ color, size }) => (
               <View className="flex flex-col items-center">
                 <Ionicons name="home-outline" size={size} color={color} />
-                <Text className="font-bold text-xs" numberOfLines={1}>
+                <Text className="text-xs font-bold" numberOfLines={1}>
                   Main
                 </Text>
               </View>
@@ -53,7 +51,7 @@ export default function RootLayout() {
           }}
         />
         <Tabs.Screen
-          name="(tabs)/stats"
+          name="stats"
           options={{
             title: "Stats",
             tabBarIcon: ({ color, size }) => (
@@ -63,7 +61,7 @@ export default function RootLayout() {
                   size={size}
                   color={color}
                 />
-                <Text className="font-bold text-xs" numberOfLines={1}>
+                <Text className="text-xs font-bold" numberOfLines={1}>
                   Stats
                 </Text>
               </View>
@@ -71,7 +69,7 @@ export default function RootLayout() {
           }}
         />
         <Tabs.Screen
-          name="(tabs)/record"
+          name="record"
           options={{
             title: "Record",
             tabBarIcon: ({ color, size }) => (
@@ -82,13 +80,13 @@ export default function RootLayout() {
           }}
         />
         <Tabs.Screen
-          name="(tabs)/goals"
+          name="goals"
           options={{
             title: "Goal",
             tabBarIcon: ({ color, size }) => (
               <View className="flex flex-col items-center">
                 <Ionicons name="trophy-outline" size={size} color={color} />
-                <Text className="font-bold text-xs" numberOfLines={1}>
+                <Text className="text-xs font-bold" numberOfLines={1}>
                   Goal
                 </Text>
               </View>
@@ -96,13 +94,13 @@ export default function RootLayout() {
           }}
         />
         <Tabs.Screen
-          name="(tabs)/profile"
+          name="profile"
           options={{
             title: "My",
             tabBarIcon: ({ color, size }) => (
               <View className="flex flex-col items-center">
                 <Ionicons name="person-outline" size={size} color={color} />
-                <Text className="font-bold text-xs" numberOfLines={1}>
+                <Text className="text-xs font-bold" numberOfLines={1}>
                   My
                 </Text>
               </View>
@@ -110,7 +108,6 @@ export default function RootLayout() {
           }}
         />
       </Tabs>
-      <Stack />
     </SafeAreaProvider>
   );
 }

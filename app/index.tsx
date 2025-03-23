@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 15:57:49
+ * @LastEditTime: 2025-03-23 16:12:49
  * @FilePath: /Money_Recorder/app/index.tsx
  */
 import { useState } from "react";
@@ -14,8 +14,9 @@ import {
   Modal,
   ActivityIndicator,
 } from "react-native";
+import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { createUser } from "@/services/userManagement";
+import { createUser, loginUser } from "@/services/userManagement";
 
 export default function Index() {
   const [isLogin, setIsLogin] = useState(true);
@@ -33,7 +34,12 @@ export default function Index() {
 
       if (isLogin) {
         // 处理登录逻辑
-        console.log("Login:", { username, password });
+        if (!email || !password) {
+          throw new Error("Please fill all fields");
+        }
+        const user = await loginUser(email, password);
+        console.log("Login successful:", user);
+        setShowSuccessModal(true);
       } else {
         // 处理注册逻辑
         if (!username || !email || !password) {
@@ -181,13 +187,19 @@ export default function Index() {
           <View className="items-center p-6 w-4/5 bg-white rounded-2xl">
             <Ionicons name="checkmark-circle" size={60} color="#10B981" />
             <Text className="mt-4 mb-6 text-xl font-bold text-center">
-              SignUp successfully!
+              {isLogin ? "Login successfully!" : "SignUp successfully!"}
             </Text>
             <Text className="mb-6 text-center text-gray-600">
-              Jump to the login page
+              {isLogin ? "Jump to the main page" : "Jump to the Login page"}
             </Text>
             <TouchableOpacity
-              onPress={() => setShowSuccessModal(false)}
+              onPress={() => {
+                setShowSuccessModal(false);
+                // 跳转主页面
+                if (isLogin) {
+                  router.replace("/(tabs)/home");
+                }
+              }}
               className="px-8 py-3 w-full rounded-lg bg-tertiary">
               <Text className="font-semibold text-center text-white">
                 Confirm
