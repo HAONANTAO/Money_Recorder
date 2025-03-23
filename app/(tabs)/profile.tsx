@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 23:01:46
+ * @LastEditTime: 2025-03-23 23:04:12
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -79,13 +79,13 @@ const Profile = () => {
             </View>
             {edit ? (
               <Button
-                title="Edit "
+                title="Edit"
                 onPress={() => handleEdit()}
-                color="bg-deepBlue"
+                color="#E63946"
               />
             ) : (
               <Button
-                title="Save "
+                title="Save"
                 onPress={() => handleSave()}
                 color="bg-deepBlue"
               />
@@ -110,13 +110,13 @@ const Profile = () => {
             </View>
             {edit ? (
               <Button
-                title="Edit "
+                title="Edit"
                 onPress={() => handleEdit()}
-                color="bg-deepBlue"
+                color="#E63946"
               />
             ) : (
               <Button
-                title="Save "
+                title="Save"
                 onPress={() => handleSave()}
                 color="bg-deepBlue"
               />
