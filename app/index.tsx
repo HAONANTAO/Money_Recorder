@@ -10,7 +10,6 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Animated,
   Image,
   Modal,
   ActivityIndicator,
@@ -147,6 +146,7 @@ export default function Index() {
             className="py-3 mt-6 rounded-lg bg-tertiary"
             disabled={loading}>
             {loading ? (
+              // 加载器
               <ActivityIndicator color="white" />
             ) : (
               <Text className="font-semibold text-center text-white">

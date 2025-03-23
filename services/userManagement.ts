@@ -108,3 +108,27 @@ export const updateUser = async (userId: string, data: Partial<User>) => {
     throw error;
   }
 };
+
+// 用户登录
+export const loginUser = async (email: string, password: string) => {
+  try {
+    // 获取用户信息
+    const user = await getUserByEmail(email);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // 验证密码
+    const isPasswordValid = verifyPassword(password, user.password);
+    if (!isPasswordValid) {
+      throw new Error("Invalid password");
+    }
+
+    // 返回用户信息（不包含密码）
+    const { password: _, ...userWithoutPassword } = user;
+    return userWithoutPassword;
+  } catch (error) {
+    console.error("Error during login:", error);
+    throw error;
+  }
+};
