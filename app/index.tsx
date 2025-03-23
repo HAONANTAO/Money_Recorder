@@ -1,10 +1,10 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 16:12:49
+ * @LastEditTime: 2025-03-23 16:19:38
  * @FilePath: /Money_Recorder/app/index.tsx
  */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -27,6 +27,23 @@ export default function Index() {
   const [loading, setLoading] = useState(false);
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (showSuccessModal) {
+      timer = setTimeout(() => {
+        setShowSuccessModal(false);
+        if (isLogin) {
+          router.replace("/(tabs)/home");
+        }
+      }, 3000);
+    }
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [showSuccessModal, isLogin]);
 
   const handleSubmit = async () => {
     try {
