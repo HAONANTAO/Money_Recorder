@@ -1,13 +1,13 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-22 20:19:09
+ * @LastEditTime: 2025-03-23 22:41:28
  * @FilePath: /Money_Recorder/app/(tabs)/_layout.tsx
  */
-import { Tabs } from "expo-router";
+import { Stack, Tabs } from "expo-router";
 import ".././globals.css";
 import { Ionicons } from "@expo/vector-icons";
-import { View, Text } from "react-native";
+import { View, Text, StatusBar } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 // 主页面的基础配置
 export default function RootLayout() {
@@ -40,6 +40,7 @@ export default function RootLayout() {
           name="home"
           options={{
             title: "Home",
+            headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <View className="flex flex-col items-center">
                 <Ionicons name="home-outline" size={size} color={color} />
@@ -54,6 +55,7 @@ export default function RootLayout() {
           name="stats"
           options={{
             title: "Stats",
+            headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <View className="flex flex-col items-center">
                 <Ionicons
@@ -72,6 +74,7 @@ export default function RootLayout() {
           name="record"
           options={{
             title: "Record",
+            headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <View className="flex flex-col items-center">
                 <Ionicons name="add-circle-outline" size={size} color={color} />
@@ -83,6 +86,7 @@ export default function RootLayout() {
           name="goals"
           options={{
             title: "Goal",
+            headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <View className="flex flex-col items-center">
                 <Ionicons name="trophy-outline" size={size} color={color} />
@@ -97,6 +101,7 @@ export default function RootLayout() {
           name="profile"
           options={{
             title: "My",
+            headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <View className="flex flex-col items-center">
                 <Ionicons name="person-outline" size={size} color={color} />

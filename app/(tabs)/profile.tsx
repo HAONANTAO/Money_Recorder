@@ -1,10 +1,10 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 22:34:14
+ * @LastEditTime: 2025-03-23 22:39:29
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect } from "react";
 import { StorageService } from "@/utils/storageService";
 import { router } from "expo-router";
@@ -17,6 +17,7 @@ const Profile = () => {
     router.replace("/");
   };
 
+  // get all user info
   useEffect(() => {
     const getEmailNow = async () => {
       try {
@@ -36,9 +37,15 @@ const Profile = () => {
   return (
     <>
       <View className="flex-1 justify-center items-center">
-        <Text className="text-5xl font-bold text-primary">Profile</Text>
+        <Text className="text-5xl font-bold text-primary">User profile</Text>
       </View>
-      <Button title="LogOut" onPress={() => handleLogOut()}></Button>
+      <View className="flex justify-center items-center mb-4">
+        <TouchableOpacity
+          onPress={() => handleLogOut()}
+          className="py-3 mt-6 rounded-lg w-[180px] bg-tertiary ">
+          <Text className="font-semibold text-center text-white">Log out</Text>
+        </TouchableOpacity>
+      </View>
     </>
   );
 };
