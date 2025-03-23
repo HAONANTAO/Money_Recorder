@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-22 19:59:46
+ * @LastEditTime: 2025-03-22 21:11:11
  * @FilePath: /Money_Recorder/app/index.tsx
  */
 import { useState } from "react";
@@ -32,18 +32,26 @@ export default function Index() {
   };
 
   return (
-    <View className="flex-1 justify-center items-center bg-white p-6">
+    <View className="flex-1 justify-center items-center p-6 bg-white">
+      {/* 背景图片 */}
+      <View className="absolute inset-0 z-0">
+        <Image
+          source={require("../assets/images/Background.png")}
+          className="w-full h-full"
+          resizeMode="cover"
+        />
+      </View>
       {/* 主题和图片+介绍 */}
       <Image source={require("../assets/images/HomeTitle.png")} />
-      <Text className="text-3xl font-bold text-center text-secondary mb-16 mt-6 justify-center">
+      <Text className="justify-center mt-6 mb-16 text-3xl font-bold text-center text-secondary">
         The Money-Recorder
       </Text>
-      <Text className="text-lg font-extrabold text-center text-secondary mb-12  justify-center">
+      <Text className="justify-center mb-12 text-lg font-extrabold text-center text-secondary">
         Start to record the money you spent and earned every day.
       </Text>
       <View className="w-full max-w-sm">
         {/* 切换显示*/}
-        <Text className="text-3xl font-bold text-center text-quaternary mb-8">
+        <Text className="mb-8 text-3xl font-bold text-center text-quaternary">
           {isLogin ? "Log-In" : "Sign-Up"}
         </Text>
 
@@ -60,7 +68,7 @@ export default function Index() {
               placeholder="用户名"
               value={username}
               onChangeText={setUsername}
-              className="bg-gray-100 rounded-lg pl-10 pr-4 py-3 text-gray-800"
+              className="py-3 pr-4 pl-10 text-gray-800 bg-gray-100 rounded-lg"
             />
           </View>
 
@@ -76,7 +84,7 @@ export default function Index() {
               value={password}
               onChangeText={setPassword}
               secureTextEntry
-              className="bg-gray-100 rounded-lg pl-10 pr-4 py-3 text-gray-800"
+              className="py-3 pr-4 pl-10 text-gray-800 bg-gray-100 rounded-lg"
             />
           </View>
 
@@ -93,22 +101,22 @@ export default function Index() {
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
                 secureTextEntry
-                className="bg-gray-100 rounded-lg pl-10 pr-4 py-3 text-gray-800"
+                className="py-3 pr-4 pl-10 text-gray-800 bg-gray-100 rounded-lg"
               />
             </View>
           )}
 
           <TouchableOpacity
             onPress={handleSubmit}
-            className="bg-primary rounded-lg py-3 mt-6">
-            <Text className="text-white text-center font-semibold">
+            className="py-3 mt-6 rounded-lg bg-primary">
+            <Text className="font-semibold text-center text-white">
               {isLogin ? "登录" : "注册"}
             </Text>
           </TouchableOpacity>
         </View>
         {/* 切换按钮 */}
         {isLogin ? (
-          <View className="mt-6 flex-row justify-center mb-8">
+          <View className="flex-row justify-center mt-6 mb-8">
             <TouchableOpacity onPress={() => setIsLogin(false)}>
               <Text className={!isLogin ? "text-quaternary" : "text-secondary"}>
                 Don't have an account?
@@ -116,7 +124,7 @@ export default function Index() {
             </TouchableOpacity>
           </View>
         ) : (
-          <View className="mt-6 flex-row justify-center mb-8">
+          <View className="flex-row justify-center mt-6 mb-8">
             <TouchableOpacity onPress={() => setIsLogin(true)}>
               <Text className={isLogin ? "text-quaternary" : "text-secondary"}>
                 Already have an account?
