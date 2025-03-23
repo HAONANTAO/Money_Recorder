@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 16:29:28
+ * @LastEditTime: 2025-03-23 16:47:21
  * @FilePath: /Money_Recorder/app/index.tsx
  */
 import { useEffect, useState } from "react";
@@ -19,6 +19,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { createUser, loginUser } from "@/services/userManagement";
 
 export default function Index() {
+  // 默认登录状态
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -27,33 +28,34 @@ export default function Index() {
   const [loading, setLoading] = useState(false);
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [autojump, setAutojump] = useState(false);
-  // 自动跳转
+  // const [autojump, setAutojump] = useState(false);
 
   // auto jump 3s
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (showSuccessModal) {
-      timer = setTimeout(() => {
-        setShowSuccessModal(false);
-        if (isLogin) {
-          router.replace("/(tabs)/home");
-        }
-      }, 3000);
-    }
-    return () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-    };
-  }, [showSuccessModal, isLogin]);
+  // useEffect(() => {
+  //   let timer: NodeJS.Timeout;
+  //   if (showSuccessModal) {
+  //     timer = setTimeout(() => {
+  //       setShowSuccessModal(false);
+  //       if (isLogin) {
+  //         router.replace("/(tabs)/home");
+  //       }
+  //     }, 3000);
+  //   }
+  //   return () => {
+  //     if (timer) {
+  //       clearTimeout(timer);
+  //     }
+  //   };
+  // }, [showSuccessModal, isLogin]);
 
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      setAutojump(true);
+      // setAutojump(true);
+
       if (isLogin) {
-        // 处理登录逻辑
+        // 如果是登录按钮被点击
+
         if (!email || !password) {
           throw new Error("Please fill all fields");
         }
@@ -61,20 +63,20 @@ export default function Index() {
         console.log("Login successful:", user);
         setShowSuccessModal(true);
       } else {
-        // 处理注册逻辑
+        // 注册按钮
         if (!username || !email || !password) {
           throw new Error("Please fill all fields");
         }
 
-        console.log("Register:", { username, email, password: "[REDACTED]" });
         const user = await createUser(username, email, password);
         console.log("Account sign up successfully:", user);
 
-        // 注册成功后切换到登录页面
-        setIsLogin(true);
+        // 注册成功后切换到登录页面，所以需要清空表单
+        // 登录后直接跳转网页，不需要清空
         setUsername("");
         setEmail("");
         setPassword("");
+        // setIsLogin(true);
         setShowSuccessModal(true);
       }
     } catch (err) {
@@ -167,6 +169,7 @@ export default function Index() {
             />
           </View>
 
+          {/* 按钮触发 */}
           <TouchableOpacity
             onPress={handleSubmit}
             className="py-3 mt-6 rounded-lg bg-tertiary"
@@ -201,6 +204,7 @@ export default function Index() {
       <Modal
         animationType="fade"
         transparent={true}
+        // 可见性被控制
         visible={showSuccessModal}
         onRequestClose={() => setShowSuccessModal(false)}>
         <View className="flex-1 justify-center items-center bg-black/50">
@@ -209,18 +213,19 @@ export default function Index() {
             <Text className="mt-4 mb-6 text-xl font-bold text-center">
               {isLogin ? "Login successfully!" : "SignUp successfully!"}
             </Text>
-            <Text className="mb-2 text-center text-gray-600">
-              {autojump && isLogin
+            <Text className="mb-6 text-center text-gray-600">
+              {isLogin
                 ? " redirect to the Main page within 3s"
-                : ""}
+                : "switch to Login within 3s"}
             </Text>
 
             <TouchableOpacity
               onPress={() => {
                 setShowSuccessModal(false);
-                // 跳转主页面
                 if (isLogin) {
                   router.replace("/(tabs)/home");
+                } else {
+                  setIsLogin(true);
                 }
               }}
               className="px-8 py-3 w-full rounded-lg bg-tertiary">
