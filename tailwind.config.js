@@ -1,3 +1,9 @@
+/*
+ * @Date: 2025-03-21 20:37:36
+ * @LastEditors: 陶浩南 taoaaron5@gmail.com
+ * @LastEditTime: 2025-03-23 22:50:06
+ * @FilePath: /Money_Recorder/tailwind.config.js
+ */
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   // NOTE: Update this to include the paths to all of your component files.
@@ -13,6 +19,8 @@ module.exports = {
         tertiary: "#7C3AED",
         quaternary: "#171717",
         quinary: "#FFFFFF",
+        deepPurple: "#6A0DAD",
+        deepBlue: "#003366",
       },
     },
   },
