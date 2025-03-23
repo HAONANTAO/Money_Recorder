@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 16:19:38
+ * @LastEditTime: 2025-03-23 16:29:28
  * @FilePath: /Money_Recorder/app/index.tsx
  */
 import { useEffect, useState } from "react";
@@ -27,7 +27,10 @@ export default function Index() {
   const [loading, setLoading] = useState(false);
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [autojump, setAutojump] = useState(false);
+  // 自动跳转
 
+  // auto jump 3s
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (showSuccessModal) {
@@ -48,7 +51,7 @@ export default function Index() {
   const handleSubmit = async () => {
     try {
       setLoading(true);
-
+      setAutojump(true);
       if (isLogin) {
         // 处理登录逻辑
         if (!email || !password) {
@@ -206,9 +209,12 @@ export default function Index() {
             <Text className="mt-4 mb-6 text-xl font-bold text-center">
               {isLogin ? "Login successfully!" : "SignUp successfully!"}
             </Text>
-            <Text className="mb-6 text-center text-gray-600">
-              {isLogin ? "Jump to the main page" : "Jump to the Login page"}
+            <Text className="mb-2 text-center text-gray-600">
+              {autojump && isLogin
+                ? " redirect to the Main page within 3s"
+                : ""}
             </Text>
+
             <TouchableOpacity
               onPress={() => {
                 setShowSuccessModal(false);
