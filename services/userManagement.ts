@@ -125,8 +125,8 @@ export const loginUser = async (email: string, password: string) => {
     }
 
     // 返回用户信息（不包含密码）
-    const { password: _, ...userWithoutPassword } = user;
-    return userWithoutPassword;
+    const { password: _, $id, ...userWithoutPassword } = user;
+    return { ...userWithoutPassword, userId: $id };
   } catch (error) {
     console.error("Error during login:", error);
     throw error;

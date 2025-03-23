@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 17:00:58
+ * @LastEditTime: 2025-03-23 17:07:32
  * @FilePath: /Money_Recorder/app/index.tsx
  */
 import { useEffect, useState } from "react";
@@ -17,6 +17,7 @@ import {
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { createUser, loginUser } from "@/services/userManagement";
+import { StorageService } from "@/services/storageService";
 
 export default function Index() {
   // 默认登录状态
@@ -25,6 +26,22 @@ export default function Index() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(true);
+
+  // 第一次进入检查本地存储的userId
+  useEffect(() => {
+    const checkUserId = async () => {
+      try {
+        // 先看有没有本地存储
+        const userId = await StorageService.getUserId();
+        if (userId) {
+          router.replace("/(tabs)/home");
+        }
+      } catch (error) {
+        return;
+      }
+    };
+    checkUserId();
+  }, []);
 
   // format email checker
   const validateEmail = (email: string) => {
@@ -78,6 +95,7 @@ export default function Index() {
         }
         const user = await loginUser(email, password);
         console.log("Login successful:", user);
+        await StorageService.saveUserId(user.userId);
         setShowSuccessModal(true);
       } else {
         // 注册按钮
