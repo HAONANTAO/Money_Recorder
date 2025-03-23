@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 15:48:48
+ * @LastEditTime: 2025-03-23 15:57:49
  * @FilePath: /Money_Recorder/app/index.tsx
  */
 import { useState } from "react";
@@ -12,6 +12,8 @@ import {
   TouchableOpacity,
   Animated,
   Image,
+  Modal,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { createUser } from "@/services/userManagement";
@@ -22,12 +24,12 @@ export default function Index() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleSubmit = async () => {
     try {
-      setError("");
       setLoading(true);
 
       if (isLogin) {
@@ -36,8 +38,7 @@ export default function Index() {
       } else {
         // 处理注册逻辑
         if (!username || !email || !password) {
-          setError("Please fill all fields");
-          return;
+          throw new Error("Please fill all fields");
         }
 
         console.log("Register:", { username, email, password: "[REDACTED]" });
@@ -49,11 +50,10 @@ export default function Index() {
         setUsername("");
         setEmail("");
         setPassword("");
-        alert("Please LogIn");
+        setShowSuccessModal(true);
       }
     } catch (err) {
-     
-      setError("Failed action, pls try again!");
+      throw new Error("Failed action. pls try again!");
     } finally {
       setLoading(false);
     }
@@ -144,10 +144,15 @@ export default function Index() {
 
           <TouchableOpacity
             onPress={handleSubmit}
-            className="py-3 mt-6 rounded-lg bg-tertiary">
-            <Text className="font-semibold text-center text-white">
-              {isLogin ? "LogIn" : "SignUp"}
-            </Text>
+            className="py-3 mt-6 rounded-lg bg-tertiary"
+            disabled={loading}>
+            {loading ? (
+              <ActivityIndicator color="white" />
+            ) : (
+              <Text className="font-semibold text-center text-white">
+                {isLogin ? "LogIn" : "SignUp"}
+              </Text>
+            )}
           </TouchableOpacity>
         </View>
         {/* 切换按钮 */}
@@ -165,6 +170,32 @@ export default function Index() {
           </View>
         )}
       </View>
+
+      {/* 成功提示Modal */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={showSuccessModal}
+        onRequestClose={() => setShowSuccessModal(false)}>
+        <View className="flex-1 justify-center items-center bg-black/50">
+          <View className="items-center p-6 w-4/5 bg-white rounded-2xl">
+            <Ionicons name="checkmark-circle" size={60} color="#10B981" />
+            <Text className="mt-4 mb-6 text-xl font-bold text-center">
+              SignUp successfully!
+            </Text>
+            <Text className="mb-6 text-center text-gray-600">
+              Jump to the login page
+            </Text>
+            <TouchableOpacity
+              onPress={() => setShowSuccessModal(false)}
+              className="px-8 py-3 w-full rounded-lg bg-tertiary">
+              <Text className="font-semibold text-center text-white">
+                Confirm
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
