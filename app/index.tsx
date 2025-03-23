@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 15:12:50
+ * @LastEditTime: 2025-03-23 15:48:48
  * @FilePath: /Money_Recorder/app/index.tsx
  */
 import { useState } from "react";
@@ -22,14 +22,40 @@ export default function Index() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = () => {
-    if (isLogin) {
-      // 处理登录逻辑
-      console.log("Login:", { username, password });
-    } else {
-      // 处理注册逻辑
-      console.log("Register:", { username, email, password });
-      // createUser();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async () => {
+    try {
+      setError("");
+      setLoading(true);
+
+      if (isLogin) {
+        // 处理登录逻辑
+        console.log("Login:", { username, password });
+      } else {
+        // 处理注册逻辑
+        if (!username || !email || !password) {
+          setError("Please fill all fields");
+          return;
+        }
+
+        console.log("Register:", { username, email, password: "[REDACTED]" });
+        const user = await createUser(username, email, password);
+        console.log("Account sign up successfully:", user);
+
+        // 注册成功后切换到登录页面
+        setIsLogin(true);
+        setUsername("");
+        setEmail("");
+        setPassword("");
+        alert("Please LogIn");
+      }
+    } catch (err) {
+     
+      setError("Failed action, pls try again!");
+    } finally {
+      setLoading(false);
     }
   };
 

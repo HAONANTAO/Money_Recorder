@@ -29,26 +29,40 @@ export const createUser = async (
   password: string,
 ) => {
   try {
-    return new Promise((resolve, reject) => {
-      bcrypt.hash(password, SALT_ROUNDS, (err, hashedPassword) => {
-        if (err) {
-          console.log("Error hashing password:", err);
-          reject(err);
-        } else {
-          database
-            .createDocument(DATABASE_ID!, USERS_COLLECTION_ID!, ID.unique(), {
-              username,
-              email,
-              password: hashedPassword,
-              created_at: new Date().toISOString(),
-            })
-            .then(resolve)
-            .catch(reject);
-        }
+    if (!DATABASE_ID || !USERS_COLLECTION_ID) {
+      throw new Error("Database configuration is missing");
+    }
+
+    // 检查邮箱是否已存在
+    const existingUser = await getUserByEmail(email);
+    if (existingUser) {
+      throw new Error("Email already exists");
+    }
+
+    // 对密码进行哈希处理
+    const hashedPassword = await new Promise((resolve, reject) => {
+      bcrypt.hash(password, SALT_ROUNDS, (err, hash) => {
+        if (err) reject(err);
+        else resolve(hash);
       });
     });
+
+    // 创建新用户文档
+    const user = await database.createDocument(
+      DATABASE_ID,
+      USERS_COLLECTION_ID,
+      ID.unique(),
+      {
+        username,
+        email,
+        password: hashedPassword,
+        created_at: new Date().toISOString(),
+      },
+    );
+
+    return user;
   } catch (error) {
-    console.log(error);
+    console.error("Error creating user:", error);
     throw error;
   }
 };
