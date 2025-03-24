@@ -7,7 +7,7 @@
 import { Stack, Tabs } from "expo-router";
 import ".././globals.css";
 import { Ionicons } from "@expo/vector-icons";
-import { View, Text, StatusBar } from "react-native";
+import { View, Text } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 // 主页面的基础配置
 export default function RootLayout() {
@@ -33,8 +33,8 @@ export default function RootLayout() {
             fontSize: 10,
             marginTop: 4,
           },
-          tabBarActiveTintColor: "#1E40AF",
-          tabBarInactiveTintColor: "#9CA3AF",
+          tabBarActiveTintColor: "#1647ea",
+          tabBarInactiveTintColor: "#D1D5DB",
         }}>
         <Tabs.Screen
           name="home"
