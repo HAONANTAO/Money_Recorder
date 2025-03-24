@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-24 16:27:24
+ * @LastEditTime: 2025-03-24 21:52:12
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -34,7 +34,7 @@ const Profile = () => {
   const [avatar, setAvatar] = useState("");
   const [userId, setUserId] = useState("");
   // for edit considering
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  // const [showSuccessModal, setShowSuccessModal] = useState(false);
   // logout functions
   const handleLogOut = async () => {
     await StorageService.clearEmail();
@@ -123,7 +123,7 @@ const Profile = () => {
   return (
     <View className="flex-1 p-6 mt-16 bg-gray-100">
       {/* front profile info */}
-      <View className="p-6 mb-4 bg-gray-50 rounded-xl shadow-sm">
+      <View className="p-6 mb-4 bg-gray-50 rounded-xl shadow-md">
         <View className="flex justify-center items-center">
           <Text className="mb-6 text-3xl font-bold text-primary">
             My Profile
@@ -147,12 +147,12 @@ const Profile = () => {
         {/* 本来 */}
         {edit && username && email && (
           <>
-            <View className="mb-4">
-              <Text className="mb-1 text-gray-500">Username</Text>
+            <View className="flex justify-center items-center mt-4">
+              {/* <Text className="mb-1 text-gray-500">Username</Text> */}
               <Text className="text-lg font-semibold">{username}</Text>
             </View>
-            <View className="mb-4">
-              <Text className="mb-1 text-gray-500">Email:</Text>
+            <View className="flex justify-center items-center mt-4 mb-4">
+              {/* <Text className="mb-1 text-gray-500">Email:</Text> */}
               <Text className="text-lg font-semibold">{email}</Text>
             </View>
             {edit ? (
@@ -170,14 +170,14 @@ const Profile = () => {
         {/* 点击完edit */}
         {!edit && username && email && (
           <>
-            <View className="mb-4">
+            <View className="flex justify-center items-center mt-4">
               <Text className="mb-1 font-bold text-quaternary">Username</Text>
               <TextInput
                 value={username}
                 onChangeText={setUsername}
                 className="p-2 text-lg bg-white rounded-lg border border-gray-300"></TextInput>
             </View>
-            <View className="mb-4">
+            <View className="flex justify-center items-center mt-4">
               <Text className="mb-1 font-bold text-quaternary">Email:</Text>
               <TextInput
                 value={email}
@@ -199,6 +199,7 @@ const Profile = () => {
           </>
         )}
       </View>
+
       {/* middle box display view */}
       <View>
         <View className="flex flex-row justify-around items-center mt-4 mb-2">
@@ -278,7 +279,7 @@ const Profile = () => {
         </View>
       </View>
       {/* logout button */}
-      <View className="flex justify-end items-center mt-6">
+      <View className="flex justify-end items-center mt-12">
         <TouchableOpacity
           onPress={() => handleLogOut()}
           className="py-3 mt-2  rounded-lg w-[140px] bg-tertiary ">
