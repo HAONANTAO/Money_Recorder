@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-24 14:27:05
+ * @LastEditTime: 2025-03-24 14:50:21
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -117,9 +117,11 @@ const Profile = () => {
     }
   };
 
+  // main body
   return (
     <View className="flex-1 p-6 mt-16 bg-white">
-      <View className="p-6 mb-6 bg-gray-50 rounded-xl shadow-sm">
+      {/* front profile info */}
+      <View className="p-6 mb-4 bg-gray-50 rounded-xl shadow-sm">
         <View className="flex justify-center items-center">
           <Text className="mb-6 text-3xl font-bold text-primary">
             My Profile
@@ -195,10 +197,37 @@ const Profile = () => {
           </>
         )}
       </View>
-      <View className="flex flex-1 justify-end items-center pb-6">
+
+      {/* middle box display view */}
+      <View>
+        <View className="flex flex-row justify-between items-center mb-4">
+          <View className="flex justify-center items-center w-24 h-24 rounded-xl shadow-md bg-primary">
+            <TouchableOpacity>
+              <Text className="font-bold text-white">Box 1</Text>
+            </TouchableOpacity>
+          </View>
+          <View className="flex justify-center items-center w-24 h-24 rounded-xl shadow-md bg-secondary">
+            <Text className="font-bold text-white">Box 2</Text>
+          </View>
+          <View className="flex justify-center items-center w-24 h-24 rounded-xl shadow-md bg-tertiary">
+            <Text className="font-bold text-white">Box 3</Text>
+          </View>
+        </View>
+        <View className="flex flex-row justify-around items-center mb-4">
+          <View className="flex justify-center items-center w-24 h-24 rounded-xl shadow-md bg-quaternary">
+            <Text className="font-bold text-white">Box 4</Text>
+          </View>
+          <View className="flex justify-center items-center w-24 h-24 rounded-xl shadow-md bg-primary">
+            <Text className="font-bold text-white">Box 5</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* logout button */}
+      <View className="flex flex-1 justify-end items-center">
         <TouchableOpacity
           onPress={() => handleLogOut()}
-          className="py-3 mt-6 mb-4 rounded-lg w-[180px] bg-tertiary ">
+          className="py-3 mt-6  rounded-lg w-[180px] bg-tertiary ">
           <Text className="font-bold text-center text-white">Log out</Text>
         </TouchableOpacity>
       </View>
