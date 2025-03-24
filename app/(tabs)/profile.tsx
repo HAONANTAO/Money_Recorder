@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-24 13:27:35
+ * @LastEditTime: 2025-03-24 14:27:05
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -23,12 +23,14 @@ import {
   updateAvatar,
   updateUser,
 } from "@/services/userManagement";
+import { uploadAvatar } from "@/services/storageService";
 
 const Profile = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [edit, setEdit] = useState(false);
+  const [edit, setEdit] = useState(true);
   const [avatar, setAvatar] = useState("");
+  const [userId, setUserId] = useState("");
   // for edit considering
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   // logout functions
@@ -43,9 +45,11 @@ const Profile = () => {
         const email = await StorageService.getEmail();
         // user info
         const userInfo = await getUserByEmail(email as string);
+
         setUsername(userInfo.username);
         setEmail(userInfo.email);
         setAvatar(userInfo.avatar);
+        setUserId(userInfo.$id);
       } catch (error) {
         console.log(error);
         throw error;
@@ -85,7 +89,12 @@ const Profile = () => {
       if (!result.canceled && result.assets[0].base64) {
         const base64Image = `data:image/jpeg;base64,${result.assets[0].base64}`;
 
-        setAvatar(base64Image);
+        // 上传头像到Storage并获取URL
+        const avatarUrl = await uploadAvatar(base64Image);
+        console.log("这里看", avatarUrl);
+        // 存数据库
+        updateAvatar(userId, avatarUrl);
+        setAvatar(avatarUrl);
       }
     } catch (error) {
       console.log("Error selecting image:", error);
