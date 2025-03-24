@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-20 18:36:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 22:17:30
+ * @LastEditTime: 2025-03-24 13:21:36
  * @FilePath: /Money_Recorder/services/userManagement.ts
  */
 
@@ -101,6 +101,22 @@ export const updateUser = async (userId: string, data: Partial<User>) => {
       USERS_COLLECTION_ID!,
       userId,
       data,
+    );
+    return user;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+// 更新用户头像
+export const updateAvatar = async (userId: string, avatar: string) => {
+  try {
+    const user = await database.updateDocument(
+      DATABASE_ID!,
+      USERS_COLLECTION_ID!,
+      userId,
+      { avatar },
     );
     return user;
   } catch (error) {
