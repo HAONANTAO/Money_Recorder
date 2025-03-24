@@ -211,7 +211,7 @@ const Profile = () => {
                 className="w-12 h-12"
               />
               <Text className="mt-2 text-sm font-bold text-quaternary">
-                setting
+                Setting
               </Text>
             </TouchableOpacity>
           </View>
