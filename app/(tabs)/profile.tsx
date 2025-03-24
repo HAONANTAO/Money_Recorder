@@ -13,6 +13,8 @@ import {
   View,
   Image,
   Alert,
+  Linking,
+  Platform,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import React, { useEffect, useState } from "react";
@@ -226,7 +228,20 @@ const Profile = () => {
           </View>
           <View className="flex justify-center items-center w-24 h-24 bg-white rounded-xl border border-gray-200 shadow-md">
             <TouchableOpacity
-              onPress={() => router.push("/(profile)/rating")}
+              onPress={async () => {
+                try {
+                  if (Platform.OS === "ios") {
+                    // TODO:替换为实际的App Store ID
+                    await Linking.openURL(
+                      "https://apps.apple.com/app/idYOUR_APP_ID?action=write-review",
+                    );
+                  } else {
+                    Alert.alert("提示", "此功能仅支持iOS设备");
+                  }
+                } catch (error) {
+                  Alert.alert("错误", "无法打开App Store，请稍后重试");
+                }
+              }}
               className="flex justify-center items-center w-full h-full">
               <Image
                 source={require("../../assets/images/rating.png")}
