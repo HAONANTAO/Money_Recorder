@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-24 16:13:17
+ * @LastEditTime: 2025-03-24 16:27:24
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -220,7 +220,7 @@ const Profile = () => {
               onPress={() => router.push("/(profile)/data")}
               className="flex justify-center items-center w-full h-full">
               <Image
-                source={require("../../assets/images/data.png")}
+                source={require("../../assets/images/icons/data.png")}
                 className="w-12 h-12"
               />
               <Text className="mt-2 font-bold text-quaternary">Data</Text>
@@ -244,7 +244,7 @@ const Profile = () => {
               }}
               className="flex justify-center items-center w-full h-full">
               <Image
-                source={require("../../assets/images/rating.png")}
+                source={require("../../assets/images/icons/rating.png")}
                 className="w-10 h-10"
               />
               <Text className="mt-2 font-bold text-quaternary">Rating</Text>
@@ -257,7 +257,7 @@ const Profile = () => {
               onPress={() => router.push("/(profile)/author")}
               className="flex justify-center items-center w-full h-full">
               <Image
-                source={require("../../assets/images/author.png")}
+                source={require("../../assets/images/icons/author.png")}
                 className="w-10 h-10"
               />
 
@@ -269,7 +269,7 @@ const Profile = () => {
               onPress={() => router.push("/(profile)/more")}
               className="flex justify-center items-center w-full h-full">
               <Image
-                source={require("../../assets/images/more.png")}
+                source={require("../../assets/images/icons/more.png")}
                 className="w-10 h-10"
               />
               <Text className="font-bold text-quaternary">More</Text>
