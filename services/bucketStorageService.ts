@@ -18,11 +18,37 @@ const client = new Client()
 // 初始化Storage服务
 const storage = new Storage(client);
 
+// 从URL中提取文件ID
+export const getFileIdFromUrl = (url: string): string | null => {
+  const match = url.match(/files\/([^\/]+)\/preview/);
+  return match ? match[1] : null;
+};
+
 // 上传头像图片
-export const uploadAvatar = async (imageBase64: string) => {
+export const uploadAvatar = async (
+  imageBase64: string,
+  oldAvatarUrl?: string,
+) => {
   try {
     if (!BUCKET_ID) {
       throw new Error("Storage configuration is missing");
+    }
+
+    // 如果存在旧头像，先删除
+    if (oldAvatarUrl) {
+      const oldFileId = getFileIdFromUrl(oldAvatarUrl);
+      if (oldFileId) {
+        try {
+          await deleteAvatar(oldFileId);
+          console.log("Successfully deleted old avatar");
+        } catch (error) {
+          // 只记录错误但不中断流程
+          console.log(
+            "Error deleting old avatar, but continuing with upload:",
+            error,
+          );
+        }
+      }
     }
 
     // 创建符合React Native的文件对象

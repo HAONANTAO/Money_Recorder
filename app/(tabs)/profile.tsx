@@ -90,7 +90,7 @@ const Profile = () => {
         const base64Image = `data:image/jpeg;base64,${result.assets[0].base64}`;
 
         // 上传头像到Storage并获取URL
-        const avatarUrl = await uploadAvatar(base64Image);
+        const avatarUrl = await uploadAvatar(base64Image, avatar);
         // console.log("这里看", avatarUrl);
         // 存数据库
         updateAvatar(userId, avatarUrl);
