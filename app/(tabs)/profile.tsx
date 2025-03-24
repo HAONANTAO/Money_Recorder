@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-24 16:05:36
+ * @LastEditTime: 2025-03-24 16:13:17
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -197,11 +197,13 @@ const Profile = () => {
           </>
         )}
       </View>
-      {/* middle box display view */}){" "}
+      {/* middle box display view */}
       <View>
         <View className="flex flex-row justify-around items-center mt-4 mb-2">
           <View className="flex justify-center items-center w-24 h-24 bg-white rounded-xl border border-gray-200 shadow-md">
-            <TouchableOpacity className="flex justify-center items-center w-full h-full">
+            <TouchableOpacity
+              onPress={() => router.push("/(profile)/settings")}
+              className="flex justify-center items-center w-full h-full">
               <Image
                 source={require("../../assets/images/setting.png")}
                 className="w-12 h-12"
@@ -212,7 +214,9 @@ const Profile = () => {
             </TouchableOpacity>
           </View>
           <View className="flex justify-center items-center w-24 h-24 bg-white rounded-xl border border-gray-200 shadow-md">
-            <TouchableOpacity className="flex justify-center items-center w-full h-full">
+            <TouchableOpacity
+              onPress={() => router.push("/(profile)/data")}
+              className="flex justify-center items-center w-full h-full">
               <Image
                 source={require("../../assets/images/data.png")}
                 className="w-12 h-12"
@@ -221,7 +225,9 @@ const Profile = () => {
             </TouchableOpacity>
           </View>
           <View className="flex justify-center items-center w-24 h-24 bg-white rounded-xl border border-gray-200 shadow-md">
-            <TouchableOpacity className="flex justify-center items-center w-full h-full">
+            <TouchableOpacity
+              onPress={() => router.push("/(profile)/rating")}
+              className="flex justify-center items-center w-full h-full">
               <Image
                 source={require("../../assets/images/rating.png")}
                 className="w-10 h-10"
@@ -232,7 +238,9 @@ const Profile = () => {
         </View>
         <View className="flex flex-row justify-around items-center mt-4 mb-2">
           <View className="flex justify-center items-center w-24 h-24 bg-white rounded-xl border border-gray-200 shadow-md">
-            <TouchableOpacity className="flex justify-center items-center w-full h-full">
+            <TouchableOpacity
+              onPress={() => router.push("/(profile)/author")}
+              className="flex justify-center items-center w-full h-full">
               <Image
                 source={require("../../assets/images/author.png")}
                 className="w-10 h-10"
@@ -242,7 +250,9 @@ const Profile = () => {
             </TouchableOpacity>
           </View>
           <View className="flex justify-center items-center w-24 h-24 bg-white rounded-xl border border-gray-200 shadow-md">
-            <TouchableOpacity className="flex justify-center items-center w-full h-full">
+            <TouchableOpacity
+              onPress={() => router.push("/(profile)/more")}
+              className="flex justify-center items-center w-full h-full">
               <Image
                 source={require("../../assets/images/more.png")}
                 className="w-10 h-10"
