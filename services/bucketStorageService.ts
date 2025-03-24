@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-24 13:21:36
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-24 14:38:34
+ * @LastEditTime: 2025-03-24 14:57:19
  * @FilePath: /Money_Recorder/services/bucketStorageService.ts
  */
 
@@ -36,6 +36,7 @@ export const uploadAvatar = async (
 
     // 如果存在旧头像，先删除
     if (oldAvatarUrl) {
+      // 这个ID是Appwrite在创建文件时自动生成的唯一标识符，用于后续对文件进行访问、更新或删除操作。
       const oldFileId = getFileIdFromUrl(oldAvatarUrl);
       if (oldFileId) {
         try {
