@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 22:41:28
+ * @LastEditTime: 2025-03-24 21:57:06
  * @FilePath: /Money_Recorder/app/(tabs)/_layout.tsx
  */
 import { Stack, Tabs } from "expo-router";
@@ -77,7 +77,12 @@ export default function RootLayout() {
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <View className="flex flex-col items-center">
-                <Ionicons name="add-circle-outline" size={size} color={color} />
+                <Ionicons
+                  name="add-circle-outline"
+                  size={size * 1.3}
+                  color={color}
+                  style={{ marginBottom: -4 }} // 减小负值，调整图标与标签之间的距离
+                />
               </View>
             ),
           }}
