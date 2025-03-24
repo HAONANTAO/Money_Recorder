@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-24 14:50:21
+ * @LastEditTime: 2025-03-24 16:05:36
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -119,7 +119,7 @@ const Profile = () => {
 
   // main body
   return (
-    <View className="flex-1 p-6 mt-16 bg-white">
+    <View className="flex-1 p-6 mt-16 bg-gray-100">
       {/* front profile info */}
       <View className="p-6 mb-4 bg-gray-50 rounded-xl shadow-sm">
         <View className="flex justify-center items-center">
@@ -197,39 +197,72 @@ const Profile = () => {
           </>
         )}
       </View>
-
-      {/* middle box display view */}
+      {/* middle box display view */}){" "}
       <View>
-        <View className="flex flex-row justify-between items-center mb-4">
-          <View className="flex justify-center items-center w-24 h-24 rounded-xl shadow-md bg-primary">
-            <TouchableOpacity>
-              <Text className="font-bold text-white">Box 1</Text>
+        <View className="flex flex-row justify-around items-center mt-4 mb-2">
+          <View className="flex justify-center items-center w-24 h-24 bg-white rounded-xl border border-gray-200 shadow-md">
+            <TouchableOpacity className="flex justify-center items-center w-full h-full">
+              <Image
+                source={require("../../assets/images/setting.png")}
+                className="w-12 h-12"
+              />
+              <Text className="mt-2 text-sm font-bold text-quaternary">
+                setting
+              </Text>
             </TouchableOpacity>
           </View>
-          <View className="flex justify-center items-center w-24 h-24 rounded-xl shadow-md bg-secondary">
-            <Text className="font-bold text-white">Box 2</Text>
+          <View className="flex justify-center items-center w-24 h-24 bg-white rounded-xl border border-gray-200 shadow-md">
+            <TouchableOpacity className="flex justify-center items-center w-full h-full">
+              <Image
+                source={require("../../assets/images/data.png")}
+                className="w-12 h-12"
+              />
+              <Text className="mt-2 font-bold text-quaternary">Data</Text>
+            </TouchableOpacity>
           </View>
-          <View className="flex justify-center items-center w-24 h-24 rounded-xl shadow-md bg-tertiary">
-            <Text className="font-bold text-white">Box 3</Text>
+          <View className="flex justify-center items-center w-24 h-24 bg-white rounded-xl border border-gray-200 shadow-md">
+            <TouchableOpacity className="flex justify-center items-center w-full h-full">
+              <Image
+                source={require("../../assets/images/rating.png")}
+                className="w-10 h-10"
+              />
+              <Text className="mt-2 font-bold text-quaternary">Rating</Text>
+            </TouchableOpacity>
           </View>
         </View>
-        <View className="flex flex-row justify-around items-center mb-4">
-          <View className="flex justify-center items-center w-24 h-24 rounded-xl shadow-md bg-quaternary">
-            <Text className="font-bold text-white">Box 4</Text>
+        <View className="flex flex-row justify-around items-center mt-4 mb-2">
+          <View className="flex justify-center items-center w-24 h-24 bg-white rounded-xl border border-gray-200 shadow-md">
+            <TouchableOpacity className="flex justify-center items-center w-full h-full">
+              <Image
+                source={require("../../assets/images/author.png")}
+                className="w-10 h-10"
+              />
+
+              <Text className="font-bold text-quaternary">Author</Text>
+            </TouchableOpacity>
           </View>
-          <View className="flex justify-center items-center w-24 h-24 rounded-xl shadow-md bg-primary">
-            <Text className="font-bold text-white">Box 5</Text>
+          <View className="flex justify-center items-center w-24 h-24 bg-white rounded-xl border border-gray-200 shadow-md">
+            <TouchableOpacity className="flex justify-center items-center w-full h-full">
+              <Image
+                source={require("../../assets/images/more.png")}
+                className="w-10 h-10"
+              />
+              <Text className="font-bold text-quaternary">More</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
-
       {/* logout button */}
-      <View className="flex flex-1 justify-end items-center">
+      <View className="flex justify-end items-center mt-6">
         <TouchableOpacity
           onPress={() => handleLogOut()}
-          className="py-3 mt-6  rounded-lg w-[180px] bg-tertiary ">
+          className="py-3 mt-2  rounded-lg w-[140px] bg-tertiary ">
           <Text className="font-bold text-center text-white">Log out</Text>
         </TouchableOpacity>
+      </View>
+      {/* footer */}
+      <View className="absolute right-0 bottom-0 px-4 py-2">
+        <Text className="text-[10px] text-gray-400">Developed by AaronTAO</Text>
       </View>
     </View>
   );
