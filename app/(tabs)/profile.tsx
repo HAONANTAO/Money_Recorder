@@ -23,7 +23,7 @@ import {
   updateAvatar,
   updateUser,
 } from "@/services/userManagement";
-import { uploadAvatar } from "@/services/storageService";
+import { uploadAvatar } from "@/services/bucketStorageService";
 
 const Profile = () => {
   const [username, setUsername] = useState("");
@@ -91,7 +91,7 @@ const Profile = () => {
 
         // 上传头像到Storage并获取URL
         const avatarUrl = await uploadAvatar(base64Image);
-        console.log("这里看", avatarUrl);
+        // console.log("这里看", avatarUrl);
         // 存数据库
         updateAvatar(userId, avatarUrl);
         setAvatar(avatarUrl);
@@ -195,10 +195,10 @@ const Profile = () => {
           </>
         )}
       </View>
-      <View className="flex justify-center items-center mb-4">
+      <View className="flex flex-1 justify-end items-center pb-6">
         <TouchableOpacity
           onPress={() => handleLogOut()}
-          className="py-3 mt-6 rounded-lg w-[180px] bg-tertiary ">
+          className="py-3 mt-6 mb-4 rounded-lg w-[180px] bg-tertiary ">
           <Text className="font-bold text-center text-white">Log out</Text>
         </TouchableOpacity>
       </View>

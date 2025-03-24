@@ -1,8 +1,8 @@
 /*
  * @Date: 2025-03-24 13:21:36
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-24 14:18:51
- * @FilePath: /Money_Recorder/services/storageService.ts
+ * @LastEditTime: 2025-03-24 14:38:34
+ * @FilePath: /Money_Recorder/services/bucketStorageService.ts
  */
 
 import { Client, Storage, ID } from "react-native-appwrite";
@@ -40,6 +40,7 @@ export const uploadAvatar = async (imageBase64: string) => {
     // 获取文件的预览URL
     const fileUrl = storage.getFilePreview(BUCKET_ID, file.$id);
 
+    // 返回文件的预览URL
     return fileUrl.toString();
   } catch (error) {
     console.error("Error uploading avatar:", error);
