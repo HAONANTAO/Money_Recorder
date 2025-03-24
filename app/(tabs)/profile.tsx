@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 23:04:12
+ * @LastEditTime: 2025-03-24 13:12:23
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -11,6 +11,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { StorageService } from "@/utils/storageService";
@@ -21,6 +22,7 @@ const Profile = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [edit, setEdit] = useState(false);
+  const [avatar, setAvatar] = useState("");
   // for edit considering
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   // logout functions
@@ -37,6 +39,7 @@ const Profile = () => {
         const userInfo = await getUserByEmail(email as string);
         setUsername(userInfo.username);
         setEmail(userInfo.email);
+        setAvatar(userInfo.avatar);
       } catch (error) {
         console.log(error);
         throw error;
@@ -64,6 +67,18 @@ const Profile = () => {
           <Text className="mb-6 text-3xl font-bold text-primary">
             My Profile
           </Text>
+          {/* 有avatar就显示 */}
+          {avatar ? (
+            <Image
+              source={{ uri: avatar }}
+              className="w-28 h-28 rounded-full border border-gray-100"
+            />
+          ) : (
+            <Image
+              source={require("../../assets/images/DefaultUser.png")}
+              className="w-28 h-28 rounded-full border border-gray-100"
+            />
+          )}
         </View>
 
         {/* 本来 */}
@@ -84,11 +99,7 @@ const Profile = () => {
                 color="#E63946"
               />
             ) : (
-              <Button
-                title="Save"
-                onPress={() => handleSave()}
-                color="bg-deepBlue"
-              />
+              <Button title="Save" onPress={() => handleSave()} color="" />
             )}
           </>
         )}
@@ -118,7 +129,7 @@ const Profile = () => {
               <Button
                 title="Save"
                 onPress={() => handleSave()}
-                color="bg-deepBlue"
+                color="#1E40AF"
               />
             )}
           </>
