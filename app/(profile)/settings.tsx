@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,38 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons"; // 引入图标库
 
 const Settings = () => {
+  const [theme, setTheme] = useState("light"); // 默认主题为 light
+
+  // 在组件加载时获取存储的主题
+  useEffect(() => {
+    const fetchTheme = async () => {
+      try {
+        const savedTheme = await AsyncStorage.getItem("theme");
+        if (savedTheme) {
+          setTheme(savedTheme); // 如果有保存的主题，更新状态
+        }
+      } catch (error) {
+        console.error("Failed to load theme from storage:", error);
+      }
+    };
+
+    fetchTheme();
+  }, []);
+
+  // 主题切换函数
+  const handleThemeToggle = async () => {
+    const newTheme = theme === "light" ? "dark" : "light"; // 切换主题
+
+    // 保存新主题到 AsyncStorage
+    try {
+      await AsyncStorage.setItem("theme", newTheme);
+      setTheme(newTheme); // 更新状态
+      console.log(await AsyncStorage.getItem("theme"));
+    } catch (error) {
+      console.error("Failed to save theme:", error);
+    }
+  };
+
   // 清除缓存函数
   const handleClearCache = async () => {
     Alert.alert(
@@ -74,7 +106,7 @@ const Settings = () => {
           <View className="gap-4 space-y-6">
             {/* Notifications 按钮 */}
             <TouchableOpacity
-              onPress={openNotificationSettings} // 调用打开设置页面
+              onPress={openNotificationSettings}
               className="flex-row items-center p-4 bg-white rounded-xl shadow-md">
               <Ionicons
                 name="notifications-outline"
@@ -86,20 +118,17 @@ const Settings = () => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity className="flex-row items-center p-4 bg-white rounded-xl shadow-md">
-              <Ionicons name="lock-closed-outline" size={24} color="#4B5563" />
-              <Text className="ml-4 text-lg font-semibold text-gray-700">
-                Privacy Settings
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity className="flex-row items-center p-4 bg-white rounded-xl shadow-md">
+            {/* 主题切换按钮 */}
+            <TouchableOpacity
+              onPress={handleThemeToggle} // 点击时切换主题
+              className="flex-row items-center p-4 bg-white rounded-xl shadow-md">
               <Ionicons name="moon-outline" size={24} color="#4B5563" />
               <Text className="ml-4 text-lg font-semibold text-gray-700">
-                Theme: Light/Dark
+                Theme: {theme === "light" ? "Light" : "Dark"}
               </Text>
             </TouchableOpacity>
 
+            {/* 清除缓存按钮 */}
             <TouchableOpacity
               onPress={handleClearCache}
               className="flex-row items-center p-4 bg-white rounded-xl shadow-md">
