@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-24 21:52:12
+ * @LastEditTime: 2025-03-25 23:11:09
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -133,7 +133,7 @@ const Profile = () => {
           theme === "dark" ? "bg-quaternary" : "bg-gray-50"
         } rounded-xl shadow-md`}>
         <View className="flex justify-center items-center">
-          <Text className="mb-6 text-3xl font-bold text-primary">
+          <Text className="mb-6 text-3xl font-bold text-secondary">
             My Profile
           </Text>
           {/* 有avatar就显示 */}
@@ -157,11 +157,21 @@ const Profile = () => {
           <>
             <View className="flex justify-center items-center mt-4">
               {/* <Text className="mb-1 text-gray-500">Username</Text> */}
-              <Text className="text-lg font-semibold">{username}</Text>
+              <Text
+                className={`${
+                  theme === "dark" ? "text-quinary" : ""
+                } text-lg font-semibold`}>
+                {username}
+              </Text>
             </View>
             <View className="flex justify-center items-center mt-4 mb-4">
               {/* <Text className="mb-1 text-gray-500">Email:</Text> */}
-              <Text className="text-lg font-semibold">{email}</Text>
+              <Text
+                className={`${
+                  theme === "dark" ? "text-quinary" : ""
+                } text-lg font-semibold`}>
+                {email}
+              </Text>
             </View>
             {edit ? (
               <Button
@@ -179,14 +189,26 @@ const Profile = () => {
         {!edit && username && email && (
           <>
             <View className="flex justify-center items-center mt-4">
-              <Text className="mb-1 font-bold text-quaternary">Username</Text>
+              <Text
+                className={`${
+                  theme === "dark" ? "text-secondary" : ""
+                } mb-1 font-bold text-quaternary`}>
+                Username
+              </Text>
               <TextInput
                 value={username}
                 onChangeText={setUsername}
-                className="p-2 text-lg bg-white rounded-lg border border-gray-300"></TextInput>
+                className={
+                  "p-2 text-lg bg-white rounded-lg border border-gray-300"
+                }></TextInput>
             </View>
             <View className="flex justify-center items-center mt-4">
-              <Text className="mb-1 font-bold text-quaternary">Email:</Text>
+              <Text
+                className={`${
+                  theme === "dark" ? "text-secondary" : ""
+                } mb-1 font-bold text-quaternary`}>
+                Email:
+              </Text>
               <TextInput
                 value={email}
                 className="p-2 text-lg bg-white rounded-lg border border-gray-300"></TextInput>
@@ -201,7 +223,7 @@ const Profile = () => {
               <Button
                 title="Save"
                 onPress={() => handleSave()}
-                color="#1E40AF"
+                color="#2c78e3"
               />
             )}
           </>

@@ -86,7 +86,10 @@ const Author = () => {
       </Animated.View>
 
       {/* 简介 */}
-      <Text className="px-8 mt-4 text-lg leading-relaxed text-center text-gray-600">
+      <Text
+        className={`${
+          theme === "dark" ? "text-quinary" : "text-gray-600"
+        } px-8 mt-4 text-lg leading-relaxed text-center `}>
         Hello! I am an IT developer who has studied at Monash and Melbourne
         University. As a passionate developer, I am constantly learning and
         growing, hoping to make achievements in the IT field.
@@ -96,17 +99,39 @@ const Author = () => {
       {/* 精简后的技能展示，带淡入效果 */}
 
       {/* 联系方式部分，淡入效果 */}
-      <Text className="mt-36 text-3xl font-semibold text-primary">
+      <Text className="mt-36 text-3xl font-semibold text-secondary">
         Contact Me
       </Text>
       <Animated.View style={{ opacity: fadeAnim }} className="mt-4 space-y-2">
         <Text className="text-lg text-gray-700">
-          <Text className="font-bold text-quaternary">📧 Email:</Text>
-          taoaaron5@gmail.com
+          <Text
+            className={`${
+              theme === "dark" ? "text-primary" : "text-quaternary"
+            } font-bold `}>
+            📧 Email:
+          </Text>
+          <Text
+            className={`${
+              theme === "dark" ? "text-quinary" : "text-gray-600"
+            }`}>
+            {" "}
+            taoaaron5@gmail.com
+          </Text>
         </Text>
         <Text className="text-lg text-gray-700">
-          <Text className="font-bold text-quaternary">🌐 WeChat:</Text>{" "}
-          taohaonan001
+          <Text
+            className={`${
+              theme === "dark" ? "text-primary" : "text-quaternary"
+            } font-bold `}>
+            🌐 WeChat:
+          </Text>{" "}
+          <Text
+            className={`${
+              theme === "dark" ? "text-quinary" : "text-gray-600"
+            }`}>
+            {" "}
+            taohaonan001
+          </Text>
         </Text>
       </Animated.View>
 

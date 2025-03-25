@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-24 21:57:06
+ * @LastEditTime: 2025-03-25 22:58:49
  * @FilePath: /Money_Recorder/app/(tabs)/_layout.tsx
  */
 import { Stack, Tabs } from "expo-router";
@@ -48,7 +48,11 @@ export default function RootLayout() {
             tabBarIcon: ({ color, size }) => (
               <View className="flex flex-col items-center">
                 <Ionicons name="home-outline" size={size} color={color} />
-                <Text className="text-xs font-bold" numberOfLines={1}>
+                <Text
+                  className={`${
+                    isDark ? "text-primary " : ""
+                  } text-xs font-bold`}
+                  numberOfLines={1}>
                   Main
                 </Text>
               </View>
@@ -67,7 +71,11 @@ export default function RootLayout() {
                   size={size}
                   color={color}
                 />
-                <Text className="text-xs font-bold" numberOfLines={1}>
+                <Text
+                  className={`${
+                    isDark ? "text-primary " : ""
+                  } text-xs font-bold`}
+                  numberOfLines={1}>
                   Stats
                 </Text>
               </View>
@@ -99,7 +107,11 @@ export default function RootLayout() {
             tabBarIcon: ({ color, size }) => (
               <View className="flex flex-col items-center">
                 <Ionicons name="trophy-outline" size={size} color={color} />
-                <Text className="text-xs font-bold" numberOfLines={1}>
+                <Text
+                  className={`${
+                    isDark ? "text-primary " : ""
+                  } text-xs font-bold`}
+                  numberOfLines={1}>
                   Goal
                 </Text>
               </View>
@@ -114,7 +126,11 @@ export default function RootLayout() {
             tabBarIcon: ({ color, size }) => (
               <View className="flex flex-col items-center">
                 <Ionicons name="person-outline" size={size} color={color} />
-                <Text className="text-xs font-bold" numberOfLines={1}>
+                <Text
+                  className={`${
+                    isDark ? "text-primary " : ""
+                  } text-xs font-bold`}
+                  numberOfLines={1}>
                   My
                 </Text>
               </View>
