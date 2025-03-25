@@ -1,13 +1,21 @@
 import { View, Text } from "react-native";
 import React from "react";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const More = () => {
+  const { theme } = useTheme();
   return (
-    <View className="flex-1 justify-center items-center p-6 bg-gray-100">
+    <View
+      className={`flex-1 justify-center items-center p-6 ${
+        theme === "dark" ? "bg-quaternary" : "bg-gray-100"
+      }`}>
       <Text className="text-4xl font-bold text-primary">More</Text>
 
       {/* 主要内容区 */}
-      <View className="px-6 py-4 mt-10 w-full bg-white rounded-lg shadow-lg">
+      <View
+        className={`px-6 py-4 mt-10 w-full ${
+          theme === "dark" ? "bg-quaternary" : "bg-white"
+        } rounded-lg shadow-lg`}>
         <Text className="mb-4 text-xl font-semibold text-quaternary">
           🚧 Under Development 🚧
         </Text>

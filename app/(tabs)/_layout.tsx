@@ -9,8 +9,12 @@ import ".././globals.css";
 import { Ionicons } from "@expo/vector-icons";
 import { View, Text } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useTheme } from "../../contexts/ThemeContext";
 // 主页面的基础配置
 export default function RootLayout() {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   return (
     <SafeAreaProvider>
       <Tabs
@@ -19,10 +23,10 @@ export default function RootLayout() {
             flexDirection: "row",
             justifyContent: "space-around",
             alignItems: "center",
-            backgroundColor: "#FFFFFF",
+            backgroundColor: isDark ? "#171717" : "#FFFFFF",
             paddingVertical: 4,
             borderTopWidth: 1,
-            borderTopColor: "#E5E7EB",
+            borderTopColor: isDark ? "#333333" : "#E5E7EB",
           },
           tabBarItemStyle: {
             alignItems: "center",
@@ -33,8 +37,8 @@ export default function RootLayout() {
             fontSize: 10,
             marginTop: 4,
           },
-          tabBarActiveTintColor: "#1647ea",
-          tabBarInactiveTintColor: "#D1D5DB",
+          tabBarActiveTintColor: isDark ? "#60A5FA" : "#1647ea",
+          tabBarInactiveTintColor: isDark ? "#6B7280" : "#D1D5DB",
         }}>
         <Tabs.Screen
           name="home"

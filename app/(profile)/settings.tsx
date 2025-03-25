@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -10,39 +10,11 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons"; // 引入图标库
+import { useTheme } from "../../contexts/ThemeContext";
 
 const Settings = () => {
-  const [theme, setTheme] = useState("light"); // 默认主题为 light
-
-  // 在组件加载时获取存储的主题
-  useEffect(() => {
-    const fetchTheme = async () => {
-      try {
-        const savedTheme = await AsyncStorage.getItem("theme");
-        if (savedTheme) {
-          setTheme(savedTheme); // 如果有保存的主题，更新状态
-        }
-      } catch (error) {
-        console.error("Failed to load theme from storage:", error);
-      }
-    };
-
-    fetchTheme();
-  }, []);
-
-  // 主题切换函数
-  const handleThemeToggle = async () => {
-    const newTheme = theme === "light" ? "dark" : "light"; // 切换主题
-
-    // 保存新主题到 AsyncStorage
-    try {
-      await AsyncStorage.setItem("theme", newTheme);
-      setTheme(newTheme); // 更新状态
-      console.log(await AsyncStorage.getItem("theme"));
-    } catch (error) {
-      console.error("Failed to save theme:", error);
-    }
-  };
+  // Use the theme context instead of local state
+  const { theme, toggleTheme } = useTheme();
 
   // 清除缓存函数
   const handleClearCache = async () => {
@@ -95,11 +67,17 @@ const Settings = () => {
   };
 
   return (
-    <View className="flex-1 bg-gray-100">
+    <View
+      className={`flex-1 ${
+        theme === "dark" ? "bg-quaternary" : "bg-gray-100"
+      }`}>
       <ScrollView
         contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}>
         <View className="px-6 py-10">
-          <Text className="mb-8 text-3xl font-extrabold text-center text-gray-800">
+          <Text
+            className={`mb-8 text-3xl font-extrabold text-center ${
+              theme === "dark" ? "text-gray-200" : "text-gray-800"
+            }`}>
             Settings
           </Text>
 
@@ -107,23 +85,37 @@ const Settings = () => {
             {/* Notifications 按钮 */}
             <TouchableOpacity
               onPress={openNotificationSettings}
-              className="flex-row items-center p-4 bg-white rounded-xl shadow-md">
+              className={`flex-row items-center p-4 rounded-xl shadow-md ${
+                theme === "dark" ? "bg-quaternary" : "bg-white"
+              }`}>
               <Ionicons
                 name="notifications-outline"
                 size={24}
-                color="#4B5563"
+                color={theme === "dark" ? "#60A5FA" : "#4B5563"}
               />
-              <Text className="ml-4 text-lg font-semibold text-gray-700">
+              <Text
+                className={`ml-4 text-lg font-semibold ${
+                  theme === "dark" ? "text-gray-200" : "text-gray-700"
+                }`}>
                 Notifications
               </Text>
             </TouchableOpacity>
 
             {/* 主题切换按钮 */}
             <TouchableOpacity
-              onPress={handleThemeToggle} // 点击时切换主题
-              className="flex-row items-center p-4 bg-white rounded-xl shadow-md">
-              <Ionicons name="moon-outline" size={24} color="#4B5563" />
-              <Text className="ml-4 text-lg font-semibold text-gray-700">
+              onPress={toggleTheme} // 使用context中的toggleTheme函数
+              className={`flex-row items-center p-4 rounded-xl shadow-md ${
+                theme === "dark" ? "bg-quaternary" : "bg-white"
+              }`}>
+              <Ionicons
+                name={theme === "dark" ? "sunny-outline" : "moon-outline"}
+                size={24}
+                color={theme === "dark" ? "#60A5FA" : "#4B5563"}
+              />
+              <Text
+                className={`ml-4 text-lg font-semibold ${
+                  theme === "dark" ? "text-gray-200" : "text-gray-700"
+                }`}>
                 Theme: {theme === "light" ? "Light" : "Dark"}
               </Text>
             </TouchableOpacity>
@@ -131,16 +123,28 @@ const Settings = () => {
             {/* 清除缓存按钮 */}
             <TouchableOpacity
               onPress={handleClearCache}
-              className="flex-row items-center p-4 bg-white rounded-xl shadow-md">
-              <Ionicons name="trash-outline" size={24} color="#4B5563" />
-              <Text className="ml-4 text-lg font-semibold text-gray-700">
+              className={`flex-row items-center p-4 rounded-xl shadow-md ${
+                theme === "dark" ? "bg-quaternary" : "bg-white"
+              }`}>
+              <Ionicons
+                name="trash-outline"
+                size={24}
+                color={theme === "dark" ? "#60A5FA" : "#4B5563"}
+              />
+              <Text
+                className={`ml-4 text-lg font-semibold ${
+                  theme === "dark" ? "text-gray-200" : "text-gray-700"
+                }`}>
                 Clear Cache
               </Text>
             </TouchableOpacity>
           </View>
 
           <View className="mt-16">
-            <Text className="text-sm text-center text-gray-500">
+            <Text
+              className={`text-sm text-center ${
+                theme === "dark" ? "text-gray-400" : "text-gray-500"
+              }`}>
               App Version: 1.0.0
             </Text>
           </View>

@@ -1,5 +1,6 @@
 import { View, Text, Image, Animated } from "react-native";
 import React, { useEffect, useRef } from "react";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const Author = () => {
   // 动画值
@@ -40,8 +41,12 @@ const Author = () => {
     ).start();
   }, []);
 
+  const { theme } = useTheme();
   return (
-    <View className="flex-1 justify-center items-center p-6 bg-gray-100">
+    <View
+      className={`flex-1 justify-center items-center p-6 ${
+        theme === "dark" ? "bg-quaternary" : "bg-gray-100"
+      }`}>
       {/* 头像带放大和透明度动画 */}
       <Animated.View
         style={{

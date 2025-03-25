@@ -6,10 +6,15 @@
  */
 import { View, Text } from "react-native";
 import React from "react";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const Data = () => {
+  const { theme } = useTheme();
   return (
-    <View className="flex-1 justify-center items-center bg-gray-100">
+    <View
+      className={`flex-1 justify-center items-center ${
+        theme === "dark" ? "bg-quaternary" : "bg-gray-100"
+      }`}>
       <Text className="text-2xl font-bold text-quaternary">Data Page</Text>
       <Text className="mt-4 text-gray-600">Coming soon...</Text>
     </View>

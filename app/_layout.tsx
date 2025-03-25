@@ -7,26 +7,35 @@
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { View, Image } from "react-native";
+import { View } from "react-native";
+import { ThemeProvider } from "../contexts/ThemeContext";
 import "./globals.css";
 
 export default function RootLayout() {
   return (
     <>
-      <View className="flex-1">
-        <SafeAreaProvider>
-          <StatusBar style="auto" />
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              contentStyle: {
-                backgroundColor: "transparent", // 背景透明
-              },
-              animation: "slide_from_right",
-            }}
-          />
-        </SafeAreaProvider>
-      </View>
+      <ThemeProvider>
+        {({ theme }) => (
+          <View
+            className={`flex-1 ${
+              theme === "dark" ? "bg-quaternary" : "bg-quinary"
+            }`}
+            style={{ flex: 1 }}>
+            <SafeAreaProvider style={{ flex: 1 }}>
+              <StatusBar style={theme === "dark" ? "light" : "dark"} />
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                  contentStyle: {
+                    backgroundColor: theme === "dark" ? "#171717" : "#FFFFFF", // 根据主题设置背景色
+                  },
+                  animation: "slide_from_right",
+                }}
+              />
+            </SafeAreaProvider>
+          </View>
+        )}
+      </ThemeProvider>
     </>
   );
 }

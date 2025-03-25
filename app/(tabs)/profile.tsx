@@ -26,8 +26,10 @@ import {
   updateUser,
 } from "@/services/userManagement";
 import { uploadAvatar } from "@/services/bucketStorageService";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const Profile = () => {
+  const { theme } = useTheme();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [edit, setEdit] = useState(true);
@@ -121,9 +123,15 @@ const Profile = () => {
 
   // main body
   return (
-    <View className="flex-1 p-6 mt-16 bg-gray-100">
+    <View
+      className={`flex-1 p-6 mt-16 ${
+        theme === "dark" ? "bg-quaternary" : "bg-gray-100"
+      }`}>
       {/* front profile info */}
-      <View className="p-6 mb-4 bg-gray-50 rounded-xl shadow-md">
+      <View
+        className={`p-6 mb-4 ${
+          theme === "dark" ? "bg-quaternary" : "bg-gray-50"
+        } rounded-xl shadow-md`}>
         <View className="flex justify-center items-center">
           <Text className="mb-6 text-3xl font-bold text-primary">
             My Profile
