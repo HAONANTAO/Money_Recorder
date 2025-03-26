@@ -13,25 +13,26 @@ import { createRecord } from "../../services/recordService";
 import { StorageService } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
 
+// records 的icons没用到
 const EXPENSE_CATEGORIES = [
-  { label: "Eating", value: "eating" },
-  { label: "Traffic", value: "traffic" },
-  { label: "Shopping", value: "shopping" },
-  { label: "Entertainment", value: "entertainment" },
-  { label: "Living", value: "living" },
-  { label: "Medication", value: "medication" },
-  { label: "Education", value: "education" },
-  { label: "Others", value: "others" },
+  { label: "Eating", value: "eating", icon: "🍔" },
+  { label: "Traffic", value: "traffic", icon: "🚗" },
+  { label: "Shopping", value: "shopping", icon: "🛍️" },
+  { label: "Entertainment", value: "entertainment", icon: "🎮" },
+  { label: "Living", value: "living", icon: "🏠" },
+  { label: "Medication", value: "medication", icon: "💊" },
+  { label: "Education", value: "education", icon: "🎓" },
+  { label: "Others", value: "others", icon: "🌍" },
 ];
 
+// Income Categories
 const INCOME_CATEGORIES = [
-  { label: "Salary", value: "salary" },
-  { label: "Sideline", value: "sideline" },
-  { label: "Investment", value: "investment" },
-  { label: "Bonus", value: "bonus" },
-  { label: "Other", value: "other" },
+  { label: "Salary", value: "salary", icon: "💼" },
+  { label: "Sideline", value: "sideline", icon: "📊" },
+  { label: "Investment", value: "investment", icon: "📈" },
+  { label: "Bonus", value: "bonus", icon: "💵" },
+  { label: "Other", value: "other", icon: "🌍" },
 ];
-
 const Record = () => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
@@ -195,7 +196,7 @@ const Record = () => {
               <Picker.Item
                 label="Choose category"
                 value="Choose category"
-                color={isDark ? "#9CA3AF" : "#6B7280"}
+                color={isDark ? "#1e67e5" : "#1c64f3"}
               />
               {(record.type === "expense"
                 ? EXPENSE_CATEGORIES
@@ -203,7 +204,7 @@ const Record = () => {
               ).map((category) => (
                 <Picker.Item
                   key={category.value}
-                  label={category.label}
+                  label={`${category.icon} ${category.label}`}
                   value={category.value}
                   color={isDark ? "#E5E7EB" : "#1F2937"}
                 />
