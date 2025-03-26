@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-26 16:50:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-26 19:52:43
+ * @LastEditTime: 2025-03-26 20:07:54
  * @FilePath: /Money_Recorder/app/(tabs)/stats.tsx
  */
 import { StyleSheet, Text, View } from "react-native";
@@ -16,7 +16,7 @@ import RecordShowBox from "@/components/RecordShowbox";
 const Stats = () => {
   const { theme } = useTheme();
   const [user, setUser] = useState<any>(null);
-  const [records, setRecords] = useState<any>(null);
+  const [records, setRecords] = useState<any[]>([]);
   let email;
   useEffect(() => {
     // email
@@ -49,19 +49,23 @@ const Stats = () => {
   // }, [user]); // 只要 user 变化，就会执行这个 useEffect
 
   return (
-    <View
-      className={`flex-1 justify-center items-center ${
-        theme === "dark" ? "bg-quaternary" : "bg-white"
-      }`}>
-      <Text className="text-5xl font-bold text-primary">stats</Text>
-      {records.length >= 0 &&
-        records.map((record: any) => (
-          <View>
-            <RecordShowBox record={record} />
-          </View>
-        ))}
-      {records.length === 0 && <Text>No records found</Text>}
-    </View>
+    <>
+      <View
+        className={`flex-1 justify-center items-center ${
+          theme === "dark" ? "bg-quaternary" : "bg-white"
+        }`}>
+        <Text className="absolute top-24 text-4xl font-bold text-primary">
+          Stats Overview
+        </Text>
+        <View className="flex flex-row flex-wrap justify-around">
+          {records.length >= 0 &&
+            records.map((record: any) => (
+              <RecordShowBox record={record} key={record.$id} />
+            ))}
+        </View>
+        {records.length === 0 && <Text>No records found</Text>}
+      </View>
+    </>
   );
 };
 
