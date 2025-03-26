@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-20 18:36:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-26 13:17:51
+ * @LastEditTime: 2025-03-26 13:45:01
  * @FilePath: /Money_Recorder/services/recordService.ts
  */
 
@@ -10,7 +10,7 @@ import { Client, Databases, ID, Query } from "react-native-appwrite";
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID;
 
 const RECORDS_COLLECTION_ID =
-  process.env.EXPO_PUBLIC_APPWRITE_RECORDS_COLLECTION_ID;
+  process.env.EXPO_PUBLIC_APPWRITE_Record_COLLECTION_ID;
 const PROJECT_ID = process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID;
 
 // 连接数据库
@@ -27,8 +27,9 @@ export const createRecord = async (
   record: Omit<MoneyRecord, "$id" | "createAt">,
 ) => {
   try {
+    console.log(DATABASE_ID, RECORDS_COLLECTION_ID);
     if (!DATABASE_ID || !RECORDS_COLLECTION_ID) {
-      throw new Error("Database configuration is missing");
+      throw new Error("createRecord-Database configuration is missing");
     }
 
     const newRecord = await database.createDocument(
@@ -52,7 +53,7 @@ export const createRecord = async (
 export const deleteRecord = async (recordId: string) => {
   try {
     if (!DATABASE_ID || !RECORDS_COLLECTION_ID) {
-      throw new Error("Database configuration is missing");
+      throw new Error("deleteRecord-Database configuration is missing");
     }
 
     await database.deleteDocument(DATABASE_ID, RECORDS_COLLECTION_ID, recordId);

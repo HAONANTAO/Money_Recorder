@@ -22,7 +22,7 @@ interface MoneyRecord {
   type: "income" | "expense"; // 收入或支出
   category: string; // 收支类别（如餐饮、交通等）
   paymentMethod: string; // 支付方式（如现金、信用卡等）
-  tags: string[]; // 自定义标签
+  tags: string; // 自定义标签（以逗号分隔的字符串）
   location: string; // 消费地点 ！
   recurring: boolean; // 是否为周期性收支 ！
   comment: string; // 备注说明
