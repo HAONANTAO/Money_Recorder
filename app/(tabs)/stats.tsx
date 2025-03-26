@@ -4,6 +4,8 @@ import {
   View,
   ActivityIndicator,
   ScrollView,
+  Switch,
+  TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -26,17 +28,27 @@ const EXPENSE_CATEGORIES = [
   { label: "Others", value: "others", icon: "🌍" },
 ];
 
+const INCOME_CATEGORIES = [
+  { label: "Salary", value: "salary", icon: "💼" },
+  { label: "Sideline", value: "sideline", icon: "📊" },
+  { label: "Investment", value: "investment", icon: "📈" },
+  { label: "Bonus", value: "bonus", icon: "💵" },
+  { label: "Other", value: "other", icon: "🌍" },
+];
+
 const Stats = () => {
   const { theme } = useTheme();
   const [user, setUser] = useState<any>(null);
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isIncome, setIsIncome] = useState<boolean>(false); // State to toggle between income and expense charts
 
   const [income, setIncome] = useState<number>(0);
   const [expense, setExpense] = useState<number>(0);
   const [eventLength, setEventLength] = useState<number>(0);
 
   const [expenseCategories, setExpenseCategories] = useState<any[]>([]);
+  const [incomeCategories, setIncomeCategories] = useState<any[]>([]); // Income categories state
 
   useEffect(() => {
     const getInit = async () => {
@@ -80,7 +92,7 @@ const Stats = () => {
             return categories;
           }, {});
 
-        const pieChartData = EXPENSE_CATEGORIES.map((category) => ({
+        const pieChartExpenseData = EXPENSE_CATEGORIES.map((category) => ({
           name: category.label,
           population: categoryData[category.value] || 0,
           color: getRandomColor(),
@@ -88,7 +100,28 @@ const Stats = () => {
           legendFontSize: 15,
         }));
 
-        setExpenseCategories(pieChartData);
+        const incomeCategoryData = filteredRecords
+          .filter((record: any) => record.type === "income")
+          .reduce((categories: any, record: any) => {
+            const category = record.category;
+            if (categories[category]) {
+              categories[category] += record.moneyAmount;
+            } else {
+              categories[category] = record.moneyAmount;
+            }
+            return categories;
+          }, {});
+
+        const pieChartIncomeData = INCOME_CATEGORIES.map((category) => ({
+          name: category.label,
+          population: incomeCategoryData[category.value] || 0,
+          color: getRandomColor(),
+          legendFontColor: "#7f7f7f",
+          legendFontSize: 15,
+        }));
+
+        setExpenseCategories(pieChartExpenseData);
+        setIncomeCategories(pieChartIncomeData);
 
         setLoading(false);
       } catch (error) {
@@ -124,22 +157,34 @@ const Stats = () => {
         <>
           <View className="p-4">
             <Text className="text-xl font-semibold">
-              Total Event: {eventLength}
+              📅 Total Event: {eventLength}
             </Text>
             <Text className="text-xl font-semibold">
-              Total Income: ${income}
+              💳 Total Income: ${income}
             </Text>
             <Text className="text-xl font-semibold">
-              Total Expense: ${expense}
+              💵 Total Expense: ${expense}
             </Text>
           </View>
 
-          {/* Use the PieChartComponent here */}
-          <PieChartComponent data={expenseCategories} />
+          {/* Add Switch Button to toggle between income and expense pie chart */}
+          <View className="flex flex-row justify-between items-center">
+            <TouchableOpacity onPress={() => setIsIncome(!isIncome)}>
+              <Text className="text-xl font-bold text-secondary">
+                {isIncome ? "Income Chart" : "Expense Chart"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Display the PieChartComponent for either income or expense */}
+
+          <PieChartComponent
+            data={isIncome ? incomeCategories : expenseCategories}
+          />
 
           <ScrollView
             contentContainerStyle={{ paddingBottom: 20 }}
-            className="p-4 m-2 rounded-2xl border border-gray-200">
+            className="p-4 rounded-2xl border border-gray-200">
             <View className="flex flex-row flex-wrap justify-around">
               {records.length > 0 ? (
                 records.map((record: any) => (

@@ -9,11 +9,10 @@ interface PieChartComponentProps {
 const PieChartComponent: React.FC<PieChartComponentProps> = ({ data }) => {
   return (
     <View className="p-4 m-2 rounded-2xl border border-gray-200">
-      <Text className="mb-4 text-xl font-semibold">Expense Categories</Text>
       <PieChart
         data={data}
         width={350} // Set the chart width
-        height={250} // Set the chart height
+        height={200} // Set the chart height
         chartConfig={{
           backgroundColor: "#000",
           backgroundGradientFrom: "#1E2923",
