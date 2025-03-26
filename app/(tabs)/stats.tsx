@@ -12,8 +12,20 @@ import { StorageKeys } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
 import { getRecords } from "@/services/recordService";
 import RecordShowBox from "@/components/RecordShowbox";
+import { PieChart } from "react-native-chart-kit"; // 引入饼图
 
 import DateChecker from "@/utils/dateChecker";
+
+const EXPENSE_CATEGORIES = [
+  { label: "Eating", value: "eating", icon: "🍔" },
+  { label: "Traffic", value: "traffic", icon: "🚗" },
+  { label: "Shopping", value: "shopping", icon: "🛍️" },
+  { label: "Entertainment", value: "entertainment", icon: "🎮" },
+  { label: "Living", value: "living", icon: "🏠" },
+  { label: "Medication", value: "medication", icon: "💊" },
+  { label: "Education", value: "education", icon: "🎓" },
+  { label: "Others", value: "others", icon: "🌍" },
+];
 
 const Stats = () => {
   const { theme } = useTheme();
@@ -24,6 +36,8 @@ const Stats = () => {
   const [income, setIncome] = useState<number>(0); // 收入总和
   const [expense, setExpense] = useState<number>(0); // 支出总和
   const [eventLength, setEventLength] = useState<number>(0); // 净资产
+
+  const [expenseCategories, setExpenseCategories] = useState<any[]>([]); // 支出分类的数据
 
   useEffect(() => {
     const getInit = async () => {
@@ -59,6 +73,32 @@ const Stats = () => {
         setIncome(incomeTotal); // 设置收入总和
         setExpense(expenseTotal); // 设置支出总和
 
+        // 分类支出数据
+        const categoryData = filteredRecords
+          .filter((record: any) => record.type === "expense") // 第一步：过滤出支出记录
+          .reduce((categories: any, record: any) => {
+            // 第二步：通过 reduce 进行分类统计
+            const category = record.category; // 获取当前记录的分类
+            if (categories[category]) {
+              // 如果当前分类已经存在于 categories 中
+              categories[category] += record.moneyAmount; // 将该分类的金额加到现有金额上
+            } else {
+              categories[category] = record.moneyAmount; // 如果该分类不存在，初始化该分类并赋值金额
+            }
+            return categories; // 返回更新后的 categories 对象
+          }, {}); // 初始值是一个空对象（{}），用于存储各个分类的总金额
+
+        // 转换为图表数据
+        const pieChartData = EXPENSE_CATEGORIES.map((category) => ({
+          name: category.label,
+          population: categoryData[category.value] || 0, // 如果没有该分类的记录，默认为 0
+          color: getRandomColor(),
+          legendFontColor: "#7f7f7f",
+          legendFontSize: 15,
+        }));
+
+        setExpenseCategories(pieChartData); // 设置支出分类数据
+
         setLoading(false); // 数据加载完成后设置加载状态为 false
       } catch (error) {
         console.error("Error fetching user or records:", error);
@@ -68,6 +108,16 @@ const Stats = () => {
 
     getInit();
   }, []);
+
+  // 随机生成颜色的函数
+  const getRandomColor = () => {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
 
   return (
     <>
@@ -84,7 +134,6 @@ const Stats = () => {
         {loading ? (
           <ActivityIndicator size="large" color="#0000ff" />
         ) : (
-          // 数据加载完成后显示记录
           <>
             <View className="p-4">
               <Text className="text-xl font-semibold">
@@ -97,15 +146,39 @@ const Stats = () => {
                 Total Expense: ${expense}
               </Text>
             </View>
-            {/* diagram */}
-            <View></View>
+
+            {/* 饼图展示支出分类 */}
+            <View className="p-4 m-2 rounded-2xl border border-gray-200">
+              <Text className="mb-4 text-xl font-semibold">
+                Expense Categories
+              </Text>
+              <PieChart
+                data={expenseCategories}
+                width={350} // 设置图表的宽度
+                height={250} // 设置图表的高度
+                chartConfig={{
+                  backgroundColor: "#000",
+                  backgroundGradientFrom: "#1E2923",
+                  backgroundGradientTo: "#08130D",
+                  decimalPlaces: 2, // 精度
+                  color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+                  style: {
+                    borderRadius: 16,
+                  },
+                }}
+                accessor={"population"}
+                backgroundColor={"transparent"}
+                paddingLeft={"15"}
+              />
+            </View>
+
             {/* 东西多的时候可以滚动看 */}
             <ScrollView
               contentContainerStyle={{
                 paddingBottom: 20,
-                paddingTop: 90, // 增加顶部空白
+                // 增加顶部空白
               }}
-              className="p-4 mt-4">
+              className="p-4 m-2 rounded-2xl border border-gray-200">
               <View className="flex flex-row flex-wrap justify-around">
                 {records.length > 0 ? (
                   records.map((record: any) => (

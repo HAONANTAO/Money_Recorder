@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-26 15:57:31
+ * @LastEditTime: 2025-03-26 21:09:34
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import { StyleSheet, Text, View } from "react-native";
@@ -30,7 +30,10 @@ const Home = () => {
         isDark ? "bg-gray-900" : "bg-white"
       } pt-10 px-4 `}>
       {/* 今天日期 */}
-      <Text className=" text-2xl font-bold text-center text-gray-800 dark:text-white">
+      <Text
+        className={`${
+          isDark ? "text-white" : ""
+        } text-2xl font-bold text-center text-gray-800`}>
         {getCurrentDate()}
       </Text>
 
@@ -41,7 +44,10 @@ const Home = () => {
         }`}>
         {/* Net Worth View */}
         <View className="p-4 rounded-3xl border border-gray-300 dark:border-gray-700">
-          <Text className="text-xl font-bold text-gray-700 dark:text-white">
+          <Text
+            className={`${
+              isDark ? "text-white" : ""
+            } text-xl font-bold text-gray-700`}>
             Net Worth
           </Text>
           <Text className="text-4xl font-extrabold text-green-500">
@@ -51,7 +57,10 @@ const Home = () => {
 
         {/* Loss View */}
         <View className="p-4 rounded-3xl border border-gray-300 dark:border-gray-700">
-          <Text className="text-xl font-bold text-gray-700 dark:text-white">
+          <Text
+            className={`${
+              isDark ? "text-white" : ""
+            } text-xl font-bold text-gray-700`}>
             Loss
           </Text>
           <Text className="text-4xl font-extrabold text-red-500">$2,300</Text>

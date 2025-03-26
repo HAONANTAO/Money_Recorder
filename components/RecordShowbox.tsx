@@ -19,17 +19,22 @@ const RecordShowBox: React.FC<RecordShowBoxProps> = ({ record }) => {
         }`}>
         {record.type === "income" ? "Income" : "Expense"}: ${record.moneyAmount}
       </Text>
-      <Text className="text-sm text-gray-600 dark:text-gray-400">
-        Category: {record.category}
+      <Text className="text-sm text-gray-600">
+        <Text className="text-secondary">Category: </Text>
+        {record.category}
       </Text>
+
       <Text className="text-sm text-gray-600 dark:text-gray-400">
-        Location: {record.location || "N/A"}
+        <Text className="text-secondary">Date: </Text>
+        {formatDate(record.createAt)}
       </Text>
-      <Text className="text-sm text-gray-600 dark:text-gray-400">
-        Date: {formatDate(record.createAt)}
+      <Text className="text-sm text-gray-600">
+        <Text className="text-secondary">Payment Method: </Text>
+        {record.paymentMethod}
       </Text>
-      <Text className="text-sm text-gray-600 dark:text-gray-400">
-        Payment Method: {record.paymentMethod}
+      <Text className="text-sm text-gray-600">
+        <Text className="text-secondary">Location: </Text>
+        {record.location || "N/A"}
       </Text>
       {record.comment && (
         <Text className="mt-2 text-sm text-gray-600 dark:text-gray-400">
