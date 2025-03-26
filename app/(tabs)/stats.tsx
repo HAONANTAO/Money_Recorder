@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+  ScrollView,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -6,6 +12,8 @@ import { StorageKeys } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
 import { getRecords } from "@/services/recordService";
 import RecordShowBox from "@/components/RecordShowbox";
+
+import DateChecker from "@/utils/dateChecker";
 
 const Stats = () => {
   const { theme } = useTheme();
@@ -15,6 +23,7 @@ const Stats = () => {
 
   const [income, setIncome] = useState<number>(0); // 收入总和
   const [expense, setExpense] = useState<number>(0); // 支出总和
+  const [eventLength, setEventLength] = useState<number>(0); // 净资产
 
   useEffect(() => {
     const getInit = async () => {
@@ -30,29 +39,14 @@ const Stats = () => {
         ]);
 
         setUser(user);
-      
-        // 获取当前的月份和年份
-        const currentMonth = new Date().getMonth(); // 当前月份 (0-11)
-        const currentYear = new Date().getFullYear(); // 当前年份
 
-        const filteredRecords = records.filter((record: any) => {
-          const recordDate = new Date(record.createAt);
-
-          //检查 createdAt 是否为有效日期
-          if (isNaN(recordDate.getTime())) {
-            console.warn(`Invalid date for record: ${record.createdAt}`);
-            return false; // 如果日期无效，排除这个记录
-          }
-
-          const recordMonth = recordDate.getMonth(); // 获取记录的月份
-          const recordYear = recordDate.getFullYear(); // 获取记录的年份
-
-          // 只选择当前月份和年份的记录
-          return recordMonth === currentMonth && recordYear === currentYear;
-        });
+        // 检查必须要是这个月的
+        const filteredRecords = DateChecker(
+          records as unknown as MoneyRecord[],
+        );
 
         setRecords(filteredRecords);
-
+        setEventLength(records.length);
         // 计算收入和支出
         const incomeTotal = filteredRecords
           .filter((record: any) => record.type === "income")
@@ -78,15 +72,13 @@ const Stats = () => {
   return (
     <>
       <View
-        className={`flex-1 justify-center items-center ${
+        className={`flex-1 justify-start items-center ${
           theme === "dark" ? "bg-quaternary" : "bg-white"
         }`}>
         {/* title */}
-        <Text className="absolute top-24 text-4xl font-bold text-primary">
+        <Text className="mt-20 text-4xl font-bold text-primary">
           Stats Overview
         </Text>
-
-        {/* display the chart */}
 
         {/* 显示加载器 */}
         {loading ? (
@@ -96,24 +88,36 @@ const Stats = () => {
           <>
             <View className="p-4">
               <Text className="text-xl font-semibold">
+                Total Event: {eventLength}
+              </Text>
+              <Text className="text-xl font-semibold">
                 Total Income: ${income}
               </Text>
               <Text className="text-xl font-semibold">
                 Total Expense: ${expense}
               </Text>
             </View>
-            <View className="flex flex-row flex-wrap justify-around">
-              {records.length > 0 ? (
-                records.map((record: any) => (
-                  // solved: 大小box不一致
-                  <View className="p-2 w-1/2" key={record.$id}>
-                    <RecordShowBox record={record} />
-                  </View>
-                ))
-              ) : (
-                <Text>No records found</Text>
-              )}
-            </View>
+            {/* diagram */}
+            <View></View>
+            {/* 东西多的时候可以滚动看 */}
+            <ScrollView
+              contentContainerStyle={{
+                paddingBottom: 20,
+                paddingTop: 90, // 增加顶部空白
+              }}
+              className="p-4 mt-4">
+              <View className="flex flex-row flex-wrap justify-around">
+                {records.length > 0 ? (
+                  records.map((record: any) => (
+                    <View className="p-2 w-1/2" key={record.$id}>
+                      <RecordShowBox record={record} />
+                    </View>
+                  ))
+                ) : (
+                  <Text>No records found</Text>
+                )}
+              </View>
+            </ScrollView>
           </>
         )}
       </View>
