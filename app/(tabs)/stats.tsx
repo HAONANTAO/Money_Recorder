@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-26 16:50:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-26 17:31:17
+ * @LastEditTime: 2025-03-26 19:52:43
  * @FilePath: /Money_Recorder/app/(tabs)/stats.tsx
  */
 import { StyleSheet, Text, View } from "react-native";
@@ -54,12 +54,13 @@ const Stats = () => {
         theme === "dark" ? "bg-quaternary" : "bg-white"
       }`}>
       <Text className="text-5xl font-bold text-primary">stats</Text>
-      {records.length >= 1 &&
+      {records.length >= 0 &&
         records.map((record: any) => (
           <View>
             <RecordShowBox record={record} />
           </View>
         ))}
+      {records.length === 0 && <Text>No records found</Text>}
     </View>
   );
 };
