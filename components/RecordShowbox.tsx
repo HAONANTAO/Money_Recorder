@@ -1,12 +1,13 @@
 import React from "react";
 import { View, Text } from "react-native";
 
-// 
+//
 interface RecordShowBoxProps {
   record: MoneyRecord;
 }
 
 const RecordShowBox: React.FC<RecordShowBoxProps> = ({ record }) => {
+  console.log("here:", record);
   return (
     <View className="p-4 mb-4 bg-white rounded-lg shadow-lg dark:bg-gray-800">
       <Text className="text-xl font-bold text-primary">

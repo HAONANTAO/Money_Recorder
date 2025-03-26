@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-26 16:50:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-26 17:06:55
+ * @LastEditTime: 2025-03-26 17:31:17
  * @FilePath: /Money_Recorder/app/(tabs)/stats.tsx
  */
 import { StyleSheet, Text, View } from "react-native";
@@ -11,6 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StorageKeys } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
 import { getRecords } from "@/services/recordService";
+import RecordShowBox from "@/components/RecordShowbox";
 // import { getRecords } from "../../services/bucketStorageService";
 const Stats = () => {
   const { theme } = useTheme();
@@ -35,6 +36,7 @@ const Stats = () => {
         setUser(user);
         setRecords(records);
         console.log(records);
+        console.log(records.length);
       } catch (error) {
         console.error("Error fetching user or records:", error);
       }
@@ -42,9 +44,9 @@ const Stats = () => {
     getInit();
   }, []);
   //
-  useEffect(() => {
-    console.log("Updated user:", user);
-  }, [user]); // 只要 user 变化，就会执行这个 useEffect
+  // useEffect(() => {
+  //   console.log("Updated user:", user);
+  // }, [user]); // 只要 user 变化，就会执行这个 useEffect
 
   return (
     <View
@@ -52,6 +54,12 @@ const Stats = () => {
         theme === "dark" ? "bg-quaternary" : "bg-white"
       }`}>
       <Text className="text-5xl font-bold text-primary">stats</Text>
+      {records.length >= 1 &&
+        records.map((record: any) => (
+          <View>
+            <RecordShowBox record={record} />
+          </View>
+        ))}
     </View>
   );
 };
