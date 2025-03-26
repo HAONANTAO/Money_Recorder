@@ -23,19 +23,42 @@ const Stats = () => {
         if (!email) return;
 
         const userData = await getUserByEmail(email);
+        // 一起完成
         const [user, records] = await Promise.all([
           getUserByEmail(email),
           getRecords(userData.$id),
         ]);
 
         setUser(user);
-        setRecords(records);
+      
+        // 获取当前的月份和年份
+        const currentMonth = new Date().getMonth(); // 当前月份 (0-11)
+        const currentYear = new Date().getFullYear(); // 当前年份
+
+        const filteredRecords = records.filter((record: any) => {
+          const recordDate = new Date(record.createAt);
+
+          //检查 createdAt 是否为有效日期
+          if (isNaN(recordDate.getTime())) {
+            console.warn(`Invalid date for record: ${record.createdAt}`);
+            return false; // 如果日期无效，排除这个记录
+          }
+
+          const recordMonth = recordDate.getMonth(); // 获取记录的月份
+          const recordYear = recordDate.getFullYear(); // 获取记录的年份
+
+          // 只选择当前月份和年份的记录
+          return recordMonth === currentMonth && recordYear === currentYear;
+        });
+
+        setRecords(filteredRecords);
+
         // 计算收入和支出
-        const incomeTotal = records
+        const incomeTotal = filteredRecords
           .filter((record: any) => record.type === "income")
           .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
 
-        const expenseTotal = records
+        const expenseTotal = filteredRecords
           .filter((record: any) => record.type === "expense")
           .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
 
