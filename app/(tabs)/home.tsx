@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-26 13:04:12
+ * @LastEditTime: 2025-03-26 15:57:31
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import { StyleSheet, Text, View } from "react-native";
@@ -30,7 +30,7 @@ const Home = () => {
         isDark ? "bg-gray-900" : "bg-white"
       } pt-10 px-4 `}>
       {/* 今天日期 */}
-      <Text className="mt-4 text-2xl font-bold text-center text-gray-800 dark:text-white">
+      <Text className=" text-2xl font-bold text-center text-gray-800 dark:text-white">
         {getCurrentDate()}
       </Text>
 
