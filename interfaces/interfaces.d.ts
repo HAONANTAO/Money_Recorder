@@ -14,7 +14,7 @@ interface User {
   avatar: string; // 用户头像，类型为 string，通常是一个 URL
 }
 
-interface Record {
+interface MoneyRecord {
   $id: string;
   userId: string; // 关联的用户ID
   createAt: string; // 记录创建时间
