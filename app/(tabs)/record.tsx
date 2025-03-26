@@ -223,17 +223,76 @@ const Record = () => {
             }`}>
             Payment method
           </Text>
-          <TextInput
-            className={`p-3 rounded-lg text-base ${
-              isDark ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"
-            }`}
-            placeholder="Credit/Debit/Cash"
-            placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
-            value={record.paymentMethod}
-            onChangeText={(value) =>
-              setRecord({ ...record, paymentMethod: value })
-            }
-          />
+          <View className="flex-row gap-2 justify-between">
+            <TouchableOpacity
+              onPress={() => setRecord({ ...record, paymentMethod: "Card" })}
+              className={`flex-1 p-3 rounded-lg ${
+                record.paymentMethod === "Card"
+                  ? isDark
+                    ? "bg-blue-700"
+                    : "bg-blue-500"
+                  : isDark
+                  ? "bg-gray-700"
+                  : "bg-gray-200"
+              }`}>
+              <Text
+                className={`text-center font-medium ${
+                  record.paymentMethod === "Card"
+                    ? "text-white"
+                    : isDark
+                    ? "text-gray-200"
+                    : "text-gray-700"
+                }`}>
+                Card
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                setRecord({ ...record, paymentMethod: "Transfer" })
+              }
+              className={`flex-1 p-3 rounded-lg ${
+                record.paymentMethod === "Transfer"
+                  ? isDark
+                    ? "bg-blue-700"
+                    : "bg-blue-500"
+                  : isDark
+                  ? "bg-gray-700"
+                  : "bg-gray-200"
+              }`}>
+              <Text
+                className={`text-center font-medium ${
+                  record.paymentMethod === "Transfer"
+                    ? "text-white"
+                    : isDark
+                    ? "text-gray-200"
+                    : "text-gray-700"
+                }`}>
+                Transfer
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setRecord({ ...record, paymentMethod: "Cash" })}
+              className={`flex-1 p-3 rounded-lg ${
+                record.paymentMethod === "Cash"
+                  ? isDark
+                    ? "bg-blue-700"
+                    : "bg-blue-500"
+                  : isDark
+                  ? "bg-gray-700"
+                  : "bg-gray-200"
+              }`}>
+              <Text
+                className={`text-center font-medium ${
+                  record.paymentMethod === "Cash"
+                    ? "text-white"
+                    : isDark
+                    ? "text-gray-200"
+                    : "text-gray-700"
+                }`}>
+                Cash
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* 地点输入 */}
