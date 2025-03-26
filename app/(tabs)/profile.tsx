@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-25 23:11:09
+ * @LastEditTime: 2025-03-25 23:15:58
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -233,7 +233,10 @@ const Profile = () => {
       {/* middle box display view */}
       <View>
         <View className="flex flex-row justify-around items-center mt-4 mb-2">
-          <View className="flex justify-center items-center w-24 h-24 bg-white rounded-xl border border-gray-200 shadow-md">
+          <View
+            className={`${
+              theme === "dark" ? "bg-blue-200" : "bg-white "
+            } flex justify-center items-center w-24 h-24 rounded-xl border border-gray-200 shadow-md`}>
             <TouchableOpacity
               onPress={() => router.push("/(profile)/settings")}
               className="flex justify-center items-center w-full h-full">
@@ -246,7 +249,10 @@ const Profile = () => {
               </Text>
             </TouchableOpacity>
           </View>
-          <View className="flex justify-center items-center w-24 h-24 bg-white rounded-xl border border-gray-200 shadow-md">
+          <View
+            className={`${
+              theme === "dark" ? "bg-blue-200" : "bg-white "
+            } flex justify-center items-center w-24 h-24 rounded-xl border border-gray-200 shadow-md`}>
             <TouchableOpacity
               onPress={() => router.push("/(profile)/data")}
               className="flex justify-center items-center w-full h-full">
@@ -257,7 +263,10 @@ const Profile = () => {
               <Text className="mt-2 font-bold text-quaternary">Data</Text>
             </TouchableOpacity>
           </View>
-          <View className="flex justify-center items-center w-24 h-24 bg-white rounded-xl border border-gray-200 shadow-md">
+          <View
+            className={`${
+              theme === "dark" ? "bg-blue-200" : "bg-white "
+            } flex justify-center items-center w-24 h-24 rounded-xl border border-gray-200 shadow-md`}>
             <TouchableOpacity
               onPress={async () => {
                 try {
@@ -283,7 +292,10 @@ const Profile = () => {
           </View>
         </View>
         <View className="flex flex-row justify-around items-center mt-4 mb-2">
-          <View className="flex justify-center items-center w-24 h-24 bg-white rounded-xl border border-gray-200 shadow-md">
+          <View
+            className={`${
+              theme === "dark" ? "bg-blue-200" : "bg-white "
+            } flex justify-center items-center w-24 h-24 rounded-xl border border-gray-200 shadow-md`}>
             <TouchableOpacity
               onPress={() => router.push("/(profile)/author")}
               className="flex justify-center items-center w-full h-full">
@@ -295,7 +307,10 @@ const Profile = () => {
               <Text className="font-bold text-quaternary">Author</Text>
             </TouchableOpacity>
           </View>
-          <View className="flex justify-center items-center w-24 h-24 bg-white rounded-xl border border-gray-200 shadow-md">
+          <View
+            className={`${
+              theme === "dark" ? "bg-blue-200" : "bg-white "
+            } flex justify-center items-center w-24 h-24 rounded-xl border border-gray-200 shadow-md`}>
             <TouchableOpacity
               onPress={() => router.push("/(profile)/more")}
               className="flex justify-center items-center w-full h-full">
