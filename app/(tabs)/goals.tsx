@@ -6,6 +6,8 @@ import {
   TextInput,
   RefreshControl,
 } from "react-native";
+import { Picker } from "@react-native-picker/picker";
+import { DEPOSIT_CATEGORIES } from "../../constants/categories";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -95,22 +97,46 @@ const Goals = () => {
         <TextInput
           value={amount}
           onChangeText={setAmount}
-          placeholder="Enter your deposit goal amount"
+          placeholder="请输入存款目标金额"
           keyboardType="numeric"
           className="p-4 rounded-lg border border-gray-300"
         />
 
-        <TextInput
-          value={category}
-          onChangeText={setCategory}
-          placeholder="Enter category (optional)"
-          className="p-4 mt-4 rounded-lg border border-gray-300"
-        />
+        <View className="overflow-hidden mt-4 rounded-lg border border-gray-300">
+          <Picker
+            selectedValue={category}
+            onValueChange={(itemValue: string) => setCategory(itemValue)}
+            style={{
+              backgroundColor: theme === "dark" ? "#374151" : "#FFFFFF",
+              color: theme === "dark" ? "#FFFFFF" : "#000000",
+              height: 200,
+              marginVertical: 10,
+              paddingHorizontal: 16,
+              width: "100%",
+              borderRadius: 8,
+            }}
+            itemStyle={{
+              color: theme === "dark" ? "#FFFFFF" : "#000000",
+              fontSize: 20,
+              height: 150,
+              textAlign: "center",
+              paddingVertical: 12,
+            }}>
+            
+            {DEPOSIT_CATEGORIES.map((cat) => (
+              <Picker.Item
+                key={cat.value}
+                label={`${cat.icon} ${cat.label}`}
+                value={cat.value}
+              />
+            ))}
+          </Picker>
+        </View>
 
         <TextInput
           value={note}
           onChangeText={setNote}
-          placeholder="Enter note (optional)"
+          placeholder="添加备注（可选）"
           className="p-4 mt-4 rounded-lg border border-gray-300"
         />
 
@@ -119,14 +145,14 @@ const Goals = () => {
             <TextInput
               value={startYear.toString()}
               onChangeText={(text) => setStartYear(parseInt(text))}
-              placeholder="Start year"
+              placeholder="开始年份"
               keyboardType="numeric"
               className="p-4 rounded-lg border border-gray-300"
             />
             <TextInput
               value={startMonth.toString()}
               onChangeText={(text) => setStartMonth(parseInt(text))}
-              placeholder="Start month"
+              placeholder="开始月份"
               keyboardType="numeric"
               className="p-4 mt-2 rounded-lg border border-gray-300"
             />
@@ -136,14 +162,14 @@ const Goals = () => {
             <TextInput
               value={endYear.toString()}
               onChangeText={(text) => setEndYear(parseInt(text))}
-              placeholder="End year"
+              placeholder="结束年份"
               keyboardType="numeric"
               className="p-4 rounded-lg border border-gray-300"
             />
             <TextInput
               value={endMonth.toString()}
               onChangeText={(text) => setEndMonth(parseInt(text))}
-              placeholder="End month"
+              placeholder="结束月份"
               keyboardType="numeric"
               className="p-4 mt-2 rounded-lg border border-gray-300"
             />

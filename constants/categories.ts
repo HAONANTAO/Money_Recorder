@@ -26,6 +26,16 @@ export const BUDGET_CATEGORIES = [
   { label: "Medication", value: "medication", icon: "💊" },
   { label: "Education", value: "education", icon: "🎓" },
 ];
+export const DEPOSIT_CATEGORIES = [
+  { label: "Travel", value: "travel", icon: "✈️" },
+  { label: "Emergency", value: "emergency", icon: "🚨" },
+  { label: "House", value: "house", icon: "🏠" },
+  { label: "Car", value: "car", icon: "🚗" },
+  { label: "Education", value: "education", icon: "🎓" },
+  { label: "Investment", value: "investment", icon: "📈" },
+  { label: "Others", value: "others", icon: "🌍" },
+];
+
 export const INCOME_CATEGORIES = [
   { label: "Salary", value: "salary", icon: "💼" },
   { label: "Sideline", value: "sideline", icon: "📊" },
