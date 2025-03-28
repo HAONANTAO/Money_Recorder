@@ -197,7 +197,7 @@ const Stats = () => {
               />
             </View>
 
-            <View className="p-4 rounded-2xl border border-gray-200">
+            {/* <View className="p-4 rounded-2xl border border-gray-200">
               <View className="flex flex-row flex-wrap justify-around">
                 {records.length > 0 ? (
                   records.map((record: any) => (
@@ -209,7 +209,7 @@ const Stats = () => {
                   <Text>No records found</Text>
                 )}
               </View>
-            </View>
+            </View> */}
           </>
         )}
       </View>
@@ -277,25 +277,29 @@ const Stats = () => {
               </TouchableOpacity>
             );
           })}
+          <View className="items-center mt-2">
+            <TouchableOpacity
+              onPress={() => router.push("/(func)/budget")}
+              className={`flex-row justify-center items-center px-4 py-2 border-gray-200 shadow-md border rounded-full ${
+                theme === "dark" ? "bg-secondary" : "bg-[#e6f7ff]"
+              }`}
+              style={{ width: "70%" }} // 控制宽度更短
+            >
+              <Ionicons
+                name="wallet-outline"
+                size={24}
+                color={theme === "dark" ? "#1477f1" : "#0d6df4"}
+              />
+              <Text
+                className={`ml-4 text-lg font-semibold ${
+                  theme === "dark" ? "text-gray-200" : "text-gray-700"
+                }`}>
+                Set Budget
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       )}
-      <TouchableOpacity
-        onPress={() => router.push("/(func)/budget")}
-        className={`flex-row items-center p-4 rounded-xl shadow-md ${
-          theme === "dark" ? "bg-quaternary" : "bg-white"
-        }`}>
-        <Ionicons
-          name="wallet-outline"
-          size={24}
-          color={theme === "dark" ? "#1477f1" : "#0d6df4"}
-        />
-        <Text
-          className={`ml-4 text-lg font-semibold ${
-            theme === "dark" ? "text-gray-200" : "text-gray-700"
-          }`}>
-          Set Budget
-        </Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 };
