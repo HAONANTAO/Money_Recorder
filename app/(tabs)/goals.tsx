@@ -18,19 +18,23 @@ import { getMonthlyExpensesByCategory } from "@/services/recordService";
 const Goals = () => {
   const router = useRouter();
   const { theme } = useTheme();
-  const [userId, setUserId] = useState("");
+  const [userId, setUserId] = useState<string | null>(null); // Set userId as string | null
   const [monthlyBudgets, setMonthlyBudgets] = useState<any>(null);
   const [expensesByCategory, setExpensesByCategory] = useState<any>(null);
+
   useEffect(() => {
     const getInitialUserAndFetchBudgets = async () => {
       try {
         // Step 1: Get user email and fetch user details
         const email = await StorageService.getEmail();
-        const user = await getUserByEmail(email as unknown as string);
-        const userId = user.$id as unknown as string;
-        setUserId(userId);
+        if (!email) {
+          console.error("No email found in storage");
+          return;
+        }
 
-        // console.log("这里的user是：", userId);
+        const user = await getUserByEmail(email);
+        const userId = user.$id as string;
+        setUserId(userId);
 
         // Step 2: Fetch budgets once userId is available
         const currentYear = new Date().getFullYear();
@@ -41,6 +45,7 @@ const Goals = () => {
           currentMonth,
         );
         setMonthlyBudgets(budgets);
+
         const result = await getMonthlyExpensesByCategory(
           userId,
           currentYear,
@@ -51,11 +56,9 @@ const Goals = () => {
         console.error("获取预算失败:", error);
       }
     };
-    // 拿到userid后再去
+
     getInitialUserAndFetchBudgets();
-    console.log("xxx", monthlyBudgets);
-    // console.log("分类", expensesByCategory);
-  }, [monthlyBudgets]);
+  }, []); // Empty array ensures this runs only once on component mount
 
   return (
     <View
@@ -79,17 +82,26 @@ const Goals = () => {
               本月预算
             </Text>
             {BUDGET_CATEGORIES.map((category) => {
-              // 获取该类别的预算记录（从monthlyBudgets查找该类别的预算金额）
               const budget = monthlyBudgets?.find(
                 (b: any) => b.category === category.value,
               ) || { budgetAmount: 0 };
 
-              // 获取该类别的支出
               const expense = expensesByCategory?.[category.value] || 0;
 
               return (
-                <View
+                <TouchableOpacity
                   key={category.value}
+                  onPress={() => {
+                    const budgetId = budget?.$id;
+                    router.push({
+                      pathname: "/(func)/budgetDetail",
+                      params: {
+                        budgetId,
+                        category: category.value,
+                        amount: budget?.budgetAmount,
+                      },
+                    });
+                  }}
                   className={`flex-row items-center justify-between p-3 mb-2 rounded-lg ${
                     theme === "dark" ? "bg-tertiary" : "bg-white"
                   }`}>
@@ -102,25 +114,26 @@ const Goals = () => {
                       {category.label}
                     </Text>
                   </View>
-                  <Text
-                    className={`text-base font-semibold ${
-                      theme === "dark" ? "text-gray-200" : "text-gray-700"
-                    }`}>
-                    ${expense}/{budget?.budgetAmount}
-                  </Text>
-                  {/* 让正数就显示绿色 负数显示红色 0是黑色呢 */}
-                  <Text
-                    style={{
-                      color:
-                        budget?.budgetAmount - expense > 0
-                          ? "green" // 正数为绿色
-                          : budget?.budgetAmount - expense < 0
-                          ? "red" // 负数为红色
-                          : "black", // 0 为黑色
-                    }}>
-                    ${budget?.budgetAmount - expense}
-                  </Text>
-                </View>
+                  <View>
+                    <Text
+                      className={`text-base font-semibold ${
+                        theme === "dark" ? "text-gray-200" : "text-gray-700"
+                      }`}>
+                      ${expense}/{budget?.budgetAmount}
+                    </Text>
+                    <Text
+                      style={{
+                        color:
+                          budget?.budgetAmount - expense > 0
+                            ? "green"
+                            : budget?.budgetAmount - expense < 0
+                            ? "red"
+                            : "black",
+                      }}>
+                      ${budget?.budgetAmount - expense}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
               );
             })}
           </View>
@@ -144,7 +157,6 @@ const Goals = () => {
           </Text>
         </TouchableOpacity>
       </ScrollView>
-      {/* Proper closing tag for ScrollView */}
     </View>
   );
 };

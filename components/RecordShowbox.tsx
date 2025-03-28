@@ -35,7 +35,7 @@ const RecordShowBox: React.FC<RecordShowBoxProps> = ({ record }) => {
         {formatDate(record.createAt)}
       </Text>
       <Text className="text-sm text-gray-600">
-        <Text className="text-secondary">Payment Method: </Text>
+        <Text className="text-secondary">Method: </Text>
         {record.paymentMethod}
       </Text>
       <Text className="text-sm text-gray-600">
