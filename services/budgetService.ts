@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-28 14:00:00
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-28 16:28:46
+ * @LastEditTime: 2025-03-28 17:19:31
  * @FilePath: /Money_Recorder/services/budgetService.ts
  */
 
@@ -115,13 +115,14 @@ export const getMonthlyBudget = async (
       ],
     );
 
-    // 创建一个数组，包含所有预算类别和预算金额
+    // 创建一个数组，包含所有预算类别、预算金额和预算ID
     const budgetCategories = budgets.documents.map((document: any) => ({
+      budgetId: document.$id, // 添加 budgetId
       category: document.category, // 预算类别
       budgetAmount: document.amount, // 预算金额
     }));
 
-    return budgetCategories; // 返回预算类别和金额的数组
+    return budgetCategories; // 返回包含 budgetId 的预算类别和金额的数组
   } catch (error) {
     console.error("Error getting monthly budget:", error);
     throw error;
@@ -130,7 +131,7 @@ export const getMonthlyBudget = async (
 
 // 更新预算
 export const updateBudget = async (
-  budgetId: string,
+  documentId: string,
   data: Partial<Omit<Budget, "$id" | "userId" | "createAt" | "updateAt">>,
 ) => {
   try {
@@ -141,7 +142,7 @@ export const updateBudget = async (
     const updatedBudget = await database.updateDocument(
       DATABASE_ID,
       BUDGET_COLLECTION_ID,
-      budgetId,
+      documentId,
       {
         ...data,
         updateAt: new Date().toISOString(),

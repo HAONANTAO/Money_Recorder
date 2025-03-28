@@ -92,7 +92,8 @@ const Goals = () => {
                 <TouchableOpacity
                   key={category.value}
                   onPress={() => {
-                    const budgetId = budget?.$id;
+                    const budgetId = budget?.budgetId;
+
                     router.push({
                       pathname: "/(func)/budgetDetail",
                       params: {
