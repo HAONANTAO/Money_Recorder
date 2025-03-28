@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:44:20
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-26 17:21:22
+ * @LastEditTime: 2025-03-28 13:52:50
  * @FilePath: /Money_Recorder/interfaces/interfaces.d.ts
  */
 interface User {
@@ -26,4 +26,15 @@ interface MoneyRecord {
   location?: string; // 消费地点 ！
   recurring: boolean; // 是否为周期性收支 ！
   comment?: string; // 备注说明
+}
+
+interface Budget {
+  $id: string; // 文档ID
+  userId: string; // 关联的用户ID
+  amount: number; // 预算金额
+  year: number; // 预算年份
+  month: number; // 预算月份（1-12）
+  createAt: string; // 创建时间
+  category?: string; // 可选：特定类别的预算
+  note?: string; // 可选：预算备注
 }

@@ -31,6 +31,7 @@ const BarChartComponent: React.FC<BarChartComponentProps> = ({ data }) => {
   return (
     <View className="p-4 rounded-2xl border border-gray-200">
       <BarChart
+        yAxisSuffix=""
         data={chartData}
         width={screenWidth} // 动态宽度
         height={220}

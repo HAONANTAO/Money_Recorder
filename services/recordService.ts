@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-20 18:36:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-26 13:45:01
+ * @LastEditTime: 2025-03-28 13:50:46
  * @FilePath: /Money_Recorder/services/recordService.ts
  */
 
@@ -10,7 +10,7 @@ import { Client, Databases, ID, Query } from "react-native-appwrite";
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID;
 
 const RECORDS_COLLECTION_ID =
-  process.env.EXPO_PUBLIC_APPWRITE_Record_COLLECTION_ID;
+  process.env.EXPO_PUBLIC_APPWRITE_RECORD_COLLECTION_ID;
 const PROJECT_ID = process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID;
 
 // 连接数据库
