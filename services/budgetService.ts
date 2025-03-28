@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-28 14:00:00
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-28 15:10:19
+ * @LastEditTime: 2025-03-28 16:16:33
  * @FilePath: /Money_Recorder/services/budgetService.ts
  */
 
@@ -87,7 +87,13 @@ export const getMonthlyBudget = async (
       ],
     );
 
-    return budgets.documents[0]; // 返回当前生效的预算
+    // 创建一个数组，包含所有预算类别和预算金额
+    const budgetCategories = budgets.documents.map((document: any) => ({
+      category: document.category, // 预算类别
+      budgetAmount: document.amount, // 预算金额
+    }));
+
+    return budgetCategories; // 返回预算类别和金额的数组
   } catch (error) {
     console.error("Error getting monthly budget:", error);
     throw error;

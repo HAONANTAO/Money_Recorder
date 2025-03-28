@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-20 18:36:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-28 15:52:39
+ * @LastEditTime: 2025-03-28 16:10:22
  * @FilePath: /Money_Recorder/services/recordService.ts
  */
 
@@ -160,7 +160,7 @@ export const getMonthlyExpensesByCategory = async (
     );
 
     // 检查返回的 records 数据
-    console.log("Raw Records:", records); // Debug log to check if any records are returned
+    // console.log("Raw Records:", records); // Debug log to check if any records are returned
 
     if (!records || !records.documents || records.documents.length === 0) {
       console.log("No records found for the specified date range and user");
@@ -181,7 +181,7 @@ export const getMonthlyExpensesByCategory = async (
       }
     });
 
-    console.log("Expenses by Category:", expensesByCategory);
+    // console.log("Expenses by Category:", expensesByCategory);
     return expensesByCategory;
   } catch (error) {
     console.error("Error fetching monthly expenses by category:", error);

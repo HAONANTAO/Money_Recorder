@@ -30,7 +30,7 @@ const Goals = () => {
         const userId = user.$id as unknown as string;
         setUserId(userId);
 
-        console.log("这里的user是：", userId);
+        // console.log("这里的user是：", userId);
 
         // Step 2: Fetch budgets once userId is available
         const currentYear = new Date().getFullYear();
@@ -53,7 +53,8 @@ const Goals = () => {
     };
     // 拿到userid后再去
     getInitialUserAndFetchBudgets();
-    console.log("分类", expensesByCategory);
+    console.log("xxx", monthlyBudgets);
+    // console.log("分类", expensesByCategory);
   }, []);
 
   return (
@@ -78,9 +79,14 @@ const Goals = () => {
               本月预算
             </Text>
             {BUDGET_CATEGORIES.map((category) => {
-              const budget = monthlyBudgets?.documents?.find(
+              // 获取该类别的预算记录（从monthlyBudgets查找该类别的预算金额）
+              const budget = monthlyBudgets?.find(
                 (b: any) => b.category === category.value,
-              );
+              ) || { budgetAmount: 0 };
+
+              // 获取该类别的支出
+              const expense = expensesByCategory?.[category.value] || 0;
+
               return (
                 <View
                   key={category.value}
@@ -88,7 +94,6 @@ const Goals = () => {
                     theme === "dark" ? "bg-tertiary" : "bg-white"
                   }`}>
                   <View className="flex-row items-center">
-                    {/* Wrap the icon in a Text component */}
                     <Text className="mr-2 text-lg">{category.icon}</Text>
                     <Text
                       className={`text-base font-medium ${
@@ -101,7 +106,7 @@ const Goals = () => {
                     className={`text-base font-semibold ${
                       theme === "dark" ? "text-gray-200" : "text-gray-700"
                     }`}>
-                    ¥{budget?.amount || 0}
+                    ¥{expense}/{budget?.budgetAmount}
                   </Text>
                 </View>
               );
