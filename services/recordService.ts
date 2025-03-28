@@ -127,3 +127,46 @@ export const getRecordById = async (recordId: string) => {
     throw error;
   }
 };
+
+// 获取用户特定月份的各类别消费总额
+export const getMonthlyExpensesByCategory = async (
+  userId: string,
+  year: number,
+  month: number,
+) => {
+  try {
+    if (!DATABASE_ID || !RECORDS_COLLECTION_ID) {
+      throw new Error("Database configuration is missing");
+    }
+
+    // 获取指定月份的开始和结束时间
+    const startDate = new Date(year, month - 1, 1).toISOString();
+    const endDate = new Date(year, month, 0).toISOString();
+
+    // 查询指定用户在特定月份内的所有记录
+    const records = await database.listDocuments(
+      DATABASE_ID,
+      RECORDS_COLLECTION_ID,
+      [
+        Query.equal("userId", userId),
+        Query.greaterThanEqual("createAt", startDate),
+        Query.lessThanEqual("createAt", endDate),
+      ],
+    );
+
+    // 按类别统计总额
+    const expensesByCategory: { [key: string]: number } = {};
+    records.documents.forEach((record: any) => {
+      const { category, amount } = record;
+      if (!expensesByCategory[category]) {
+        expensesByCategory[category] = 0;
+      }
+      expensesByCategory[category] += amount;
+    });
+
+    return expensesByCategory;
+  } catch (error) {
+    console.error("Error fetching monthly expenses by category:", error);
+    throw error;
+  }
+};
