@@ -5,6 +5,8 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import React, { useState } from "react";
@@ -95,287 +97,297 @@ const Record = () => {
   };
 
   return (
-    <ScrollView
-      className={`flex-1 ${isDark ? "bg-quaternary" : "bg-gray-100"}`}>
-      <View className="p-5">
-        <Text
-          className={`mt-12 text-2xl font-bold mb-5 text-center ${
-            isDark ? "text-secondary" : "text-quaternary"
-          }`}>
-          Add Record
-        </Text>
-
-        {/* 金额输入 */}
-        <View
-          className={`mb-4 ${
-            isDark ? "bg-quaternary" : "bg-white"
-          } rounded-xl p-4`}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <ScrollView
+        className={`flex-1 ${isDark ? "bg-quaternary" : "bg-gray-100"}`}>
+        <View className="p-5">
           <Text
-            className={`mb-2 text-base font-medium ${
-              isDark ? "text-gray-200" : "text-gray-700"
+            className={`mt-12 text-2xl font-bold mb-5 text-center ${
+              isDark ? "text-secondary" : "text-quaternary"
             }`}>
-            Amount
+            Add Record
           </Text>
-          <View className={`flex-row items-center p-3 bg-white rounded-lg`}>
+
+          {/* 金额输入 */}
+          <View
+            className={`mb-4 ${
+              isDark ? "bg-quaternary" : "bg-white"
+            } rounded-xl p-4`}>
             <Text
-              className={`text-xl mr-2 font-medium ${
+              className={`mb-2 text-base font-medium ${
                 isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              $
+              Amount
+            </Text>
+            <View className={`flex-row items-center p-3 bg-white rounded-lg`}>
+              <Text
+                className={`text-xl mr-2 font-medium ${
+                  isDark ? "text-gray-200" : "text-gray-700"
+                }`}>
+                $
+              </Text>
+              <TextInput
+                placeholder="0.00"
+                placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
+                keyboardType="numeric"
+                value={record.moneyAmount}
+                onSubmitEditing={Keyboard.dismiss}
+                returnKeyType="done"
+                onChangeText={(value) =>
+                  setRecord({ ...record, moneyAmount: value })
+                }
+              />
+            </View>
+          </View>
+
+          {/* 类型选择 */}
+          <View
+            className={`mb-4 ${
+              isDark ? "bg-quaternary" : "bg-white"
+            } rounded-xl p-4`}>
+            <Text
+              className={`mb-2 text-base font-medium ${
+                isDark ? "text-gray-200" : "text-gray-700"
+              }`}>
+              Type
+            </Text>
+            <View
+              className={`${
+                isDark ? "" : "bg-white"
+              }overflow-hidden  rounded-lg`}>
+              <Picker
+                selectedValue={record.type}
+                onValueChange={(value) => setRecord({ ...record, type: value })}
+                className={`h-12 ${
+                  isDark
+                    ? "bg-gray-700 text-gray-200"
+                    : "bg-white text-gray-800"
+                }`}>
+                <Picker.Item
+                  label="Expense"
+                  value="expense"
+                  color={isDark ? "#EF4444" : "#DC2626"}
+                />
+                <Picker.Item
+                  label="Income"
+                  value="income"
+                  color={isDark ? "#10B981" : "#059669"}
+                />
+              </Picker>
+            </View>
+          </View>
+
+          {/* 类别选择 */}
+          <View
+            className={`mb-4 ${
+              isDark ? "bg-quaternary" : "bg-white"
+            } rounded-xl p-4`}>
+            <Text
+              className={`mb-2 text-base font-medium ${
+                isDark ? "text-gray-200" : "text-gray-700"
+              }`}>
+              Category
+            </Text>
+            <View
+              className={`${
+                isDark ? "" : "bg-white"
+              }overflow-hidden  rounded-lg`}>
+              <Picker
+                selectedValue={record.category}
+                onValueChange={(value) =>
+                  setRecord({ ...record, category: value })
+                }
+                className={`h-12 ${
+                  isDark
+                    ? "bg-gray-700 text-gray-200"
+                    : "bg-white text-gray-800"
+                }`}>
+                <Picker.Item
+                  label="Choose category"
+                  value="Choose category"
+                  color={isDark ? "#1e67e5" : "#1c64f3"}
+                />
+                {(record.type === "expense"
+                  ? EXPENSE_CATEGORIES
+                  : INCOME_CATEGORIES
+                ).map((category) => (
+                  <Picker.Item
+                    key={category.value}
+                    label={`${category.icon} ${category.label}`}
+                    value={category.value}
+                    color={isDark ? "#E5E7EB" : "#1F2937"}
+                  />
+                ))}
+              </Picker>
+            </View>
+          </View>
+
+          {/* 支付方式 */}
+          <View
+            className={`mb-4 ${
+              isDark ? "bg-quaternary" : "bg-white"
+            } rounded-xl p-4`}>
+            <Text
+              className={`mb-2 text-base font-medium ${
+                isDark ? "text-gray-200" : "text-gray-700"
+              }`}>
+              Payment method
+            </Text>
+            <View className="flex-row gap-2 justify-between">
+              <TouchableOpacity
+                onPress={() => setRecord({ ...record, paymentMethod: "Card" })}
+                className={`flex-1 p-3 rounded-lg ${
+                  record.paymentMethod === "Card"
+                    ? isDark
+                      ? "bg-blue-700"
+                      : "bg-blue-500"
+                    : isDark
+                    ? "bg-gray-700"
+                    : "bg-gray-200"
+                }`}>
+                <Text
+                  className={`text-center font-medium ${
+                    record.paymentMethod === "Card"
+                      ? "text-white"
+                      : isDark
+                      ? "text-gray-200"
+                      : "text-gray-700"
+                  }`}>
+                  Card
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  setRecord({ ...record, paymentMethod: "Transfer" })
+                }
+                className={`flex-1 p-3 rounded-lg ${
+                  record.paymentMethod === "Transfer"
+                    ? isDark
+                      ? "bg-blue-700"
+                      : "bg-blue-500"
+                    : isDark
+                    ? "bg-gray-700"
+                    : "bg-gray-200"
+                }`}>
+                <Text
+                  className={`text-center font-medium ${
+                    record.paymentMethod === "Transfer"
+                      ? "text-white"
+                      : isDark
+                      ? "text-gray-200"
+                      : "text-gray-700"
+                  }`}>
+                  Transfer
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setRecord({ ...record, paymentMethod: "Cash" })}
+                className={`flex-1 p-3 rounded-lg ${
+                  record.paymentMethod === "Cash"
+                    ? isDark
+                      ? "bg-blue-700"
+                      : "bg-blue-500"
+                    : isDark
+                    ? "bg-gray-700"
+                    : "bg-gray-200"
+                }`}>
+                <Text
+                  className={`text-center font-medium ${
+                    record.paymentMethod === "Cash"
+                      ? "text-white"
+                      : isDark
+                      ? "text-gray-200"
+                      : "text-gray-700"
+                  }`}>
+                  Cash
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* 地点输入 */}
+          <View
+            className={`mb-4 ${
+              isDark ? "bg-quaternary" : "bg-white"
+            } rounded-xl p-4`}>
+            <Text
+              className={`mb-2 text-base font-medium ${
+                isDark ? "text-gray-200" : "text-gray-700"
+              }`}>
+              Location
             </Text>
             <TextInput
-              placeholder="0.00"
+              className={`p-3 rounded-lg text-base ${
+                isDark ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"
+              }`}
+              placeholder="Enter location"
               placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
-              keyboardType="numeric"
-              value={record.moneyAmount}
+              value={record.location}
               onChangeText={(value) =>
-                setRecord({ ...record, moneyAmount: value })
+                setRecord({ ...record, location: value })
               }
             />
           </View>
-        </View>
 
-        {/* 类型选择 */}
-        <View
-          className={`mb-4 ${
-            isDark ? "bg-quaternary" : "bg-white"
-          } rounded-xl p-4`}>
-          <Text
-            className={`mb-2 text-base font-medium ${
-              isDark ? "text-gray-200" : "text-gray-700"
-            }`}>
-            Type
-          </Text>
+          {/* 标签 */}
           <View
-            className={`${
-              isDark ? "" : "bg-white"
-            }overflow-hidden  rounded-lg`}>
-            <Picker
-              selectedValue={record.type}
-              onValueChange={(value) => setRecord({ ...record, type: value })}
-              className={`h-12 ${
-                isDark ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"
+            className={`mb-4 ${
+              isDark ? "bg-quaternary" : "bg-white"
+            } rounded-xl p-4`}>
+            <Text
+              className={`mb-2 text-base font-medium ${
+                isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              <Picker.Item
-                label="Expense"
-                value="expense"
-                color={isDark ? "#EF4444" : "#DC2626"}
-              />
-              <Picker.Item
-                label="Income"
-                value="income"
-                color={isDark ? "#10B981" : "#059669"}
-              />
-            </Picker>
+              Labels
+            </Text>
+            <TextInput
+              className={`p-3 rounded-lg text-base ${
+                isDark ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"
+              }`}
+              placeholder="multiple tags separated by commas"
+              placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
+              value={record.tags}
+              onChangeText={(value) => setRecord({ ...record, tags: value })}
+            />
           </View>
-        </View>
 
-        {/* 类别选择 */}
-        <View
-          className={`mb-4 ${
-            isDark ? "bg-quaternary" : "bg-white"
-          } rounded-xl p-4`}>
-          <Text
-            className={`mb-2 text-base font-medium ${
-              isDark ? "text-gray-200" : "text-gray-700"
-            }`}>
-            Category
-          </Text>
+          {/* 备注 */}
           <View
-            className={`${
-              isDark ? "" : "bg-white"
-            }overflow-hidden  rounded-lg`}>
-            <Picker
-              selectedValue={record.category}
-              onValueChange={(value) =>
-                setRecord({ ...record, category: value })
-              }
-              className={`h-12 ${
+            className={`mb-4 ${
+              isDark ? "bg-quaternary" : "bg-white"
+            } rounded-xl p-4`}>
+            <Text
+              className={`mb-2 text-base font-medium ${
+                isDark ? "text-gray-200" : "text-gray-700"
+              }`}>
+              Comments
+            </Text>
+            <TextInput
+              className={`p-3 rounded-lg text-base ${
                 isDark ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"
-              }`}>
-              <Picker.Item
-                label="Choose category"
-                value="Choose category"
-                color={isDark ? "#1e67e5" : "#1c64f3"}
-              />
-              {(record.type === "expense"
-                ? EXPENSE_CATEGORIES
-                : INCOME_CATEGORIES
-              ).map((category) => (
-                <Picker.Item
-                  key={category.value}
-                  label={`${category.icon} ${category.label}`}
-                  value={category.value}
-                  color={isDark ? "#E5E7EB" : "#1F2937"}
-                />
-              ))}
-            </Picker>
+              }`}
+              placeholder="add comment..."
+              placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
+              value={record.comment}
+              onChangeText={(value) => setRecord({ ...record, comment: value })}
+              multiline
+              numberOfLines={3}
+            />
           </View>
-        </View>
 
-        {/* 支付方式 */}
-        <View
-          className={`mb-4 ${
-            isDark ? "bg-quaternary" : "bg-white"
-          } rounded-xl p-4`}>
-          <Text
-            className={`mb-2 text-base font-medium ${
-              isDark ? "text-gray-200" : "text-gray-700"
+          {/* 提交按钮 */}
+          <TouchableOpacity
+            onPress={handleSubmit}
+            className={`p-4 rounded-xl mb-6 mt-2 ${
+              isDark ? "bg-blue-700" : "bg-blue-500"
             }`}>
-            Payment method
-          </Text>
-          <View className="flex-row gap-2 justify-between">
-            <TouchableOpacity
-              onPress={() => setRecord({ ...record, paymentMethod: "Card" })}
-              className={`flex-1 p-3 rounded-lg ${
-                record.paymentMethod === "Card"
-                  ? isDark
-                    ? "bg-blue-700"
-                    : "bg-blue-500"
-                  : isDark
-                  ? "bg-gray-700"
-                  : "bg-gray-200"
-              }`}>
-              <Text
-                className={`text-center font-medium ${
-                  record.paymentMethod === "Card"
-                    ? "text-white"
-                    : isDark
-                    ? "text-gray-200"
-                    : "text-gray-700"
-                }`}>
-                Card
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() =>
-                setRecord({ ...record, paymentMethod: "Transfer" })
-              }
-              className={`flex-1 p-3 rounded-lg ${
-                record.paymentMethod === "Transfer"
-                  ? isDark
-                    ? "bg-blue-700"
-                    : "bg-blue-500"
-                  : isDark
-                  ? "bg-gray-700"
-                  : "bg-gray-200"
-              }`}>
-              <Text
-                className={`text-center font-medium ${
-                  record.paymentMethod === "Transfer"
-                    ? "text-white"
-                    : isDark
-                    ? "text-gray-200"
-                    : "text-gray-700"
-                }`}>
-                Transfer
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setRecord({ ...record, paymentMethod: "Cash" })}
-              className={`flex-1 p-3 rounded-lg ${
-                record.paymentMethod === "Cash"
-                  ? isDark
-                    ? "bg-blue-700"
-                    : "bg-blue-500"
-                  : isDark
-                  ? "bg-gray-700"
-                  : "bg-gray-200"
-              }`}>
-              <Text
-                className={`text-center font-medium ${
-                  record.paymentMethod === "Cash"
-                    ? "text-white"
-                    : isDark
-                    ? "text-gray-200"
-                    : "text-gray-700"
-                }`}>
-                Cash
-              </Text>
-            </TouchableOpacity>
-          </View>
+            <Text className="text-base font-semibold text-center text-white">
+              Save Record
+            </Text>
+          </TouchableOpacity>
         </View>
-
-        {/* 地点输入 */}
-        <View
-          className={`mb-4 ${
-            isDark ? "bg-quaternary" : "bg-white"
-          } rounded-xl p-4`}>
-          <Text
-            className={`mb-2 text-base font-medium ${
-              isDark ? "text-gray-200" : "text-gray-700"
-            }`}>
-            Location
-          </Text>
-          <TextInput
-            className={`p-3 rounded-lg text-base ${
-              isDark ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"
-            }`}
-            placeholder="Enter location"
-            placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
-            value={record.location}
-            onChangeText={(value) => setRecord({ ...record, location: value })}
-          />
-        </View>
-
-        {/* 标签 */}
-        <View
-          className={`mb-4 ${
-            isDark ? "bg-quaternary" : "bg-white"
-          } rounded-xl p-4`}>
-          <Text
-            className={`mb-2 text-base font-medium ${
-              isDark ? "text-gray-200" : "text-gray-700"
-            }`}>
-            Labels
-          </Text>
-          <TextInput
-            className={`p-3 rounded-lg text-base ${
-              isDark ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"
-            }`}
-            placeholder="multiple tags separated by commas"
-            placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
-            value={record.tags}
-            onChangeText={(value) => setRecord({ ...record, tags: value })}
-          />
-        </View>
-
-        {/* 备注 */}
-        <View
-          className={`mb-4 ${
-            isDark ? "bg-quaternary" : "bg-white"
-          } rounded-xl p-4`}>
-          <Text
-            className={`mb-2 text-base font-medium ${
-              isDark ? "text-gray-200" : "text-gray-700"
-            }`}>
-            Comments
-          </Text>
-          <TextInput
-            className={`p-3 rounded-lg text-base ${
-              isDark ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"
-            }`}
-            placeholder="add comment..."
-            placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
-            value={record.comment}
-            onChangeText={(value) => setRecord({ ...record, comment: value })}
-            multiline
-            numberOfLines={3}
-          />
-        </View>
-
-        {/* 提交按钮 */}
-        <TouchableOpacity
-          onPress={handleSubmit}
-          className={`p-4 rounded-xl mb-6 mt-2 ${
-            isDark ? "bg-blue-700" : "bg-blue-500"
-          }`}>
-          <Text className="text-base font-semibold text-center text-white">
-            Save Record
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </TouchableWithoutFeedback>
   );
 };
 

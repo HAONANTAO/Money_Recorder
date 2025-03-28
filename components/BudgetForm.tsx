@@ -8,6 +8,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   ScrollView,
+  Modal,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useTheme } from "../contexts/ThemeContext";
@@ -27,6 +28,8 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
   const [category, setCategory] = useState(BUDGET_CATEGORIES[0].value);
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const handleSubmit = async () => {
     try {
@@ -46,15 +49,16 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
 
       await createBudget(budgetData);
       setAmount("");
-      setCategory("");
+      setCategory(BUDGET_CATEGORIES[0].value);
       setNote("");
       setError("");
+      setShowSuccessModal(true);
       if (onSuccess) {
         onSuccess();
-        console.error("创建预算成功:");
       }
     } catch (err) {
       setError("创建预算失败，请重试");
+      setShowErrorModal(true);
       console.error("创建预算失败:", err);
     }
   };
@@ -214,6 +218,58 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
               保存预算
             </Text>
           </TouchableOpacity>
+
+          {/* 成功提示Modal */}
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={showSuccessModal}
+            onRequestClose={() => setShowSuccessModal(false)}>
+            <View className="flex-1 justify-center items-center bg-black/50">
+              <View
+                className={`m-5 p-5 rounded-lg ${
+                  theme === "dark" ? "bg-quaternary" : "bg-white"
+                }`}>
+                <Text
+                  className={`text-lg font-bold mb-4 text-center ${
+                    theme === "dark" ? "text-white" : "text-black"
+                  }`}>
+                  创建预算成功
+                </Text>
+                <TouchableOpacity
+                  className="px-4 py-2 rounded-md bg-primary"
+                  onPress={() => setShowSuccessModal(false)}>
+                  <Text className="text-center text-white">确定</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+
+          {/* 失败提示Modal */}
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={showErrorModal}
+            onRequestClose={() => setShowErrorModal(false)}>
+            <View className="flex-1 justify-center items-center bg-black/50">
+              <View
+                className={`m-5 p-5 rounded-lg ${
+                  theme === "dark" ? "bg-quaternary" : "bg-white"
+                }`}>
+                <Text
+                  className={`text-lg font-bold mb-4 text-center ${
+                    theme === "dark" ? "text-white" : "text-black"
+                  }`}>
+                  创建预算失败
+                </Text>
+                <TouchableOpacity
+                  className="px-4 py-2 rounded-md bg-primary"
+                  onPress={() => setShowErrorModal(false)}>
+                  <Text className="text-center text-white">确定</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
         </View>
       </ScrollView>
     </TouchableWithoutFeedback>
