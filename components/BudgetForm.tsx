@@ -6,8 +6,10 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import { useTheme } from "../contexts/ThemeContext";
 import { createBudget } from "../services/budgetService";
+import { BUDGET_CATEGORIES } from "../constants/categories";
 
 interface BudgetFormProps {
   userId: string;
@@ -25,14 +27,14 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
 
   const handleSubmit = async () => {
     try {
-      if (!amount || isNaN(Number(amount))) {
-        setError("请输入有效的预算金额");
+      if (!amount) {
+        setError("请输入预算金额");
         return;
       }
 
       const budgetData = {
         userId,
-        amount: Number(amount),
+        amount: parseFloat(amount),
         year,
         month,
         category,
@@ -71,35 +73,48 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
           预算年月
         </Text>
         <View className="flex-row space-x-2">
-          <TextInput
-            className={`flex-1 border rounded-md p-2 ${
-              theme === "dark"
-                ? "bg-tertiary text-white border-gray-600"
-                : "bg-white text-black border-gray-300"
-            }`}
-            value={String(year)}
-            onChangeText={(text) => setYear(Number(text))}
-            placeholder="年份"
-            keyboardType="numeric"
-            placeholderTextColor={theme === "dark" ? "#9CA3AF" : "#6B7280"}
-          />
-          <TextInput
-            className={`flex-1 border rounded-md p-2 ${
-              theme === "dark"
-                ? "bg-tertiary text-white border-gray-600"
-                : "bg-white text-black border-gray-300"
-            }`}
-            value={String(month)}
-            onChangeText={(text) => {
-              const value = Number(text);
-              if (value >= 1 && value <= 12) {
-                setMonth(value);
-              }
-            }}
-            placeholder="月份(1-12)"
-            keyboardType="numeric"
-            placeholderTextColor={theme === "dark" ? "#9CA3AF" : "#6B7280"}
-          />
+          <View
+            className={`flex-1 border rounded-md overflow-hidden ${
+              theme === "dark" ? "border-gray-600" : "border-gray-300"
+            }`}>
+            <Picker
+              selectedValue={String(year)}
+              onValueChange={(itemValue) => setYear(Number(itemValue))}
+              style={{
+                backgroundColor: theme === "dark" ? "#374151" : "#FFFFFF",
+                color: theme === "dark" ? "#FFFFFF" : "#000000",
+              }}
+              itemStyle={{ color: theme === "dark" ? "#FFFFFF" : "#000000" }}>
+              {Array.from({ length: 10 }, (_, i) => (
+                <Picker.Item
+                  key={i}
+                  label={String(new Date().getFullYear() + i)}
+                  value={String(new Date().getFullYear() + i)}
+                />
+              ))}
+            </Picker>
+          </View>
+          <View
+            className={`flex-1 border rounded-md overflow-hidden ${
+              theme === "dark" ? "border-gray-600" : "border-gray-300"
+            }`}>
+            <Picker
+              selectedValue={String(month)}
+              onValueChange={(itemValue) => setMonth(Number(itemValue))}
+              style={{
+                backgroundColor: theme === "dark" ? "#374151" : "#FFFFFF",
+                color: theme === "dark" ? "#FFFFFF" : "#000000",
+              }}
+              itemStyle={{ color: theme === "dark" ? "#FFFFFF" : "#000000" }}>
+              {Array.from({ length: 12 }, (_, i) => (
+                <Picker.Item
+                  key={i}
+                  label={String(i + 1)}
+                  value={String(i + 1)}
+                />
+              ))}
+            </Picker>
+          </View>
         </View>
       </View>
 
@@ -127,17 +142,28 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
           className={`mb-2 ${theme === "dark" ? "text-white" : "text-black"}`}>
           预算类别
         </Text>
-        <TextInput
-          className={`border rounded-md p-2 ${
-            theme === "dark"
-              ? "bg-tertiary text-white border-gray-600"
-              : "bg-white text-black border-gray-300"
-          }`}
-          value={category}
-          onChangeText={setCategory}
-          placeholder="输入预算类别（可选）"
-          placeholderTextColor={theme === "dark" ? "#9CA3AF" : "#6B7280"}
-        />
+        <View
+          className={`border rounded-md overflow-hidden ${
+            theme === "dark" ? "border-gray-600" : "border-gray-300"
+          }`}>
+          <Picker
+            selectedValue={category}
+            onValueChange={(itemValue: string) => setCategory(itemValue)}
+            style={{
+              backgroundColor: theme === "dark" ? "#374151" : "#FFFFFF",
+              color: theme === "dark" ? "#FFFFFF" : "#000000",
+            }}
+            itemStyle={{ color: theme === "dark" ? "#FFFFFF" : "#000000" }}>
+            <Picker.Item label="选择类别" value="" />
+            {BUDGET_CATEGORIES.map((cat) => (
+              <Picker.Item
+                key={cat.value}
+                label={`${cat.icon} ${cat.label}`}
+                value={cat.value}
+              />
+            ))}
+          </Picker>
+        </View>
       </View>
 
       <View className="mb-4">
