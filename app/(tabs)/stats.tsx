@@ -248,7 +248,7 @@ const Stats = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [monthlyBudgets, expensesByCategory]);
 
   return (
     <ScrollView

@@ -1,12 +1,12 @@
 /*
  * @Date: 2025-03-28 15:21:48
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-28 15:22:10
- * @FilePath: /Money_Recorder/app/(func)/budget.tsx
+ * @LastEditTime: 2025-03-28 19:52:15
+ * @FilePath: /Money_Recorder/components/Budget.tsx
  */
 import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useTheme } from "../../contexts/ThemeContext";
+import { useTheme } from "../contexts/ThemeContext";
 import { getUserByEmail } from "@/services/userManagement";
 import { StorageService } from "@/utils/storageService";
 import BudgetForm from "@/components/BudgetForm";
@@ -19,7 +19,7 @@ const Budget = () => {
       const email = await StorageService.getEmail();
       const user = await getUserByEmail(email as unknown as string);
       setUserId(user.$id as unknown as null);
-      console.log("这里的user是：", userId);
+      // console.log("这里的user是：", userId);
     };
     getInitialUser();
   }, []);

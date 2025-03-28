@@ -1,7 +1,7 @@
 import { Text, View, TouchableOpacity, TextInput, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useTheme } from "../../contexts/ThemeContext";
+import { useTheme } from "../contexts/ThemeContext";
 import { deleteBudget, updateBudget } from "@/services/budgetService";
 import { Ionicons } from "@expo/vector-icons";
 
