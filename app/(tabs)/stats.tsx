@@ -17,6 +17,7 @@ import RecordShowBox from "@/components/RecordShowbox";
 import DateChecker from "@/utils/dateChecker";
 import PieChartComponent from "@/components/PieChartComponent";
 import BarChartComponent from "@/components/BarChartComponent";
+import { RefreshControl } from "react-native";
 
 import {
   EXPENSE_CATEGORIES,
@@ -152,8 +153,115 @@ const Stats = () => {
     return color;
   };
 
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+
+  const fetchData = async () => {
+    setIsRefreshing(true);
+    try {
+      const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
+      if (!email) return;
+
+      const userData = await getUserByEmail(email);
+      const currentYear = new Date().getFullYear();
+      const currentMonth = new Date().getMonth() + 1;
+      const [budgets, expenses] = await Promise.all([
+        getMonthlyBudget(userData.$id, currentYear, currentMonth),
+        getMonthlyExpensesByCategory(userData.$id, currentYear, currentMonth),
+      ]);
+      setMonthlyBudgets(budgets);
+      setExpensesByCategory(expenses);
+
+      const [user, records] = await Promise.all([
+        getUserByEmail(email),
+        getRecords(userData.$id),
+      ]);
+
+      setUser(user);
+      const filteredRecords = DateChecker(records as unknown as MoneyRecord[]);
+      setRecords(filteredRecords);
+      setEventLength(records.length);
+
+      const incomeTotal = filteredRecords
+        .filter((record: any) => record.type === "income")
+        .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
+
+      const expenseTotal = filteredRecords
+        .filter((record: any) => record.type === "expense")
+        .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
+
+      setIncome(incomeTotal);
+      setExpense(expenseTotal);
+
+      const categoryData = filteredRecords
+        .filter((record: any) => record.type === "expense")
+        .reduce((categories: any, record: any) => {
+          const category = record.category;
+          if (categories[category]) {
+            categories[category] += record.moneyAmount;
+          } else {
+            categories[category] = record.moneyAmount;
+          }
+          return categories;
+        }, {});
+
+      const pieChartExpenseData = EXPENSE_CATEGORIES.map((category) => ({
+        name: category.label,
+        population: categoryData[category.value] || 0,
+        color: getRandomColor(),
+        legendFontColor: "#7f7f7f",
+        legendFontSize: 15,
+        icon: category.icon,
+      }));
+
+      const incomeCategoryData = filteredRecords
+        .filter((record: any) => record.type === "income")
+        .reduce((categories: any, record: any) => {
+          const category = record.category;
+          if (categories[category]) {
+            categories[category] += record.moneyAmount;
+          } else {
+            categories[category] = record.moneyAmount;
+          }
+          return categories;
+        }, {});
+
+      const pieChartIncomeData = INCOME_CATEGORIES.map((category) => ({
+        name: category.label,
+        population: incomeCategoryData[category.value] || 0,
+        color: getRandomColor(),
+        legendFontColor: "#7f7f7f",
+        legendFontSize: 15,
+        icon: category.icon,
+      }));
+
+      setExpenseCategories(pieChartExpenseData);
+      setIncomeCategories(pieChartIncomeData);
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsRefreshing(false);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="flex-1">
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1 }}
+      className="flex-1"
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefreshing}
+          onRefresh={fetchData}
+          tintColor={theme === "dark" ? "#1477f1" : "#0d6df4"}
+          progressBackgroundColor={theme === "dark" ? "#333" : "#fff"}
+        />
+      }>
       <View
         className={`flex-1 justify-start items-center ${
           theme === "dark" ? "bg-quaternary" : "bg-white"
