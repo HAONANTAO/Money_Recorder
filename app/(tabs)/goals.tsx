@@ -1,28 +1,44 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import React from "react";
+import { useRouter } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
-import { getUserByEmail } from "@/services/userManagement";
-import { StorageService } from "@/utils/storageService";
-import BudgetForm from "@/components/BudgetForm";
+import { Ionicons } from "@expo/vector-icons";
 
 const Goals = () => {
+  const router = useRouter();
   const { theme } = useTheme();
-  const [userId, setUserId] = useState(null);
-  useEffect(() => {
-    const getInitialUser = async () => {
-      const email = await StorageService.getEmail();
-      const user = await getUserByEmail(email as unknown as string);
-      setUserId(user.$id as unknown as null);
-      console.log("这里的user是：", userId);
-    };
-    getInitialUser();
-  }, []);
+
   return (
     <View
-      className={`flex-1 p-4 ${
-        theme === "dark" ? "bg-quaternary" : "bg-white"
+      className={`flex-1 ${
+        theme === "dark" ? "bg-quaternary" : "bg-gray-100"
       }`}>
-      {userId && <BudgetForm userId={userId} />}
+      <View className="px-6 py-10">
+        <Text
+          className={`mb-8 text-3xl font-extrabold text-center ${
+            theme === "dark" ? "text-gray-200" : "text-gray-800"
+          }`}>
+          Goals
+        </Text>
+
+        <TouchableOpacity
+          onPress={() => router.push("/(func)/budget")}
+          className={`flex-row items-center p-4 rounded-xl shadow-md ${
+            theme === "dark" ? "bg-quaternary" : "bg-white"
+          }`}>
+          <Ionicons
+            name="wallet-outline"
+            size={24}
+            color={theme === "dark" ? "#60A5FA" : "#4B5563"}
+          />
+          <Text
+            className={`ml-4 text-lg font-semibold ${
+              theme === "dark" ? "text-gray-200" : "text-gray-700"
+            }`}>
+            Budget
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
