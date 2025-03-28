@@ -55,7 +55,7 @@ const Goals = () => {
     getInitialUserAndFetchBudgets();
     console.log("xxx", monthlyBudgets);
     // console.log("分类", expensesByCategory);
-  }, []);
+  }, [monthlyBudgets]);
 
   return (
     <View
@@ -112,13 +112,13 @@ const Goals = () => {
                   <Text
                     style={{
                       color:
-                        expense - budget?.budgetAmount > 0
+                        budget?.budgetAmount - expense > 0
                           ? "green" // 正数为绿色
-                          : expense - budget?.budgetAmount < 0
+                          : budget?.budgetAmount - expense < 0
                           ? "red" // 负数为红色
                           : "black", // 0 为黑色
                     }}>
-                    ${expense - budget?.budgetAmount}
+                    ${budget?.budgetAmount - expense}
                   </Text>
                 </View>
               );

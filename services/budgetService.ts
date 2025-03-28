@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-28 14:00:00
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-28 16:16:33
+ * @LastEditTime: 2025-03-28 16:26:01
  * @FilePath: /Money_Recorder/services/budgetService.ts
  */
 
@@ -29,6 +29,34 @@ export const createBudget = async (
       throw new Error("Database configuration is missing");
     }
 
+    const { year, month, category } = budget;
+
+    // Ensure category is a valid string (non-empty)
+    if (!category || typeof category !== "string" || category.trim() === "") {
+      throw new Error("Category must be a valid non-empty string");
+    }
+
+    // Log the category for debugging
+    console.log("Category being checked:", category);
+
+    // Step 1: Check if a budget for the same category, year, and month already exists
+    const existingBudgets = await database.listDocuments(
+      DATABASE_ID,
+      BUDGET_COLLECTION_ID,
+      [
+        Query.equal("year", year),
+        Query.equal("month", month),
+        Query.equal("category", category), // Ensure category is a valid string
+      ],
+    );
+
+    if (existingBudgets.documents.length > 0) {
+      throw new Error(
+        `A budget for category "${category}" already exists for ${year}-${month}`,
+      );
+    }
+
+    // Step 2: Create the new budget if no existing one
     const now = new Date().toISOString();
     const newBudget = await database.createDocument(
       DATABASE_ID,
