@@ -79,7 +79,7 @@ const Goals = () => {
           />
         }>
         <Text
-          className={`mb-8 text-3xl font-extrabold text-center ${
+          className={`mt-6 mb-8 text-3xl font-extrabold text-center ${
             theme === "dark" ? "text-gray-200" : "text-gray-800"
           }`}>
           Goals
@@ -89,9 +89,9 @@ const Goals = () => {
           <View className="mb-6">
             <Text
               className={`mb-4 text-xl font-bold ${
-                theme === "dark" ? "text-gray-200" : "text-gray-800"
+                theme === "dark" ? "text-gray-200" : "text-secondary"
               }`}>
-              本月预算
+              This Month Budget
             </Text>
             {BUDGET_CATEGORIES.map((category) => {
               const budget = monthlyBudgets?.find(

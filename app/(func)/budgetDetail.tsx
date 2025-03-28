@@ -21,22 +21,22 @@ const BudgetDetail = () => {
 
   const handleDelete = async () => {
     Alert.alert(
-      "确认删除",
-      "您确定要删除这个预算吗？",
+      "Confirm Deletion",
+      "Are you sure you want to delete this budget?？",
       [
         {
-          text: "取消",
-          onPress: () => console.log("删除操作已取消"),
+          text: "cancel",
+          onPress: () => console.log("Delete operation canceled"),
           style: "cancel",
         },
         {
-          text: "确定",
+          text: "confirmed",
           onPress: async () => {
             try {
               await deleteBudget(budgetId as string);
               router.back();
             } catch (error) {
-              console.error("删除预算失败:", error);
+              console.error("Failed to delete budget:", error);
             }
           },
         },
@@ -48,22 +48,22 @@ const BudgetDetail = () => {
   const handleUpdate = () => {
     if (isEditing && newAmount !== String(amount)) {
       Alert.alert(
-        "确认更新",
-        "您确定要保存这些更改吗？",
+        "Confirm Update",
+        "Are you sure you want to save these changes?",
         [
           {
-            text: "取消",
-            onPress: () => console.log("更新操作已取消"),
+            text: "cancel",
+            onPress: () => console.log("Update operation canceled"),
             style: "cancel",
           },
           {
-            text: "确定",
+            text: "confirm",
             onPress: () => {
               const updatedData = {
                 category: category as string,
                 amount: parseFloat(newAmount), // Update the amount
               };
-              console.log("更新预算，ID:", budgetId);
+              console.log("Update budget，ID:", budgetId);
 
               // Call the updateBudget function with the budgetId and updatedData
               updateBudget(budgetId as string, updatedData)
@@ -73,7 +73,7 @@ const BudgetDetail = () => {
                   setNewAmount(String(updatedData.amount)); // Update the state with the new amount
                 })
                 .catch((error) => {
-                  console.error("更新预算失败:", error);
+                  console.error("Update budget failed:", error);
                 });
             },
           },
@@ -94,7 +94,7 @@ const BudgetDetail = () => {
         className={`text-3xl font-bold mb-6 ${
           theme === "dark" ? "text-white" : "text-gray-900"
         }`}>
-        预算详情
+        Budget Details
       </Text>
 
       <View
@@ -105,7 +105,7 @@ const BudgetDetail = () => {
           className={`text-lg mb-3 font-medium ${
             theme === "dark" ? "text-gray-300" : "text-gray-700"
           }`}>
-          类别: {category}
+          Category: {category}
         </Text>
 
         {isEditing ? (
@@ -120,7 +120,7 @@ const BudgetDetail = () => {
             className={`text-lg mb-3 ${
               theme === "dark" ? "text-gray-300" : "text-gray-700"
             }`}>
-            预算金额: ${newAmount}
+            Budget Amount: ${newAmount}
           </Text>
         )}
       </View>
@@ -130,14 +130,16 @@ const BudgetDetail = () => {
           onPress={handleUpdate}
           className="px-8 py-4 bg-green-600 rounded-lg shadow-lg transition duration-200 ease-in-out hover:bg-green-500">
           <Text className="text-lg font-semibold text-white">
-            {isEditing ? "保存预算" : "更新预算"}
+            {isEditing ? "Save budget" : "Update budget"}
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={handleDelete}
           className="px-8 py-4 bg-red-600 rounded-lg shadow-lg transition duration-200 ease-in-out hover:bg-red-500">
-          <Text className="text-lg font-semibold text-white">删除预算</Text>
+          <Text className="text-lg font-semibold text-white">
+            Delete Budget
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -157,7 +159,7 @@ const BudgetDetail = () => {
             className={`ml-4 text-lg font-semibold ${
               theme === "dark" ? "text-gray-200" : "text-gray-700"
             }`}>
-            设置预算
+            Set Your Budget
           </Text>
         </TouchableOpacity>
       )}

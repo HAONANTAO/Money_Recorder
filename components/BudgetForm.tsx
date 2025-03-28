@@ -34,7 +34,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
   const handleSubmit = async () => {
     try {
       if (!amount) {
-        setError("请输入预算金额");
+        setError("Enter budget amount");
         return;
       }
 
@@ -57,9 +57,9 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
         onSuccess();
       }
     } catch (err) {
-      setError("创建预算失败，请重试");
+      setError("create budget failed,pls try again");
       setShowErrorModal(true);
-      console.error("创建预算失败:", err);
+      console.error("create budget failed:", err);
     }
   };
 
@@ -67,14 +67,14 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView>
         <View
-          className={`p-4 rounded-lg ${
+          className={`mt-12 p-4  rounded-lg ${
             theme === "dark" ? "bg-quaternary" : "bg-white"
           }`}>
           <Text
-            className={`text-lg font-bold mb-4 ${
-              theme === "dark" ? "text-white" : "text-black"
+            className={`text-center text-lg font-bold mb-2 ${
+              theme === "dark" ? "text-white" : "text-secondary"
             }`}>
-            设置预算
+            Set The Budget
           </Text>
 
           <View className="mb-4">
@@ -82,7 +82,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
               className={`mb-2 ${
                 theme === "dark" ? "text-white" : "text-black"
               }`}>
-              预算年月
+              Budget Date
             </Text>
             <View className="flex-row space-x-2">
               <View
@@ -139,7 +139,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
               className={`mb-2 ${
                 theme === "dark" ? "text-white" : "text-black"
               }`}>
-              预算金额
+              Budget Amount
             </Text>
             <TextInput
               className={`border rounded-md p-2 ${
@@ -149,7 +149,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
               }`}
               value={amount}
               onChangeText={setAmount}
-              placeholder="输入预算金额"
+              placeholder="Please enter amount"
               keyboardType="numeric"
               placeholderTextColor={theme === "dark" ? "#9CA3AF" : "#6B7280"}
               returnKeyType="done"
@@ -162,7 +162,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
               className={`mb-2 ${
                 theme === "dark" ? "text-white" : "text-black"
               }`}>
-              预算类别
+              Budget Category
             </Text>
             <View
               className={`border rounded-md overflow-hidden ${
@@ -192,7 +192,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
               className={`mb-2 ${
                 theme === "dark" ? "text-white" : "text-black"
               }`}>
-              备注（可选）
+              Comments
             </Text>
             <TextInput
               className={`border rounded-md p-2 ${
@@ -202,7 +202,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
               }`}
               value={note}
               onChangeText={setNote}
-              placeholder="输入备注信息"
+              placeholder="Please enter comments"
               placeholderTextColor={theme === "dark" ? "#9CA3AF" : "#6B7280"}
               returnKeyType="done"
               onSubmitEditing={Keyboard.dismiss}
@@ -215,7 +215,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
             className="py-3 rounded-md bg-primary"
             onPress={handleSubmit}>
             <Text className="font-semibold text-center text-white">
-              保存预算
+              Save The Budget
             </Text>
           </TouchableOpacity>
 
@@ -234,12 +234,12 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
                   className={`text-lg font-bold mb-4 text-center ${
                     theme === "dark" ? "text-white" : "text-black"
                   }`}>
-                  创建预算成功
+                  Create Budget Successfully
                 </Text>
                 <TouchableOpacity
                   className="px-4 py-2 rounded-md bg-primary"
                   onPress={() => setShowSuccessModal(false)}>
-                  <Text className="text-center text-white">确定</Text>
+                  <Text className="text-center text-white">Confirmed</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -260,12 +260,12 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
                   className={`text-lg font-bold mb-4 text-center ${
                     theme === "dark" ? "text-white" : "text-black"
                   }`}>
-                  创建预算失败
+                  Create Budget Failed
                 </Text>
                 <TouchableOpacity
                   className="px-4 py-2 rounded-md bg-primary"
                   onPress={() => setShowErrorModal(false)}>
-                  <Text className="text-center text-white">确定</Text>
+                  <Text className="text-center text-white">Confirmed</Text>
                 </TouchableOpacity>
               </View>
             </View>
