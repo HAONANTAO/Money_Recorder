@@ -106,7 +106,19 @@ const Goals = () => {
                     className={`text-base font-semibold ${
                       theme === "dark" ? "text-gray-200" : "text-gray-700"
                     }`}>
-                    ¥{expense}/{budget?.budgetAmount}
+                    ${expense}/{budget?.budgetAmount}
+                  </Text>
+                  {/* 让正数就显示绿色 负数显示红色 0是黑色呢 */}
+                  <Text
+                    style={{
+                      color:
+                        expense - budget?.budgetAmount > 0
+                          ? "green" // 正数为绿色
+                          : expense - budget?.budgetAmount < 0
+                          ? "red" // 负数为红色
+                          : "black", // 0 为黑色
+                    }}>
+                    ${expense - budget?.budgetAmount}
                   </Text>
                 </View>
               );
@@ -122,13 +134,13 @@ const Goals = () => {
           <Ionicons
             name="wallet-outline"
             size={24}
-            color={theme === "dark" ? "#60A5FA" : "#4B5563"}
+            color={theme === "dark" ? "#1477f1" : "#0d6df4"}
           />
           <Text
             className={`ml-4 text-lg font-semibold ${
               theme === "dark" ? "text-gray-200" : "text-gray-700"
             }`}>
-            Budget
+            Set Budget
           </Text>
         </TouchableOpacity>
       </ScrollView>
