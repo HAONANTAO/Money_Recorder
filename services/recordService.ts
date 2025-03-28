@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-20 18:36:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-28 13:50:46
+ * @LastEditTime: 2025-03-28 15:52:39
  * @FilePath: /Money_Recorder/services/recordService.ts
  */
 
@@ -129,6 +129,7 @@ export const getRecordById = async (recordId: string) => {
 };
 
 // 获取用户特定月份的各类别消费总额
+
 export const getMonthlyExpensesByCategory = async (
   userId: string,
   year: number,
@@ -143,27 +144,44 @@ export const getMonthlyExpensesByCategory = async (
     const startDate = new Date(year, month - 1, 1).toISOString();
     const endDate = new Date(year, month, 0).toISOString();
 
+    console.log("Start Date:", startDate); // Debug log for start date
+    console.log("End Date:", endDate); // Debug log for end date
+
     // 查询指定用户在特定月份内的所有记录
     const records = await database.listDocuments(
       DATABASE_ID,
       RECORDS_COLLECTION_ID,
       [
         Query.equal("userId", userId),
+        Query.equal("type", "expense"),
         Query.greaterThanEqual("createAt", startDate),
         Query.lessThanEqual("createAt", endDate),
       ],
     );
 
+    // 检查返回的 records 数据
+    console.log("Raw Records:", records); // Debug log to check if any records are returned
+
+    if (!records || !records.documents || records.documents.length === 0) {
+      console.log("No records found for the specified date range and user");
+      return {}; // Return empty if no records are found
+    }
+
     // 按类别统计总额
     const expensesByCategory: { [key: string]: number } = {};
     records.documents.forEach((record: any) => {
-      const { category, amount } = record;
-      if (!expensesByCategory[category]) {
-        expensesByCategory[category] = 0;
+      const { category, moneyAmount } = record;
+
+      // 确保category是有效的
+      if (category) {
+        if (!expensesByCategory[category]) {
+          expensesByCategory[category] = 0;
+        }
+        expensesByCategory[category] += moneyAmount; // 累加金额
       }
-      expensesByCategory[category] += amount;
     });
 
+    console.log("Expenses by Category:", expensesByCategory);
     return expensesByCategory;
   } catch (error) {
     console.error("Error fetching monthly expenses by category:", error);

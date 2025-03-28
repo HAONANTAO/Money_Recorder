@@ -13,13 +13,14 @@ import { getMonthlyBudget } from "../../services/budgetService";
 import { BUDGET_CATEGORIES } from "../../constants/categories";
 import { StorageService } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
+import { getMonthlyExpensesByCategory } from "@/services/recordService";
 
 const Goals = () => {
   const router = useRouter();
   const { theme } = useTheme();
   const [userId, setUserId] = useState("");
   const [monthlyBudgets, setMonthlyBudgets] = useState<any>(null);
-
+  const [expensesByCategory, setExpensesByCategory] = useState<any>(null);
   useEffect(() => {
     const getInitialUserAndFetchBudgets = async () => {
       try {
@@ -40,12 +41,19 @@ const Goals = () => {
           currentMonth,
         );
         setMonthlyBudgets(budgets);
+        const result = await getMonthlyExpensesByCategory(
+          userId,
+          currentYear,
+          currentMonth,
+        );
+        setExpensesByCategory(result);
       } catch (error) {
         console.error("获取预算失败:", error);
       }
     };
-
+    // 拿到userid后再去
     getInitialUserAndFetchBudgets();
+    console.log("分类", expensesByCategory);
   }, []);
 
   return (
