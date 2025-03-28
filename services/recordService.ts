@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-20 18:36:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-28 16:10:22
+ * @LastEditTime: 2025-03-28 18:30:17
  * @FilePath: /Money_Recorder/services/recordService.ts
  */
 
@@ -143,9 +143,6 @@ export const getMonthlyExpensesByCategory = async (
     // 获取指定月份的开始和结束时间
     const startDate = new Date(year, month - 1, 1).toISOString();
     const endDate = new Date(year, month, 0).toISOString();
-
-    console.log("Start Date:", startDate); // Debug log for start date
-    console.log("End Date:", endDate); // Debug log for end date
 
     // 查询指定用户在特定月份内的所有记录
     const records = await database.listDocuments(

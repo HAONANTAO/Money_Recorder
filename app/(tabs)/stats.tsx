@@ -18,10 +18,21 @@ import DateChecker from "@/utils/dateChecker";
 import PieChartComponent from "@/components/PieChartComponent";
 import BarChartComponent from "@/components/BarChartComponent";
 
-import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from "@/constants/categories";
+import {
+  EXPENSE_CATEGORIES,
+  INCOME_CATEGORIES,
+  BUDGET_CATEGORIES,
+} from "@/constants/categories";
+import { getMonthlyBudget } from "@/services/budgetService";
+import { getMonthlyExpensesByCategory } from "@/services/recordService";
+import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 const Stats = () => {
   const { theme } = useTheme();
+  const router = useRouter();
+  const [monthlyBudgets, setMonthlyBudgets] = useState<any>(null);
+  const [expensesByCategory, setExpensesByCategory] = useState<any>(null);
   const [user, setUser] = useState<any>(null);
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -36,6 +47,19 @@ const Stats = () => {
 
   useEffect(() => {
     const getInit = async () => {
+      const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
+      if (!email) return;
+
+      const userData = await getUserByEmail(email);
+      const currentYear = new Date().getFullYear();
+      const currentMonth = new Date().getMonth() + 1;
+      const [budgets, expenses] = await Promise.all([
+        getMonthlyBudget(userData.$id, currentYear, currentMonth),
+        getMonthlyExpensesByCategory(userData.$id, currentYear, currentMonth),
+      ]);
+      setMonthlyBudgets(budgets);
+      setExpensesByCategory(expenses);
+
       try {
         const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
         if (!email) return;
@@ -189,6 +213,89 @@ const Stats = () => {
           </>
         )}
       </View>
+
+      {/* Budget Section */}
+      {!loading && (
+        <View className="px-4 mb-6 w-full">
+          <Text
+            className={`mb-2 mt-2 text-xl font-bold text-center ${
+              theme === "dark" ? "text-gray-200" : "text-secondary"
+            }`}>
+            This Month Budget
+          </Text>
+          {BUDGET_CATEGORIES.map((category) => {
+            const budget = monthlyBudgets?.find(
+              (b: any) => b.category === category.value,
+            ) || { budgetAmount: 0 };
+            const expense = expensesByCategory?.[category.value] || 0;
+
+            return (
+              <TouchableOpacity
+                key={category.value}
+                onPress={() => {
+                  const budgetId = budget?.budgetId;
+                  router.push({
+                    pathname: "/(func)/budgetDetail",
+                    params: {
+                      budgetId,
+                      category: category.value,
+                      amount: budget?.budgetAmount,
+                    },
+                  });
+                }}
+                className={`flex-row items-center justify-between p-3 mb-2 rounded-lg ${
+                  theme === "dark" ? "bg-tertiary" : "bg-white"
+                }`}>
+                <View className="flex-row items-center">
+                  <Text className="mr-2 text-lg">{category.icon}</Text>
+                  <Text
+                    className={`text-base font-medium ${
+                      theme === "dark" ? "text-gray-200" : "text-gray-700"
+                    }`}>
+                    {category.label}
+                  </Text>
+                </View>
+                <View>
+                  <Text
+                    className={`text-base font-semibold ${
+                      theme === "dark" ? "text-gray-200" : "text-gray-700"
+                    }`}>
+                    ${expense}/{budget?.budgetAmount}
+                  </Text>
+                  <Text
+                    style={{
+                      color:
+                        budget?.budgetAmount - expense > 0
+                          ? "green"
+                          : budget?.budgetAmount - expense < 0
+                          ? "red"
+                          : "black",
+                    }}>
+                    ${budget?.budgetAmount - expense}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      )}
+      <TouchableOpacity
+        onPress={() => router.push("/(func)/budget")}
+        className={`flex-row items-center p-4 rounded-xl shadow-md ${
+          theme === "dark" ? "bg-quaternary" : "bg-white"
+        }`}>
+        <Ionicons
+          name="wallet-outline"
+          size={24}
+          color={theme === "dark" ? "#1477f1" : "#0d6df4"}
+        />
+        <Text
+          className={`ml-4 text-lg font-semibold ${
+            theme === "dark" ? "text-gray-200" : "text-gray-700"
+          }`}>
+          Set Budget
+        </Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };

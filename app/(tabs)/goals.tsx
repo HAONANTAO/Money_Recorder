@@ -85,70 +85,7 @@ const Goals = () => {
           Goals
         </Text>
 
-        {monthlyBudgets && (
-          <View className="mb-6">
-            <Text
-              className={`mb-4 text-xl font-bold ${
-                theme === "dark" ? "text-gray-200" : "text-secondary"
-              }`}>
-              This Month Budget
-            </Text>
-            {BUDGET_CATEGORIES.map((category) => {
-              const budget = monthlyBudgets?.find(
-                (b: any) => b.category === category.value,
-              ) || { budgetAmount: 0 };
-              const expense = expensesByCategory?.[category.value] || 0;
-
-              return (
-                <TouchableOpacity
-                  key={category.value}
-                  onPress={() => {
-                    const budgetId = budget?.budgetId;
-                    router.push({
-                      pathname: "/(func)/budgetDetail",
-                      params: {
-                        budgetId,
-                        category: category.value,
-                        amount: budget?.budgetAmount,
-                      },
-                    });
-                  }}
-                  className={`flex-row items-center justify-between p-3 mb-2 rounded-lg ${
-                    theme === "dark" ? "bg-tertiary" : "bg-white"
-                  }`}>
-                  <View className="flex-row items-center">
-                    <Text className="mr-2 text-lg">{category.icon}</Text>
-                    <Text
-                      className={`text-base font-medium ${
-                        theme === "dark" ? "text-gray-200" : "text-gray-700"
-                      }`}>
-                      {category.label}
-                    </Text>
-                  </View>
-                  <View>
-                    <Text
-                      className={`text-base font-semibold ${
-                        theme === "dark" ? "text-gray-200" : "text-gray-700"
-                      }`}>
-                      ${expense}/{budget?.budgetAmount}
-                    </Text>
-                    <Text
-                      style={{
-                        color:
-                          budget?.budgetAmount - expense > 0
-                            ? "green"
-                            : budget?.budgetAmount - expense < 0
-                            ? "red"
-                            : "black",
-                      }}>
-                      ${budget?.budgetAmount - expense}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        )}
+        {/* 预算显示部分已移至stats页面 */}
 
         <TouchableOpacity
           onPress={() => router.push("/(func)/budget")}
