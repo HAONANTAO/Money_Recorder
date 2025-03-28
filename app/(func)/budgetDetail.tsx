@@ -1,11 +1,5 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
-import React, { useState } from "react";
+import { Text, View, TouchableOpacity, TextInput } from "react-native";
+import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
 import { deleteBudget, updateBudget } from "@/services/budgetService";
@@ -14,12 +8,15 @@ const BudgetDetail = () => {
   const { theme } = useTheme();
   const router = useRouter();
   const { budgetId, category, amount } = useLocalSearchParams();
-  console.log("先看看", budgetId, category, amount);
-  // 确保amount是数字类型
-  const parsedAmount = parseFloat(amount as string);
 
+  // Track the budget amount in state
+  const [newAmount, setNewAmount] = useState<string>(String(amount));
   const [isEditing, setIsEditing] = useState(false);
-  const [newAmount, setNewAmount] = useState<string>(String(parsedAmount));
+
+  useEffect(() => {
+    // Initialize with the passed amount when the component mounts
+    setNewAmount(String(amount));
+  }, [amount]);
 
   const handleDelete = async () => {
     try {
@@ -31,45 +28,48 @@ const BudgetDetail = () => {
   };
 
   const handleUpdate = () => {
-    if (isEditing && newAmount !== String(parsedAmount)) {
-      // 构建更新的数据对象，确保类型匹配
+    if (isEditing && newAmount !== String(amount)) {
+      // Construct the updated data object
       const updatedData = {
         category: category as string,
-        amount: parseFloat(newAmount), // 更新金额
+        amount: parseFloat(newAmount), // Update the amount
       };
       console.log("更新预算，ID:", budgetId);
-      // 调用 updateBudget，传递 budgetId 和 updatedData
+
+      // Call the updateBudget function with the budgetId and updatedData
       updateBudget(budgetId as string, updatedData)
         .then(() => {
-          setIsEditing(false); // 更新成功后切换回非编辑模式
+          // After successful update, save the new amount and switch off editing mode
+          setIsEditing(false);
+          setNewAmount(String(updatedData.amount)); // Update the state with the new amount
         })
         .catch((error) => {
           console.error("更新预算失败:", error);
         });
     } else {
-      setIsEditing(true); // 切换为编辑模式
+      setIsEditing(true); // Switch to edit mode
     }
   };
 
   return (
     <View
-      className={`flex-1 p-6 ${
-        theme === "dark" ? "bg-quaternary" : "bg-gray-100"
+      className={`flex-1 p-8 justify-center items-center ${
+        theme === "dark" ? "bg-dark-900" : "bg-gray-50"
       }`}>
       <Text
-        className={`text-2xl font-bold mb-6 ${
-          theme === "dark" ? "text-gray-200" : "text-gray-800"
+        className={`text-3xl font-bold mb-6 ${
+          theme === "dark" ? "text-white" : "text-gray-900"
         }`}>
         预算详情
       </Text>
 
       <View
-        className={`p-4 rounded-lg mb-6 ${
-          theme === "dark" ? "bg-tertiary" : "bg-white"
+        className={`p-6 rounded-2xl shadow-2xl ${
+          theme === "dark" ? "bg-dark-800" : "bg-white"
         }`}>
         <Text
-          className={`text-lg mb-2 ${
-            theme === "dark" ? "text-gray-300" : "text-gray600"
+          className={`text-lg mb-3 font-medium ${
+            theme === "dark" ? "text-gray-300" : "text-gray-700"
           }`}>
           类别: {category}
         </Text>
@@ -79,31 +79,31 @@ const BudgetDetail = () => {
             value={newAmount}
             onChangeText={setNewAmount}
             keyboardType="numeric"
-            className="p-2 rounded border"
+            className="p-3 mb-6 text-xl rounded-lg border border-gray-300 shadow-sm"
           />
         ) : (
           <Text
-            className={`text-lg mb-2 ${
-              theme === "dark" ? "text-gray-300" : "text-gray-600"
+            className={`text-lg mb-3 ${
+              theme === "dark" ? "text-gray-300" : "text-gray-700"
             }`}>
-            预算金额: ${parsedAmount}
+            预算金额: ${newAmount}
           </Text>
         )}
       </View>
 
-      <View className="flex-row justify-around">
+      <View className="flex-row justify-between mt-8 w-full">
         <TouchableOpacity
           onPress={handleUpdate}
-          className="px-6 py-3 bg-blue-500 rounded-lg">
-          <Text className="font-semibold text-white">
+          className="px-8 py-4 bg-green-600 rounded-lg shadow-lg transition duration-200 ease-in-out hover:bg-green-500">
+          <Text className="text-lg font-semibold text-white">
             {isEditing ? "保存预算" : "更新预算"}
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={handleDelete}
-          className="px-6 py-3 bg-red-500 rounded-lg">
-          <Text className="font-semibold text-white">删除预算</Text>
+          className="px-8 py-4 bg-red-600 rounded-lg shadow-lg transition duration-200 ease-in-out hover:bg-red-500">
+          <Text className="text-lg font-semibold text-white">删除预算</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -111,5 +111,3 @@ const BudgetDetail = () => {
 };
 
 export default BudgetDetail;
-
-const styles = StyleSheet.create({});
