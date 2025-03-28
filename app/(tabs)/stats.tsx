@@ -18,24 +18,7 @@ import DateChecker from "@/utils/dateChecker";
 import PieChartComponent from "@/components/PieChartComponent";
 import BarChartComponent from "@/components/BarChartComponent";
 
-const EXPENSE_CATEGORIES = [
-  { label: "Eating", value: "eating", icon: "🍔" },
-  { label: "Traffic", value: "traffic", icon: "🚗" },
-  { label: "Shopping", value: "shopping", icon: "🛍️" },
-  { label: "Entertainment", value: "entertainment", icon: "🎮" },
-  { label: "Living", value: "living", icon: "🏠" },
-  { label: "Medication", value: "medication", icon: "💊" },
-  { label: "Education", value: "education", icon: "🎓" },
-  { label: "Others", value: "others", icon: "🌍" },
-];
-
-const INCOME_CATEGORIES = [
-  { label: "Salary", value: "salary", icon: "💼" },
-  { label: "Sideline", value: "sideline", icon: "📊" },
-  { label: "Investment", value: "investment", icon: "📈" },
-  { label: "Bonus", value: "bonus", icon: "💵" },
-  { label: "Other", value: "other", icon: "🌍" },
-];
+import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from "@/constants/categories";
 
 const Stats = () => {
   const { theme } = useTheme();
