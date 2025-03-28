@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-20 18:36:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-28 19:45:53
+ * @LastEditTime: 2025-03-28 21:05:26
  * @FilePath: /Money_Recorder/services/depositGoal.ts
  */
 
@@ -24,7 +24,7 @@ const database = new Databases(client);
 // 创建新记录
 export const createDeposit = async (
   // Omit是一个工具类型，用于从一个类型中排除某些属性。在这里，record参数的类型是从MoneyRecord类型中排除了'$id'和'createAt'这两个属性的新类型。这意味着创建新记录时，不需要提供这两个字段，因为'$id'会由数据库自动生成，'createAt'会在函数内部设置为当前时间。
-  record: Omit<MoneyRecord, "$id" | "createAt">,
+  deposit: Omit<Deposit, "$id" | "createAt">,
 ) => {
   try {
     console.log(DATABASE_ID, DEPOSIT_COLLECTION_ID);
@@ -37,7 +37,7 @@ export const createDeposit = async (
       DEPOSIT_COLLECTION_ID,
       ID.unique(),
       {
-        ...record,
+        ...deposit,
         createAt: new Date().toISOString(),
       },
     );
@@ -50,13 +50,17 @@ export const createDeposit = async (
 };
 
 // 删除记录
-export const deleteDeposit = async (recordId: string) => {
+export const deleteDeposit = async (depositId: string) => {
   try {
     if (!DATABASE_ID || !DEPOSIT_COLLECTION_ID) {
       throw new Error("deleteRecord-Database configuration is missing");
     }
 
-    await database.deleteDocument(DATABASE_ID, DEPOSIT_COLLECTION_ID, recordId);
+    await database.deleteDocument(
+      DATABASE_ID,
+      DEPOSIT_COLLECTION_ID,
+      depositId,
+    );
     return true;
   } catch (error) {
     console.error("Error deleting record:", error);
@@ -66,7 +70,7 @@ export const deleteDeposit = async (recordId: string) => {
 
 // 更新记录
 export const updateDeposit = async (
-  recordId: string,
+  depositId: string,
   data: Partial<Omit<MoneyRecord, "$id" | "userId" | "createAt">>,
 ) => {
   try {
@@ -77,7 +81,7 @@ export const updateDeposit = async (
     const updatedRecord = await database.updateDocument(
       DATABASE_ID,
       DEPOSIT_COLLECTION_ID,
-      recordId,
+      depositId,
       data,
     );
 
@@ -109,7 +113,7 @@ export const getDeposits = async (userId: string) => {
 };
 
 // 获取特定记录
-export const getDepositById = async (recordId: string) => {
+export const getDepositById = async (depositId: string) => {
   try {
     if (!DATABASE_ID || !DEPOSIT_COLLECTION_ID) {
       throw new Error("Database configuration is missing");
@@ -118,7 +122,7 @@ export const getDepositById = async (recordId: string) => {
     const record = await database.getDocument(
       DATABASE_ID,
       DEPOSIT_COLLECTION_ID,
-      recordId,
+      depositId,
     );
 
     return record;

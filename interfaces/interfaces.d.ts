@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:44:20
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-28 19:41:41
+ * @LastEditTime: 2025-03-28 20:58:05
  * @FilePath: /Money_Recorder/interfaces/interfaces.d.ts
  */
 interface User {
@@ -40,12 +40,14 @@ interface Budget {
 }
 
 interface Deposit {
-  $id: string; // 文档ID
+  $id?: string; // 文档ID
   userId: string; // 关联的用户ID
   amount: number; // 预算金额
-  year: number; // 预算年份
-  month: number; // 预算月份（1-12）
+  startYear: number; // 预算年份
+  startMonth: number; // 预算月份（1-12）
+  endYear: number;
+  endMonth: number;
   createAt: string; // 创建时间
   category?: string; // 可选：特定类别的预算
-  note?: string; // 可选：预算备注
+  note: string; // 预算备注
 }

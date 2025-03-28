@@ -38,7 +38,7 @@ const Stats = () => {
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isIncome, setIsIncome] = useState<boolean>(false); // State to toggle between income and expense charts
-
+  const [refreashing, setRefreshing] = useState<boolean>(false);
   const [income, setIncome] = useState<number>(0);
   const [expense, setExpense] = useState<number>(0);
   const [eventLength, setEventLength] = useState<number>(0);
@@ -169,6 +169,7 @@ const Stats = () => {
         getMonthlyExpensesByCategory(userData.$id, currentYear, currentMonth),
       ]);
       setMonthlyBudgets(budgets);
+
       setExpensesByCategory(expenses);
 
       const [user, records] = await Promise.all([
@@ -248,7 +249,7 @@ const Stats = () => {
 
   useEffect(() => {
     fetchData();
-  }, [monthlyBudgets, expensesByCategory]);
+  }, [refreashing]);
 
   return (
     <ScrollView

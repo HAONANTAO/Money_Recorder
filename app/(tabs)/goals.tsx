@@ -3,31 +3,86 @@ import {
   Text,
   View,
   TouchableOpacity,
-  ScrollView,
+  TextInput,
   RefreshControl,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
 import DepositBox from "../../components/DepositBox";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StorageKeys } from "@/utils/storageService";
+import { getUserByEmail } from "@/services/userManagement";
+import { createDeposit, getDeposits } from "@/services/depositGoal";
 
 const Goals = () => {
   const router = useRouter();
   const { theme } = useTheme();
-  // 刷新的
-  const [refreshing, setRefreshing] = useState(false);
-  //存goals
-  const [deposits, setDeposits] = useState([]);
+  const [user, setUser] = useState<any>(null);
+  const [deposits, setDeposits] = useState<any>([]);
+  const [emergencyFund, setEmergencyFund] = useState(""); // 紧急基金金额
+  const [travelFund, setTravelFund] = useState(""); // 旅行基金金额
+  const [category, setCategory] = useState(""); // 预算类别
+  const [note, setNote] = useState(""); // 备注
+  const [userId, setUserId] = useState("");
+  const [startYear, setStartYear] = useState(new Date().getFullYear()); // 起始年份
+  const [startMonth, setStartMonth] = useState(new Date().getMonth() + 1); // 起始月份
+  const [endYear, setEndYear] = useState(new Date().getFullYear()); // 结束年份
+  const [endMonth, setEndMonth] = useState(new Date().getMonth() + 1); // 结束月份
+  const [amount, setAmount] = useState(""); // 存款目标金额
+
   useEffect(() => {
-    const fetchDeposits = async () => {
-      try {
-        // console.log("fetchDeposits good");
-      } catch (error) {
-        console.log("fetchDeposits failed", error);
-      }
+    const getInitInfo = async () => {
+      const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
+      if (!email) return;
+
+      const userData = await getUserByEmail(email);
+      const [user, deposit] = await Promise.all([
+        getUserByEmail(email),
+        getDeposits(userData.$id),
+      ]);
+      setDeposits(deposit);
+      setUser(user);
+      setUserId(userData.$id);
     };
-    fetchDeposits();
-  }, [deposits]);
+    getInitInfo();
+  }, []);
+
+  const handleDepositSubmit = async (goal: string, amount: string) => {
+    if (!amount) {
+      alert(`Please enter a value for ${goal}`);
+      return;
+    }
+
+    const newDeposit: Deposit = {
+      userId: userId,
+      amount: parseFloat(amount),
+      startYear: startYear,
+      startMonth: startMonth,
+      endYear: endYear,
+      endMonth: endMonth,
+      createAt: new Date().toISOString(),
+      category: category || undefined,
+      note: note || "",
+      // 不需要手动指定 $id，因为它是由数据库生成的
+    };
+
+    try {
+      await createDeposit(newDeposit); // 这里将提交给数据库，数据库会为 $id 生成一个值
+      alert(`${goal} deposit goal added successfully!`);
+      // 清空输入框
+      goal === "Emergency Fund" ? setEmergencyFund("") : setTravelFund("");
+      setCategory(""); // 清空类别
+      setNote(""); // 清空备注
+      // 重新获取存款数据
+      const updatedDeposits = await getDeposits(userId);
+      setDeposits(updatedDeposits);
+    } catch (error) {
+      console.error("Error adding deposit:", error);
+      alert(`Failed to add ${goal} deposit goal.`);
+    }
+  };
+
   return (
     <View
       className={`flex-1 mt-20 items-center ${
@@ -35,6 +90,74 @@ const Goals = () => {
       }`}>
       <Text className="font-extrabold text-secondary">The Deposit Goal</Text>
       <DepositBox />
+
+      <View className="mt-6 w-80">
+        <TextInput
+          value={amount}
+          onChangeText={setAmount}
+          placeholder="Enter your deposit goal amount"
+          keyboardType="numeric"
+          className="p-4 rounded-lg border border-gray-300"
+        />
+
+        <TextInput
+          value={category}
+          onChangeText={setCategory}
+          placeholder="Enter category (optional)"
+          className="p-4 mt-4 rounded-lg border border-gray-300"
+        />
+
+        <TextInput
+          value={note}
+          onChangeText={setNote}
+          placeholder="Enter note (optional)"
+          className="p-4 mt-4 rounded-lg border border-gray-300"
+        />
+
+        <View className="flex-row mt-4 space-x-4">
+          <View className="flex-1">
+            <TextInput
+              value={startYear.toString()}
+              onChangeText={(text) => setStartYear(parseInt(text))}
+              placeholder="Start year"
+              keyboardType="numeric"
+              className="p-4 rounded-lg border border-gray-300"
+            />
+            <TextInput
+              value={startMonth.toString()}
+              onChangeText={(text) => setStartMonth(parseInt(text))}
+              placeholder="Start month"
+              keyboardType="numeric"
+              className="p-4 mt-2 rounded-lg border border-gray-300"
+            />
+          </View>
+
+          <View className="flex-1">
+            <TextInput
+              value={endYear.toString()}
+              onChangeText={(text) => setEndYear(parseInt(text))}
+              placeholder="End year"
+              keyboardType="numeric"
+              className="p-4 rounded-lg border border-gray-300"
+            />
+            <TextInput
+              value={endMonth.toString()}
+              onChangeText={(text) => setEndMonth(parseInt(text))}
+              placeholder="End month"
+              keyboardType="numeric"
+              className="p-4 mt-2 rounded-lg border border-gray-300"
+            />
+          </View>
+        </View>
+
+        <TouchableOpacity
+          onPress={() => handleDepositSubmit("Deposit", amount)}
+          className="p-4 mt-6 bg-blue-500 rounded-lg">
+          <Text className="font-semibold text-center text-white">
+            Create Deposit Goal
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
