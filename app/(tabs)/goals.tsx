@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
 import { getUserByEmail } from "@/services/userManagement";
 import { StorageService } from "@/utils/storageService";
+import BudgetForm from "@/components/BudgetForm";
 
 const Goals = () => {
   const { theme } = useTheme();
@@ -18,10 +19,10 @@ const Goals = () => {
   }, []);
   return (
     <View
-      className={`flex-1 justify-center items-center ${
+      className={`flex-1 p-4 ${
         theme === "dark" ? "bg-quaternary" : "bg-white"
       }`}>
-      <Text className="text-5xl font-bold text-primary">Goals</Text>
+      {userId && <BudgetForm userId={userId} />}
     </View>
   );
 };

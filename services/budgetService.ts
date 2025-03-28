@@ -22,7 +22,7 @@ const database = new Databases(client);
 
 // 创建新预算
 export const createBudget = async (
-  budget: Omit<Budget, "$id" | "createAt" | "updateAt">,
+  budget: Omit<Budget, "$id" | "createAt">,
 ) => {
   try {
     if (!DATABASE_ID || !BUDGET_COLLECTION_ID) {
