@@ -1,3 +1,9 @@
+/*
+ * @Date: 2025-03-26 17:16:29
+ * @LastEditors: 陶浩南 taoaaron5@gmail.com
+ * @LastEditTime: 2025-03-28 13:39:26
+ * @FilePath: /Money_Recorder/components/RecordShowbox.tsx
+ */
 import React from "react";
 import { View, Text } from "react-native";
 
