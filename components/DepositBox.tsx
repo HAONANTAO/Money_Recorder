@@ -12,8 +12,12 @@ import { getUserByEmail } from "@/services/userManagement";
 import { getDeposits } from "@/services/depositGoal";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
+import { TouchableOpacity, Alert } from "react-native";
+import { useRouter } from "expo-router";
+import { deleteDeposit } from "@/services/depositGoal";
 
 const DepositBox = () => {
+  const router = useRouter();
   const { theme } = useTheme();
   const [user, setUser] = useState();
   const [userId, setUserId] = useState("");
@@ -165,6 +169,68 @@ const DepositBox = () => {
                   </Text>
                 </View>
               )}
+            </View>
+            <View className="flex-row justify-end mt-4 space-x-3">
+              <TouchableOpacity
+                className={`flex-row items-center px-4 py-2 rounded-lg ${
+                  theme === "dark" ? "bg-blue-600/20" : "bg-blue-100"
+                }`}
+                onPress={() =>
+                  router.push({
+                    pathname: "/(func)/depositGoal",
+                    params: { depositId: deposit.$id },
+                  })
+                }>
+                <Ionicons
+                  name="pencil-outline"
+                  size={20}
+                  color={theme === "dark" ? "#60a5fa" : "#2563eb"}
+                />
+                <Text
+                  className={`ml-2 font-medium ${
+                    theme === "dark" ? "text-blue-400" : "text-blue-600"
+                  }`}>
+                  更新
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                className={`flex-row items-center px-4 py-2 rounded-lg ${
+                  theme === "dark" ? "bg-red-600/20" : "bg-red-100"
+                }`}
+                onPress={() => {
+                  Alert.alert("确认删除", "确定要删除这个存款目标吗？", [
+                    { text: "取消", style: "cancel" },
+                    {
+                      text: "删除",
+                      style: "destructive",
+                      onPress: async () => {
+                        try {
+                          await deleteDeposit(deposit.$id);
+                          setDeposits(
+                            deposits.filter(
+                              (d: { $id: any }) => d.$id !== deposit.$id,
+                            ),
+                          );
+                        } catch (error) {
+                          console.error("删除失败:", error);
+                          Alert.alert("错误", "删除失败，请重试");
+                        }
+                      },
+                    },
+                  ]);
+                }}>
+                <Ionicons
+                  name="trash-outline"
+                  size={20}
+                  color={theme === "dark" ? "#f87171" : "#dc2626"}
+                />
+                <Text
+                  className={`ml-2 font-medium ${
+                    theme === "dark" ? "text-red-400" : "text-red-600"
+                  }`}>
+                  删除
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         ))}
