@@ -1,3 +1,9 @@
+/*
+ * @Date: 2025-03-28 20:17:02
+ * @LastEditors: 陶浩南 taoaaron5@gmail.com
+ * @LastEditTime: 2025-03-29 12:42:32
+ * @FilePath: /Money_Recorder/app/(tabs)/goals.tsx
+ */
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
@@ -12,21 +18,19 @@ import { Ionicons } from "@expo/vector-icons";
 const Goals = () => {
   const router = useRouter();
   const { theme } = useTheme();
-  const [deposits, setDeposits] = useState<any>([]);
-  const [userId, setUserId] = useState("");
 
-  useEffect(() => {
-    const getInitInfo = async () => {
-      const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
-      if (!email) return;
+  // useEffect(() => {
+  //   const getInitInfo = async () => {
+  //     const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
+  //     if (!email) return;
 
-      const userData = await getUserByEmail(email);
-      const deposit = await getDeposits(userData.$id);
-      setDeposits(deposit);
-      setUserId(userData.$id);
-    };
-    getInitInfo();
-  }, []);
+  //     const userData = await getUserByEmail(email);
+  //     const deposit = await getDeposits(userData.$id);
+  //     setDeposits(deposit);
+  //     setUserId(userData.$id);
+  //   };
+  //   getInitInfo();
+  // }, []);
 
   return (
     <View
