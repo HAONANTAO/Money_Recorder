@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-29 16:31:38
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-29 22:47:35
+ * @LastEditTime: 2025-03-29 22:49:40
  * @FilePath: /Money_Recorder/app/(func)/editRecord.tsx
  */
 import {
@@ -71,7 +71,7 @@ const EditRecord = () => {
         });
       } catch (error) {
         console.error("Error fetching record:", error);
-        Alert.alert("错误", "获取记录失败");
+        Alert.alert("Error", "Failed to obtain records");
       } finally {
         setLoading(false);
       }
@@ -97,15 +97,15 @@ const EditRecord = () => {
         type: updateData.type as "income" | "expense",
       };
       await updateRecord(id as string, validatedData);
-      Alert.alert("成功", "记录已更新", [
+      Alert.alert("Success", "Record updated", [
         {
-          text: "确定",
+          text: "OK",
           onPress: () => router.back(),
         },
       ]);
     } catch (error) {
       console.error("Error updating record:", error);
-      Alert.alert("错误", "更新记录失败");
+      Alert.alert("Error", "Update record failed");
     }
   };
 
@@ -126,7 +126,7 @@ const EditRecord = () => {
             className={`mt-12 text-2xl font-bold mb-5 text-center ${
               isDark ? "text-secondary" : "text-quaternary"
             }`}>
-            编辑记录
+            Edit Record
           </Text>
 
           {/* 金额输入 */}
@@ -138,7 +138,7 @@ const EditRecord = () => {
               className={`mb-2 text-base font-medium ${
                 isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              金额
+              Amount
             </Text>
             <TouchableOpacity
               onPress={() => {}}
@@ -173,7 +173,7 @@ const EditRecord = () => {
               className={`mb-2 text-base font-medium ${
                 isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              类型
+              Type
             </Text>
             <View
               className={`${
@@ -204,7 +204,7 @@ const EditRecord = () => {
           </View>
 
           {/* 类别选择 */}
-          {/* 类别选择 */}
+
           <View
             className={`mb-4 ${
               isDark ? "bg-quaternary" : "bg-white"
@@ -262,7 +262,7 @@ const EditRecord = () => {
               className={`mb-2 text-base font-medium ${
                 isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              支付方式
+              Payment Method
             </Text>
             <View className="flex-row justify-around">
               <TouchableOpacity
@@ -331,11 +331,11 @@ const EditRecord = () => {
               className={`mb-2 text-base font-medium ${
                 isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              位置
+              Location
             </Text>
             <View className={`flex-row items-center p-3 bg-white rounded-lg`}>
               <TextInput
-                placeholder="输入位置"
+                placeholder="enter the location..."
                 placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
                 value={formData.location}
                 onSubmitEditing={Keyboard.dismiss}
@@ -357,11 +357,11 @@ const EditRecord = () => {
               className={`mb-2 text-base font-medium ${
                 isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              备注
+              Comment
             </Text>
             <View className={`flex-row items-start p-3 bg-white rounded-lg`}>
               <TextInput
-                placeholder="添加备注"
+                placeholder="add comment..."
                 placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
                 value={formData.comment}
                 onSubmitEditing={Keyboard.dismiss}
