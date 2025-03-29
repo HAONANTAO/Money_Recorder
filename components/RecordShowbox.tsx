@@ -5,7 +5,8 @@
  * @FilePath: /Money_Recorder/components/RecordShowbox.tsx
  */
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
+import { router } from "expo-router";
 
 //
 interface RecordShowBoxProps {
@@ -17,8 +18,14 @@ const RecordShowBox: React.FC<RecordShowBoxProps> = ({ record }) => {
     return new Date(date).toLocaleDateString();
   };
 
+  const handlePress = () => {
+    router.push(`/(func)/recordDetail?id=${record.$id}`);
+  };
+
   return (
-    <View className="w-[48%] p-3 mb-4 bg-white rounded-lg shadow-md border border-blue-100 dark:bg-gray-800 dark:border-blue-900">
+    <TouchableOpacity
+      onPress={handlePress}
+      className="w-[48%] p-3 mb-4 bg-white rounded-lg shadow-md border border-blue-100 dark:bg-gray-800 dark:border-blue-900 active:opacity-80">
       <Text
         className={`text-lg font-bold ${
           record.type === "income" ? "text-green-500" : "text-red-500"
@@ -47,7 +54,7 @@ const RecordShowBox: React.FC<RecordShowBoxProps> = ({ record }) => {
           Comment: {record.comment}
         </Text>
       )}
-    </View>
+    </TouchableOpacity>
   );
 };
 
