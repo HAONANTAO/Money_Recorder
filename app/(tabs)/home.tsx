@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-29 15:37:24
+ * @LastEditTime: 2025-03-29 21:49:11
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
@@ -152,7 +152,7 @@ const Home = () => {
           className={`mt-6 p-6 rounded-2xl ${
             isDark ? "bg-secondary" : "bg-blue-100"
           }`}>
-          <Text className="text-lg font-bold text-gray-700 dark:text-white">
+          <Text className="text-lg font-bold text-gray-700 ">
             Net Income This Month
           </Text>
           <Text

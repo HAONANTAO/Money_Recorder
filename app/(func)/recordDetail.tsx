@@ -112,12 +112,12 @@ const RecordDetail = () => {
       <View className="flex-row px-4 mt-8 space-x-4 w-full max-w-lg">
         {/* update button */}
         <TouchableOpacity
-          onPress={() =>
+          onPress={() => {
             router.push({
               pathname: "/(func)/editRecord",
               params: { id: record.$id },
-            })
-          }
+            });
+          }}
           className="flex-1 px-6 py-4 bg-blue-600 rounded-full shadow-lg hover:bg-blue-500">
           <Text className="text-lg font-semibold text-center text-white">
             更新

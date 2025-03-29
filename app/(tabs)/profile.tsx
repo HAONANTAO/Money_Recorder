@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-25 23:15:58
+ * @LastEditTime: 2025-03-29 21:51:54
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -249,20 +249,7 @@ const Profile = () => {
               </Text>
             </TouchableOpacity>
           </View>
-          <View
-            className={`${
-              theme === "dark" ? "bg-blue-200" : "bg-white "
-            } flex justify-center items-center w-24 h-24 rounded-xl border border-gray-200 shadow-md`}>
-            <TouchableOpacity
-              onPress={() => router.push("/(profile)/data")}
-              className="flex justify-center items-center w-full h-full">
-              <Image
-                source={require("../../assets/images/icons/data.png")}
-                className="w-12 h-12"
-              />
-              <Text className="mt-2 font-bold text-quaternary">Data</Text>
-            </TouchableOpacity>
-          </View>
+
           <View
             className={`${
               theme === "dark" ? "bg-blue-200" : "bg-white "

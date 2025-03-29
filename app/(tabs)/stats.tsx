@@ -347,8 +347,6 @@ const Stats = () => {
                     pathname: "/(func)/depositGoal",
                     params: {
                       budgetId,
-                      category: category.value,
-                      amount: budget?.budgetAmount,
                     },
                   });
                 }}

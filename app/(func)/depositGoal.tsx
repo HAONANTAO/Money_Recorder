@@ -73,7 +73,10 @@ const DepositGoal = () => {
     };
     getInitInfo();
   }, [depositId]);
-
+  // check
+  useEffect(() => {
+    console.log(depositId);
+  }, []);
   const handleDepositSubmit = async (goal: string, amount: string) => {
     if (!amount) {
       alert(`Please enter the deposit amount`);
