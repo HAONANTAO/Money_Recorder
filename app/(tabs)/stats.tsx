@@ -268,7 +268,7 @@ const Stats = () => {
           theme === "dark" ? "bg-quaternary" : "bg-white"
         }`}>
         <Text className="mt-20 text-4xl font-bold text-primary">
-          Stats Overview
+          Data Overview
         </Text>
 
         {loading ? (

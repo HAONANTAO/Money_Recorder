@@ -1,14 +1,14 @@
 /*
  * @Date: 2025-03-29 15:37:24
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-29 15:50:54
+ * @LastEditTime: 2025-03-29 16:01:08
  * @FilePath: /Money_Recorder/app/(func)/recordDetail.tsx
  */
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Alert } from "react-native";
 import React, { useEffect } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
-import { getRecordById } from "@/services/recordService";
+import { deleteRecord, getRecordById } from "@/services/recordService";
 
 const RecordDetail = () => {
   const { theme } = useTheme();
@@ -124,6 +124,49 @@ const RecordDetail = () => {
             </View>
           )}
         </View>
+      </View>
+
+      <View className="flex-row justify-between px-4 mt-8">
+        <TouchableOpacity
+          // onPress={() =>
+          //   router.push({
+          //     pathname: "/editRecord",
+          //     params: { id: record.$id },
+          //   })
+          // }
+          className="px-8 py-4 bg-green-600 rounded-lg shadow-lg transition duration-200 ease-in-out hover:bg-green-500 w-[45%]">
+          <Text className="text-lg font-semibold text-center text-white">
+            更新
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => {
+            Alert.alert("确认删除", "确定要删除这条记录吗？", [
+              {
+                text: "取消",
+                style: "cancel",
+              },
+              {
+                text: "确定",
+                style: "destructive",
+                onPress: async () => {
+                  try {
+                    await deleteRecord(record.$id);
+                    router.back();
+                  } catch (error) {
+                    console.error("删除记录失败:", error);
+                    Alert.alert("错误", "删除记录失败，请重试");
+                  }
+                },
+              },
+            ]);
+          }}
+          className="px-8 py-4 bg-red-600 rounded-lg shadow-lg transition duration-200 ease-in-out hover:bg-red-500 w-[45%]">
+          <Text className="text-lg font-semibold text-center text-white">
+            删除
+          </Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
