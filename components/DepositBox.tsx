@@ -88,6 +88,7 @@ const DepositBox = () => {
             </Text>
           </TouchableOpacity>
         </View>
+        {/* main body */}
         {filteredDeposits.map((deposit: any, index: number) => (
           <View
             key={index}
@@ -106,26 +107,16 @@ const DepositBox = () => {
               elevation: 10,
             }}>
             <View className="flex-row justify-between items-center mb-5">
-              <View className="flex-row items-center">
-                <View
-                  className={`p-2.5 rounded-2xl ${
-                    theme === "dark"
-                      ? "bg-gradient-to-br from-blue-900/40 to-blue-900/20"
-                      : "bg-gradient-to-br from-blue-100 to-blue-50"
-                  }`}>
-                  <Ionicons
-                    name="wallet-outline"
-                    size={32}
-                    color={theme === "dark" ? "#60a5fa" : "#2563eb"}
-                  />
-                </View>
+              <View className="flex-row justify-center items-center">
                 <Text
-                  className={`text-4xl font-bold ml-4 ${
-                    theme === "dark" ? "text-blue-400" : "text-blue-600"
+                  className={`text-2xl font-bold ${
+                    theme === "dark" ? "text-gray-200" : "text-secondary"
                   }`}>
-                  ${deposit.amount}
+                  {deposit.Name}
                 </Text>
               </View>
+
+              {/* 右边图标 */}
               <View className="flex-row items-center space-x-2">
                 <View
                   className={`p-2.5 rounded-xl ${
@@ -133,7 +124,6 @@ const DepositBox = () => {
                       ? "bg-gradient-to-br from-blue-900/40 to-blue-900/20"
                       : "bg-gradient-to-br from-blue-100 to-blue-50"
                   }`}>
-                  {/* 下个月1号之前！ */}
                   {new Date(deposit.endYear, deposit.endMonth, 1) <
                   new Date() ? (
                     <View className="p-2">
@@ -151,6 +141,27 @@ const DepositBox = () => {
                 </View>
               </View>
             </View>
+            <View className="flex-row items-center mb-4">
+              <View
+                className={`p-2.5 rounded-2xl ${
+                  theme === "dark"
+                    ? "bg-gradient-to-br from-blue-900/40 to-blue-900/20"
+                    : "bg-gradient-to-br from-blue-100 to-blue-50"
+                }`}>
+                <Ionicons
+                  name="wallet-outline"
+                  size={32}
+                  color={theme === "dark" ? "#60a5fa" : "#2563eb"}
+                />
+              </View>
+              <Text
+                className={`text-3xl font-bold ml-4 ${
+                  theme === "dark" ? "text-blue-400" : "text-blue-600"
+                }`}>
+                ${deposit.amount}
+              </Text>
+            </View>
+
             <View className="space-y-4">
               <View className="flex-row items-center">
                 <View

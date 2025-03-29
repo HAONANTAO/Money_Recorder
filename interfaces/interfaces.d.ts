@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:44:20
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-29 13:22:58
+ * @LastEditTime: 2025-03-29 16:01:33
  * @FilePath: /Money_Recorder/interfaces/interfaces.d.ts
  */
 interface User {
@@ -41,6 +41,7 @@ interface Budget {
 
 interface Deposit {
   $id?: string; // 文档ID
+  Name: string; // 存款名字
   userId: string; // 关联的用户ID
   amount: number; // 预算金额
   startYear: number; // 预算年份
