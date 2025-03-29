@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StorageKeys } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
-import { getDeposits } from "@/services/depositGoal";
+import { decreaseSaveAmount, getDeposits } from "@/services/depositGoal";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity, Alert } from "react-native";
@@ -133,7 +133,8 @@ const DepositBox = () => {
                       ? "bg-gradient-to-br from-blue-900/40 to-blue-900/20"
                       : "bg-gradient-to-br from-blue-100 to-blue-50"
                   }`}>
-                  {new Date(`${deposit.endYear}-${deposit.endMonth}-01`) <
+                  {/* 下个月1号之前！ */}
+                  {new Date(deposit.endYear, deposit.endMonth, 1) <
                   new Date() ? (
                     <View className="p-2">
                       <Text style={{ color: "#ef4444", fontSize: 20 }}>
@@ -239,6 +240,36 @@ const DepositBox = () => {
                                     : d,
                                 ),
                               );
+                              // 检查是否达到存款目标
+                              if (newAmount >= deposit.amount) {
+                                Alert.alert("恭喜！", "你已经达成存款目标！", [
+                                  {
+                                    text: "OK",
+                                    onPress: async () => {
+                                      try {
+                                        const updatedDeposit =
+                                          await completeDeposit(deposit.$id);
+                                        setDeposits(
+                                          deposits.map((d: any) =>
+                                            d.$id === deposit.$id
+                                              ? {
+                                                  ...d,
+                                                  completed:
+                                                    updatedDeposit.completed,
+                                                }
+                                              : d,
+                                          ),
+                                        );
+                                      } catch (error) {
+                                        console.error(
+                                          "Error completing deposit:",
+                                          error,
+                                        );
+                                      }
+                                    },
+                                  },
+                                ]);
+                              }
                             } catch (error) {
                               console.error(
                                 "Error updating save amount:",
@@ -261,6 +292,63 @@ const DepositBox = () => {
                       theme === "dark" ? "text-blue-400" : "text-green-500"
                     }`}>
                     +
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  className={`ml-4 px-3 py-1 rounded-lg `}
+                  onPress={() => {
+                    Alert.prompt(
+                      "decrease money",
+                      "How much money you want to decrease ",
+                      [
+                        { text: "Cancel", style: "cancel" },
+                        {
+                          text: "Ok",
+                          onPress: async (value) => {
+                            if (!value) return;
+                            const amount = Number(value);
+                            if (isNaN(amount) || amount <= 0) {
+                              Alert.alert(
+                                "Error",
+                                "Please enter a valid amount",
+                              );
+                              return;
+                            }
+                            try {
+                              await decreaseSaveAmount(deposit.$id, amount);
+                              const currentSaveAmount = Number(
+                                deposit.saveAmount || 0,
+                              );
+                              const newAmount = currentSaveAmount - amount;
+                              setDeposits(
+                                deposits.map((d: any) =>
+                                  d.$id === deposit.$id
+                                    ? { ...d, saveAmount: newAmount }
+                                    : d,
+                                ),
+                              );
+                            } catch (error) {
+                              console.error(
+                                "Error decreasing save amount:",
+                                error,
+                              );
+                              Alert.alert(
+                                "Error",
+                                "Failed to decrease save amount",
+                              );
+                            }
+                          },
+                        },
+                      ],
+                      "plain-text",
+                      "",
+                    );
+                  }}>
+                  <Text
+                    className={`font-extrabold text-2xl ${
+                      theme === "dark" ? "text-red-400" : "text-red-500"
+                    }`}>
+                    -
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -340,20 +428,40 @@ const DepositBox = () => {
                     : "bg-blue-100 hover:bg-blue-200"
                 }`}
                 onPress={async () => {
-                  try {
-                    await completeDeposit(deposit.$id);
-                    setDeposits(
-                      deposits.map((d: any) =>
-                        d.$id === deposit.$id ? { ...d, completed: true } : d,
-                      ),
-                    );
-                  } catch (error) {
-                    console.error("Error completing deposit:", error);
-                    Alert.alert(
-                      "Error",
-                      "Failed to complete deposit, please try again",
-                    );
-                  }
+                  Alert.alert(
+                    "确认完成",
+                    "确认要将这个存款目标标记为已完成吗？",
+                    [
+                      { text: "取消", style: "cancel" },
+                      {
+                        text: "确认",
+                        onPress: async () => {
+                          try {
+                            const updatedDeposit = await completeDeposit(
+                              deposit.$id,
+                            );
+                            setDeposits(
+                              deposits.map((d: any) =>
+                                d.$id === deposit.$id
+                                  ? {
+                                      ...d,
+                                      completed: updatedDeposit.completed,
+                                    }
+                                  : d,
+                              ),
+                            );
+                            Alert.alert("恭喜！", "你已经完成了这个存款目标！");
+                          } catch (error) {
+                            console.error("Error completing deposit:", error);
+                            Alert.alert(
+                              "Error",
+                              "Failed to complete deposit, please try again",
+                            );
+                          }
+                        },
+                      },
+                    ],
+                  );
                 }}>
                 <Ionicons
                   name={

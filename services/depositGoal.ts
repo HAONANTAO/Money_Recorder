@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-20 18:36:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-29 13:26:34
+ * @LastEditTime: 2025-03-29 15:03:13
  * @FilePath: /Money_Recorder/services/depositGoal.ts
  */
 
@@ -179,9 +179,95 @@ export const updateSaveAmount = async (
       },
     );
 
-    return updatedRecord;
+    // 检查是否达到存款目标
+    return await checkDepositCompletion(depositId);
   } catch (error) {
     console.error("Error updating save amount:", error);
+    throw error;
+  }
+};
+
+// 减少存款目标的已存金额
+export const decreaseSaveAmount = async (
+  depositId: string,
+  decreaseAmount: Number,
+) => {
+  try {
+    if (!DATABASE_ID || !DEPOSIT_COLLECTION_ID) {
+      throw new Error("Database configuration is missing");
+    }
+
+    // 获取当前存款记录
+    const currentDeposit = await getDepositById(depositId);
+    const currentSaveAmount = Number(currentDeposit.saveAmount || 0);
+
+    // 验证减少金额不能大于已存金额
+    if (Number(decreaseAmount) > currentSaveAmount) {
+      throw new Error(
+        "The reduction amount cannot be greater than the deposited amount",
+      );
+    }
+
+    const newSaveAmount = currentSaveAmount - Number(decreaseAmount);
+
+    if (newSaveAmount < 0) {
+      throw new Error("Decrease amount would result in negative save amount");
+    }
+
+    const updatedRecord = await database.updateDocument(
+      DATABASE_ID,
+      DEPOSIT_COLLECTION_ID,
+      depositId,
+      {
+        saveAmount: newSaveAmount,
+      },
+    );
+
+    return updatedRecord;
+  } catch (error) {
+    console.error("Error decreasing save amount:", error);
+    throw error;
+  }
+};
+
+// 检查存款目标是否完成
+export const checkDepositCompletion = async (depositId: string) => {
+  try {
+    if (!DATABASE_ID || !DEPOSIT_COLLECTION_ID) {
+      throw new Error("Database configuration is missing");
+    }
+
+    const deposit = await getDepositById(depositId);
+    const saveAmount = Number(deposit.saveAmount || 0);
+    const targetAmount = Number(deposit.amount || 0);
+
+    // 只有在saveAmount大于等于targetAmount时才会将completed设置为true
+    if (saveAmount >= targetAmount) {
+      const updatedRecord = await database.updateDocument(
+        DATABASE_ID,
+        DEPOSIT_COLLECTION_ID,
+        depositId,
+        {
+          completed: true,
+        },
+      );
+      return updatedRecord;
+    } else {
+      // 如果saveAmount小于targetAmount，确保completed为false
+      const updatedRecord = await database.updateDocument(
+        DATABASE_ID,
+        DEPOSIT_COLLECTION_ID,
+        depositId,
+        {
+          completed: false,
+        },
+      );
+      return updatedRecord;
+    }
+
+    return deposit;
+  } catch (error) {
+    console.error("Error checking deposit completion:", error);
     throw error;
   }
 };
