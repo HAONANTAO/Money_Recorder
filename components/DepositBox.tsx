@@ -14,7 +14,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity, Alert } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { deleteDeposit } from "@/services/depositGoal";
+import { deleteDeposit, completeDeposit } from "@/services/depositGoal";
 
 const DepositBox = () => {
   const router = useRouter();
@@ -204,6 +204,62 @@ const DepositBox = () => {
                     theme === "dark" ? "text-blue-400" : "text-blue-600"
                   }`}>
                   Update
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                className={`flex-row items-center px-4 py-2 rounded-lg ${
+                  deposit.completed
+                    ? theme === "dark"
+                      ? "bg-green-600/20"
+                      : "bg-green-100"
+                    : theme === "dark"
+                    ? "bg-blue-600/20"
+                    : "bg-blue-100"
+                }`}
+                onPress={async () => {
+                  try {
+                    await completeDeposit(deposit.$id);
+                    setDeposits(
+                      deposits.map((d: any) =>
+                        d.$id === deposit.$id ? { ...d, completed: true } : d,
+                      ),
+                    );
+                  } catch (error) {
+                    console.error("Error completing deposit:", error);
+                    Alert.alert(
+                      "Error",
+                      "Failed to complete deposit, please try again",
+                    );
+                  }
+                }}>
+                <Ionicons
+                  name={
+                    deposit.completed
+                      ? "checkmark-circle"
+                      : "checkmark-circle-outline"
+                  }
+                  size={20}
+                  color={
+                    deposit.completed
+                      ? theme === "dark"
+                        ? "#4ade80"
+                        : "#16a34a"
+                      : theme === "dark"
+                      ? "#60a5fa"
+                      : "#2563eb"
+                  }
+                />
+                <Text
+                  className={`ml-2 font-medium ${
+                    deposit.completed
+                      ? theme === "dark"
+                        ? "text-green-400"
+                        : "text-green-600"
+                      : theme === "dark"
+                      ? "text-blue-400"
+                      : "text-blue-600"
+                  }`}>
+                  {deposit.completed ? "Completed" : "Complete"}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
