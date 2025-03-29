@@ -351,7 +351,6 @@ const DepositBox = () => {
                       "plain-text",
                       "",
                       "number-pad",
-                      "number-pad",
                     );
                   }}>
                   <Text

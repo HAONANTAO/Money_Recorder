@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-28 18:35:12
+ * @LastEditTime: 2025-03-29 15:37:24
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
@@ -10,10 +10,11 @@ import {
   View,
   ActivityIndicator,
   ScrollView,
+  RefreshControl,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
-import { center } from "../../node_modules/@shopify/react-native-skia/lib/module/skia/core/Rect";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StorageKeys } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
@@ -38,36 +39,70 @@ const Home = () => {
   const [user, setUser] = useState<any>(null);
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [monthlyIncome, setMonthlyIncome] = useState<number>(0);
+  const [monthlyExpense, setMonthlyExpense] = useState<number>(0);
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    const getInit = async () => {
-      try {
-        const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
-        if (!email) return;
+  const getInit = async () => {
+    try {
+      const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
+      if (!email) return;
 
-        const userData = await getUserByEmail(email);
-        const [user, records] = await Promise.all([
-          getUserByEmail(email),
-          getRecords(userData.$id),
-        ]);
+      const userData = await getUserByEmail(email);
+      const [user, records] = await Promise.all([
+        getUserByEmail(email),
+        getRecords(userData.$id),
+      ]);
 
-        setUser(user);
-        const filteredRecords = DateChecker(
-          records as unknown as MoneyRecord[],
+      setUser(user);
+      const filteredRecords = DateChecker(records as unknown as MoneyRecord[]);
+      setRecords(filteredRecords);
+
+      // 计算当月收入和支出
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth();
+      const currentYear = currentDate.getFullYear();
+
+      const monthlyRecords = filteredRecords.filter((record: any) => {
+        const recordDate = new Date(record.createAt);
+        return (
+          recordDate.getMonth() === currentMonth &&
+          recordDate.getFullYear() === currentYear
         );
-        setRecords(filteredRecords);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching user or records:", error);
-        setLoading(false);
-      }
-    };
+      });
 
-    getInit();
+      const totalIncome = monthlyRecords
+        .filter((record: any) => record.type === "income")
+        .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
+
+      const totalExpense = monthlyRecords
+        .filter((record: any) => record.type === "expense")
+        .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
+
+      setMonthlyIncome(totalIncome);
+      setMonthlyExpense(totalExpense);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching user or records:", error);
+      setLoading(false);
+    }
+  };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getInit().then(() => setRefreshing(false));
   }, []);
 
+  useEffect(() => {
+    getInit();
+  }, [records]);
+
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1 }}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
       <View
         className={`mt-8 flex-1 ${
           isDark ? "bg-gray-900" : "bg-white"
@@ -91,10 +126,10 @@ const Home = () => {
               className={`${
                 isDark ? "text-white" : ""
               } text-xl font-bold text-gray-700`}>
-              Net Worth
+              Monthly Income
             </Text>
             <Text className="text-4xl font-extrabold text-green-500">
-              $12,500
+              ${monthlyIncome.toFixed(2)}
             </Text>
           </View>
 
@@ -104,9 +139,11 @@ const Home = () => {
               className={`${
                 isDark ? "text-white" : ""
               } text-xl font-bold text-gray-700`}>
-              Loss
+              Monthly Expense
             </Text>
-            <Text className="text-4xl font-extrabold text-red-500">$2,300</Text>
+            <Text className="text-4xl font-extrabold text-red-500">
+              ${monthlyExpense.toFixed(2)}
+            </Text>
           </View>
         </View>
 
@@ -116,9 +153,16 @@ const Home = () => {
             isDark ? "bg-secondary" : "bg-blue-100"
           }`}>
           <Text className="text-lg font-bold text-gray-700 dark:text-white">
-            This Month's Expenses
+            Net Income This Month
           </Text>
-          <Text className="text-5xl font-extrabold text-red-500">$1,200</Text>
+          <Text
+            className={`text-5xl font-extrabold ${
+              monthlyIncome - monthlyExpense >= 0
+                ? "text-green-500"
+                : "text-red-500"
+            }`}>
+            ${(monthlyIncome - monthlyExpense).toFixed(2)}
+          </Text>
         </View>
 
         {/* details */}
