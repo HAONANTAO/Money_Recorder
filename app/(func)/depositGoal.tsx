@@ -107,8 +107,11 @@ const DepositGoal = () => {
       setCategory("");
       setNote("");
 
-      // 返回上一页
-      router.back();
+      // 返回上一页并刷新数据
+      router.push({
+        pathname: "/(tabs)/goals",
+        params: { refresh: Date.now().toString() },
+      });
     } catch (error) {
       console.error("操作失败:", error);
       alert(depositId ? "更新存款目标失败" : "创建存款目标失败");
@@ -288,7 +291,7 @@ const DepositGoal = () => {
             onPress={() => handleDepositSubmit("Deposit", amount)}
             className="p-4 mt-6 bg-blue-500 rounded-lg">
             <Text className="font-semibold text-center text-white">
-              Create Deposit Goal
+              {depositId ? "Update Deposit Goal" : "Create Deposit Goal"}
             </Text>
           </TouchableOpacity>
         </View>

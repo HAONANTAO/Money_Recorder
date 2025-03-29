@@ -13,7 +13,7 @@ import { getDeposits } from "@/services/depositGoal";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity, Alert } from "react-native";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { deleteDeposit } from "@/services/depositGoal";
 
 const DepositBox = () => {
@@ -23,6 +23,8 @@ const DepositBox = () => {
   const [userId, setUserId] = useState("");
   const [deposits, setDeposits] = useState<any>([]);
   const [loading, setLoading] = useState(true);
+
+  const { refresh } = useLocalSearchParams();
 
   useEffect(() => {
     const getInitInfo = async () => {
@@ -41,7 +43,7 @@ const DepositBox = () => {
       }
     };
     getInitInfo();
-  }, []);
+  }, [refresh]); // 添加refresh依赖，当refresh变化时重新加载数据
 
   if (loading) {
     return (
