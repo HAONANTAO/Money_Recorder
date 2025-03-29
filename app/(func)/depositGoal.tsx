@@ -90,17 +90,18 @@ const DepositGoal = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View
-        className={`flex-1 mt-20 items-center ${
+        className={`flex-1 items-center ${
           theme === "dark" ? "bg-quaternary" : "bg-gray-100"
         }`}>
-        <Text className="font-extrabold text-secondary">The Deposit Goal</Text>
-        <DepositBox />
+        <Text className="mt-20 text-xl font-extrabold text-secondary">
+          The Deposit Goal
+        </Text>
 
         <View className="mt-6 w-80">
           <TextInput
             value={amount}
             onChangeText={setAmount}
-            placeholder="请输入存款目标金额"
+            placeholder="Please enter the deposit amount..."
             keyboardType="numeric"
             className="p-4 rounded-lg border border-gray-300"
             returnKeyType="done"
@@ -108,6 +109,7 @@ const DepositGoal = () => {
           />
 
           <View className="overflow-hidden mt-4 rounded-lg border border-gray-300">
+            <Text className="mt-2 font-semibold text-secondary">Category</Text>
             <Picker
               selectedValue={category}
               onValueChange={(itemValue: string) => setCategory(itemValue)}
@@ -140,7 +142,7 @@ const DepositGoal = () => {
           <TextInput
             value={note}
             onChangeText={setNote}
-            placeholder="添加备注（可选）"
+            placeholder="Add a note"
             className="p-4 mt-4 rounded-lg border border-gray-300"
             returnKeyType="done"
             onSubmitEditing={Keyboard.dismiss}
@@ -148,7 +150,7 @@ const DepositGoal = () => {
 
           <View className="flex-row mt-4 space-x-4">
             <View className="flex-1">
-              <Text className="mb-2">开始日期</Text>
+              <Text className="mb-2 font-bold">Start Date</Text>
               <View className="overflow-hidden rounded-lg border border-gray-300">
                 <Picker
                   selectedValue={startYear.toString()}
@@ -202,7 +204,7 @@ const DepositGoal = () => {
             </View>
 
             <View className="flex-1">
-              <Text className="mb-2">结束日期</Text>
+              <Text className="mb-2 font-bold">End Date</Text>
               <View className="overflow-hidden rounded-lg border border-gray-300">
                 <Picker
                   selectedValue={endYear.toString()}
