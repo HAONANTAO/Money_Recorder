@@ -17,11 +17,18 @@ import DepositBox from "../../components/DepositBox";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StorageKeys } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
-import { createDeposit, getDeposits } from "@/services/depositGoal";
+import {
+  createDeposit,
+  getDeposits,
+  getDepositById,
+  updateDeposit,
+} from "@/services/depositGoal";
+import { useLocalSearchParams } from "expo-router";
 
 const DepositGoal = () => {
   const router = useRouter();
   const { theme } = useTheme();
+  const { depositId } = useLocalSearchParams();
   const [user, setUser] = useState<any>(null);
   const [deposits, setDeposits] = useState<any>([]);
   const [emergencyFund, setEmergencyFund] = useState(""); // 紧急基金金额
@@ -41,49 +48,70 @@ const DepositGoal = () => {
       if (!email) return;
 
       const userData = await getUserByEmail(email);
-      const [user, deposit] = await Promise.all([
-        getUserByEmail(email),
-        getDeposits(userData.$id),
-      ]);
-      setDeposits(deposit);
       setUser(user);
       setUserId(userData.$id);
+
+      if (depositId) {
+        try {
+          const depositData = await getDepositById(depositId as string);
+          if (depositData) {
+            setAmount(depositData.amount.toString());
+            setCategory(depositData.category || "");
+            setNote(depositData.note || "");
+            setStartYear(depositData.startYear);
+            setStartMonth(depositData.startMonth);
+            setEndYear(depositData.endYear);
+            setEndMonth(depositData.endMonth);
+          }
+        } catch (error) {
+          console.error("获取存款目标数据失败:", error);
+          alert("获取存款目标数据失败");
+        }
+      }
     };
     getInitInfo();
-  }, []);
+  }, [depositId]);
 
   const handleDepositSubmit = async (goal: string, amount: string) => {
     if (!amount) {
-      alert(`Please enter a value for ${goal}`);
+      alert(`请输入存款金额`);
       return;
     }
 
-    const newDeposit: Deposit = {
+    const depositData = {
       userId: userId,
       amount: parseFloat(amount),
       startYear: startYear,
       startMonth: startMonth,
       endYear: endYear,
       endMonth: endMonth,
-      createAt: new Date().toISOString(),
       category: category || undefined,
       note: note || "",
-      // 不需要手动指定 $id，因为它是由数据库生成的
     };
 
     try {
-      await createDeposit(newDeposit); // 这里将提交给数据库，数据库会为 $id 生成一个值
-      alert(`${goal} deposit goal added successfully!`);
+      if (depositId) {
+        // 更新现有存款目标
+        await updateDeposit(depositId as string, depositData);
+        alert("存款目标更新成功！");
+      } else {
+        // 创建新的存款目标
+        await createDeposit({
+          ...depositData,
+        });
+        alert("存款目标创建成功！");
+      }
+
       // 清空输入框
-      goal === "Emergency Fund" ? setEmergencyFund("") : setTravelFund("");
-      setCategory(""); // 清空类别
-      setNote(""); // 清空备注
-      // 重新获取存款数据
-      const updatedDeposits = await getDeposits(userId);
-      setDeposits(updatedDeposits);
+      setAmount("");
+      setCategory("");
+      setNote("");
+
+      // 返回上一页
+      router.back();
     } catch (error) {
-      console.error("Error adding deposit:", error);
-      alert(`Failed to add ${goal} deposit goal.`);
+      console.error("操作失败:", error);
+      alert(depositId ? "更新存款目标失败" : "创建存款目标失败");
     }
   };
 
