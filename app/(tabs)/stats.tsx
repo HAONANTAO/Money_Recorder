@@ -344,7 +344,7 @@ const Stats = () => {
                 onPress={() => {
                   const budgetId = budget?.budgetId;
                   router.push({
-                    pathname: "/(func)/budgetDetail",
+                    pathname: "/(func)/depositGoal",
                     params: {
                       budgetId,
                       category: category.value,
