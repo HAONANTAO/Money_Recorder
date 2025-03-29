@@ -344,9 +344,11 @@ const Stats = () => {
                 onPress={() => {
                   const budgetId = budget?.budgetId;
                   router.push({
-                    pathname: "/(func)/depositGoal",
+                    pathname: "/(func)/budget",
                     params: {
                       budgetId,
+                      category: category.value,
+                      amount: budget?.budgetAmount,
                     },
                   });
                 }}
