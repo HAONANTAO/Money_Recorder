@@ -15,6 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity, Alert } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { deleteDeposit, completeDeposit } from "@/services/depositGoal";
+import { updateSaveAmount } from "@/services/depositGoal";
 
 const DepositBox = () => {
   const router = useRouter();
@@ -148,6 +149,98 @@ const DepositBox = () => {
                       : "bg-gradient-to-br from-gray-100 to-gray-50"
                   }`}>
                   <Ionicons
+                    name="cash-outline"
+                    size={22}
+                    color={theme === "dark" ? "#9ca3af" : "#4b5563"}
+                  />
+                </View>
+                <Text
+                  className={`${
+                    theme === "dark" ? "text-gray-300" : "text-gray-700"
+                  } text-base font-medium`}>
+                  Deposited : ${deposit.saveAmount || 0}
+                  <Text
+                    className={`ml-2 ${
+                      Number(deposit.saveAmount || 0) / deposit.amount >= 0.7
+                        ? theme === "dark"
+                          ? "text-green-400"
+                          : "text-green-600"
+                        : theme === "dark"
+                        ? "text-gray-400"
+                        : "text-gray-600"
+                    }`}>
+                    (
+                    {(
+                      (Number(deposit.saveAmount || 0) / deposit.amount) *
+                      100
+                    ).toFixed(1)}
+                    %)
+                  </Text>
+                </Text>
+                <TouchableOpacity
+                  className={`ml-4 px-3 py-1 rounded-lg `}
+                  onPress={() => {
+                    Alert.prompt(
+                      "add money",
+                      "How much money you want to add ",
+                      [
+                        { text: "Cancel", style: "cancel" },
+                        {
+                          text: "Ok",
+                          onPress: async (value) => {
+                            if (!value) return;
+                            const amount = Number(value);
+                            if (isNaN(amount) || amount <= 0) {
+                              Alert.alert(
+                                "Error",
+                                "Please enter a valid amount",
+                              );
+                              return;
+                            }
+                            const newAmount =
+                              Number(deposit.saveAmount || 0) + amount;
+                            try {
+                              await updateSaveAmount(deposit.$id, newAmount);
+                              setDeposits(
+                                deposits.map((d: any) =>
+                                  d.$id === deposit.$id
+                                    ? { ...d, saveAmount: newAmount }
+                                    : d,
+                                ),
+                              );
+                            } catch (error) {
+                              console.error(
+                                "Error updating save amount:",
+                                error,
+                              );
+                              Alert.alert(
+                                "Error",
+                                "Failed to update save amount",
+                              );
+                            }
+                          },
+                        },
+                      ],
+                      "plain-text",
+                      "",
+                    );
+                  }}>
+                  <Text
+                    className={`font-extrabold text-2xl ${
+                      theme === "dark" ? "text-blue-400" : "text-green-500"
+                    }`}>
+                    +
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View className="flex-row items-center">
+                <View
+                  className={`p-2 rounded-lg mr-3 ${
+                    theme === "dark"
+                      ? "bg-gradient-to-br from-gray-700/60 to-gray-700/40"
+                      : "bg-gradient-to-br from-gray-100 to-gray-50"
+                  }`}>
+                  <Ionicons
                     name="pricetag-outline"
                     size={22}
                     color={theme === "dark" ? "#9ca3af" : "#4b5563"}
@@ -183,11 +276,10 @@ const DepositBox = () => {
                 </View>
               )}
             </View>
-            <View className="flex-row justify-end mt-4 space-x-3">
+            {/* buttons */}
+            <View className="flex-row justify-end mt-6 space-x-6">
               <TouchableOpacity
-                className={`flex-row items-center px-4 py-2 rounded-lg ${
-                  theme === "dark" ? "bg-blue-600/20" : "bg-blue-100"
-                }`}
+                className={`flex-row items-center px-6 py-3.5 rounded-xl transform active:scale-95 transition-all `}
                 onPress={() =>
                   router.push({
                     pathname: "/(func)/depositGoal",
@@ -196,25 +288,25 @@ const DepositBox = () => {
                 }>
                 <Ionicons
                   name="pencil-outline"
-                  size={20}
+                  size={22}
                   color={theme === "dark" ? "#60a5fa" : "#2563eb"}
                 />
                 <Text
-                  className={`ml-2 font-medium ${
+                  className={`ml-2 font-semibold text-base ${
                     theme === "dark" ? "text-blue-400" : "text-blue-600"
                   }`}>
                   Update
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                className={`flex-row items-center px-4 py-2 rounded-lg ${
+                className={`flex-row items-center px-6 py-3.5 rounded-xl transform active:scale-95 transition-all ${
                   deposit.completed
                     ? theme === "dark"
-                      ? "bg-green-600/20"
-                      : "bg-green-100"
+                      ? "bg-green-600/20 hover:bg-green-600/30"
+                      : "bg-green-100 hover:bg-green-200"
                     : theme === "dark"
-                    ? "bg-blue-600/20"
-                    : "bg-blue-100"
+                    ? "bg-blue-600/20 hover:bg-blue-600/30"
+                    : "bg-blue-100 hover:bg-blue-200"
                 }`}
                 onPress={async () => {
                   try {
@@ -238,7 +330,7 @@ const DepositBox = () => {
                       ? "checkmark-circle"
                       : "checkmark-circle-outline"
                   }
-                  size={20}
+                  size={22}
                   color={
                     deposit.completed
                       ? theme === "dark"
@@ -250,7 +342,7 @@ const DepositBox = () => {
                   }
                 />
                 <Text
-                  className={`ml-2 font-medium ${
+                  className={`ml-2 font-semibold text-base ${
                     deposit.completed
                       ? theme === "dark"
                         ? "text-green-400"
@@ -263,8 +355,10 @@ const DepositBox = () => {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                className={`flex-row items-center px-4 py-2 rounded-lg ${
-                  theme === "dark" ? "bg-red-600/20" : "bg-red-100"
+                className={`flex-row items-center px-6 py-3.5 rounded-xl transform active:scale-95 transition-all ${
+                  theme === "dark"
+                    ? "bg-red-600/20 hover:bg-red-600/30"
+                    : "bg-red-100 hover:bg-red-200"
                 }`}
                 onPress={() => {
                   Alert.alert(
@@ -297,11 +391,11 @@ const DepositBox = () => {
                 }}>
                 <Ionicons
                   name="trash-outline"
-                  size={20}
+                  size={22}
                   color={theme === "dark" ? "#f87171" : "#dc2626"}
                 />
                 <Text
-                  className={`ml-2 font-medium ${
+                  className={`ml-2 font-semibold text-base ${
                     theme === "dark" ? "text-red-400" : "text-red-600"
                   }`}>
                   Delete

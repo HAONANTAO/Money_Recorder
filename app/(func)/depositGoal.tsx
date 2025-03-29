@@ -31,7 +31,8 @@ const DepositGoal = () => {
   const { depositId } = useLocalSearchParams();
   const [user, setUser] = useState<any>(null);
 
-  const [category, setCategory] = useState(""); // 预算类别
+  const [category, setCategory] = useState(DEPOSIT_CATEGORIES[0]?.value || "");
+  // 预算类别
   const [note, setNote] = useState(""); // 备注
   const [userId, setUserId] = useState("");
   const [startYear, setStartYear] = useState(new Date().getFullYear()); // 起始年份
