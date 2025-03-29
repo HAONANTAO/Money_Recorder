@@ -249,7 +249,7 @@ const Stats = () => {
 
   useEffect(() => {
     fetchData();
-  }, [refreashing]);
+  }, [isRefreshing]);
 
   return (
     <ScrollView
@@ -344,7 +344,7 @@ const Stats = () => {
                 onPress={() => {
                   const budgetId = budget?.budgetId;
                   router.push({
-                    pathname: "/(func)/budget",
+                    pathname: "/(func)/budgetDetail",
                     params: {
                       budgetId,
                       category: category.value,

@@ -1,7 +1,7 @@
 import { Text, View, TouchableOpacity, TextInput, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useTheme } from "../contexts/ThemeContext";
+import { useTheme } from "../../contexts/ThemeContext";
 import { deleteBudget, updateBudget } from "@/services/budgetService";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -22,7 +22,7 @@ const BudgetDetail = () => {
   const handleDelete = async () => {
     Alert.alert(
       "Confirm Deletion",
-      "Are you sure you want to delete this budget?？",
+      "Are you sure you want to delete this budget?",
       [
         {
           text: "cancel",
@@ -125,43 +125,37 @@ const BudgetDetail = () => {
         )}
       </View>
 
-      <View className="flex-row justify-between mt-8 w-full">
-        <TouchableOpacity
-          onPress={handleUpdate}
-          className="px-8 py-4 bg-green-600 rounded-lg shadow-lg transition duration-200 ease-in-out hover:bg-green-500">
-          <Text className="text-lg font-semibold text-white">
-            {isEditing ? "Save budget" : "Update budget"}
-          </Text>
-        </TouchableOpacity>
+      {/* Conditional rendering for the buttons */}
+      {parseFloat(newAmount) !== 0 && (
+        <View className="flex-row justify-between mt-8 w-full">
+          <TouchableOpacity
+            onPress={handleUpdate}
+            className="px-8 py-4 bg-green-600 rounded-lg shadow-lg transition duration-200 ease-in-out hover:bg-green-500">
+            <Text className="text-lg font-semibold text-white">
+              {isEditing ? "Save budget" : "Update budget"}
+            </Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={handleDelete}
-          className="px-8 py-4 bg-red-600 rounded-lg shadow-lg transition duration-200 ease-in-out hover:bg-red-500">
-          <Text className="text-lg font-semibold text-white">
-            Delete Budget
-          </Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            onPress={handleDelete}
+            className="px-8 py-4 bg-red-600 rounded-lg shadow-lg transition duration-200 ease-in-out hover:bg-red-500">
+            <Text className="text-lg font-semibold text-white">
+              Delete Budget
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
-      {/* 如果预算为0，显示 Set Budget 按钮 */}
+      {/* If the budget amount is 0, show the message */}
       {parseFloat(newAmount) === 0 && (
-        <TouchableOpacity
-          onPress={() => router.push("/(func)/budget")}
-          className={`flex-row items-center p-3 mt-6 rounded-xl shadow-md ${
-            theme === "dark" ? "bg-quaternary" : "bg-white"
-          }`}>
-          <Ionicons
-            name="wallet-outline"
-            size={20}
-            color={theme === "dark" ? "#1477f1" : "#0d6df4"}
-          />
+        <View className="p-3 mt-6 w-full bg-red-100 rounded-xl shadow-md">
           <Text
-            className={`ml-4 text-lg font-semibold ${
+            className={`text-lg font-semibold ${
               theme === "dark" ? "text-gray-200" : "text-gray-700"
             }`}>
-            Set Your Budget
+            Please create a budget first.
           </Text>
-        </TouchableOpacity>
+        </View>
       )}
     </View>
   );
