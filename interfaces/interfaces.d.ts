@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:44:20
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-28 20:58:05
+ * @LastEditTime: 2025-03-29 13:22:58
  * @FilePath: /Money_Recorder/interfaces/interfaces.d.ts
  */
 interface User {
@@ -50,4 +50,6 @@ interface Deposit {
   createAt: string; // 创建时间
   category?: string; // 可选：特定类别的预算
   note: string; // 预算备注
+  completed?: boolean; // 完成状态
+  saveAmount?: number; // 已存金额
 }

@@ -1,11 +1,12 @@
 /*
  * @Date: 2025-03-20 18:36:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-28 21:05:26
+ * @LastEditTime: 2025-03-29 13:26:34
  * @FilePath: /Money_Recorder/services/depositGoal.ts
  */
 
 import { Client, Databases, ID, Query } from "react-native-appwrite";
+import { Float } from "react-native/Libraries/Types/CodegenTypes";
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID;
 
@@ -128,6 +129,59 @@ export const getDepositById = async (depositId: string) => {
     return record;
   } catch (error) {
     console.error("Error fetching record:", error);
+    throw error;
+  }
+};
+
+// 标记存款目标为已完成
+export const completeDeposit = async (depositId: string) => {
+  try {
+    if (!DATABASE_ID || !DEPOSIT_COLLECTION_ID) {
+      throw new Error("Database configuration is missing");
+    }
+
+    const updatedRecord = await database.updateDocument(
+      DATABASE_ID,
+      DEPOSIT_COLLECTION_ID,
+      depositId,
+      {
+        completed: true,
+      },
+    );
+
+    return updatedRecord;
+  } catch (error) {
+    console.error("Error completing deposit:", error);
+    throw error;
+  }
+};
+
+// 更新存款目标的已存金额
+export const updateSaveAmount = async (
+  depositId: string,
+  saveAmount: Number,
+) => {
+  try {
+    if (!DATABASE_ID || !DEPOSIT_COLLECTION_ID) {
+      throw new Error("Database configuration is missing");
+    }
+
+    if (Number(saveAmount) < 0) {
+      throw new Error("Save amount cannot be negative");
+    }
+
+    const updatedRecord = await database.updateDocument(
+      DATABASE_ID,
+      DEPOSIT_COLLECTION_ID,
+      depositId,
+      {
+        saveAmount: saveAmount,
+      },
+    );
+
+    return updatedRecord;
+  } catch (error) {
+    console.error("Error updating save amount:", error);
     throw error;
   }
 };
