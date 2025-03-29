@@ -1,22 +1,23 @@
 /*
  * @Date: 2025-03-29 15:37:24
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-29 15:49:39
+ * @LastEditTime: 2025-03-29 15:50:54
  * @FilePath: /Money_Recorder/app/(func)/recordDetail.tsx
  */
 import { View, Text, ScrollView } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
 import { getRecordById } from "@/services/recordService";
 
 const RecordDetail = () => {
   const { theme } = useTheme();
+  // 传递过来的id
   const { id } = useLocalSearchParams();
   const [record, setRecord] = React.useState<MoneyRecord | null>(null);
   const [loading, setLoading] = React.useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchRecord = async () => {
       try {
         const recordData = await getRecordById(id as string);
@@ -56,62 +57,70 @@ const RecordDetail = () => {
       className={`flex-1 p-4 ${
         theme === "dark" ? "bg-quaternary" : "bg-gray-100"
       }`}>
-      <View className="p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
+      <View className="p-6 bg-gradient-to-br rounded-2xl border shadow-2xl backdrop-blur-sm transition-all duration-300 ease-in-out from-white/90 to-gray-50/90 dark:from-gray-800/90 dark:to-gray-900/90 border-gray-100/50 dark:border-gray-700/50">
         <Text
-          className={`text-3xl font-bold mb-4 ${
-            record.type === "income" ? "text-green-500" : "text-red-500"
-          }`}>
+          className={`text-5xl font-bold mb-8 ${
+            record.type === "income"
+              ? "bg-gradient-to-r from-emerald-500 to-teal-400"
+              : "bg-gradient-to-r from-rose-500 to-pink-400"
+          } bg-clip-text text-transparent animate-fade-in`}>
           ${record.moneyAmount}
         </Text>
 
-        <View className="space-y-4">
-          <View className="flex-row justify-between items-center">
-            <Text className="text-lg text-gray-600 dark:text-gray-400">
+        <View className="space-y-6">
+          <View className="flex-row justify-between items-center py-4 border-b transition-colors duration-200 border-gray-100/50 dark:border-gray-700/50 hover:border-primary/50">
+            <Text className="text-xl font-medium text-gray-600 dark:text-gray-400">
               Type
             </Text>
-            <Text className="text-lg font-medium">
+            <Text className="text-xl font-semibold text-gray-800 transition-colors duration-200 dark:text-gray-200 hover:text-primary">
               {record.type === "income" ? "Income" : "Expense"}
             </Text>
           </View>
 
-          <View className="flex-row justify-between items-center">
-            <Text className="text-lg text-gray-600 dark:text-gray-400">
+          <View className="flex-row justify-between items-center py-4 border-b transition-colors duration-200 border-gray-100/50 dark:border-gray-700/50 hover:border-primary/50">
+            <Text className="text-xl font-medium text-gray-600 dark:text-gray-400">
               Category
             </Text>
-            <Text className="text-lg font-medium">{record.category}</Text>
+            <Text className="text-xl font-semibold text-gray-800 transition-colors duration-200 dark:text-gray-200 hover:text-primary">
+              {record.category}
+            </Text>
           </View>
 
-          <View className="flex-row justify-between items-center">
-            <Text className="text-lg text-gray-600 dark:text-gray-400">
+          <View className="flex-row justify-between items-center py-4 border-b transition-colors duration-200 border-gray-100/50 dark:border-gray-700/50 hover:border-primary/50">
+            <Text className="text-xl font-medium text-gray-600 dark:text-gray-400">
               Date
             </Text>
-            <Text className="text-lg font-medium">
+            <Text className="text-xl font-semibold text-gray-800 transition-colors duration-200 dark:text-gray-200 hover:text-primary">
               {formatDate(record.createAt)}
             </Text>
           </View>
 
-          <View className="flex-row justify-between items-center">
-            <Text className="text-lg text-gray-600 dark:text-gray-400">
+          <View className="flex-row justify-between items-center py-4 border-b transition-colors duration-200 border-gray-100/50 dark:border-gray-700/50 hover:border-primary/50">
+            <Text className="text-xl font-medium text-gray-600 dark:text-gray-400">
               Payment Method
             </Text>
-            <Text className="text-lg font-medium">{record.paymentMethod}</Text>
+            <Text className="text-xl font-semibold text-gray-800 transition-colors duration-200 dark:text-gray-200 hover:text-primary">
+              {record.paymentMethod}
+            </Text>
           </View>
 
-          <View className="flex-row justify-between items-center">
-            <Text className="text-lg text-gray-600 dark:text-gray-400">
+          <View className="flex-row justify-between items-center py-4 border-b transition-colors duration-200 border-gray-100/50 dark:border-gray-700/50 hover:border-primary/50">
+            <Text className="text-xl font-medium text-gray-600 dark:text-gray-400">
               Location
             </Text>
-            <Text className="text-lg font-medium">
+            <Text className="text-xl font-semibold text-gray-800 transition-colors duration-200 dark:text-gray-200 hover:text-primary">
               {record.location || "N/A"}
             </Text>
           </View>
 
           {record.comment && (
-            <View className="mt-4">
-              <Text className="mb-2 text-lg text-gray-600 dark:text-gray-400">
+            <View className="p-6 mt-8 rounded-xl backdrop-blur-sm transition-all duration-300 ease-in-out bg-gray-50/80 dark:bg-gray-900/80 hover:shadow-lg">
+              <Text className="mb-4 text-xl font-medium text-gray-600 dark:text-gray-400">
                 Comment
               </Text>
-              <Text className="text-lg">{record.comment}</Text>
+              <Text className="text-xl leading-relaxed text-gray-800 dark:text-gray-200">
+                {record.comment}
+              </Text>
             </View>
           )}
         </View>
