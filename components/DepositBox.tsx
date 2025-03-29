@@ -94,17 +94,28 @@ const DepositBox = () => {
                   ¥{deposit.amount}
                 </Text>
               </View>
-              <View
-                className={`p-2.5 rounded-xl ${
-                  theme === "dark"
-                    ? "bg-gradient-to-br from-blue-900/40 to-blue-900/20"
-                    : "bg-gradient-to-br from-blue-100 to-blue-50"
-                }`}>
-                <Ionicons
-                  name="trending-up"
-                  size={26}
-                  color={theme === "dark" ? "#60a5fa" : "#2563eb"}
-                />
+              <View className="flex-row items-center space-x-2">
+                <View
+                  className={`p-2.5 rounded-xl ${
+                    theme === "dark"
+                      ? "bg-gradient-to-br from-blue-900/40 to-blue-900/20"
+                      : "bg-gradient-to-br from-blue-100 to-blue-50"
+                  }`}>
+                  {new Date(`${deposit.endYear}-${deposit.endMonth}-01`) <
+                  new Date() ? (
+                    <View className="p-2">
+                      <Text style={{ color: "#ef4444", fontSize: 20 }}>
+                        Expired
+                      </Text>
+                    </View>
+                  ) : (
+                    <Ionicons
+                      name="trending-up"
+                      size={26}
+                      color={theme === "dark" ? "#60a5fa" : "#2563eb"}
+                    />
+                  )}
+                </View>
               </View>
             </View>
             <View className="space-y-4">
