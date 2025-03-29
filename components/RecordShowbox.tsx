@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-26 17:16:29
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-28 13:39:26
+ * @LastEditTime: 2025-03-29 21:24:03
  * @FilePath: /Money_Recorder/components/RecordShowbox.tsx
  */
 import React from "react";
@@ -25,7 +25,7 @@ const RecordShowBox: React.FC<RecordShowBoxProps> = ({ record }) => {
   return (
     <TouchableOpacity
       onPress={handlePress}
-      className="w-[48%] p-3 mb-4 bg-white rounded-lg shadow-md border border-blue-100 dark:bg-gray-800 dark:border-blue-900 active:opacity-80">
+      className="w-[48%] p-3 mb-4 bg-white rounded-lg shadow-md border border-blue-200  active:opacity-80">
       <Text
         className={`text-lg font-bold ${
           record.type === "income" ? "text-green-500" : "text-red-500"
