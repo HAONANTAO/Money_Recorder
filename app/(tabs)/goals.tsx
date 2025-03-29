@@ -5,6 +5,8 @@ import {
   TouchableOpacity,
   TextInput,
   RefreshControl,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { DEPOSIT_CATEGORIES } from "../../constants/categories";
@@ -86,105 +88,182 @@ const Goals = () => {
   };
 
   return (
-    <View
-      className={`flex-1 mt-20 items-center ${
-        theme === "dark" ? "bg-quaternary" : "bg-gray-100"
-      }`}>
-      <Text className="font-extrabold text-secondary">The Deposit Goal</Text>
-      <DepositBox />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View
+        className={`flex-1 mt-20 items-center ${
+          theme === "dark" ? "bg-quaternary" : "bg-gray-100"
+        }`}>
+        <Text className="font-extrabold text-secondary">The Deposit Goal</Text>
+        <DepositBox />
 
-      <View className="mt-6 w-80">
-        <TextInput
-          value={amount}
-          onChangeText={setAmount}
-          placeholder="请输入存款目标金额"
-          keyboardType="numeric"
-          className="p-4 rounded-lg border border-gray-300"
-        />
+        <View className="mt-6 w-80">
+          <TextInput
+            value={amount}
+            onChangeText={setAmount}
+            placeholder="请输入存款目标金额"
+            keyboardType="numeric"
+            className="p-4 rounded-lg border border-gray-300"
+            returnKeyType="done"
+            onSubmitEditing={Keyboard.dismiss}
+          />
 
-        <View className="overflow-hidden mt-4 rounded-lg border border-gray-300">
-          <Picker
-            selectedValue={category}
-            onValueChange={(itemValue: string) => setCategory(itemValue)}
-            style={{
-              backgroundColor: theme === "dark" ? "#374151" : "#FFFFFF",
-              color: theme === "dark" ? "#FFFFFF" : "#000000",
-              height: 200,
-              marginVertical: 10,
-              paddingHorizontal: 16,
-              width: "100%",
-              borderRadius: 8,
-            }}
-            itemStyle={{
-              color: theme === "dark" ? "#FFFFFF" : "#000000",
-              fontSize: 20,
-              height: 150,
-              textAlign: "center",
-              paddingVertical: 12,
-            }}>
-            
-            {DEPOSIT_CATEGORIES.map((cat) => (
-              <Picker.Item
-                key={cat.value}
-                label={`${cat.icon} ${cat.label}`}
-                value={cat.value}
-              />
-            ))}
-          </Picker>
-        </View>
-
-        <TextInput
-          value={note}
-          onChangeText={setNote}
-          placeholder="添加备注（可选）"
-          className="p-4 mt-4 rounded-lg border border-gray-300"
-        />
-
-        <View className="flex-row mt-4 space-x-4">
-          <View className="flex-1">
-            <TextInput
-              value={startYear.toString()}
-              onChangeText={(text) => setStartYear(parseInt(text))}
-              placeholder="开始年份"
-              keyboardType="numeric"
-              className="p-4 rounded-lg border border-gray-300"
-            />
-            <TextInput
-              value={startMonth.toString()}
-              onChangeText={(text) => setStartMonth(parseInt(text))}
-              placeholder="开始月份"
-              keyboardType="numeric"
-              className="p-4 mt-2 rounded-lg border border-gray-300"
-            />
+          <View className="overflow-hidden mt-4 rounded-lg border border-gray-300">
+            <Picker
+              selectedValue={category}
+              onValueChange={(itemValue: string) => setCategory(itemValue)}
+              style={{
+                backgroundColor: theme === "dark" ? "#374151" : "#FFFFFF",
+                color: theme === "dark" ? "#FFFFFF" : "#000000",
+                height: 200,
+                marginVertical: 10,
+                paddingHorizontal: 16,
+                width: "100%",
+                borderRadius: 8,
+              }}
+              itemStyle={{
+                color: theme === "dark" ? "#FFFFFF" : "#000000",
+                fontSize: 20,
+                height: 150,
+                textAlign: "center",
+                paddingVertical: 12,
+              }}>
+              {DEPOSIT_CATEGORIES.map((cat) => (
+                <Picker.Item
+                  key={cat.value}
+                  label={`${cat.icon} ${cat.label}`}
+                  value={cat.value}
+                />
+              ))}
+            </Picker>
           </View>
 
-          <View className="flex-1">
-            <TextInput
-              value={endYear.toString()}
-              onChangeText={(text) => setEndYear(parseInt(text))}
-              placeholder="结束年份"
-              keyboardType="numeric"
-              className="p-4 rounded-lg border border-gray-300"
-            />
-            <TextInput
-              value={endMonth.toString()}
-              onChangeText={(text) => setEndMonth(parseInt(text))}
-              placeholder="结束月份"
-              keyboardType="numeric"
-              className="p-4 mt-2 rounded-lg border border-gray-300"
-            />
-          </View>
-        </View>
+          <TextInput
+            value={note}
+            onChangeText={setNote}
+            placeholder="添加备注（可选）"
+            className="p-4 mt-4 rounded-lg border border-gray-300"
+            returnKeyType="done"
+            onSubmitEditing={Keyboard.dismiss}
+          />
 
-        <TouchableOpacity
-          onPress={() => handleDepositSubmit("Deposit", amount)}
-          className="p-4 mt-6 bg-blue-500 rounded-lg">
-          <Text className="font-semibold text-center text-white">
-            Create Deposit Goal
-          </Text>
-        </TouchableOpacity>
+          <View className="flex-row mt-4 space-x-4">
+            <View className="flex-1">
+              <Text className="mb-2">开始日期</Text>
+              <View className="overflow-hidden rounded-lg border border-gray-300">
+                <Picker
+                  selectedValue={startYear.toString()}
+                  onValueChange={(itemValue) =>
+                    setStartYear(parseInt(itemValue))
+                  }
+                  style={{
+                    backgroundColor: theme === "dark" ? "#374151" : "#FFFFFF",
+                    color: theme === "dark" ? "#FFFFFF" : "#000000",
+                    height: 100,
+                  }}
+                  itemStyle={{
+                    color: theme === "dark" ? "#FFFFFF" : "#000000",
+                    fontSize: 16,
+                    height: 100,
+                  }}>
+                  {Array.from({ length: 11 }, (_, i) => (
+                    <Picker.Item
+                      key={i}
+                      label={String(new Date().getFullYear() - 5 + i)}
+                      value={String(new Date().getFullYear() - 5 + i)}
+                    />
+                  ))}
+                </Picker>
+              </View>
+              <View className="overflow-hidden mt-2 rounded-lg border border-gray-300">
+                <Picker
+                  selectedValue={startMonth.toString()}
+                  onValueChange={(itemValue) =>
+                    setStartMonth(parseInt(itemValue))
+                  }
+                  style={{
+                    backgroundColor: theme === "dark" ? "#374151" : "#FFFFFF",
+                    color: theme === "dark" ? "#FFFFFF" : "#000000",
+                    height: 100,
+                  }}
+                  itemStyle={{
+                    color: theme === "dark" ? "#FFFFFF" : "#000000",
+                    fontSize: 16,
+                    height: 100,
+                  }}>
+                  {Array.from({ length: 12 }, (_, i) => (
+                    <Picker.Item
+                      key={i}
+                      label={String(i + 1)}
+                      value={String(i + 1)}
+                    />
+                  ))}
+                </Picker>
+              </View>
+            </View>
+
+            <View className="flex-1">
+              <Text className="mb-2">结束日期</Text>
+              <View className="overflow-hidden rounded-lg border border-gray-300">
+                <Picker
+                  selectedValue={endYear.toString()}
+                  onValueChange={(itemValue) => setEndYear(parseInt(itemValue))}
+                  style={{
+                    backgroundColor: theme === "dark" ? "#374151" : "#FFFFFF",
+                    color: theme === "dark" ? "#FFFFFF" : "#000000",
+                    height: 100,
+                  }}
+                  itemStyle={{
+                    color: theme === "dark" ? "#FFFFFF" : "#000000",
+                    fontSize: 16,
+                    height: 100,
+                  }}>
+                  {Array.from({ length: 11 }, (_, i) => (
+                    <Picker.Item
+                      key={i}
+                      label={String(new Date().getFullYear() - 5 + i)}
+                      value={String(new Date().getFullYear() - 5 + i)}
+                    />
+                  ))}
+                </Picker>
+              </View>
+              <View className="overflow-hidden mt-2 rounded-lg border border-gray-300">
+                <Picker
+                  selectedValue={endMonth.toString()}
+                  onValueChange={(itemValue) =>
+                    setEndMonth(parseInt(itemValue))
+                  }
+                  style={{
+                    backgroundColor: theme === "dark" ? "#374151" : "#FFFFFF",
+                    color: theme === "dark" ? "#FFFFFF" : "#000000",
+                    height: 100,
+                  }}
+                  itemStyle={{
+                    color: theme === "dark" ? "#FFFFFF" : "#000000",
+                    fontSize: 16,
+                    height: 100,
+                  }}>
+                  {Array.from({ length: 12 }, (_, i) => (
+                    <Picker.Item
+                      key={i}
+                      label={String(i + 1)}
+                      value={String(i + 1)}
+                    />
+                  ))}
+                </Picker>
+              </View>
+            </View>
+          </View>
+
+          <TouchableOpacity
+            onPress={() => handleDepositSubmit("Deposit", amount)}
+            className="p-4 mt-6 bg-blue-500 rounded-lg">
+            <Text className="font-semibold text-center text-white">
+              Create Deposit Goal
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

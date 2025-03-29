@@ -1,15 +1,16 @@
 /*
  * @Date: 2025-03-28 15:21:48
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-28 19:52:15
- * @FilePath: /Money_Recorder/components/Budget.tsx
+ * @LastEditTime: 2025-03-29 12:29:42
+ * @FilePath: /Money_Recorder/app/(func)/budget.tsx
  */
 import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useTheme } from "../contexts/ThemeContext";
+
 import { getUserByEmail } from "@/services/userManagement";
 import { StorageService } from "@/utils/storageService";
 import BudgetForm from "@/components/BudgetForm";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const Budget = () => {
   const { theme } = useTheme();
