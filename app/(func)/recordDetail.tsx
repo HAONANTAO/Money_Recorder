@@ -128,12 +128,12 @@ const RecordDetail = () => {
 
       <View className="flex-row justify-between px-4 mt-8">
         <TouchableOpacity
-          // onPress={() =>
-          //   router.push({
-          //     pathname: "/editRecord",
-          //     params: { id: record.$id },
-          //   })
-          // }
+          onPress={() =>
+            router.push({
+              pathname: "/(func)/editRecord",
+              params: { id: record.$id },
+            })
+          }
           className="px-8 py-4 bg-green-600 rounded-lg shadow-lg transition duration-200 ease-in-out hover:bg-green-500 w-[45%]">
           <Text className="text-lg font-semibold text-center text-white">
             更新
