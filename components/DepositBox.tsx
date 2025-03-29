@@ -194,11 +194,7 @@ const DepositBox = () => {
                   <Text
                     className={`ml-2 ${
                       Number(deposit.saveAmount || 0) / deposit.amount >= 0.7
-                        ? theme === "dark"
-                          ? "text-green-400"
-                          : "text-green-600"
-                        : theme === "dark"
-                        ? "text-gray-400"
+                        ? "text-green-500"
                         : "text-gray-600"
                     }`}>
                     (
@@ -242,33 +238,37 @@ const DepositBox = () => {
                               );
                               // 检查是否达到存款目标
                               if (newAmount >= deposit.amount) {
-                                Alert.alert("恭喜！", "你已经达成存款目标！", [
-                                  {
-                                    text: "OK",
-                                    onPress: async () => {
-                                      try {
-                                        const updatedDeposit =
-                                          await completeDeposit(deposit.$id);
-                                        setDeposits(
-                                          deposits.map((d: any) =>
-                                            d.$id === deposit.$id
-                                              ? {
-                                                  ...d,
-                                                  completed:
-                                                    updatedDeposit.completed,
-                                                }
-                                              : d,
-                                          ),
-                                        );
-                                      } catch (error) {
-                                        console.error(
-                                          "Error completing deposit:",
-                                          error,
-                                        );
-                                      }
+                                Alert.alert(
+                                  "Congratulations!",
+                                  "You have reached your deposit goal!",
+                                  [
+                                    {
+                                      text: "OK",
+                                      onPress: async () => {
+                                        try {
+                                          const updatedDeposit =
+                                            await completeDeposit(deposit.$id);
+                                          setDeposits(
+                                            deposits.map((d: any) =>
+                                              d.$id === deposit.$id
+                                                ? {
+                                                    ...d,
+                                                    completed:
+                                                      updatedDeposit.completed,
+                                                  }
+                                                : d,
+                                            ),
+                                          );
+                                        } catch (error) {
+                                          console.error(
+                                            "Error completing deposit:",
+                                            error,
+                                          );
+                                        }
+                                      },
                                     },
-                                  },
-                                ]);
+                                  ],
+                                );
                               }
                             } catch (error) {
                               console.error(
@@ -285,6 +285,7 @@ const DepositBox = () => {
                       ],
                       "plain-text",
                       "",
+                      "number-pad",
                     );
                   }}>
                   <Text
@@ -314,11 +315,18 @@ const DepositBox = () => {
                               );
                               return;
                             }
+                            const currentSaveAmount = Number(
+                              deposit.saveAmount || 0,
+                            );
+                            if (amount > currentSaveAmount) {
+                              Alert.alert(
+                                "hint",
+                                "The reduction amount cannot be greater than the deposited amount",
+                              );
+                              return;
+                            }
                             try {
                               await decreaseSaveAmount(deposit.$id, amount);
-                              const currentSaveAmount = Number(
-                                deposit.saveAmount || 0,
-                              );
                               const newAmount = currentSaveAmount - amount;
                               setDeposits(
                                 deposits.map((d: any) =>
@@ -342,6 +350,8 @@ const DepositBox = () => {
                       ],
                       "plain-text",
                       "",
+                      "number-pad",
+                      "number-pad",
                     );
                   }}>
                   <Text
@@ -429,12 +439,12 @@ const DepositBox = () => {
                 }`}
                 onPress={async () => {
                   Alert.alert(
-                    "确认完成",
-                    "确认要将这个存款目标标记为已完成吗？",
+                    "Confirmation of completion",
+                    "Are you sure you want to mark this deposit goal as completed?",
                     [
-                      { text: "取消", style: "cancel" },
+                      { text: "Cancel", style: "cancel" },
                       {
-                        text: "确认",
+                        text: "OK",
                         onPress: async () => {
                           try {
                             const updatedDeposit = await completeDeposit(
@@ -450,7 +460,10 @@ const DepositBox = () => {
                                   : d,
                               ),
                             );
-                            Alert.alert("恭喜！", "你已经完成了这个存款目标！");
+                            Alert.alert(
+                              "Congratulations!",
+                              "You have reached your deposit goal!",
+                            );
                           } catch (error) {
                             console.error("Error completing deposit:", error);
                             Alert.alert(
@@ -581,13 +594,6 @@ const DepositBox = () => {
             </Text>
           </View>
         )}
-        {/* <TouchableOpacity
-          onPress={() => router.push("/(func)/depositGoal")}
-          className={`absolute bottom-8 right-8 p-4 rounded-full shadow-lg ${
-            theme === "dark" ? "bg-blue-600" : "bg-blue-500"
-          }`}>
-          <Ionicons name="add" size={30} color="white" />
-        </TouchableOpacity> */}
       </View>
     </ScrollView>
   );
