@@ -24,6 +24,7 @@ const DepositBox = () => {
   const [userId, setUserId] = useState("");
   const [deposits, setDeposits] = useState<any>([]);
   const [loading, setLoading] = useState(true);
+  const [showCompleted, setShowCompleted] = useState(false);
 
   const { refresh } = useLocalSearchParams();
 
@@ -54,10 +55,40 @@ const DepositBox = () => {
     );
   }
 
+  const filteredDeposits = deposits.filter(
+    (deposit: any) => deposit.completed === showCompleted,
+  );
+
   return (
     <ScrollView className="flex-1">
-      <View className="p-4 w-full">
-        {deposits.map((deposit: any, index: number) => (
+      <View className="relative p-4 w-full">
+        <View className="flex-row mb-4 space-x-2">
+          <TouchableOpacity
+            onPress={() => setShowCompleted(false)}
+            className={`flex-1 p-3 rounded-xl ${
+              !showCompleted ? "bg-blue-500" : "bg-gray-300"
+            }`}>
+            <Text
+              className={`text-center font-medium ${
+                !showCompleted ? "text-white" : "text-gray-700"
+              }`}>
+              Uncompleted
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setShowCompleted(true)}
+            className={`flex-1 p-3 rounded-xl ${
+              showCompleted ? "bg-blue-500" : "bg-gray-300"
+            }`}>
+            <Text
+              className={`text-center font-medium ${
+                showCompleted ? "text-white" : "text-gray-700"
+              }`}>
+              Completed
+            </Text>
+          </TouchableOpacity>
+        </View>
+        {filteredDeposits.map((deposit: any, index: number) => (
           <View
             key={index}
             className={`p-6 mb-5 rounded-3xl shadow-2xl ${
@@ -92,7 +123,7 @@ const DepositBox = () => {
                   className={`text-4xl font-bold ml-4 ${
                     theme === "dark" ? "text-blue-400" : "text-blue-600"
                   }`}>
-                  ¥{deposit.amount}
+                  ${deposit.amount}
                 </Text>
               </View>
               <View className="flex-row items-center space-x-2">
@@ -404,7 +435,7 @@ const DepositBox = () => {
             </View>
           </View>
         ))}
-        {deposits.length === 0 && (
+        {filteredDeposits.length === 0 && (
           <View
             className={`p-8 rounded-3xl ${
               theme === "dark"
@@ -436,10 +467,19 @@ const DepositBox = () => {
               className={`text-lg font-medium ${
                 theme === "dark" ? "text-gray-400" : "text-gray-500"
               }`}>
-              No deposit goal yet
+              {showCompleted
+                ? "No deposit goal has been completed yet"
+                : "Want to set a new deposit goal?"}
             </Text>
           </View>
         )}
+        {/* <TouchableOpacity
+          onPress={() => router.push("/(func)/depositGoal")}
+          className={`absolute bottom-8 right-8 p-4 rounded-full shadow-lg ${
+            theme === "dark" ? "bg-blue-600" : "bg-blue-500"
+          }`}>
+          <Ionicons name="add" size={30} color="white" />
+        </TouchableOpacity> */}
       </View>
     </ScrollView>
   );
