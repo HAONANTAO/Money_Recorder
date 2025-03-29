@@ -13,7 +13,7 @@ import { DEPOSIT_CATEGORIES } from "../../constants/categories";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
-import DepositBox from "../../components/DepositBox";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StorageKeys } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
@@ -30,9 +30,7 @@ const DepositGoal = () => {
   const { theme } = useTheme();
   const { depositId } = useLocalSearchParams();
   const [user, setUser] = useState<any>(null);
-  const [deposits, setDeposits] = useState<any>([]);
-  const [emergencyFund, setEmergencyFund] = useState(""); // 紧急基金金额
-  const [travelFund, setTravelFund] = useState(""); // 旅行基金金额
+
   const [category, setCategory] = useState(""); // 预算类别
   const [note, setNote] = useState(""); // 备注
   const [userId, setUserId] = useState("");
@@ -74,7 +72,15 @@ const DepositGoal = () => {
 
   const handleDepositSubmit = async (goal: string, amount: string) => {
     if (!amount) {
-      alert(`请输入存款金额`);
+      alert(`Please enter the deposit amount`);
+      return;
+    }
+
+    // 验证结束日期不早于开始日期
+    const startDate = new Date(startYear, startMonth - 1);
+    const endDate = new Date(endYear, endMonth - 1);
+    if (endDate < startDate) {
+      alert(`End date cannot be earlier than start date`);
       return;
     }
 
@@ -93,13 +99,13 @@ const DepositGoal = () => {
       if (depositId) {
         // 更新现有存款目标
         await updateDeposit(depositId as string, depositData);
-        alert("存款目标更新成功！");
+        alert("Deposit target updated successfully!");
       } else {
         // 创建新的存款目标
         await createDeposit({
           ...depositData,
         });
-        alert("存款目标创建成功！");
+        alert("Deposit target created successfully!");
       }
 
       // 清空输入框
@@ -113,8 +119,12 @@ const DepositGoal = () => {
         params: { refresh: Date.now().toString() },
       });
     } catch (error) {
-      console.error("操作失败:", error);
-      alert(depositId ? "更新存款目标失败" : "创建存款目标失败");
+      console.error("Operation failed:", error);
+      alert(
+        depositId
+          ? "Update deposit target failed"
+          : "Failed to create deposit destination",
+      );
     }
   };
 

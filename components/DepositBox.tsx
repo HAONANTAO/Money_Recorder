@@ -37,7 +37,7 @@ const DepositBox = () => {
         setUserId(userData.$id);
         setDeposits(deposit);
       } catch (error) {
-        console.error("获取数据失败:", error);
+        console.error("Failed to obtain data:", error);
       } finally {
         setLoading(false);
       }
@@ -192,7 +192,7 @@ const DepositBox = () => {
                   className={`ml-2 font-medium ${
                     theme === "dark" ? "text-blue-400" : "text-blue-600"
                   }`}>
-                  更新
+                  Update
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -200,26 +200,33 @@ const DepositBox = () => {
                   theme === "dark" ? "bg-red-600/20" : "bg-red-100"
                 }`}
                 onPress={() => {
-                  Alert.alert("确认删除", "确定要删除这个存款目标吗？", [
-                    { text: "取消", style: "cancel" },
-                    {
-                      text: "删除",
-                      style: "destructive",
-                      onPress: async () => {
-                        try {
-                          await deleteDeposit(deposit.$id);
-                          setDeposits(
-                            deposits.filter(
-                              (d: { $id: any }) => d.$id !== deposit.$id,
-                            ),
-                          );
-                        } catch (error) {
-                          console.error("删除失败:", error);
-                          Alert.alert("错误", "删除失败，请重试");
-                        }
+                  Alert.alert(
+                    "Confirm Delete",
+                    "Are you sure you want to delete this deposit target?",
+                    [
+                      { text: "Cancel", style: "cancel" },
+                      {
+                        text: "Delete",
+                        style: "destructive",
+                        onPress: async () => {
+                          try {
+                            await deleteDeposit(deposit.$id);
+                            setDeposits(
+                              deposits.filter(
+                                (d: { $id: any }) => d.$id !== deposit.$id,
+                              ),
+                            );
+                          } catch (error) {
+                            console.error("Deletion failed:", error);
+                            Alert.alert(
+                              "Error",
+                              "Deletion failed, please try again",
+                            );
+                          }
+                        },
                       },
-                    },
-                  ]);
+                    ],
+                  );
                 }}>
                 <Ionicons
                   name="trash-outline"
@@ -230,7 +237,7 @@ const DepositBox = () => {
                   className={`ml-2 font-medium ${
                     theme === "dark" ? "text-red-400" : "text-red-600"
                   }`}>
-                  删除
+                  Delete
                 </Text>
               </TouchableOpacity>
             </View>
@@ -268,7 +275,7 @@ const DepositBox = () => {
               className={`text-lg font-medium ${
                 theme === "dark" ? "text-gray-400" : "text-gray-500"
               }`}>
-              暂无存款目标
+              No deposit goal yet
             </Text>
           </View>
         )}
