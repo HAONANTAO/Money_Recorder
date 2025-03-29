@@ -1,56 +1,211 @@
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StorageKeys } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
 import { getDeposits } from "@/services/depositGoal";
+import { useTheme } from "@/contexts/ThemeContext";
+import { Ionicons } from "@expo/vector-icons";
+
 const DepositBox = () => {
+  const { theme } = useTheme();
   const [user, setUser] = useState();
   const [userId, setUserId] = useState("");
   const [deposits, setDeposits] = useState<any>([]);
-  // 获取数据
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const getInitInfo = async () => {
-      const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
-      if (!email) return;
+      try {
+        const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
+        if (!email) return;
 
-      const userData = await getUserByEmail(email);
-      const deposit = await getDeposits(userData.$id);
-      setUserId(userData.$id);
-      setDeposits(deposit);
+        const userData = await getUserByEmail(email);
+        const deposit = await getDeposits(userData.$id);
+        setUserId(userData.$id);
+        setDeposits(deposit);
+      } catch (error) {
+        console.error("获取数据失败:", error);
+      } finally {
+        setLoading(false);
+      }
     };
     getInitInfo();
   }, []);
 
-  // 打印测试
-  useEffect(() => {
-    if (userId && deposits.length > 0) {
-      console.log("用户ID:", userId);
-      console.log("存款目标:", deposits);
-    }
-  }, [userId, deposits]);
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="#0891b2" />
+      </View>
+    );
+  }
 
   return (
-    <View className="p-4 w-full">
-      {deposits.map((deposit: any, index: number) => (
-        <View key={index} className="p-4 mb-4 bg-white rounded-lg shadow-md">
-          <Text className="mb-2 text-lg font-bold text-secondary">
-            目标金额: ¥{deposit.amount}
-          </Text>
-          <Text className="mb-1 text-gray-600">
-            时间范围: {deposit.startYear}年{deposit.startMonth}月 -{" "}
-            {deposit.endYear}年{deposit.endMonth}月
-          </Text>
-          <Text className="mb-1 text-gray-600">类别: {deposit.category}</Text>
-          {deposit.note && (
-            <Text className="italic text-gray-500">备注: {deposit.note}</Text>
-          )}
-        </View>
-      ))}
-      {deposits.length === 0 && (
-        <Text className="text-center text-gray-500">暂无存款目标</Text>
-      )}
-    </View>
+    <ScrollView className="flex-1">
+      <View className="p-4 w-full">
+        {deposits.map((deposit: any, index: number) => (
+          <View
+            key={index}
+            className={`p-6 mb-5 rounded-3xl shadow-2xl ${
+              theme === "dark"
+                ? "bg-gradient-to-br from-gray-800/95 via-gray-800/90 to-gray-800/85"
+                : "bg-gradient-to-br from-white via-blue-50 to-cyan-100"
+            } border ${
+              theme === "dark" ? "border-blue-900/20" : "border-blue-200/40"
+            }`}
+            style={{
+              shadowColor: theme === "dark" ? "#1e293b" : "#0891b2",
+              shadowOffset: { width: 0, height: 8 },
+              shadowOpacity: 0.3,
+              shadowRadius: 16,
+              elevation: 10,
+            }}>
+            <View className="flex-row justify-between items-center mb-5">
+              <View className="flex-row items-center">
+                <View
+                  className={`p-2.5 rounded-2xl ${
+                    theme === "dark"
+                      ? "bg-gradient-to-br from-blue-900/40 to-blue-900/20"
+                      : "bg-gradient-to-br from-blue-100 to-blue-50"
+                  }`}>
+                  <Ionicons
+                    name="wallet-outline"
+                    size={32}
+                    color={theme === "dark" ? "#60a5fa" : "#2563eb"}
+                  />
+                </View>
+                <Text
+                  className={`text-4xl font-bold ml-4 ${
+                    theme === "dark" ? "text-blue-400" : "text-blue-600"
+                  }`}>
+                  ¥{deposit.amount}
+                </Text>
+              </View>
+              <View
+                className={`p-2.5 rounded-xl ${
+                  theme === "dark"
+                    ? "bg-gradient-to-br from-blue-900/40 to-blue-900/20"
+                    : "bg-gradient-to-br from-blue-100 to-blue-50"
+                }`}>
+                <Ionicons
+                  name="trending-up"
+                  size={26}
+                  color={theme === "dark" ? "#60a5fa" : "#2563eb"}
+                />
+              </View>
+            </View>
+            <View className="space-y-4">
+              <View className="flex-row items-center">
+                <View
+                  className={`p-2 rounded-lg mr-3 ${
+                    theme === "dark"
+                      ? "bg-gradient-to-br from-gray-700/60 to-gray-700/40"
+                      : "bg-gradient-to-br from-gray-100 to-gray-50"
+                  }`}>
+                  <Ionicons
+                    name="calendar-outline"
+                    size={22}
+                    color={theme === "dark" ? "#9ca3af" : "#4b5563"}
+                  />
+                </View>
+                <Text
+                  className={`${
+                    theme === "dark" ? "text-gray-300" : "text-gray-700"
+                  } text-base font-medium`}>
+                  {deposit.startYear}.{deposit.startMonth} - {deposit.endYear}.
+                  {deposit.endMonth}
+                </Text>
+              </View>
+              <View className="flex-row items-center">
+                <View
+                  className={`p-2 rounded-lg mr-3 ${
+                    theme === "dark"
+                      ? "bg-gradient-to-br from-gray-700/60 to-gray-700/40"
+                      : "bg-gradient-to-br from-gray-100 to-gray-50"
+                  }`}>
+                  <Ionicons
+                    name="pricetag-outline"
+                    size={22}
+                    color={theme === "dark" ? "#9ca3af" : "#4b5563"}
+                  />
+                </View>
+                <Text
+                  className={`${
+                    theme === "dark" ? "text-gray-300" : "text-gray-700"
+                  } text-base font-medium`}>
+                  {deposit.category}
+                </Text>
+              </View>
+              {deposit.note && (
+                <View className="flex-row items-center">
+                  <View
+                    className={`p-2 rounded-lg mr-3 ${
+                      theme === "dark"
+                        ? "bg-gradient-to-br from-gray-700/60 to-gray-700/40"
+                        : "bg-gradient-to-br from-gray-100 to-gray-50"
+                    }`}>
+                    <Ionicons
+                      name="document-text-outline"
+                      size={22}
+                      color={theme === "dark" ? "#9ca3af" : "#4b5563"}
+                    />
+                  </View>
+                  <Text
+                    className={`${
+                      theme === "dark" ? "text-gray-400" : "text-secondary"
+                    } text-base italic font-bold`}>
+                    {deposit.note}
+                  </Text>
+                </View>
+              )}
+            </View>
+          </View>
+        ))}
+        {deposits.length === 0 && (
+          <View
+            className={`p-8 rounded-3xl ${
+              theme === "dark"
+                ? "bg-gradient-to-br from-gray-800 to-gray-800/90"
+                : "bg-gradient-to-br from-white to-gray-50"
+            } shadow-xl items-center justify-center border ${
+              theme === "dark" ? "border-gray-700/30" : "border-gray-200/50"
+            }`}
+            style={{
+              shadowColor: theme === "dark" ? "#1e293b" : "#94a3b8",
+              shadowOffset: { width: 0, height: 6 },
+              shadowOpacity: 0.2,
+              shadowRadius: 12,
+              elevation: 8,
+            }}>
+            <View
+              className={`p-4 rounded-2xl mb-4 ${
+                theme === "dark"
+                  ? "bg-gradient-to-br from-gray-700/60 to-gray-700/40"
+                  : "bg-gradient-to-br from-gray-100 to-gray-50"
+              }`}>
+              <Ionicons
+                name="wallet-outline"
+                size={44}
+                color={theme === "dark" ? "#4b5563" : "#6b7280"}
+              />
+            </View>
+            <Text
+              className={`text-lg font-medium ${
+                theme === "dark" ? "text-gray-400" : "text-gray-500"
+              }`}>
+              暂无存款目标
+            </Text>
+          </View>
+        )}
+      </View>
+    </ScrollView>
   );
 };
 
