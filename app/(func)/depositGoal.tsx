@@ -49,7 +49,7 @@ const DepositGoal = () => {
       if (!email) return;
 
       const userData = await getUserByEmail(email);
-      setUser(user);
+      // setUser(user);
       setUserId(userData.$id);
 
       if (depositId) {

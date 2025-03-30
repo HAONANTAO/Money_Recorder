@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-20 18:36:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 12:44:29
+ * @LastEditTime: 2025-03-30 13:34:33
  * @FilePath: /Money_Recorder/services/recordService.ts
  */
 
@@ -196,18 +196,57 @@ export const searchRecordsByTags = async (
       throw new Error("Database configuration is missing");
     }
 
+    console.log("开始搜索标签，用户ID:", userId);
+    console.log("搜索的标签字符串:", searchTags);
+
+    // 分割并去掉空格的标签
+    const tagsArray = searchTags
+      .split(/[\s,]+/)
+      .map((tag) => tag.trim())
+      .filter((tag) => tag);
+
+    console.log("处理后的标签数组:", tagsArray);
+
+    // 如果没有有效的标签，返回空数组
+    if (tagsArray.length === 0) {
+      console.log("没有有效的标签，返回空数组");
+      return [];
+    }
+
+    // 构建查询条件
+    const queries = [Query.equal("userId", userId)];
+
+    // 如果有多个标签，使用 Query.or 来连接它们
+    if (tagsArray.length > 1) {
+      queries.push(Query.or(tagsArray.map((tag) => Query.search("tags", tag))));
+    } else {
+      // 如果只有一个标签，直接使用 Query.search
+      queries.push(Query.search("tags", tagsArray[0]));
+    }
+
+    // 执行查询并确保返回的记录的tags字段是数组
     const records = await database.listDocuments(
       DATABASE_ID,
       RECORDS_COLLECTION_ID,
-      [Query.equal("userId", userId), Query.equal("userId", searchTags)],
+      queries,
     );
 
-    return records.documents;
+    console.log("构建的查询条件:", queries);
+    console.log("查询结果:", records.documents);
+
+    // 处理返回的记录，确保tags字段是数组
+    const processedRecords = records.documents.map((record) => ({
+      ...record,
+      tags: Array.isArray(record.tags) ? record.tags : [], // 确保tags是数组，如果不是则赋值为空数组
+    }));
+
+    return processedRecords;
   } catch (error) {
     console.error("Error searching records:", error);
     throw error;
   }
 };
+
 // 根据评论搜索记录
 export const searchRecordsByComments = async (
   userId: string,
@@ -221,10 +260,7 @@ export const searchRecordsByComments = async (
     const records = await database.listDocuments(
       DATABASE_ID,
       RECORDS_COLLECTION_ID,
-      [
-        Query.equal("userId", userId),
-        Query.or([Query.search("comments", searchText)]),
-      ],
+      [Query.equal("userId", userId), Query.search("comment", searchText)],
     );
 
     return records.documents;
