@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-30 12:28:24
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 13:58:42
+ * @LastEditTime: 2025-03-30 14:26:16
  * @FilePath: /Money_Recorder/app/(func)/searchbar.tsx
  */
 import {
@@ -12,13 +12,13 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import React, { useState, useEffect, ReactNode } from "react";
+import React, { useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import {
   searchRecordsByTags,
   searchRecordsByComments,
 } from "@/services/recordService";
-import { StorageService } from "@/utils/storageService";
+
 import { getUserByEmail } from "@/services/userManagement";
 import { useTheme } from "@/contexts/ThemeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -45,22 +45,22 @@ const Searchbar = () => {
     getInitInfo();
   }, []);
 
+  // search by tags
   const handleTagSearch = async () => {
     if (!userId || !tagSearch.trim()) {
       setTagResults([]);
       return;
     }
     try {
-      console.log("搜索标签:", tagSearch);
+      // console.log("搜索标签:", tagSearch);
       const results = await searchRecordsByTags(userId, tagSearch);
-      console.log("标签搜索结果:", results);
+      // console.log("标签搜索结果:", results);
       setTagResults(results);
     } catch (error) {
-      console.error("标签搜索错误:", error);
       setTagResults([]);
     }
   };
-
+  // search by comments
   const handleCommentSearch = async () => {
     if (!userId || !commentSearch.trim()) {
       setCommentResults([]);
@@ -79,52 +79,52 @@ const Searchbar = () => {
 
   return (
     <View
-      className={`flex-1 p-4 mt-8 ${
+      className={`flex-1 p-6 mt-24 ${
         theme === "dark" ? "bg-quaternary" : "bg-white"
       }`}>
-      <View className="space-y-6">
+      <View className="space-y-12">
         <View>
-          <View className="flex-row items-center space-x-2">
+          <View className="flex-row items-center mb-8 space-x-2">
             <TextInput
-              className={`flex-1 p-3 rounded-lg border ${
+              className={`flex-1 p-4 rounded-xl border ${
                 theme === "dark"
                   ? "border-gray-600 text-white bg-tertiary"
                   : "border-gray-300 text-black bg-gray-50"
-              }`}
-              placeholder="按标签搜索"
+              } shadow-sm`}
+              placeholder="Search by tags"
               placeholderTextColor={theme === "dark" ? "#9ca3af" : "#6b7280"}
               value={tagSearch}
               onChangeText={setTagSearch}
             />
             <TouchableOpacity
               onPress={handleTagSearch}
-              className={`p-3 rounded-lg ${
+              className={`ml-2 p-4 rounded-3xl ${
                 theme === "dark" ? "bg-blue-600" : "bg-blue-500"
-              }`}>
+              } shadow-sm`}>
               <Ionicons name="search" size={24} color="white" />
             </TouchableOpacity>
           </View>
-          <ScrollView className="mt-4 max-h-40">
+          <ScrollView className="mt-2 max-h-56">
             {tagResults.length > 0 ? (
               tagResults.map((record: any) => (
                 <View
                   key={record.$id}
-                  className={`p-4 mb-6 rounded-xl shadow-md ${
+                  className={`p-6 mb-6 rounded-3xl shadow-lg ${
                     theme === "dark" ? "bg-tertiary" : "bg-white"
                   }`}
                   style={{
                     shadowColor: theme === "dark" ? "#000" : "#718096",
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 5,
+                    shadowOffset: { width: 0, height: 6 },
+                    shadowOpacity: 0.35,
+                    shadowRadius: 8,
+                    elevation: 10,
                   }}>
                   <View className="flex-row justify-between items-center mb-2">
                     <Text
-                      className={`text-lg font-semibold ${
+                      className={`text-2xl font-bold ${
                         theme === "dark" ? "text-white" : "text-gray-800"
                       }`}>
-                      ¥{record.moneyAmount}
+                      ${record.moneyAmount.toLocaleString()}
                     </Text>
                     <Text
                       className={`px-3 py-1 rounded-full ${
@@ -144,12 +144,12 @@ const Searchbar = () => {
                           ? "text-red-100"
                           : "text-red-800"
                       }`}>
-                      {record.type === "income" ? "收入" : "支出"}
+                      {record.type === "income" ? "Income" : "Expense"}
                     </Text>
                   </View>
-                  <View className="flex-row items-center mb-1">
+                  <View className="flex-row items-center mt-2 mb-3">
                     <Text
-                      className={`mr-2 ${
+                      className={`mr-3 text-sm ${
                         theme === "dark" ? "text-gray-300" : "text-gray-600"
                       }`}>
                       Category:
@@ -161,9 +161,9 @@ const Searchbar = () => {
                       {record.category}
                     </Text>
                   </View>
-                  <View className="flex-row items-center mb-1">
+                  <View className="flex-row items-center mt-2 mb-3">
                     <Text
-                      className={`mr-2 ${
+                      className={`mr-3 text-sm ${
                         theme === "dark" ? "text-gray-300" : "text-gray-600"
                       }`}>
                       Tags:
@@ -173,7 +173,7 @@ const Searchbar = () => {
                         record.tags.map((tag: string, index: number) => (
                           <Text
                             key={index}
-                            className={`px-2 py-1 rounded-full text-sm ${
+                            className={`px-3 py-1.5 rounded-full text-sm font-medium ${
                               theme === "dark"
                                 ? "bg-gray-700 text-gray-300"
                                 : "bg-gray-200 text-gray-700"
@@ -183,14 +183,63 @@ const Searchbar = () => {
                         ))}
                     </View>
                   </View>
-
-                  {record.comment && (
+                  <View className="flex-row items-center mt-2 mb-3">
                     <Text
-                      className={`mt-1 ${
-                        theme === "dark" ? "text-gray-400" : "text-gray-600"
+                      className={`mr-3 text-sm ${
+                        theme === "dark" ? "text-gray-300" : "text-gray-600"
                       }`}>
-                      {record.comment}
+                      Location:
                     </Text>
+                    <Text
+                      className={
+                        theme === "dark" ? "text-white" : "text-gray-800"
+                      }>
+                      {record.location || "N/A"}
+                    </Text>
+                  </View>
+                  <View className="flex-row items-center mt-2 mb-3">
+                    <Text
+                      className={`mr-3 text-sm ${
+                        theme === "dark" ? "text-gray-300" : "text-gray-600"
+                      }`}>
+                      Method:
+                    </Text>
+                    <Text
+                      className={
+                        theme === "dark" ? "text-white" : "text-gray-800"
+                      }>
+                      {record.paymentMethod}
+                    </Text>
+                  </View>
+                  <View className="flex-row items-center mt-2 mb-3">
+                    <Text
+                      className={`mr-3 text-sm ${
+                        theme === "dark" ? "text-gray-300" : "text-gray-600"
+                      }`}>
+                      Date:
+                    </Text>
+                    <Text
+                      className={
+                        theme === "dark" ? "text-white" : "text-gray-800"
+                      }>
+                      {new Date(record.createAt).toLocaleDateString()}
+                    </Text>
+                  </View>
+                  {record.comment && (
+                    <View className="mt-1">
+                      <Text
+                        className={`mr-3 text-sm ${
+                          theme === "dark" ? "text-gray-300" : "text-gray-600"
+                        }`}>
+                        Comment:
+                      </Text>
+                      <Text
+                        className={`${
+                          theme === "dark" ? "text-gray-400" : "text-gray-600"
+                        }`}>
+                        {record.comment}
+                      </Text>
+                    </View>
                   )}
                 </View>
               ))
@@ -199,58 +248,58 @@ const Searchbar = () => {
                 className={`text-center py-4 ${
                   theme === "dark" ? "text-gray-400" : "text-gray-600"
                 }`}>
-                无搜索结果
+                No results found for tags.
               </Text>
             ) : null}
           </ScrollView>
         </View>
 
-        <View>
+        <View className="mt-8">
           <View>
-            <View className="flex-row items-center space-x-2">
+            <View className="flex-row items-center mb-8 space-x-2">
               <TextInput
-                className={`flex-1 p-3 rounded-lg border ${
+                className={`flex-1 p-4 rounded-xl border ${
                   theme === "dark"
                     ? "border-gray-600 text-white bg-tertiary"
                     : "border-gray-300 text-black bg-gray-50"
-                }`}
-                placeholder="按评论搜索"
+                } shadow-sm`}
+                placeholder="Search by comments"
                 placeholderTextColor={theme === "dark" ? "#9ca3af" : "#6b7280"}
                 value={commentSearch}
                 onChangeText={setCommentSearch}
               />
               <TouchableOpacity
                 onPress={handleCommentSearch}
-                className={`p-3 rounded-lg ${
+                className={`ml-2 p-4 rounded-3xl ${
                   theme === "dark" ? "bg-blue-600" : "bg-blue-500"
-                }`}>
+                } shadow-sm`}>
                 <Ionicons name="search" size={24} color="white" />
               </TouchableOpacity>
             </View>
-            <ScrollView className="mt-2 max-h-32">
+            <ScrollView className="mt-4 max-h-56">
               {commentResults.length > 0 ? (
                 commentResults.map((record: any) => (
                   <View
                     key={record.$id}
-                    className={`p-4 mb-3 rounded-xl shadow-md ${
+                    className={`p-6 mb-6 rounded-3xl shadow-lg ${
                       theme === "dark" ? "bg-tertiary" : "bg-white"
                     }`}
                     style={{
                       shadowColor: theme === "dark" ? "#000" : "#718096",
-                      shadowOffset: { width: 0, height: 2 },
-                      shadowOpacity: 0.25,
-                      shadowRadius: 3.84,
-                      elevation: 5,
+                      shadowOffset: { width: 0, height: 6 },
+                      shadowOpacity: 0.35,
+                      shadowRadius: 8,
+                      elevation: 10,
                     }}>
-                    <View className="flex-row justify-between items-center mb-2">
+                    <View className="flex-row justify-between items-center mb-4">
                       <Text
-                        className={`text-lg font-semibold ${
+                        className={`text-2xl font-bold ${
                           theme === "dark" ? "text-white" : "text-gray-800"
                         }`}>
-                        ¥{record.moneyAmount}
+                        ${record.moneyAmount.toLocaleString()}
                       </Text>
                       <Text
-                        className={`px-3 py-1 rounded-full ${
+                        className={`px-4 py-2 rounded-full text-sm font-medium ${
                           record.type === "income"
                             ? theme === "dark"
                               ? "bg-green-700"
@@ -267,17 +316,16 @@ const Searchbar = () => {
                             ? "text-red-100"
                             : "text-red-800"
                         }`}>
-                        {record.type === "income" ? "收入" : "支出"}
+                        {record.type === "income" ? "Income" : "Expense"}
                       </Text>
                     </View>
-                    <View className="flex-row items-center mb-1">
+                    <View className="flex-row items-center mt-2 mb-3">
                       <Text
-                        className={`mr-2 ${
+                        className={`mr-3 text-sm ${
                           theme === "dark" ? "text-gray-300" : "text-gray-600"
                         }`}>
                         Category:
                       </Text>
-
                       <Text
                         className={
                           theme === "dark" ? "text-white" : "text-gray-800"
@@ -285,32 +333,85 @@ const Searchbar = () => {
                         {record.category}
                       </Text>
                     </View>
-
-                    {record.tags && record.tags.length > 0 && (
-                      <View className="flex-row flex-wrap gap-2 mb-1">
-                        {(typeof record.tags === "string"
-                          ? record.tags.split(",")
-                          : record.tags
-                        ).map((tag: string, index: number) => (
-                          <Text
-                            key={index}
-                            className={`px-2 py-1 rounded-full text-sm ${
-                              theme === "dark"
-                                ? "bg-gray-700 text-gray-300"
-                                : "bg-gray-200 text-gray-700"
-                            }`}>
-                            {tag.trim()}
-                          </Text>
-                        ))}
-                      </View>
-                    )}
-                    {record.comment && (
+                    <View className="flex-row items-center mt-2 mb-3">
                       <Text
-                        className={`mt-1 ${
-                          theme === "dark" ? "text-gray-400" : "text-gray-600"
+                        className={`mr-3 text-sm ${
+                          theme === "dark" ? "text-gray-300" : "text-gray-600"
                         }`}>
-                        {record.comment}
+                        Tags:
                       </Text>
+                      <View className="flex-row flex-wrap gap-2">
+                        {Array.isArray(record.tags) &&
+                          record.tags.map((tag: string, index: number) => (
+                            <Text
+                              key={index}
+                              className={`px-3 py-1.5 rounded-full text-sm font-medium ${
+                                theme === "dark"
+                                  ? "bg-gray-700 text-gray-300"
+                                  : "bg-gray-200 text-gray-700"
+                              }`}>
+                              {tag}
+                            </Text>
+                          ))}
+                      </View>
+                    </View>
+                    <View className="flex-row items-center mt-2 mb-3">
+                      <Text
+                        className={`mr-3 text-sm ${
+                          theme === "dark" ? "text-gray-300" : "text-gray-600"
+                        }`}>
+                        Location:
+                      </Text>
+                      <Text
+                        className={
+                          theme === "dark" ? "text-white" : "text-gray-800"
+                        }>
+                        {record.location || "N/A"}
+                      </Text>
+                    </View>
+                    <View className="flex-row items-center mt-2 mb-3">
+                      <Text
+                        className={`mr-3 text-sm ${
+                          theme === "dark" ? "text-gray-300" : "text-gray-600"
+                        }`}>
+                        Method:
+                      </Text>
+                      <Text
+                        className={
+                          theme === "dark" ? "text-white" : "text-gray-800"
+                        }>
+                        {record.paymentMethod}
+                      </Text>
+                    </View>
+                    <View className="flex-row items-center mt-2 mb-3">
+                      <Text
+                        className={`mr-3 text-sm ${
+                          theme === "dark" ? "text-gray-300" : "text-gray-600"
+                        }`}>
+                        Date:
+                      </Text>
+                      <Text
+                        className={
+                          theme === "dark" ? "text-white" : "text-gray-800"
+                        }>
+                        {new Date(record.createAt).toLocaleDateString()}
+                      </Text>
+                    </View>
+                    {record.comment && (
+                      <View className="mt-1">
+                        <Text
+                          className={`mr-3 text-sm ${
+                            theme === "dark" ? "text-gray-300" : "text-gray-600"
+                          }`}>
+                          Comment:
+                        </Text>
+                        <Text
+                          className={`${
+                            theme === "dark" ? "text-gray-400" : "text-gray-600"
+                          }`}>
+                          {record.comment}
+                        </Text>
+                      </View>
                     )}
                   </View>
                 ))

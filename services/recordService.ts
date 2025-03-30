@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-20 18:36:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 13:50:38
+ * @LastEditTime: 2025-03-30 14:23:38
  * @FilePath: /Money_Recorder/services/recordService.ts
  */
 
@@ -231,8 +231,8 @@ export const searchRecordsByTags = async (
       queries,
     );
 
-    console.log("构建的查询条件:", queries);
-    console.log("查询结果:", records.documents);
+    // console.log("构建的查询条件:", queries);
+    // console.log("查询结果:", records.documents);
 
     // 处理返回的记录，确保tags字段是数组
     const processedRecords = records.documents.map((record) => {
