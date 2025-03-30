@@ -1,11 +1,17 @@
 /*
  * @Date: 2025-03-30 15:09:05
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 15:09:05
+ * @LastEditTime: 2025-03-30 15:35:43
  * @FilePath: /Money_Recorder/app/(profile)/faq.tsx
  */
 import React from "react";
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useState } from "react";
 
@@ -15,27 +21,29 @@ const FAQ = () => {
 
   const faqData = [
     {
-      question: "如何记录收支？",
+      question: "How to record income and expenses?",
       answer:
-        '在底部导航栏点击"记录"按钮，选择收入或支出类型，填写金额和备注信息，然后点击保存即可完成记录。',
+        'Click the "+" button in the bottom navigation bar, select income or expense type, fill in the amount and notes, then click save to complete the record.',
     },
     {
-      question: "如何查看统计数据？",
+      question: "How to view statistics?",
       answer:
-        '在底部导航栏点击"统计"按钮，可以查看收支的饼图和柱状图分析，了解您的财务状况。',
+        'Click the "Stats" button in the bottom navigation bar to view pie charts and bar charts analysis of your income and expenses to understand your financial situation.',
     },
     {
-      question: "如何设置预算？",
+      question: "How to set a budget?",
       answer:
-        '在"目标"页面中点击"预算"按钮，可以设置每月的支出预算，系统会帮助您追踪预算使用情况。',
+        'Click the "Goal" button on the "Goals" page to set your monthly expense budget. The system will help you track your budget usage.',
     },
     {
-      question: "如何切换深色模式？",
-      answer: '在"我的"页面中点击设置，可以选择切换深色/浅色主题模式。',
+      question: "How to switch dark mode?",
+      answer:
+        'Go to S "My Profile" page then enter the setting site to switch between dark/light theme modes.',
     },
     {
-      question: "如何修改个人信息？",
-      answer: '在"我的"页面中点击编辑按钮，可以修改用户名和头像等个人信息。',
+      question: "How to modify personal information?",
+      answer:
+        'Click the edit button on "My Profile" page to modify your username, avatar and other personal information.',
     },
   ];
 
@@ -53,10 +61,10 @@ const FAQ = () => {
           className={`text-2xl font-bold ${
             theme === "dark" ? "text-white" : "text-quaternary"
           }`}>
-          常见问题
+          FAQ
         </Text>
       </View>
-      <ScrollView className="flex-1">
+      <ScrollView className="flex-1 mb-20">
         {faqData.map((item, index) => (
           <TouchableOpacity
             key={index}
@@ -75,6 +83,17 @@ const FAQ = () => {
           </TouchableOpacity>
         ))}
       </ScrollView>
+      <View className="absolute right-0 bottom-0 left-0 p-4 bg-white border-t border-gray-200">
+        <TouchableOpacity
+          onPress={() =>
+            Linking.openURL(
+              "mailto:taoaaron5@gmail.com?subject=Feedback%20for%20Money%20Recorder",
+            )
+          }
+          className="flex-row justify-center items-center p-3 rounded-lg bg-secondary">
+          <Text className="font-semibold text-white">Contact Developer</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
