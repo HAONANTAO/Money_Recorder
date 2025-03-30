@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 22:32:22
+ * @LastEditTime: 2025-03-30 20:56:44
  * @FilePath: /Money_Recorder/app/index.tsx
  */
 import { useEffect, useState } from "react";
@@ -136,7 +136,7 @@ export default function Index() {
       <Text className="justify-center mt-6 mb-16 text-3xl font-bold text-center text-secondary">
         The Money-Recorder
       </Text>
-      <Text className="justify-center mb-12 text-lg font-extrabold text-center text-secondary">
+      <Text className="justify-center mb-12 text-lg font-extrabold text-center text-gray-300">
         Start to record the money you spent and earned every day.
       </Text>
 

@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 20:50:51
+ * @LastEditTime: 2025-03-30 20:55:01
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -308,7 +308,7 @@ const Profile = () => {
               onPress={() => router.push("/(profile)/faq")}
               className="flex justify-center items-center w-full h-full">
               <Image
-                source={require("../../assets/images/help.png")}
+                source={require("../../assets/images/icons/help.png")}
                 className="w-10 h-10"
               />
               <Text className="font-bold text-quaternary">FAQ</Text>
