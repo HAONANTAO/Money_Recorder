@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-20 18:36:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 13:34:33
+ * @LastEditTime: 2025-03-30 13:50:38
  * @FilePath: /Money_Recorder/services/recordService.ts
  */
 
@@ -235,10 +235,22 @@ export const searchRecordsByTags = async (
     console.log("查询结果:", records.documents);
 
     // 处理返回的记录，确保tags字段是数组
-    const processedRecords = records.documents.map((record) => ({
-      ...record,
-      tags: Array.isArray(record.tags) ? record.tags : [], // 确保tags是数组，如果不是则赋值为空数组
-    }));
+    const processedRecords = records.documents.map((record) => {
+      // 如果tags是字符串，尝试将其解析为数组
+      let tags = record.tags;
+      if (typeof tags === "string") {
+        tags = tags
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter((tag) => tag);
+      } else if (!Array.isArray(tags)) {
+        tags = [];
+      }
+      return {
+        ...record,
+        tags: tags,
+      };
+    });
 
     return processedRecords;
   } catch (error) {
@@ -260,7 +272,7 @@ export const searchRecordsByComments = async (
     const records = await database.listDocuments(
       DATABASE_ID,
       RECORDS_COLLECTION_ID,
-      [Query.equal("userId", userId), Query.search("comment", searchText)],
+      [Query.equal("userId", userId), Query.equal("comment", searchText)],
     );
 
     return records.documents;
