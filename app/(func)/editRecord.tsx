@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-29 16:31:38
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 11:36:52
+ * @LastEditTime: 2025-03-30 11:59:47
  * @FilePath: /Money_Recorder/app/(func)/editRecord.tsx
  */
 import {
@@ -13,6 +13,7 @@ import {
   Alert,
   TouchableWithoutFeedback,
   Keyboard,
+  ActivityIndicator,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import React, { useEffect, useState } from "react";
@@ -112,7 +113,7 @@ const EditRecord = () => {
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text>Loading...</Text>
+        <ActivityIndicator size="large" color="#0000ff" />
       </View>
     );
   }

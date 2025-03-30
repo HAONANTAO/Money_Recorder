@@ -1,4 +1,11 @@
-import { View, Text, ScrollView, TouchableOpacity, Alert } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import React, { useCallback, useEffect } from "react";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -36,7 +43,7 @@ const RecordDetail = () => {
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Text>Loading...</Text>
+        <ActivityIndicator size="large" color="#0000ff" />
       </View>
     );
   }
