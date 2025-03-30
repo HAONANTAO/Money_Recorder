@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-25 22:58:49
+ * @LastEditTime: 2025-03-30 21:07:12
  * @FilePath: /Money_Recorder/app/(tabs)/_layout.tsx
  */
 import { Stack, Tabs } from "expo-router";
@@ -23,10 +23,10 @@ export default function RootLayout() {
             flexDirection: "row",
             justifyContent: "space-around",
             alignItems: "center",
-            backgroundColor: isDark ? "#171717" : "#FFFFFF",
+            backgroundColor: isDark ? "#171717" : "#7ee8f824", // 浅蓝色背景
             paddingVertical: 4,
             borderTopWidth: 1,
-            borderTopColor: isDark ? "#333333" : "#E5E7EB",
+            borderTopColor: isDark ? "#333333" : "#33c9dc", // 边框颜色
           },
           tabBarItemStyle: {
             alignItems: "center",
@@ -37,8 +37,8 @@ export default function RootLayout() {
             fontSize: 10,
             marginTop: 4,
           },
-          tabBarActiveTintColor: isDark ? "#60A5FA" : "#1647ea",
-          tabBarInactiveTintColor: isDark ? "#6B7280" : "#D1D5DB",
+          tabBarActiveTintColor: isDark ? "#60A5FA" : "#2094f3", // 浅蓝色选中的文字颜色
+          tabBarInactiveTintColor: isDark ? "#6B7280" : "#B0BEC5", // 不选中时的文字颜色
         }}>
         <Tabs.Screen
           name="home"
