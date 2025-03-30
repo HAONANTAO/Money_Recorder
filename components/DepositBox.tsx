@@ -20,7 +20,7 @@ import { updateSaveAmount } from "@/services/depositGoal";
 const DepositBox = () => {
   const router = useRouter();
   const { theme } = useTheme();
-  const [user, setUser] = useState();
+
   const [userId, setUserId] = useState("");
   const [deposits, setDeposits] = useState<any>([]);
   const [loading, setLoading] = useState(true);
@@ -416,9 +416,9 @@ const DepositBox = () => {
               )}
             </View>
             {/* buttons */}
-            <View className="flex-row justify-end mt-6 space-x-6">
+            <View className="flex-row justify-between px-2 mt-6">
               <TouchableOpacity
-                className={`flex-row items-center px-6 py-3.5 rounded-xl transform active:scale-95 transition-all `}
+                className={`w-28 flex-row items-center justify-center rounded-xl transform active:scale-95 transition-all`}
                 onPress={() =>
                   router.push({
                     pathname: "/(func)/depositGoal",
@@ -431,14 +431,14 @@ const DepositBox = () => {
                   color={theme === "dark" ? "#60a5fa" : "#2563eb"}
                 />
                 <Text
-                  className={`ml-2 font-semibold text-base ${
+                  className={`ml-2 font-semibold text-sm ${
                     theme === "dark" ? "text-blue-400" : "text-blue-600"
                   }`}>
                   Update
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                className={`flex-row items-center px-6 py-3.5 rounded-xl transform active:scale-95 transition-all ${
+                className={`w-32 flex-row items-center justify-center px-3 py-3.5 rounded-xl transform active:scale-95 transition-all ${
                   deposit.completed
                     ? theme === "dark"
                       ? "bg-green-600/20 hover:bg-green-600/30"
@@ -504,7 +504,7 @@ const DepositBox = () => {
                   }
                 />
                 <Text
-                  className={`ml-2 font-semibold text-base ${
+                  className={`ml-2 font-semibold text-sm ${
                     deposit.completed
                       ? theme === "dark"
                         ? "text-green-400"
@@ -517,7 +517,7 @@ const DepositBox = () => {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                className={`flex-row items-center px-6 py-3.5 rounded-xl transform active:scale-95 transition-all ${
+                className={`w-16 flex-row items-center justify-center px-3 py-3.5 rounded-xl transform active:scale-95 transition-all ${
                   theme === "dark"
                     ? "bg-red-600/20 hover:bg-red-600/30"
                     : "bg-red-100 hover:bg-red-200"
@@ -556,12 +556,12 @@ const DepositBox = () => {
                   size={22}
                   color={theme === "dark" ? "#f87171" : "#dc2626"}
                 />
-                <Text
-                  className={`ml-2 font-semibold text-base ${
+                {/* <Text
+                  className={`ml-2 font-semibold text-sm ${
                     theme === "dark" ? "text-red-400" : "text-red-600"
                   }`}>
                   Delete
-                </Text>
+                </Text> */}
               </TouchableOpacity>
             </View>
           </View>
