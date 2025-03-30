@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 12:10:01
+ * @LastEditTime: 2025-03-30 12:39:50
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   ScrollView,
   RefreshControl,
+  TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -21,6 +22,8 @@ import { getUserByEmail } from "@/services/userManagement";
 import { getRecords } from "@/services/recordService";
 import RecordShowBox from "@/components/RecordShowbox";
 import DateChecker from "@/utils/dateChecker";
+import { router } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 // 获取当前日期
 const getCurrentDate = () => {
@@ -114,7 +117,37 @@ const Home = () => {
           } text-2xl font-bold text-center text-gray-800`}>
           {getCurrentDate()}
         </Text>
-
+        {/* search bar */}
+        <View className="flex items-center mt-6">
+          <TouchableOpacity
+            onPress={() => router.push("/(func)/searchbar")}
+            className={`p-4 rounded-2xl shadow-lg ${
+              isDark ? "bg-secondary" : "bg-white"
+            } w-full active:opacity-80 flex-row items-center justify-between`}>
+            <View className="flex-row flex-1 items-center">
+              <View className="mr-3">
+                <Ionicons
+                  name="search-outline"
+                  size={24}
+                  color={isDark ? "#fff" : "#4B5563"}
+                />
+              </View>
+              <Text
+                className={`text-base ${
+                  isDark ? "text-gray-300" : "text-gray-500"
+                }`}>
+                Search your records...
+              </Text>
+            </View>
+            <View>
+              <Ionicons
+                name="chevron-forward-outline"
+                size={24}
+                color={isDark ? "#fff" : "#4B5563"}
+              />
+            </View>
+          </TouchableOpacity>
+        </View>
         {/* 第二个 View - 净资产 */}
         <View
           className={`mt-6 p-4 flex flex-row justify-between gap-2 rounded-lg ${
