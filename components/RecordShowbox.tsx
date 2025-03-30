@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-26 17:16:29
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-29 21:24:03
+ * @LastEditTime: 2025-03-30 20:44:49
  * @FilePath: /Money_Recorder/components/RecordShowbox.tsx
  */
 import React from "react";
@@ -36,7 +36,6 @@ const RecordShowBox: React.FC<RecordShowBoxProps> = ({ record }) => {
         <Text className="text-secondary">Category: </Text>
         {record.category}
       </Text>
-
       <Text className="text-sm text-gray-600 dark:text-gray-400">
         <Text className="text-secondary">Date: </Text>
         {formatDate(record.createAt)}
@@ -49,11 +48,24 @@ const RecordShowBox: React.FC<RecordShowBoxProps> = ({ record }) => {
         <Text className="text-secondary">Location: </Text>
         {record.location || "N/A"}
       </Text>
-      {record.comment && (
-        <Text className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-          Comment: {record.comment}
-        </Text>
-      )}
+
+      <Text className="mt-2 text-sm text-secondary">
+        Tags:
+        {record.tags === "" ? (
+          <Text className="text-gray-600">None</Text>
+        ) : (
+          <Text className="text-gray-600"> {record.tags}</Text>
+        )}
+      </Text>
+
+      <Text className="mt-2 text-sm text-secondary">
+        Comment:
+        {record.comment === "" ? (
+          <Text className="text-gray-600">None</Text>
+        ) : (
+          <Text className="text-gray-600"> {record.comment}</Text>
+        )}
+      </Text>
     </TouchableOpacity>
   );
 };

@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 15:24:45
+ * @LastEditTime: 2025-03-30 20:50:51
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -241,7 +241,7 @@ const Profile = () => {
               onPress={() => router.push("/(profile)/settings")}
               className="flex justify-center items-center w-full h-full">
               <Image
-                source={require("../../assets/images/setting.png")}
+                source={require("../../assets/images/icons/setting.png")}
                 className="w-12 h-12"
               />
               <Text className="mt-2 text-sm font-bold text-quaternary">

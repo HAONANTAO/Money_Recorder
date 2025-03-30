@@ -107,14 +107,19 @@ const RecordDetail = () => {
             </Text>
           </View>
 
+          {/* tags */}
+          <View className="flex-row justify-between items-center pb-3 border-b border-gray-300">
+            <Text className="text-lg font-semibold text-black">Tags</Text>
+            <Text className="text-xl font-bold text-black">
+              {record.tags || "N/A"}
+            </Text>
+          </View>
           {record.comment && (
             <View className="p-4 mt-6 bg-gray-100 rounded-lg">
               <Text className="mb-2 text-lg font-semibold text-black">
                 Comment
               </Text>
-              <Text className="text-base leading-relaxed text-gray-700">
-                {record.comment}
-              </Text>
+              <Text className="text-base text-secondary">{record.comment}</Text>
             </View>
           )}
         </View>

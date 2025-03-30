@@ -296,13 +296,16 @@ const Stats = () => {
           <>
             <View className="p-4">
               <Text className="text-xl font-semibold">
-                📅 Total Event: {eventLength}
+                📅 Total Event:
+                <Text className="text-tertiary"> {eventLength}</Text>
               </Text>
               <Text className="text-xl font-semibold">
-                💳 Total Income: ${income}
+                💳 Total Income:
+                <Text className="text-tertiary"> ${income}</Text>
               </Text>
               <Text className="text-xl font-semibold">
-                💵 Total Expense: ${expense}
+                💵 Total Expense:
+                <Text className="text-tertiary">${expense}</Text>
               </Text>
             </View>
 
