@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-20 18:36:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-28 18:30:17
+ * @LastEditTime: 2025-03-30 12:44:29
  * @FilePath: /Money_Recorder/services/recordService.ts
  */
 
@@ -182,6 +182,54 @@ export const getMonthlyExpensesByCategory = async (
     return expensesByCategory;
   } catch (error) {
     console.error("Error fetching monthly expenses by category:", error);
+    throw error;
+  }
+};
+
+// 根据标签搜索记录
+export const searchRecordsByTags = async (
+  userId: string,
+  searchTags: string,
+) => {
+  try {
+    if (!DATABASE_ID || !RECORDS_COLLECTION_ID) {
+      throw new Error("Database configuration is missing");
+    }
+
+    const records = await database.listDocuments(
+      DATABASE_ID,
+      RECORDS_COLLECTION_ID,
+      [Query.equal("userId", userId), Query.equal("userId", searchTags)],
+    );
+
+    return records.documents;
+  } catch (error) {
+    console.error("Error searching records:", error);
+    throw error;
+  }
+};
+// 根据评论搜索记录
+export const searchRecordsByComments = async (
+  userId: string,
+  searchText: string,
+) => {
+  try {
+    if (!DATABASE_ID || !RECORDS_COLLECTION_ID) {
+      throw new Error("Database configuration is missing");
+    }
+
+    const records = await database.listDocuments(
+      DATABASE_ID,
+      RECORDS_COLLECTION_ID,
+      [
+        Query.equal("userId", userId),
+        Query.or([Query.search("comments", searchText)]),
+      ],
+    );
+
+    return records.documents;
+  } catch (error) {
+    console.error("Error searching records:", error);
     throw error;
   }
 };
