@@ -144,13 +144,27 @@ const Stats = () => {
     getInit();
   }, []);
 
+  const CHART_COLORS = [
+    "#FF6384",
+    "#36A2EB",
+    "#FFCE56",
+    "#4BC0C0",
+    "#9966FF",
+    "#FF9F40",
+    "#E7E9ED",
+    "#2ECC71",
+    "#E74C3C",
+    "#3498DB",
+    "#F1C40F",
+    "#9B59B6",
+    "#1ABC9C",
+    "#E67E22",
+    "#34495E",
+  ];
+
   const getRandomColor = () => {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
+    const randomIndex = Math.floor(Math.random() * CHART_COLORS.length);
+    return CHART_COLORS[randomIndex];
   };
 
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
