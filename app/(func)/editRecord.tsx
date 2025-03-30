@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-29 16:31:38
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-29 22:49:40
+ * @LastEditTime: 2025-03-30 11:36:52
  * @FilePath: /Money_Recorder/app/(func)/editRecord.tsx
  */
 import {
@@ -381,7 +381,7 @@ const EditRecord = () => {
             onPress={handleUpdate}
             className="px-6 py-4 mt-6 rounded-full shadow-lg bg-primary">
             <Text className="text-lg font-semibold text-center text-white">
-              保存更新
+              Save Updates
             </Text>
           </TouchableOpacity>
         </View>

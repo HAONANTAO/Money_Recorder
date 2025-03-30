@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, TouchableOpacity, Alert } from "react-native";
-import React, { useEffect } from "react";
-import { router, useLocalSearchParams } from "expo-router";
+import React, { useCallback, useEffect } from "react";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
 import { deleteRecord, getRecordById } from "@/services/recordService";
 
@@ -10,20 +10,24 @@ const RecordDetail = () => {
   const [record, setRecord] = React.useState<MoneyRecord | null>(null);
   const [loading, setLoading] = React.useState(true);
 
-  useEffect(() => {
-    const fetchRecord = async () => {
-      try {
-        const recordData = await getRecordById(id as string);
-        setRecord(recordData as unknown as MoneyRecord);
-      } catch (error) {
-        console.error("Error fetching record:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  useFocusEffect(
+    // useCallback 是 React 的一个 性能优化 Hook，它的作用是 缓存函数，防止不必要的重新创建。
+    useCallback(() => {
+      const fetchRecord = async () => {
+        try {
+          setLoading(true);
+          const recordData = await getRecordById(id as string);
+          setRecord(recordData as unknown as MoneyRecord);
+        } catch (error) {
+          console.error("Error fetching record:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
 
-    fetchRecord();
-  }, [id]);
+      fetchRecord();
+    }, [id]), // 依赖 `id`，如果 id 变了，也会重新拉取数据
+  );
 
   const formatDate = (date: Date | string | number) => {
     return new Date(date).toLocaleDateString();
@@ -120,7 +124,7 @@ const RecordDetail = () => {
           }}
           className="flex-1 px-6 py-4 bg-blue-600 rounded-full shadow-lg hover:bg-blue-500">
           <Text className="text-lg font-semibold text-center text-white">
-            更新
+            Update
           </Text>
         </TouchableOpacity>
 
