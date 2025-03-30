@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-29 21:49:11
+ * @LastEditTime: 2025-03-30 12:10:01
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
@@ -117,31 +117,31 @@ const Home = () => {
 
         {/* 第二个 View - 净资产 */}
         <View
-          className={`mt-6 p-4 flex flex-row justify-between gap-4 rounded-lg ${
+          className={`mt-6 p-4 flex flex-row justify-between gap-2 rounded-lg ${
             isDark ? "bg-primary" : "bg-gray-100"
           }`}>
           {/* Net Worth View */}
-          <View className="p-4 rounded-3xl border border-gray-300 dark:border-gray-700">
+          <View className="p-4 rounded-3xl border border-gray-300">
             <Text
               className={`${
                 isDark ? "text-white" : ""
-              } text-xl font-bold text-gray-700`}>
+              } text-base font-bold text-gray-700`}>
               Monthly Income
             </Text>
-            <Text className="text-4xl font-extrabold text-green-500">
+            <Text className="text-2xl font-extrabold text-green-500">
               ${monthlyIncome.toFixed(2)}
             </Text>
           </View>
 
           {/* Loss View */}
-          <View className="p-4 rounded-3xl border border-gray-300 dark:border-gray-700">
+          <View className="p-4 rounded-3xl border border-gray-300">
             <Text
               className={`${
                 isDark ? "text-white" : ""
-              } text-xl font-bold text-gray-700`}>
+              } text-base font-bold text-gray-700`}>
               Monthly Expense
             </Text>
-            <Text className="text-4xl font-extrabold text-red-500">
+            <Text className="text-2xl font-extrabold text-red-500">
               ${monthlyExpense.toFixed(2)}
             </Text>
           </View>
@@ -152,7 +152,7 @@ const Home = () => {
           className={`mt-6 p-6 rounded-2xl ${
             isDark ? "bg-secondary" : "bg-blue-100"
           }`}>
-          <Text className="text-lg font-bold text-gray-700 ">
+          <Text className="text-2xl font-bold text-gray-700">
             Net Income This Month
           </Text>
           <Text

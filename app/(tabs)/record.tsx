@@ -136,7 +136,7 @@ const Record = () => {
                 onChangeText={(value) =>
                   setRecord({ ...record, moneyAmount: value })
                 }
-                className="flex-1 text-lg"
+                className="flex-1"
               />
             </View>
           </View>

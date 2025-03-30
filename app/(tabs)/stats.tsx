@@ -7,7 +7,7 @@ import {
   Switch,
   TouchableOpacity,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StorageKeys } from "@/utils/storageService";
@@ -26,7 +26,7 @@ import {
 } from "@/constants/categories";
 import { getMonthlyBudget } from "@/services/budgetService";
 import { getMonthlyExpensesByCategory } from "@/services/recordService";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 const Stats = () => {
@@ -247,9 +247,12 @@ const Stats = () => {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, [isRefreshing]);
+  // refreshing
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, []),
+  );
 
   return (
     <ScrollView
