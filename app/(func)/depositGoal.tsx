@@ -19,7 +19,6 @@ import { StorageKeys } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
 import {
   createDeposit,
-  getDeposits,
   getDepositById,
   updateDeposit,
 } from "@/services/depositGoal";
@@ -49,7 +48,7 @@ const DepositGoal = () => {
       if (!email) return;
 
       const userData = await getUserByEmail(email);
-      // setUser(user);
+
       setUserId(userData.$id);
 
       if (depositId) {
@@ -335,5 +334,3 @@ const DepositGoal = () => {
 };
 
 export default DepositGoal;
-
-const styles = StyleSheet.create({});

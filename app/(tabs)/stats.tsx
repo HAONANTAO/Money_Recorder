@@ -162,9 +162,11 @@ const Stats = () => {
     "#34495E",
   ];
 
+  let colorIndex = 0;
   const getRandomColor = () => {
-    const randomIndex = Math.floor(Math.random() * CHART_COLORS.length);
-    return CHART_COLORS[randomIndex];
+    const color = CHART_COLORS[colorIndex];
+    colorIndex = (colorIndex + 1) % CHART_COLORS.length;
+    return color;
   };
 
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);

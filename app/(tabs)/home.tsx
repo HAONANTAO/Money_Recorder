@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 12:39:50
+ * @LastEditTime: 2025-03-30 15:08:35
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
@@ -39,7 +39,7 @@ const getCurrentDate = () => {
 const Home = () => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
-  const [user, setUser] = useState<any>(null);
+  // const [user, setUser] = useState<any>(null);
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [monthlyIncome, setMonthlyIncome] = useState<number>(0);
@@ -57,7 +57,7 @@ const Home = () => {
         getRecords(userData.$id),
       ]);
 
-      setUser(user);
+      // setUser(user);
       const filteredRecords = DateChecker(records as unknown as MoneyRecord[]);
       setRecords(filteredRecords);
 
@@ -220,5 +220,3 @@ const Home = () => {
 };
 
 export default Home;
-
-const styles = StyleSheet.create({});

@@ -1,18 +1,15 @@
 /*
  * @Date: 2025-03-28 20:17:02
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-29 14:35:20
+ * @LastEditTime: 2025-03-30 15:08:19
  * @FilePath: /Money_Recorder/app/(tabs)/goals.tsx
  */
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useRouter } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
 import DepositBox from "../../components/DepositBox";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StorageKeys } from "@/utils/storageService";
-import { getUserByEmail } from "@/services/userManagement";
-import { getDeposits } from "@/services/depositGoal";
+
 import { Ionicons } from "@expo/vector-icons";
 
 const Goals = () => {
@@ -42,5 +39,3 @@ const Goals = () => {
 };
 
 export default Goals;
-
-const styles = StyleSheet.create({});

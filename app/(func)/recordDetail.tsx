@@ -6,7 +6,7 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
 import { deleteRecord, getRecordById } from "@/services/recordService";

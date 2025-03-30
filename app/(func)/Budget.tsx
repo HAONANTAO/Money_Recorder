@@ -4,7 +4,7 @@
  * @LastEditTime: 2025-03-29 12:29:42
  * @FilePath: /Money_Recorder/app/(func)/budget.tsx
  */
-import { StyleSheet, Text, View } from "react-native";
+import { View } from "react-native";
 import React, { useEffect, useState } from "react";
 
 import { getUserByEmail } from "@/services/userManagement";
@@ -35,5 +35,3 @@ const Budget = () => {
 };
 
 export default Budget;
-
-const styles = StyleSheet.create({});

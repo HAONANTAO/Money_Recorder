@@ -14,6 +14,7 @@ import { useTheme } from "../../contexts/ThemeContext";
 import { createRecord } from "../../services/recordService";
 import { StorageService } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
+import { INCOME_CATEGORIES } from "@/constants/categories";
 
 // records 的icons没用到
 const EXPENSE_CATEGORIES = [
@@ -27,14 +28,6 @@ const EXPENSE_CATEGORIES = [
   { label: "Others", value: "others", icon: "🌍" },
 ];
 
-// Income Categories
-const INCOME_CATEGORIES = [
-  { label: "Salary", value: "salary", icon: "💼" },
-  { label: "Sideline", value: "sideline", icon: "📊" },
-  { label: "Investment", value: "investment", icon: "📈" },
-  { label: "Bonus", value: "bonus", icon: "💵" },
-  { label: "Other", value: "other", icon: "🌍" },
-];
 const Record = () => {
   const { theme } = useTheme();
   const isDark = theme === "dark";

@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-29 16:31:38
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 11:59:47
+ * @LastEditTime: 2025-03-30 15:07:18
  * @FilePath: /Money_Recorder/app/(func)/editRecord.tsx
  */
 import {
@@ -20,27 +20,7 @@ import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, router } from "expo-router";
 import { getRecordById, updateRecord } from "@/services/recordService";
 import { useTheme } from "../../contexts/ThemeContext";
-
-// Income Categories
-const INCOME_CATEGORIES = [
-  { label: "Salary", value: "salary", icon: "💼" },
-  { label: "Sideline", value: "sideline", icon: "📊" },
-  { label: "Investment", value: "investment", icon: "📈" },
-  { label: "Bonus", value: "bonus", icon: "💵" },
-  { label: "Other", value: "other", icon: "🌍" },
-];
-
-// Expense Categories
-const EXPENSE_CATEGORIES = [
-  { label: "Eating", value: "eating", icon: "🍔" },
-  { label: "Traffic", value: "traffic", icon: "🚗" },
-  { label: "Shopping", value: "shopping", icon: "🛍️" },
-  { label: "Entertainment", value: "entertainment", icon: "🎮" },
-  { label: "Living", value: "living", icon: "🏠" },
-  { label: "Medication", value: "medication", icon: "💊" },
-  { label: "Education", value: "education", icon: "🎓" },
-  { label: "Others", value: "others", icon: "🌍" },
-];
+import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from "@/constants/categories";
 
 const EditRecord = () => {
   const { theme } = useTheme();

@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-29 21:51:54
+ * @LastEditTime: 2025-03-30 15:09:05
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -263,10 +263,16 @@ const Profile = () => {
                       "https://apps.apple.com/app/idYOUR_APP_ID?action=write-review",
                     );
                   } else {
-                    Alert.alert("提示", "此功能仅支持iOS设备");
+                    Alert.alert(
+                      "hint",
+                      "This feature is only available on iOS devices.",
+                    );
                   }
                 } catch (error) {
-                  Alert.alert("错误", "无法打开App Store，请稍后重试");
+                  Alert.alert(
+                    "Error",
+                    "Unable to open App Store, please try again later",
+                  );
                 }
               }}
               className="flex justify-center items-center w-full h-full">
@@ -327,5 +333,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
-const styles = StyleSheet.create({});
