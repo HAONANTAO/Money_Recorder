@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 15:09:05
+ * @LastEditTime: 2025-03-30 15:24:45
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -298,6 +298,20 @@ const Profile = () => {
               />
 
               <Text className="font-bold text-quaternary">Author</Text>
+            </TouchableOpacity>
+          </View>
+          <View
+            className={`${
+              theme === "dark" ? "bg-blue-200" : "bg-white "
+            } flex justify-center items-center w-24 h-24 rounded-xl border border-gray-200 shadow-md`}>
+            <TouchableOpacity
+              onPress={() => router.push("/(profile)/faq")}
+              className="flex justify-center items-center w-full h-full">
+              <Image
+                source={require("../../assets/images/help.png")}
+                className="w-10 h-10"
+              />
+              <Text className="font-bold text-quaternary">FAQ</Text>
             </TouchableOpacity>
           </View>
           <View
