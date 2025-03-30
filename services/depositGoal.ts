@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-20 18:36:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-29 15:03:13
+ * @LastEditTime: 2025-03-30 15:14:32
  * @FilePath: /Money_Recorder/services/depositGoal.ts
  */
 
@@ -140,6 +140,19 @@ export const completeDeposit = async (depositId: string) => {
       throw new Error("Database configuration is missing");
     }
 
+    // Fetch the deposit record
+    const depositRecord = await database.getDocument(
+      DATABASE_ID,
+      DEPOSIT_COLLECTION_ID,
+      depositId,
+    );
+
+    // Check if the deposit is already completed
+    if (depositRecord?.completed) {
+      throw new Error("This deposit has already been completed.");
+    }
+
+    // Update the deposit to completed
     const updatedRecord = await database.updateDocument(
       DATABASE_ID,
       DEPOSIT_COLLECTION_ID,

@@ -364,6 +364,7 @@ const DepositBox = () => {
                       "number-pad",
                     );
                   }}>
+                  {/* decrease */}
                   <Text
                     className={`font-extrabold text-2xl ${
                       theme === "dark" ? "text-red-400" : "text-red-500"
@@ -437,6 +438,7 @@ const DepositBox = () => {
                   Update
                 </Text>
               </TouchableOpacity>
+              {/* complete button */}
               <TouchableOpacity
                 className={`w-32 flex-row items-center justify-center px-3 py-3.5 rounded-xl transform active:scale-95 transition-all ${
                   deposit.completed
@@ -448,6 +450,7 @@ const DepositBox = () => {
                     : "bg-blue-100 hover:bg-blue-200"
                 }`}
                 onPress={async () => {
+                  if (deposit.completed) return; // Prevent click if already completed
                   Alert.alert(
                     "Confirmation of completion",
                     "Are you sure you want to mark this deposit goal as completed?",
@@ -485,7 +488,9 @@ const DepositBox = () => {
                       },
                     ],
                   );
-                }}>
+                }}
+                disabled={deposit.completed} // Disable button if completed
+              >
                 <Ionicons
                   name={
                     deposit.completed
@@ -516,6 +521,8 @@ const DepositBox = () => {
                   {deposit.completed ? "Completed" : "Complete"}
                 </Text>
               </TouchableOpacity>
+
+              {/*  */}
               <TouchableOpacity
                 className={`w-16 flex-row items-center justify-center px-3 py-3.5 rounded-xl transform active:scale-95 transition-all ${
                   theme === "dark"
