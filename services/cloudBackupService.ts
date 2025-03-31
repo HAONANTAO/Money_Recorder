@@ -20,6 +20,7 @@ const storage = new Storage(client);
 //这样，就能轻松实现 云备份 & 恢复 了 🚀
 
 // 备份用户数据
+// 备份用户数据
 export const backupUserData = async (userId: string, email: string) => {
   try {
     if (!DATA_BUCKET_ID) {
@@ -31,7 +32,7 @@ export const backupUserData = async (userId: string, email: string) => {
     const budgets = await getBudgets(userId);
     const depositGoals = await getDeposits(userId);
 
-    // 创建备份数据对象（增加 email）
+    // 创建备份数据对象（包括 email）
     const backupData = {
       email, // 存储用户 email
       records,
@@ -40,25 +41,26 @@ export const backupUserData = async (userId: string, email: string) => {
       backupDate: new Date().toISOString(),
     };
 
-    // JSON 转 Base64
+    // JSON 转为字符串
     const backupContent = JSON.stringify(backupData);
-    const base64Content = btoa(backupContent);
-    const fileName = `backup_${userId}_${Date.now()}.json`;
 
-    // 创建文件对象
-    const fileObject = {
-      name: fileName,
-      type: "application/json",
-      size: Math.round(base64Content.length * 0.75), // 估算大小
-      uri: base64Content,
-    };
+    // 解决 Base64 编码问题：使用 UTF-8 编码并进行 Base64 编码
+    const utf8Content = unescape(encodeURIComponent(backupContent)); // UTF-8 编码
+    const base64Content = btoa(utf8Content); // 然后进行 Base64 编码
+
+    const fileName = `backup_${userId}_${Date.now()}.json`;
 
     // 上传备份文件
     const file = await storage.createFile(
       DATA_BUCKET_ID,
       ID.unique(),
-      fileObject,
-      [`user:${userId}`], // 只允许当前用户访问
+      {
+        name: `backup_${userId}_${Date.now()}.json`,
+        type: "text/plain",
+        size: base64Content.length,
+        uri: `data:text/plain;base64,${base64Content}`,
+      },
+      ['read("any")', 'write("any")'], // 使用Appwrite标准权限格式
     );
 
     return {
@@ -73,11 +75,7 @@ export const backupUserData = async (userId: string, email: string) => {
 };
 
 // 恢复用户数据
-export const restoreUserData = async (
-  userId: string,
-  email: string,
-  fileId: string,
-) => {
+export const restoreUserData = async (email: string, fileId: string) => {
   try {
     if (!DATA_BUCKET_ID) {
       throw new Error("Storage configuration is missing");
@@ -95,9 +93,12 @@ export const restoreUserData = async (
       throw new Error("Invalid backup file format");
     }
 
+    // 解决 UTF-8 解码
+    const decodedContent = decodeURIComponent(escape(backupContent)); // 解码回原始内容
+
     let backupData;
     try {
-      backupData = JSON.parse(backupContent);
+      backupData = JSON.parse(decodedContent); // 解析 JSON
     } catch (e) {
       throw new Error("Invalid JSON format in backup file");
     }
@@ -113,7 +114,7 @@ export const restoreUserData = async (
     }
 
     // **检查 email 是否匹配**
-    if (backupData.email !== email) {
+    if (backupData.email.toLowerCase() !== email.toLowerCase()) {
       throw new Error("Email does not match backup data");
     }
 

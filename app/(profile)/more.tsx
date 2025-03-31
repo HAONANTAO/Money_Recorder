@@ -10,6 +10,7 @@ import { useTheme } from "../../contexts/ThemeContext";
 import { getRecords } from "@/services/recordService";
 import { StorageService } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
+import { backupUserData, restoreUserData } from "@/services/cloudBackupService";
 
 const More = () => {
   const { theme } = useTheme();
@@ -162,6 +163,69 @@ const More = () => {
                 theme === "dark" ? "text-white" : "text-quaternary"
               }`}>
               Privacy Policy
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={async () => {
+              try {
+                const email = await StorageService.getEmail();
+                const userInfo = await getUserByEmail(email as string);
+                const result = await backupUserData(
+                  userInfo.$id,
+                  email as string,
+                );
+                alert(
+                  `数据备份成功！备份时间: ${new Date(
+                    result.backupDate,
+                  ).toLocaleString()}`,
+                );
+              } catch (error) {
+                console.error("备份失败:", error);
+                alert("备份失败，请稍后重试");
+              }
+            }}
+            className={`p-4 rounded-lg ${
+              theme === "dark" ? "bg-gray-800" : "bg-white"
+            } shadow-sm`}>
+            <Text
+              className={`text-lg ${
+                theme === "dark" ? "text-white" : "text-quaternary"
+              }`}>
+              备份数据
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={async () => {
+              try {
+                const email = await StorageService.getEmail();
+                const userInfo = await getUserByEmail(email as string);
+
+                // 在调用 restoreUserData 时，确保参数顺序一致：先传递 email，再传递 userId
+                const result = await restoreUserData(
+                  email as string,
+                  userInfo.$id,
+                );
+
+                alert(
+                  `数据恢复成功！恢复时间: ${new Date(
+                    result.restoreDate,
+                  ).toLocaleString()}`,
+                );
+              } catch (error) {
+                console.error("恢复失败:", error);
+                alert("恢复失败，请稍后重试");
+              }
+            }}
+            className={`p-4 rounded-lg ${
+              theme === "dark" ? "bg-gray-800" : "bg-white"
+            } shadow-sm`}>
+            <Text
+              className={`text-lg ${
+                theme === "dark" ? "text-white" : "text-quaternary"
+              }`}>
+              恢复数据
             </Text>
           </TouchableOpacity>
         </View>
