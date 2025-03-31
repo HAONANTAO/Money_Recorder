@@ -179,11 +179,11 @@ const Stats = () => {
     "#34495E",
   ];
 
-  const [colorIndex, setColorIndex] = useState<number>(0);
+  // const [colorIndex, setColorIndex] = useState<number>(0);
   const getRandomColor = () => {
-    const color = CHART_COLORS[colorIndex];
-    setColorIndex((prevIndex) => (prevIndex + 1) % CHART_COLORS.length);
-    return color;
+    // 随机获取一个颜色
+    const randomIndex = Math.floor(Math.random() * CHART_COLORS.length);
+    return CHART_COLORS[randomIndex];
   };
 
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
