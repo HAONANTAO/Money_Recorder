@@ -15,6 +15,8 @@ export const StorageKeys = {
   // 如果超过30分钟，就认为缓存已过期，
   // 需要重新从服务器获取数据。这样可以确保用户看到的数据不会太旧，同时又能减少不必要的网络请求。
   LAST_FETCH: "lastFetch",
+  // 存储最新的备份信息
+  BACKUP_INFO: "backupInfo",
 } as const;
 
 export const StorageService = {
@@ -107,6 +109,33 @@ export const StorageService = {
       return stats ? JSON.parse(stats) : null;
     } catch (error) {
       console.error("Error getting cached monthly stats:", error);
+      return null;
+    }
+  },
+
+  // 保存备份信息
+  saveBackupInfo: async (backupInfo: {
+    fileId: string;
+    backupDate: string;
+  }) => {
+    try {
+      await AsyncStorage.setItem(
+        StorageKeys.BACKUP_INFO,
+        JSON.stringify(backupInfo),
+      );
+    } catch (error) {
+      console.error("Error saving backup info:", error);
+      throw error;
+    }
+  },
+
+  // 获取备份信息
+  getBackupInfo: async () => {
+    try {
+      const backupInfo = await AsyncStorage.getItem(StorageKeys.BACKUP_INFO);
+      return backupInfo ? JSON.parse(backupInfo) : null;
+    } catch (error) {
+      console.error("Error getting backup info:", error);
       return null;
     }
   },

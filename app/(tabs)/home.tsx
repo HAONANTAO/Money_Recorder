@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 15:08:35
+ * @LastEditTime: 2025-03-31 15:24:45
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
@@ -113,7 +113,7 @@ const Home = () => {
 
   useEffect(() => {
     getInit();
-  }, []);
+  }, [records]);
 
   return (
     <ScrollView

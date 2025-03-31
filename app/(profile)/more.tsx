@@ -171,13 +171,18 @@ const More = () => {
               try {
                 const email = await StorageService.getEmail();
                 const userInfo = await getUserByEmail(email as string);
-                const result = await backupUserData(
+                const backupResult = await backupUserData(
                   userInfo.$id,
                   email as string,
                 );
+                // 保存备份信息到本地存储
+                await StorageService.saveBackupInfo({
+                  fileId: backupResult.fileId,
+                  backupDate: backupResult.backupDate,
+                });
                 alert(
                   `数据备份成功！备份时间: ${new Date(
-                    result.backupDate,
+                    backupResult.backupDate,
                   ).toLocaleString()}`,
                 );
               } catch (error) {
@@ -202,9 +207,16 @@ const More = () => {
                 const email = await StorageService.getEmail();
                 const userInfo = await getUserByEmail(email as string);
 
-                // 在调用 restoreUserData 时，确保参数顺序一致：先传递 email，再传递 userId
+                // 从本地存储获取最新的备份信息
+                const backupInfo = await StorageService.getBackupInfo();
+                if (!backupInfo) {
+                  throw new Error("未找到备份信息，请先进行数据备份");
+                }
+
+                // 使用本地存储的备份信息进行恢复
                 const result = await restoreUserData(
                   email as string,
+                  backupInfo.fileId,
                   userInfo.$id,
                 );
 
@@ -215,7 +227,11 @@ const More = () => {
                 );
               } catch (error) {
                 console.error("恢复失败:", error);
-                alert("恢复失败，请稍后重试");
+                alert(
+                  error instanceof Error
+                    ? error.message
+                    : "恢复失败，请稍后重试",
+                );
               }
             }}
             className={`p-4 rounded-lg ${
