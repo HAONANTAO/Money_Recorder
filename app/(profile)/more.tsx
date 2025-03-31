@@ -12,6 +12,7 @@ import { getRecords } from "@/services/recordService";
 import { StorageService } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
 import { backupUserData, restoreUserData } from "@/services/cloudBackupService";
+import { Alert } from "react-native";
 
 const More = () => {
   const { theme } = useTheme();
@@ -162,29 +163,45 @@ const More = () => {
 
         {/* buttons */}
         <View className="flex-1 gap-4 justify-center items-center w-full bg-light-blue-200">
-          {/* Backup Data Button */}
           <TouchableOpacity
-            onPress={async () => {
-              try {
-                const email = await StorageService.getEmail();
-                const userInfo = await getUserByEmail(email as string);
-                const backupResult = await backupUserData(
-                  userInfo.$id,
-                  email as string,
-                );
-                await StorageService.saveBackupInfo({
-                  fileId: backupResult.fileId,
-                  backupDate: backupResult.backupDate,
-                });
-                alert(
-                  `Data backup successful! Backup time: ${new Date(
-                    backupResult.backupDate,
-                  ).toLocaleString("zh-CN", { hour12: false })}`,
-                );
-              } catch (error) {
-                console.error("Backup failed:", error);
-                alert("Backup failed,please try again later");
-              }
+            onPress={() => {
+              Alert.alert(
+                "Confirm Backup",
+                "Are you sure you want to back up your data?",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Backup Cancelled"),
+                    style: "cancel",
+                  },
+                  {
+                    text: "OK",
+                    onPress: async () => {
+                      try {
+                        const email = await StorageService.getEmail();
+                        const userInfo = await getUserByEmail(email as string);
+                        const backupResult = await backupUserData(
+                          userInfo.$id,
+                          email as string,
+                        );
+                        await StorageService.saveBackupInfo({
+                          fileId: backupResult.fileId,
+                          backupDate: backupResult.backupDate,
+                        });
+                        alert(
+                          `Data backup successful! Backup time: ${new Date(
+                            backupResult.backupDate,
+                          ).toLocaleString("zh-CN", { hour12: false })}`,
+                        );
+                      } catch (error) {
+                        console.error("Backup failed:", error);
+                        alert("Backup failed, please try again later");
+                      }
+                    },
+                  },
+                ],
+                { cancelable: false },
+              );
             }}
             className={`p-4 rounded-3xl ${
               theme === "dark" ? "bg-gray-800" : "bg-blue-100"
@@ -198,37 +215,53 @@ const More = () => {
               Backup Data
             </Text>
           </TouchableOpacity>
-
-          {/* Restore Data Button */}
+         
           <TouchableOpacity
-            onPress={async () => {
-              try {
-                const email = await StorageService.getEmail();
-                const userInfo = await getUserByEmail(email as string);
-                const backupInfo = await StorageService.getBackupInfo();
-                if (!backupInfo) {
-                  throw new Error(
-                    "No backup information found, please back up your data first",
-                  );
-                }
-                const result = await restoreUserData(
-                  email as string,
-                  backupInfo.fileId,
-                  userInfo.$id,
-                );
-                alert(
-                  `Data recovery successful! Recovery time: ${new Date(
-                    result.restoreDate,
-                  ).toLocaleString("zh-CN", { hour12: false })}`,
-                );
-              } catch (error) {
-                console.error("Restore failed:", error);
-                alert(
-                  error instanceof Error
-                    ? error.message
-                    : "Restore failed,Please try again later",
-                );
-              }
+            onPress={() => {
+              Alert.alert(
+                "Confirm Restore",
+                "Are you sure you want to restore your data? This will overwrite your current data.",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Restore Cancelled"),
+                    style: "cancel",
+                  },
+                  {
+                    text: "OK",
+                    onPress: async () => {
+                      try {
+                        const email = await StorageService.getEmail();
+                        const userInfo = await getUserByEmail(email as string);
+                        const backupInfo = await StorageService.getBackupInfo();
+                        if (!backupInfo) {
+                          throw new Error(
+                            "No backup information found, please back up your data first",
+                          );
+                        }
+                        const result = await restoreUserData(
+                          email as string,
+                          backupInfo.fileId,
+                          userInfo.$id,
+                        );
+                        alert(
+                          `Data recovery successful! Recovery time: ${new Date(
+                            result.restoreDate,
+                          ).toLocaleString("zh-CN", { hour12: false })}`,
+                        );
+                      } catch (error) {
+                        console.error("Restore failed:", error);
+                        alert(
+                          error instanceof Error
+                            ? error.message
+                            : "Restore failed, Please try again later",
+                        );
+                      }
+                    },
+                  },
+                ],
+                { cancelable: false },
+              );
             }}
             className={`p-4 rounded-3xl ${
               theme === "dark" ? "bg-gray-800" : "bg-blue-100"
@@ -242,7 +275,6 @@ const More = () => {
               Restore Data
             </Text>
           </TouchableOpacity>
-
           {/* Terms of Use Button */}
           <TouchableOpacity
             onPress={() =>
@@ -262,7 +294,6 @@ const More = () => {
               Terms Of Use
             </Text>
           </TouchableOpacity>
-
           {/* Privacy Policy Button */}
           <TouchableOpacity
             onPress={() =>
