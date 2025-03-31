@@ -9,42 +9,45 @@ import {
   Platform,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons"; // 引入图标库
 import { useTheme } from "../../contexts/ThemeContext";
-import { useLanguage } from "../../contexts/LanguageContext";
 
 const Settings = () => {
+  // Use the theme context instead of local state
   const { theme, toggleTheme } = useTheme();
-  const { language, setLanguage, t } = useLanguage();
 
   // 清除缓存函数
   const handleClearCache = async () => {
-    Alert.alert(t("clearCache"), t("clearCacheConfirm"), [
-      { text: t("cancel"), style: "cancel" },
-      {
-        text: t("clear"),
-        onPress: async () => {
-          try {
-            await AsyncStorage.clear();
-            Alert.alert(t("success"), t("cacheCleared"));
-          } catch (error) {
-            Alert.alert(t("error"), t("cacheClearFailed"));
-          }
+    Alert.alert(
+      "Clear Cache",
+      "Are you sure you want to clear the cache? This action cannot be undone.",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Clear",
+          onPress: async () => {
+            try {
+              await AsyncStorage.clear();
+              Alert.alert("Success", "Cache cleared successfully!");
+            } catch (error) {
+              Alert.alert("Error", "Failed to clear cache.");
+            }
+          },
+          style: "destructive",
         },
-        style: "destructive",
-      },
-    ]);
+      ],
+    );
   };
 
   // 打开通知设置的函数
   const openNotificationSettings = () => {
-    Alert.alert(t("notifications"), t("notificationSettings"), [
+    Alert.alert("Notifications Settings", "Open the Notification settings?", [
       {
-        text: t("cancel"),
+        text: "Cancel",
         style: "cancel",
       },
       {
-        text: t("openSettings"),
+        text: "Open Settings",
         onPress: () => {
           if (Platform.OS === "ios") {
             // 打开 iOS 设置页面
@@ -52,7 +55,10 @@ const Settings = () => {
               console.error("Failed to open settings:", err),
             );
           } else {
-            Alert.alert(t("notifications"), t("notificationIOSOnly"));
+            Alert.alert(
+              "Notifications",
+              "This functionality is only available on iOS.",
+            );
           }
         },
         style: "default",
@@ -72,7 +78,7 @@ const Settings = () => {
             className={`mb-8 text-3xl font-extrabold text-center ${
               theme === "dark" ? "text-gray-200" : "text-gray-800"
             }`}>
-            {t("settings")}
+            Settings
           </Text>
 
           <View className="gap-4 space-y-6">
@@ -91,7 +97,7 @@ const Settings = () => {
                 className={`ml-4 text-lg font-semibold ${
                   theme === "dark" ? "text-gray-200" : "text-gray-700"
                 }`}>
-                {t("notifications")}
+                Notifications
               </Text>
             </TouchableOpacity>
 
@@ -110,7 +116,7 @@ const Settings = () => {
                 className={`ml-4 text-lg font-semibold ${
                   theme === "dark" ? "text-gray-200" : "text-gray-700"
                 }`}>
-                {t("theme")}: {theme === "light" ? t("light") : t("dark")}
+                Theme: {theme === "light" ? "Light" : "Dark"}
               </Text>
             </TouchableOpacity>
 
@@ -129,37 +135,17 @@ const Settings = () => {
                 className={`ml-4 text-lg font-semibold ${
                   theme === "dark" ? "text-gray-200" : "text-gray-700"
                 }`}>
-                {t("clearCache")}
+                Clear Cache
               </Text>
             </TouchableOpacity>
           </View>
 
           <View className="mt-16">
-            {/* 语言切换按钮 */}
-            <TouchableOpacity
-              onPress={() => setLanguage(language === "en" ? "zh" : "en")}
-              className={`flex-row items-center p-4 rounded-xl shadow-md ${
-                theme === "dark" ? "bg-quaternary" : "bg-white"
-              }`}>
-              <Ionicons
-                name="language-outline"
-                size={24}
-                color={theme === "dark" ? "#60A5FA" : "#4B5563"}
-              />
-              <Text
-                className={`ml-4 text-lg font-semibold ${
-                  theme === "dark" ? "text-gray-200" : "text-gray-700"
-                }`}>
-                {t("language")}:{" "}
-                {language === "en" ? t("english") : t("chinese")}
-              </Text>
-            </TouchableOpacity>
-
             <Text
               className={`text-sm text-center ${
                 theme === "dark" ? "text-gray-400" : "text-gray-500"
               }`}>
-              {t("appVersion")}: 1.0.0
+              App Version: 1.0.0
             </Text>
           </View>
         </View>
