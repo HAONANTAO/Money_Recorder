@@ -32,6 +32,7 @@ export const backupUserData = async (userId: string, email: string) => {
     const budgets = await getBudgets(userId);
     const depositGoals = await getDeposits(userId);
     console.log("需要备份的数据：", depositGoals);
+
     // 创建备份数据对象（包括 email）
     const backupData = {
       email, // 存储用户 email
@@ -50,15 +51,39 @@ export const backupUserData = async (userId: string, email: string) => {
 
     const fileName = `backup_${userId}_${Date.now()}.json`;
 
-    // 上传备份文件
+    // 查询所有文件
+    const existingFiles = await storage.listFiles(DATA_BUCKET_ID, [
+      // 可以添加分页查询以防止文件过多
+    ]);
+
+    // 过滤出与当前用户 ID 相关的文件
+    const userFiles = (existingFiles.files || []).filter((file) =>
+      file.name.startsWith(`backup_${userId}`),
+    );
+
+    // 如果找到了旧备份文件，删除最近的一个
+    if (userFiles.length > 0) {
+      // 根据文件名中的时间戳排序，找到最近的备份文件
+      const mostRecentFile = userFiles.sort((a, b) => {
+        const aTimestamp = parseInt(a.name.split("_")[2].split(".")[0]);
+        const bTimestamp = parseInt(b.name.split("_")[2].split(".")[0]);
+        return bTimestamp - aTimestamp; // 降序排序
+      })[0];
+
+      // 删除最近的备份文件
+      await storage.deleteFile(DATA_BUCKET_ID, mostRecentFile.$id);
+      console.log(`已删除最近的备份文件: ${mostRecentFile.name}`);
+    }
+
+    // 上传新的备份文件
     const file = await storage.createFile(
       DATA_BUCKET_ID,
       ID.unique(),
       {
-        name: `backup_${userId}_${Date.now()}.json`,
-        type: "text/plain",
+        name: fileName,
+        type: "application/json",
         size: base64Content.length,
-        uri: `data:text/plain;base64,${base64Content}`,
+        uri: `data:application/json;base64,${base64Content}`,
       },
       ['read("any")', 'write("any")'], // 使用Appwrite标准权限格式
     );
