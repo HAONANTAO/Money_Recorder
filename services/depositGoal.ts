@@ -1,12 +1,11 @@
 /*
  * @Date: 2025-03-20 18:36:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 15:14:32
+ * @LastEditTime: 2025-03-31 14:15:28
  * @FilePath: /Money_Recorder/services/depositGoal.ts
  */
 
 import { Client, Databases, ID, Query } from "react-native-appwrite";
-import { Float } from "react-native/Libraries/Types/CodegenTypes";
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID;
 
