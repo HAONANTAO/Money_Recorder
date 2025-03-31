@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 17:00:58
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-23 22:29:24
+ * @LastEditTime: 2025-03-31 13:21:01
  * @FilePath: /Money_Recorder/utils/storageService.ts
  */
 
@@ -12,6 +12,8 @@ export const StorageKeys = {
   EMAIL: "userEmail",
   RECORDS_CACHE: "recordsCache",
   MONTHLY_STATS: "monthlyStats",
+  // 如果超过30分钟，就认为缓存已过期，
+  // 需要重新从服务器获取数据。这样可以确保用户看到的数据不会太旧，同时又能减少不必要的网络请求。
   LAST_FETCH: "lastFetch",
 } as const;
 

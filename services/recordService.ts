@@ -48,16 +48,28 @@ export const createRecord = async (
     const records = await getRecords(userId);
     await StorageService.cacheRecords(records);
 
-    // 如果是支出类型，更新月度统计缓存
-    if (record.type === "expense") {
-      const date = new Date();
-      const monthlyStats = await getMonthlyExpensesByCategory(
-        userId,
-        date.getFullYear(),
-        date.getMonth() + 1,
-      );
-      await StorageService.cacheMonthlyStats(monthlyStats);
-    }
+    // 更新月度统计缓存
+    const date = new Date();
+    const monthlyStats = await getMonthlyExpensesByCategory(
+      userId,
+      date.getFullYear(),
+      date.getMonth() + 1,
+    );
+    const cachedRecords = await StorageService.getCachedRecords();
+    const filteredRecords = cachedRecords ? cachedRecords : records;
+    const incomeTotal = filteredRecords
+      .filter((r: any) => r.type === "income")
+      .reduce((sum: number, r: any) => sum + r.moneyAmount, 0);
+    const expenseTotal = filteredRecords
+      .filter((r: any) => r.type === "expense")
+      .reduce((sum: number, r: any) => sum + r.moneyAmount, 0);
+    await StorageService.cacheMonthlyStats({
+      budgets: monthlyStats,
+      expenses: monthlyStats,
+      records: filteredRecords,
+      incomeTotal,
+      expenseTotal,
+    });
 
     return newRecord;
   } catch (error) {

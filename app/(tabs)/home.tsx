@@ -113,7 +113,7 @@ const Home = () => {
 
   useEffect(() => {
     getInit();
-  }, [records]);
+  }, []);
 
   return (
     <ScrollView
