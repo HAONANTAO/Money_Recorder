@@ -160,7 +160,9 @@ const More = () => {
           </View>
         ))}
 
-        <View className="space-y-4">
+        {/* buttons */}
+        <View className="flex-1 gap-4 justify-center items-center w-full bg-light-blue-200">
+          {/* Backup Data Button */}
           <TouchableOpacity
             onPress={async () => {
               try {
@@ -170,103 +172,111 @@ const More = () => {
                   userInfo.$id,
                   email as string,
                 );
-                // 保存备份信息到本地存储
                 await StorageService.saveBackupInfo({
                   fileId: backupResult.fileId,
                   backupDate: backupResult.backupDate,
                 });
                 alert(
-                  `数据备份成功！备份时间: ${new Date(
+                  `Data backup successful! Backup time: ${new Date(
                     backupResult.backupDate,
                   ).toLocaleString("zh-CN", { hour12: false })}`,
                 );
               } catch (error) {
-                console.error("备份失败:", error);
-                alert("备份失败，请稍后重试");
+                console.error("Backup failed:", error);
+                alert("Backup failed,please try again later");
               }
             }}
-            className={`p-4 rounded-lg ${
-              theme === "dark" ? "bg-gray-800" : "bg-white"
-            } shadow-sm`}>
+            className={`p-4 rounded-3xl ${
+              theme === "dark" ? "bg-gray-800" : "bg-blue-100"
+            } shadow-lg active:opacity-80 transform transition-all duration-200 border ${
+              theme === "dark" ? "border-gray-700" : "border-gray-200"
+            } w-80`}>
             <Text
-              className={`text-lg ${
+              className={`text-lg font-medium text-center ${
                 theme === "dark" ? "text-white" : "text-quaternary"
               }`}>
               Backup Data
             </Text>
           </TouchableOpacity>
 
+          {/* Restore Data Button */}
           <TouchableOpacity
             onPress={async () => {
               try {
                 const email = await StorageService.getEmail();
                 const userInfo = await getUserByEmail(email as string);
-
-                // 从本地存储获取最新的备份信息
                 const backupInfo = await StorageService.getBackupInfo();
                 if (!backupInfo) {
-                  throw new Error("未找到备份信息，请先进行数据备份");
+                  throw new Error(
+                    "No backup information found, please back up your data first",
+                  );
                 }
-
-                // 使用本地存储的备份信息进行恢复
                 const result = await restoreUserData(
                   email as string,
                   backupInfo.fileId,
                   userInfo.$id,
                 );
-
                 alert(
-                  `数据恢复成功！恢复时间: ${new Date(
+                  `Data recovery successful! Recovery time: ${new Date(
                     result.restoreDate,
                   ).toLocaleString("zh-CN", { hour12: false })}`,
                 );
               } catch (error) {
-                console.error("恢复失败:", error);
+                console.error("Restore failed:", error);
                 alert(
                   error instanceof Error
                     ? error.message
-                    : "恢复失败，请稍后重试",
+                    : "Restore failed,Please try again later",
                 );
               }
             }}
-            className={`p-4 rounded-lg ${
-              theme === "dark" ? "bg-gray-800" : "bg-white"
-            } shadow-sm`}>
+            className={`p-4 rounded-3xl ${
+              theme === "dark" ? "bg-gray-800" : "bg-blue-100"
+            } shadow-lg active:opacity-80 transform transition-all duration-200 border ${
+              theme === "dark" ? "border-gray-700" : "border-gray-200"
+            } w-80`}>
             <Text
-              className={`text-lg ${
+              className={`text-lg font-medium text-center ${
                 theme === "dark" ? "text-white" : "text-quaternary"
               }`}>
               Restore Data
             </Text>
           </TouchableOpacity>
+
+          {/* Terms of Use Button */}
           <TouchableOpacity
             onPress={() =>
               Linking.openURL(
                 "https://www.termsfeed.com/live/3cacc431-dc86-4318-b0c9-7c785b79577c",
               )
             }
-            className={`p-4 rounded-lg ${
-              theme === "dark" ? "bg-gray-800" : "bg-white"
-            } shadow-sm`}>
+            className={`p-4 rounded-3xl ${
+              theme === "dark" ? "bg-gray-800" : "bg-blue-100"
+            } shadow-lg active:opacity-80 transform transition-all duration-200 border ${
+              theme === "dark" ? "border-gray-700" : "border-gray-200"
+            } w-80`}>
             <Text
-              className={`text-lg ${
+              className={`text-lg font-medium text-center ${
                 theme === "dark" ? "text-white" : "text-quaternary"
               }`}>
               Terms Of Use
             </Text>
           </TouchableOpacity>
 
+          {/* Privacy Policy Button */}
           <TouchableOpacity
             onPress={() =>
               Linking.openURL(
                 "https://www.termsfeed.com/live/995afd4d-fa4d-4c85-8f05-4c00d3e17928",
               )
             }
-            className={`p-4 rounded-lg ${
-              theme === "dark" ? "bg-gray-800" : "bg-white"
-            } shadow-sm`}>
+            className={`p-4 rounded-3xl ${
+              theme === "dark" ? "bg-gray-800" : "bg-blue-100"
+            } shadow-lg active:opacity-80 transform transition-all duration-200 border ${
+              theme === "dark" ? "border-gray-700" : "border-gray-200"
+            } w-80`}>
             <Text
-              className={`text-lg ${
+              className={`text-lg font-medium text-center ${
                 theme === "dark" ? "text-white" : "text-quaternary"
               }`}>
               Privacy Policy
