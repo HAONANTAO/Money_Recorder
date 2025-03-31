@@ -6,6 +6,7 @@
  */
 
 import { Client, Databases, ID, Query } from "react-native-appwrite";
+import { StorageService } from "../utils/storageService";
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID;
 
@@ -42,6 +43,22 @@ export const createRecord = async (
       },
     );
 
+    // 更新缓存
+    const userId = record.userId;
+    const records = await getRecords(userId);
+    await StorageService.cacheRecords(records);
+
+    // 如果是支出类型，更新月度统计缓存
+    if (record.type === "expense") {
+      const date = new Date();
+      const monthlyStats = await getMonthlyExpensesByCategory(
+        userId,
+        date.getFullYear(),
+        date.getMonth() + 1,
+      );
+      await StorageService.cacheMonthlyStats(monthlyStats);
+    }
+
     return newRecord;
   } catch (error) {
     console.error("Error creating record:", error);
@@ -56,7 +73,25 @@ export const deleteRecord = async (recordId: string) => {
       throw new Error("deleteRecord-Database configuration is missing");
     }
 
+    // 获取记录信息以获取userId
+    const record = await getRecordById(recordId);
     await database.deleteDocument(DATABASE_ID, RECORDS_COLLECTION_ID, recordId);
+
+    // 更新缓存
+    const records = await getRecords(record.userId);
+    await StorageService.cacheRecords(records);
+
+    // 如果是支出类型，更新月度统计缓存
+    if (record.type === "expense") {
+      const date = new Date(record.createAt);
+      const monthlyStats = await getMonthlyExpensesByCategory(
+        record.userId,
+        date.getFullYear(),
+        date.getMonth() + 1,
+      );
+      await StorageService.cacheMonthlyStats(monthlyStats);
+    }
+
     return true;
   } catch (error) {
     console.error("Error deleting record:", error);
@@ -80,6 +115,21 @@ export const updateRecord = async (
       recordId,
       data,
     );
+
+    // 更新缓存
+    const records = await getRecords(updatedRecord.userId);
+    await StorageService.cacheRecords(records);
+
+    // 如果是支出类型，更新月度统计缓存
+    if (updatedRecord.type === "expense") {
+      const date = new Date(updatedRecord.createAt);
+      const monthlyStats = await getMonthlyExpensesByCategory(
+        updatedRecord.userId,
+        date.getFullYear(),
+        date.getMonth() + 1,
+      );
+      await StorageService.cacheMonthlyStats(monthlyStats);
+    }
 
     return updatedRecord;
   } catch (error) {

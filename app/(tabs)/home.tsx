@@ -17,7 +17,7 @@ import React, { useEffect, useState } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StorageKeys } from "@/utils/storageService";
+import { StorageKeys, StorageService } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
 import { getRecords } from "@/services/recordService";
 import RecordShowBox from "@/components/RecordShowbox";
@@ -46,44 +46,59 @@ const Home = () => {
   const [monthlyExpense, setMonthlyExpense] = useState<number>(0);
   const [refreshing, setRefreshing] = useState(false);
 
+  const calculateMonthlyStats = (filteredRecords: MoneyRecord[]) => {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+
+    const monthlyRecords = filteredRecords.filter((record: any) => {
+      const recordDate = new Date(record.createAt);
+      return (
+        recordDate.getMonth() === currentMonth &&
+        recordDate.getFullYear() === currentYear
+      );
+    });
+
+    const totalIncome = monthlyRecords
+      .filter((record: any) => record.type === "income")
+      .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
+
+    const totalExpense = monthlyRecords
+      .filter((record: any) => record.type === "expense")
+      .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
+
+    setMonthlyIncome(totalIncome);
+    setMonthlyExpense(totalExpense);
+  };
+
   const getInit = async () => {
     try {
       const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
       if (!email) return;
 
+      // 尝试从缓存获取数据
+      const cachedRecords = await StorageService.getCachedRecords();
+      if (cachedRecords) {
+        const filteredRecords = DateChecker(
+          cachedRecords as unknown as MoneyRecord[],
+        );
+        setRecords(filteredRecords);
+        calculateMonthlyStats(filteredRecords);
+        setLoading(false);
+      }
+
+      // 无论是否有缓存，都异步获取最新数据
       const userData = await getUserByEmail(email);
       const [user, records] = await Promise.all([
         getUserByEmail(email),
         getRecords(userData.$id),
       ]);
 
-      // setUser(user);
       const filteredRecords = DateChecker(records as unknown as MoneyRecord[]);
       setRecords(filteredRecords);
+      await StorageService.cacheRecords(records);
 
-      // 计算当月收入和支出
-      const currentDate = new Date();
-      const currentMonth = currentDate.getMonth();
-      const currentYear = currentDate.getFullYear();
-
-      const monthlyRecords = filteredRecords.filter((record: any) => {
-        const recordDate = new Date(record.createAt);
-        return (
-          recordDate.getMonth() === currentMonth &&
-          recordDate.getFullYear() === currentYear
-        );
-      });
-
-      const totalIncome = monthlyRecords
-        .filter((record: any) => record.type === "income")
-        .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
-
-      const totalExpense = monthlyRecords
-        .filter((record: any) => record.type === "expense")
-        .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
-
-      setMonthlyIncome(totalIncome);
-      setMonthlyExpense(totalExpense);
+      calculateMonthlyStats(filteredRecords);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching user or records:", error);

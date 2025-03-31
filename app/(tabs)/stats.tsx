@@ -4,13 +4,12 @@ import {
   View,
   ActivityIndicator,
   ScrollView,
-  Switch,
   TouchableOpacity,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StorageKeys } from "@/utils/storageService";
+import { StorageKeys, StorageService } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
 import { getRecords } from "@/services/recordService";
 import RecordShowBox from "@/components/RecordShowbox";
@@ -38,7 +37,7 @@ const Stats = () => {
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isIncome, setIsIncome] = useState<boolean>(false); // State to toggle between income and expense charts
-  const [refreashing, setRefreshing] = useState<boolean>(false);
+  // const [refreashing, setRefreshing] = useState<boolean>(false);
   const [income, setIncome] = useState<number>(0);
   const [expense, setExpense] = useState<number>(0);
   const [eventLength, setEventLength] = useState<number>(0);
@@ -48,36 +47,38 @@ const Stats = () => {
 
   useEffect(() => {
     const getInit = async () => {
-      const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
-      if (!email) return;
-
-      const userData = await getUserByEmail(email);
-      const currentYear = new Date().getFullYear();
-      const currentMonth = new Date().getMonth() + 1;
-      const [budgets, expenses] = await Promise.all([
-        getMonthlyBudget(userData.$id, currentYear, currentMonth),
-        getMonthlyExpensesByCategory(userData.$id, currentYear, currentMonth),
-      ]);
-      setMonthlyBudgets(budgets);
-      setExpensesByCategory(expenses);
-
       try {
         const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
         if (!email) return;
 
+        // 尝试从缓存获取统计数据
+        const cachedStats = await StorageService.getCachedMonthlyStats();
+        if (cachedStats) {
+          const { budgets, expenses, records, incomeTotal, expenseTotal } =
+            cachedStats;
+          setMonthlyBudgets(budgets);
+          setExpensesByCategory(expenses);
+          setRecords(records);
+          setEventLength(records.length);
+          setIncome(incomeTotal);
+          setExpense(expenseTotal);
+          setLoading(false);
+        }
+
+        // 无论是否有缓存，都异步获取最新数据
         const userData = await getUserByEmail(email);
-        const [user, records] = await Promise.all([
-          getUserByEmail(email),
+        const currentYear = new Date().getFullYear();
+        const currentMonth = new Date().getMonth() + 1;
+        const [budgets, expenses, records] = await Promise.all([
+          getMonthlyBudget(userData.$id, currentYear, currentMonth),
+          getMonthlyExpensesByCategory(userData.$id, currentYear, currentMonth),
           getRecords(userData.$id),
         ]);
 
-        setUser(user);
+        // 根据type分类叠加
         const filteredRecords = DateChecker(
           records as unknown as MoneyRecord[],
         );
-        setRecords(filteredRecords);
-        setEventLength(records.length);
-
         const incomeTotal = filteredRecords
           .filter((record: any) => record.type === "income")
           .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
@@ -86,9 +87,25 @@ const Stats = () => {
           .filter((record: any) => record.type === "expense")
           .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
 
+        // 更新状态和缓存
+        setMonthlyBudgets(budgets);
+        setExpensesByCategory(expenses);
+        setRecords(filteredRecords);
+        setEventLength(records.length);
         setIncome(incomeTotal);
         setExpense(expenseTotal);
+        setLoading(false);
 
+        // 缓存最新数据
+        await StorageService.cacheMonthlyStats({
+          budgets,
+          expenses,
+          records: filteredRecords,
+          incomeTotal,
+          expenseTotal,
+        });
+
+        // categoryData
         const categoryData = filteredRecords
           .filter((record: any) => record.type === "expense")
           .reduce((categories: any, record: any) => {
@@ -144,7 +161,7 @@ const Stats = () => {
     getInit();
   }, []);
 
-  const CHART_COLORS = [
+  const CHART_COLORS: string[] = [
     "#FF6384",
     "#36A2EB",
     "#FFCE56",
@@ -162,10 +179,10 @@ const Stats = () => {
     "#34495E",
   ];
 
-  let colorIndex = 0;
+  const [colorIndex, setColorIndex] = useState<number>(0);
   const getRandomColor = () => {
     const color = CHART_COLORS[colorIndex];
-    colorIndex = (colorIndex + 1) % CHART_COLORS.length;
+    setColorIndex((prevIndex) => (prevIndex + 1) % CHART_COLORS.length);
     return color;
   };
 
@@ -410,7 +427,7 @@ const Stats = () => {
           })}
           <View className="items-center mt-2">
             <TouchableOpacity
-              onPress={() => router.push("/(func)/budget")}
+              onPress={() => router.push("/(func)/Budget")}
               className={`flex-row justify-center items-center px-4 py-2 border-gray-200 shadow-md border rounded-full ${
                 theme === "dark" ? "bg-secondary" : "bg-[#e6f7ff]"
               }`}
@@ -433,8 +450,11 @@ const Stats = () => {
       )}
     </ScrollView>
   );
-};
+}; // Stats组件结束
 
 const styles = StyleSheet.create({});
 
 export default Stats;
+function getInit() {
+  throw new Error("Function not implemented.");
+}
