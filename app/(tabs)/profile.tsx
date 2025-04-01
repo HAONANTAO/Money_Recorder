@@ -27,9 +27,11 @@ import {
 } from "@/services/userManagement";
 import { uploadAvatar } from "@/services/bucketStorageService";
 import { useTheme } from "../../contexts/ThemeContext";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 const Profile = () => {
   const { theme } = useTheme();
+  const { translations } = useLanguage();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [edit, setEdit] = useState(true);
@@ -76,8 +78,8 @@ const Profile = () => {
       if (status !== "granted") {
         // 获取相册权限
         Alert.alert(
-          "Permission needed",
-          "Please grant camera roll permissions to change your avatar.",
+          translations.alerts.notifications.title,
+          translations.alerts.notifications.message,
         );
         return;
       }
@@ -102,7 +104,7 @@ const Profile = () => {
       }
     } catch (error) {
       console.log("Error selecting image:", error);
-      Alert.alert("Error", "Failed to select image. Please try again.");
+      Alert.alert(translations.common.error, translations.alerts.updateError);
     }
   };
 
@@ -114,10 +116,13 @@ const Profile = () => {
       await updateUser(userInfo.$id, { username });
       await updateAvatar(userInfo.$id, avatar);
       setEdit(!edit);
-      Alert.alert("Success", "Profile updated successfully!");
+      Alert.alert(
+        translations.common.success,
+        translations.alerts.updateSuccess,
+      );
     } catch (error) {
       console.log("Error updating profile:", error);
-      Alert.alert("Error", "Failed to update profile. Please try again.");
+      Alert.alert(translations.common.error, translations.alerts.updateError);
     }
   };
 
@@ -134,7 +139,7 @@ const Profile = () => {
         } rounded-xl shadow-md`}>
         <View className="flex justify-center items-center">
           <Text className="mb-6 text-3xl font-bold text-secondary">
-            My Profile
+            {translations.tabs.profile}
           </Text>
           {/* 有avatar就显示 */}
           <TouchableOpacity onPress={handleAvatarPress}>
@@ -175,12 +180,16 @@ const Profile = () => {
             </View>
             {edit ? (
               <Button
-                title="Edit"
+                title={translations.common.edit}
                 onPress={() => handleEdit()}
                 color="#E63946"
               />
             ) : (
-              <Button title="Save" onPress={() => handleSave()} color="" />
+              <Button
+                title={translations.common.save}
+                onPress={() => handleSave()}
+                color=""
+              />
             )}
           </>
         )}
@@ -193,7 +202,7 @@ const Profile = () => {
                 className={`${
                   theme === "dark" ? "text-secondary" : ""
                 } mb-1 font-bold text-quaternary`}>
-                Username
+                {translations.profile.username}
               </Text>
               <TextInput
                 value={username}
@@ -215,13 +224,13 @@ const Profile = () => {
             </View>
             {edit ? (
               <Button
-                title="Edit"
+                title={translations.common.edit}
                 onPress={() => handleEdit()}
                 color="#E63946"
               />
             ) : (
               <Button
-                title="Save"
+                title={translations.common.save}
                 onPress={() => handleSave()}
                 color="#2c78e3"
               />
@@ -245,7 +254,7 @@ const Profile = () => {
                 className="w-12 h-12"
               />
               <Text className="mt-2 text-sm font-bold text-quaternary">
-                Setting
+                {translations.settings.title}
               </Text>
             </TouchableOpacity>
           </View>
@@ -280,7 +289,9 @@ const Profile = () => {
                 source={require("../../assets/images/icons/rating.png")}
                 className="w-10 h-10"
               />
-              <Text className="mt-2 font-bold text-quaternary">Rating</Text>
+              <Text className="mt-2 font-bold text-quaternary">
+                {translations.profile.rating}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -297,7 +308,9 @@ const Profile = () => {
                 className="w-10 h-10"
               />
 
-              <Text className="font-bold text-quaternary">Author</Text>
+              <Text className="font-bold text-quaternary">
+                {translations.profile.author}
+              </Text>
             </TouchableOpacity>
           </View>
           <View
@@ -311,7 +324,9 @@ const Profile = () => {
                 source={require("../../assets/images/icons/help.png")}
                 className="w-10 h-10"
               />
-              <Text className="font-bold text-quaternary">FAQ</Text>
+              <Text className="font-bold text-quaternary">
+                {translations.profile.faq}
+              </Text>
             </TouchableOpacity>
           </View>
           <View
@@ -325,7 +340,9 @@ const Profile = () => {
                 source={require("../../assets/images/icons/more.png")}
                 className="w-10 h-10"
               />
-              <Text className="font-bold text-quaternary">More</Text>
+              <Text className="font-bold text-quaternary">
+                {translations.profile.more}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -335,7 +352,9 @@ const Profile = () => {
         <TouchableOpacity
           onPress={() => handleLogOut()}
           className="py-3 mt-2  rounded-lg w-[140px] bg-tertiary ">
-          <Text className="font-bold text-center text-white">Log out</Text>
+          <Text className="font-bold text-center text-white">
+            {translations.profile.logout}
+          </Text>
         </TouchableOpacity>
       </View>
       {/* footer */}

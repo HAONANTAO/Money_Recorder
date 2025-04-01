@@ -11,26 +11,34 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons"; // 引入图标库
 import { useTheme } from "../../contexts/ThemeContext";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 const Settings = () => {
-  // Use the theme context instead of local state
+  // Use the theme context and language context
   const { theme, toggleTheme } = useTheme();
+  const { language, setLanguage, translations } = useLanguage();
 
   // 清除缓存函数
   const handleClearCache = async () => {
     Alert.alert(
-      "Clear Cache",
-      "Are you sure you want to clear the cache? This action cannot be undone.",
+      translations.alerts.clearCache.title,
+      translations.alerts.clearCache.message,
       [
-        { text: "Cancel", style: "cancel" },
+        { text: translations.common.cancel, style: "cancel" },
         {
-          text: "Clear",
+          text: translations.common.clear,
           onPress: async () => {
             try {
               await AsyncStorage.clear();
-              Alert.alert("Success", "Cache cleared successfully!");
+              Alert.alert(
+                translations.common.success,
+                translations.alerts.clearCache.success,
+              );
             } catch (error) {
-              Alert.alert("Error", "Failed to clear cache.");
+              Alert.alert(
+                translations.common.error,
+                translations.alerts.clearCache.error,
+              );
             }
           },
           style: "destructive",
@@ -41,29 +49,33 @@ const Settings = () => {
 
   // 打开通知设置的函数
   const openNotificationSettings = () => {
-    Alert.alert("Notifications Settings", "Open the Notification settings?", [
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
-      {
-        text: "Open Settings",
-        onPress: () => {
-          if (Platform.OS === "ios") {
-            // 打开 iOS 设置页面
-            Linking.openURL("app-settings:").catch((err) =>
-              console.error("Failed to open settings:", err),
-            );
-          } else {
-            Alert.alert(
-              "Notifications",
-              "This functionality is only available on iOS.",
-            );
-          }
+    Alert.alert(
+      translations.alerts.notifications.title,
+      translations.alerts.notifications.message,
+      [
+        {
+          text: translations.common.cancel,
+          style: "cancel",
         },
-        style: "default",
-      },
-    ]);
+        {
+          text: translations.common.open,
+          onPress: () => {
+            if (Platform.OS === "ios") {
+              // 打开 iOS 设置页面
+              Linking.openURL("app-settings:").catch((err) =>
+                console.error("Failed to open settings:", err),
+              );
+            } else {
+              Alert.alert(
+                translations.settings.notifications,
+                translations.alerts.notifications.iosOnly,
+              );
+            }
+          },
+          style: "default",
+        },
+      ],
+    );
   };
 
   return (
@@ -78,7 +90,7 @@ const Settings = () => {
             className={`mb-8 text-3xl font-extrabold text-center ${
               theme === "dark" ? "text-gray-200" : "text-gray-800"
             }`}>
-            Settings
+            {translations.settings.title}
           </Text>
 
           <View className="gap-4 space-y-6">
@@ -97,7 +109,7 @@ const Settings = () => {
                 className={`ml-4 text-lg font-semibold ${
                   theme === "dark" ? "text-gray-200" : "text-gray-700"
                 }`}>
-                Notifications
+                {translations.settings.notifications}
               </Text>
             </TouchableOpacity>
 
@@ -116,7 +128,10 @@ const Settings = () => {
                 className={`ml-4 text-lg font-semibold ${
                   theme === "dark" ? "text-gray-200" : "text-gray-700"
                 }`}>
-                Theme: {theme === "light" ? "Light" : "Dark"}
+                {translations.settings.theme}:{" "}
+                {theme === "light"
+                  ? translations.settings.themeLight
+                  : translations.settings.themeDark}
               </Text>
             </TouchableOpacity>
 
@@ -135,7 +150,27 @@ const Settings = () => {
                 className={`ml-4 text-lg font-semibold ${
                   theme === "dark" ? "text-gray-200" : "text-gray-700"
                 }`}>
-                Clear Cache
+                {translations.settings.clearCache}
+              </Text>
+            </TouchableOpacity>
+
+            {/* 语言切换按钮 */}
+            <TouchableOpacity
+              onPress={() => setLanguage(language === "en" ? "zh" : "en")}
+              className={`flex-row items-center p-4 rounded-xl shadow-md ${
+                theme === "dark" ? "bg-quaternary" : "bg-white"
+              }`}>
+              <Ionicons
+                name="language-outline"
+                size={24}
+                color={theme === "dark" ? "#60A5FA" : "#4B5563"}
+              />
+              <Text
+                className={`ml-4 text-lg font-semibold ${
+                  theme === "dark" ? "text-gray-200" : "text-gray-700"
+                }`}>
+                {translations.settings.language}:{" "}
+                {language === "en" ? "English" : "中文"}
               </Text>
             </TouchableOpacity>
           </View>
@@ -145,7 +180,7 @@ const Settings = () => {
               className={`text-sm text-center ${
                 theme === "dark" ? "text-gray-400" : "text-gray-500"
               }`}>
-              App Version: 1.0.0
+              {translations.settings.version}: 1.0.0
             </Text>
           </View>
         </View>

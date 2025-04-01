@@ -9,10 +9,14 @@ import {
   Keyboard,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { DEPOSIT_CATEGORIES } from "../../constants/categories";
+import {
+  DEPOSIT_CATEGORIES,
+  DEPOSIT_CATEGORIES2,
+} from "../../constants/categories";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StorageKeys } from "@/utils/storageService";
@@ -28,10 +32,16 @@ import { ScrollView } from "react-native";
 const DepositGoal = () => {
   const router = useRouter();
   const { theme } = useTheme();
+  const { translations } = useLanguage();
   const { depositId } = useLocalSearchParams();
-  const [user, setUser] = useState<any>(null);
+  // const [user, setUser] = useState<any>(null);
+  const { language } = useLanguage();
+  const currentDepositCategory =
+    language === "zh" ? DEPOSIT_CATEGORIES2 : DEPOSIT_CATEGORIES;
 
-  const [category, setCategory] = useState(DEPOSIT_CATEGORIES[0]?.value || "");
+  const [category, setCategory] = useState(
+    currentDepositCategory[0]?.value || "",
+  );
   // 预算类别
   const [note, setNote] = useState(""); // 备注
   const [userId, setUserId] = useState("");
@@ -78,7 +88,7 @@ const DepositGoal = () => {
   }, []);
   const handleDepositSubmit = async (goal: string, amount: string) => {
     if (!amount) {
-      alert(`Please enter the deposit amount`);
+      alert(translations.goals.depositGoal.enterAmount);
       return;
     }
 
@@ -86,7 +96,7 @@ const DepositGoal = () => {
     const startDate = new Date(startYear, startMonth - 1);
     const endDate = new Date(endYear, endMonth - 1);
     if (endDate < startDate) {
-      alert(`End date cannot be earlier than start date`);
+      alert(translations.goals.depositGoal.endDateError);
       return;
     }
 
@@ -106,13 +116,13 @@ const DepositGoal = () => {
       if (depositId) {
         // 更新现有存款目标
         await updateDeposit(depositId as string, depositData);
-        alert("Deposit target updated successfully!");
+        alert(translations.goals.depositGoal.updateSuccess);
       } else {
         // 创建新的存款目标
         await createDeposit({
           ...depositData,
         });
-        alert("Deposit target created successfully!");
+        alert(translations.goals.depositGoal.createSuccess);
       }
 
       // 清空输入框
@@ -129,8 +139,8 @@ const DepositGoal = () => {
       console.error("Operation failed:", error);
       alert(
         depositId
-          ? "Update deposit target failed"
-          : "Failed to create deposit destination",
+          ? translations.goals.depositGoal.updateFailed
+          : translations.goals.depositGoal.createFailed,
       );
     }
   };
@@ -150,30 +160,36 @@ const DepositGoal = () => {
           }}
           keyboardShouldPersistTaps="handled">
           <Text className="mt-20 text-xl font-extrabold text-secondary">
-            The Deposit Goal
+            {translations.goals.depositGoal.title}
           </Text>
           <View className="mt-6 w-80">
-            <Text className="mt-4 mb-2 text-base font-bold">Name</Text>
+            <Text className="mt-4 mb-2 text-base font-bold">
+              {translations.goals.depositGoal.name}
+            </Text>
             <TextInput
               value={name}
               onChangeText={setName}
-              placeholder="Please enter the deposit name..."
+              placeholder={translations.goals.depositGoal.namePlaceholder}
               className="p-4 rounded-lg border border-gray-300"
               returnKeyType="done"
               onSubmitEditing={Keyboard.dismiss}
             />
-            <Text className="mt-4 mb-2 text-base font-bold">Amount</Text>
+            <Text className="mt-4 mb-2 text-base font-bold">
+              {translations.goals.depositGoal.amount}
+            </Text>
             <TextInput
               value={amount}
               onChangeText={setAmount}
-              placeholder="Please enter the deposit amount..."
+              placeholder={translations.goals.depositGoal.amountPlaceholder}
               keyboardType="numeric"
               className="p-4 rounded-lg border border-gray-300"
               returnKeyType="done"
               onSubmitEditing={Keyboard.dismiss}
             />
             <View className="overflow-hidden mt-4 rounded-lg border border-gray-300">
-              <Text className="mt-2 text-base font-bold">Category</Text>
+              <Text className="mt-2 text-base font-bold">
+                {translations.goals.depositGoal.category}
+              </Text>
               <Picker
                 selectedValue={category}
                 onValueChange={(itemValue: string) => setCategory(itemValue)}
@@ -193,7 +209,7 @@ const DepositGoal = () => {
                   textAlign: "center",
                   paddingVertical: 12,
                 }}>
-                {DEPOSIT_CATEGORIES.map((cat) => (
+                {currentDepositCategory.map((cat) => (
                   <Picker.Item
                     key={cat.value}
                     label={`${cat.icon} ${cat.label}`}
@@ -205,14 +221,16 @@ const DepositGoal = () => {
             <TextInput
               value={note}
               onChangeText={setNote}
-              placeholder="Add a note"
+              placeholder={translations.goals.depositGoal.notePlaceholder}
               className="p-4 mt-4 rounded-lg border border-gray-300"
               returnKeyType="done"
               onSubmitEditing={Keyboard.dismiss}
             />
             <View className="flex-row mt-4 space-x-4">
               <View className="flex-1">
-                <Text className="mb-2 font-bold">Start Date</Text>
+                <Text className="mb-2 font-bold">
+                  {translations.goals.depositGoal.startDate}
+                </Text>
                 <View className="overflow-hidden rounded-lg border border-gray-300">
                   <Picker
                     selectedValue={startYear.toString()}
@@ -266,7 +284,9 @@ const DepositGoal = () => {
               </View>
 
               <View className="flex-1">
-                <Text className="mb-2 font-bold">End Date</Text>
+                <Text className="mb-2 font-bold">
+                  {translations.goals.depositGoal.endDate}
+                </Text>
                 <View className="overflow-hidden rounded-lg border border-gray-300">
                   <Picker
                     selectedValue={endYear.toString()}
@@ -323,7 +343,9 @@ const DepositGoal = () => {
               onPress={() => handleDepositSubmit("Deposit", amount)}
               className="p-4 mt-6 bg-blue-500 rounded-lg">
               <Text className="font-semibold text-center text-white">
-                {depositId ? "Update Deposit Goal" : "Create Deposit Goal"}
+                {depositId
+                  ? translations.goals.depositGoal.updateButton
+                  : translations.goals.depositGoal.createButton}
               </Text>
             </TouchableOpacity>
           </View>

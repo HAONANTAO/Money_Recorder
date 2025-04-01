@@ -2,10 +2,12 @@ import { Text, View, TouchableOpacity, TextInput, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
+import { useLanguage } from "../../contexts/LanguageContext";
 import { deleteBudget, updateBudget } from "@/services/budgetService";
 
 const BudgetDetail = () => {
   const { theme } = useTheme();
+  const { translations } = useLanguage();
   const router = useRouter();
   const { budgetId, category, amount } = useLocalSearchParams();
 
@@ -20,16 +22,16 @@ const BudgetDetail = () => {
 
   const handleDelete = async () => {
     Alert.alert(
-      "Confirm Deletion",
-      "Are you sure you want to delete this budget?",
+      translations.alerts.budget.deleteTitle,
+      translations.alerts.budget.deleteMessage,
       [
         {
-          text: "cancel",
+          text: translations.common.cancel,
           onPress: () => console.log("Delete operation canceled"),
           style: "cancel",
         },
         {
-          text: "confirmed",
+          text: translations.common.confirm,
           onPress: async () => {
             try {
               await deleteBudget(budgetId as string);
@@ -47,16 +49,16 @@ const BudgetDetail = () => {
   const handleUpdate = () => {
     if (isEditing && newAmount !== String(amount)) {
       Alert.alert(
-        "Confirm Update",
-        "Are you sure you want to save these changes?",
+        translations.alerts.budget.updateTitle,
+        translations.alerts.budget.updateMessage,
         [
           {
-            text: "cancel",
+            text: translations.common.cancel,
             onPress: () => console.log("Update operation canceled"),
             style: "cancel",
           },
           {
-            text: "confirm",
+            text: translations.common.confirm,
             onPress: () => {
               const updatedData = {
                 category: category as string,
@@ -93,7 +95,7 @@ const BudgetDetail = () => {
         className={`text-3xl font-bold mb-6 ${
           theme === "dark" ? "text-white" : "text-gray-900"
         }`}>
-        Budget Details
+        {translations.stats.total}
       </Text>
 
       <View
@@ -119,7 +121,7 @@ const BudgetDetail = () => {
             className={`text-lg mb-3 ${
               theme === "dark" ? "text-gray-300" : "text-gray-700"
             }`}>
-            Budget Amount: ${newAmount}
+            {translations.stats.total}: ${newAmount}
           </Text>
         )}
       </View>
@@ -131,7 +133,9 @@ const BudgetDetail = () => {
             onPress={handleUpdate}
             className="px-8 py-4 bg-green-600 rounded-lg shadow-lg transition duration-200 ease-in-out hover:bg-green-500">
             <Text className="text-lg font-semibold text-white">
-              {isEditing ? "Save budget" : "Update budget"}
+              {isEditing
+                ? translations.common.confirm
+                : translations.common.confirm}
             </Text>
           </TouchableOpacity>
 
@@ -139,7 +143,7 @@ const BudgetDetail = () => {
             onPress={handleDelete}
             className="px-8 py-4 bg-red-600 rounded-lg shadow-lg transition duration-200 ease-in-out hover:bg-red-500">
             <Text className="text-lg font-semibold text-white">
-              Delete Budget
+              {translations.common.clear}
             </Text>
           </TouchableOpacity>
         </View>
@@ -152,7 +156,7 @@ const BudgetDetail = () => {
             className={`text-lg font-semibold ${
               theme === "dark" ? "text-gray-200" : "text-gray-700"
             }`}>
-            Please create a budget first.
+            {translations.stats.noData}
           </Text>
         </View>
       )}

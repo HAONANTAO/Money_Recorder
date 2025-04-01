@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-30 15:09:05
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 15:35:43
+ * @LastEditTime: 2025-04-01 15:08:11
  * @FilePath: /Money_Recorder/app/(profile)/faq.tsx
  */
 import React from "react";
@@ -13,37 +13,34 @@ import {
   Linking,
 } from "react-native";
 import { useTheme } from "../../contexts/ThemeContext";
+import { useLanguage } from "../../contexts/LanguageContext";
 import { useState } from "react";
 
 const FAQ = () => {
   const { theme } = useTheme();
+  const { translations } = useLanguage();
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   const faqData = [
     {
-      question: "How to record income and expenses?",
-      answer:
-        'Click the "+" button in the bottom navigation bar, select income or expense type, fill in the amount and notes, then click save to complete the record.',
+      question: translations.profile.faqContent.howToRecord.question,
+      answer: translations.profile.faqContent.howToRecord.answer,
     },
     {
-      question: "How to view statistics?",
-      answer:
-        'Click the "Stats" button in the bottom navigation bar to view pie charts and bar charts analysis of your income and expenses to understand your financial situation.',
+      question: translations.profile.faqContent.howToViewStats.question,
+      answer: translations.profile.faqContent.howToViewStats.answer,
     },
     {
-      question: "How to set a budget?",
-      answer:
-        'Click the "Goal" button on the "Goals" page to set your monthly expense budget. The system will help you track your budget usage.',
+      question: translations.profile.faqContent.howToSetBudget.question,
+      answer: translations.profile.faqContent.howToSetBudget.answer,
     },
     {
-      question: "How to switch dark mode?",
-      answer:
-        'Go to S "My Profile" page then enter the setting site to switch between dark/light theme modes.',
+      question: translations.profile.faqContent.howToSwitchTheme.question,
+      answer: translations.profile.faqContent.howToSwitchTheme.answer,
     },
     {
-      question: "How to modify personal information?",
-      answer:
-        'Click the edit button on "My Profile" page to modify your username, avatar and other personal information.',
+      question: translations.profile.faqContent.howToEditProfile.question,
+      answer: translations.profile.faqContent.howToEditProfile.answer,
     },
   ];
 
@@ -61,7 +58,7 @@ const FAQ = () => {
           className={`text-2xl font-bold ${
             theme === "dark" ? "text-white" : "text-quaternary"
           }`}>
-          FAQ
+          {translations.profile.faq}
         </Text>
       </View>
       <ScrollView className="flex-1 mb-20">
@@ -91,7 +88,9 @@ const FAQ = () => {
             )
           }
           className="flex-row justify-center items-center p-3 rounded-lg bg-secondary">
-          <Text className="font-semibold text-white">Contact Developer</Text>
+          <Text className="font-semibold text-white">
+            {translations.author.contactMe}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

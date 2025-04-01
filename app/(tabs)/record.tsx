@@ -14,23 +14,22 @@ import { useTheme } from "../../contexts/ThemeContext";
 import { createRecord } from "../../services/recordService";
 import { StorageService } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
-import { INCOME_CATEGORIES } from "@/constants/categories";
-
-// records 的icons没用到
-const EXPENSE_CATEGORIES = [
-  { label: "Eating", value: "eating", icon: "🍔" },
-  { label: "Traffic", value: "traffic", icon: "🚗" },
-  { label: "Shopping", value: "shopping", icon: "🛍️" },
-  { label: "Entertainment", value: "entertainment", icon: "🎮" },
-  { label: "Living", value: "living", icon: "🏠" },
-  { label: "Medication", value: "medication", icon: "💊" },
-  { label: "Education", value: "education", icon: "🎓" },
-  { label: "Others", value: "others", icon: "🌍" },
-];
+import {
+  INCOME_CATEGORIES,
+  INCOME_CATEGORIES2,
+  EXPENSE_CATEGORIES,
+  EXPENSE_CATEGORIES2,
+} from "@/constants/categories";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 const Record = () => {
   const { theme } = useTheme();
+  const { translations, language } = useLanguage();
   const isDark = theme === "dark";
+  const currentExpenseCategories =
+    language === "en" ? EXPENSE_CATEGORIES : EXPENSE_CATEGORIES2;
+  const currentIncomeCategories =
+    language === "en" ? INCOME_CATEGORIES : INCOME_CATEGORIES2;
 
   const [record, setRecord] = useState({
     userId: "",
@@ -64,7 +63,7 @@ const Record = () => {
   const handleSubmit = async () => {
     try {
       if (!record.moneyAmount || !record.category) {
-        alert("Pleas filled amount and category");
+        alert(translations.alerts.fillAmountCategory);
         return;
       }
       const newRecord = await createRecord({
@@ -72,7 +71,7 @@ const Record = () => {
         moneyAmount: parseFloat(record.moneyAmount),
         tags: record.tags.split(",").filter(Boolean).join(","),
       });
-      alert("record create successfully");
+      alert(translations.alerts.createSuccess);
       // 清空表单
       setRecord({
         ...record,
@@ -85,7 +84,7 @@ const Record = () => {
       });
     } catch (error) {
       console.error("failed create record:", error);
-      alert("failed create record,try again");
+      alert(translations.alerts.createError);
     }
   };
 
@@ -98,7 +97,7 @@ const Record = () => {
             className={`mt-12 text-2xl font-bold mb-5 text-center ${
               isDark ? "text-secondary" : "text-quaternary"
             }`}>
-            Add Record
+            {translations.record.title}
           </Text>
 
           {/* 金额输入 */}
@@ -110,7 +109,7 @@ const Record = () => {
               className={`mb-2 text-base font-medium ${
                 isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              Amount
+              {translations.record.amount}
             </Text>
             <View className={`flex-row items-center p-3 bg-white rounded-lg`}>
               <Text
@@ -120,7 +119,7 @@ const Record = () => {
                 $
               </Text>
               <TextInput
-                placeholder="0.00"
+                placeholder={translations.record.amountPlaceholder}
                 placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
                 keyboardType="numeric"
                 value={record.moneyAmount}
@@ -143,7 +142,7 @@ const Record = () => {
               className={`mb-2 text-base font-medium ${
                 isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              Type
+              {translations.record.type}
             </Text>
             <View
               className={`${
@@ -158,12 +157,12 @@ const Record = () => {
                     : "bg-white text-gray-800"
                 }`}>
                 <Picker.Item
-                  label="Expense"
+                  label={translations.record.expense}
                   value="expense"
                   color={isDark ? "#EF4444" : "#DC2626"}
                 />
                 <Picker.Item
-                  label="Income"
+                  label={translations.record.income}
                   value="income"
                   color={isDark ? "#10B981" : "#059669"}
                 />
@@ -180,7 +179,7 @@ const Record = () => {
               className={`mb-2 text-base font-medium ${
                 isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              Category
+              {translations.record.category}
             </Text>
             <View
               className={`${
@@ -197,13 +196,13 @@ const Record = () => {
                     : "bg-white text-gray-800"
                 }`}>
                 <Picker.Item
-                  label="Choose category"
-                  value="Choose category"
+                  label={translations.record.chooseCategory}
+                  value={translations.record.chooseCategory}
                   color={isDark ? "#1e67e5" : "#1c64f3"}
                 />
                 {(record.type === "expense"
-                  ? EXPENSE_CATEGORIES
-                  : INCOME_CATEGORIES
+                  ? currentExpenseCategories
+                  : currentIncomeCategories
                 ).map((category) => (
                   <Picker.Item
                     key={category.value}
@@ -225,7 +224,7 @@ const Record = () => {
               className={`mb-2 text-base font-medium ${
                 isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              Payment method
+              {translations.record.method}
             </Text>
             <View className="flex-row gap-2 justify-between">
               <TouchableOpacity
@@ -247,7 +246,7 @@ const Record = () => {
                       ? "text-gray-200"
                       : "text-gray-700"
                   }`}>
-                  Card
+                  {translations.categories.card}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -271,7 +270,7 @@ const Record = () => {
                       ? "text-gray-200"
                       : "text-gray-700"
                   }`}>
-                  Transfer
+                  {translations.categories.transfer}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -293,7 +292,7 @@ const Record = () => {
                       ? "text-gray-200"
                       : "text-gray-700"
                   }`}>
-                  Cash
+                  {translations.categories.cash}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -308,13 +307,13 @@ const Record = () => {
               className={`mb-2 text-base font-medium ${
                 isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              Location
+              {translations.record.location}
             </Text>
             <TextInput
               className={`p-3 rounded-lg text-base ${
                 isDark ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"
               }`}
-              placeholder="Enter location"
+              placeholder={translations.record.locationPlaceholder}
               placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
               value={record.location}
               onChangeText={(value) =>
@@ -332,13 +331,13 @@ const Record = () => {
               className={`mb-2 text-base font-medium ${
                 isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              Labels
+              {translations.record.tags}
             </Text>
             <TextInput
               className={`p-3 rounded-lg text-base ${
                 isDark ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"
               }`}
-              placeholder="multiple tags separated by commas"
+              placeholder={translations.record.tags}
               placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
               value={record.tags}
               onChangeText={(value) => setRecord({ ...record, tags: value })}
@@ -354,13 +353,13 @@ const Record = () => {
               className={`mb-2 text-base font-medium ${
                 isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              Comments
+              {translations.record.comment}
             </Text>
             <TextInput
               className={`p-3 rounded-lg text-base ${
                 isDark ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"
               }`}
-              placeholder="add comment..."
+              placeholder={translations.record.amountPlaceholder}
               placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
               value={record.comment}
               onChangeText={(value) => setRecord({ ...record, comment: value })}
@@ -376,7 +375,7 @@ const Record = () => {
               isDark ? "bg-blue-700" : "bg-blue-500"
             }`}>
             <Text className="text-base font-semibold text-center text-white">
-              Save Record
+              {translations.record.save}
             </Text>
           </TouchableOpacity>
         </View>

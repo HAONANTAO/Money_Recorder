@@ -16,10 +16,12 @@ import { TouchableOpacity, Alert } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { deleteDeposit, completeDeposit } from "@/services/depositGoal";
 import { updateSaveAmount } from "@/services/depositGoal";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const DepositBox = () => {
   const router = useRouter();
   const { theme } = useTheme();
+  const { translations } = useLanguage();
 
   const [userId, setUserId] = useState("");
   const [deposits, setDeposits] = useState<any>([]);
@@ -72,7 +74,7 @@ const DepositBox = () => {
               className={`text-center font-medium ${
                 !showCompleted ? "text-white" : "text-gray-700"
               }`}>
-              Uncompleted
+              {translations.common.completed}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -84,7 +86,7 @@ const DepositBox = () => {
               className={`text-center font-medium ${
                 showCompleted ? "text-white" : "text-gray-700"
               }`}>
-              Completed
+              {translations.common.uncompleted}
             </Text>
           </TouchableOpacity>
         </View>
@@ -563,19 +565,13 @@ const DepositBox = () => {
                   size={22}
                   color={theme === "dark" ? "#f87171" : "#dc2626"}
                 />
-                {/* <Text
-                  className={`ml-2 font-semibold text-sm ${
-                    theme === "dark" ? "text-red-400" : "text-red-600"
-                  }`}>
-                  Delete
-                </Text> */}
               </TouchableOpacity>
             </View>
           </View>
         ))}
         {filteredDeposits.length === 0 && (
           <View
-            className={`p-8 rounded-3xl ${
+            className={`p-8 rounded-3xl w-full  mx-auto ${
               theme === "dark"
                 ? "bg-gradient-to-br from-gray-800 to-gray-800/90"
                 : "bg-gradient-to-br from-white to-gray-50"
@@ -606,8 +602,8 @@ const DepositBox = () => {
                 theme === "dark" ? "text-gray-400" : "text-gray-500"
               }`}>
               {showCompleted
-                ? "No deposit goal has been completed yet"
-                : "Want to set a new deposit goal?"}
+                ? translations.goals.noCompletedData
+                : translations.goals.noUnCompletedData}
             </Text>
           </View>
         )}

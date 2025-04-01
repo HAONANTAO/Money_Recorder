@@ -12,7 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StorageKeys, StorageService } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
 import { getRecords } from "@/services/recordService";
-import RecordShowBox from "@/components/RecordShowbox";
+
 import DateChecker from "@/utils/dateChecker";
 import PieChartComponent from "@/components/PieChartComponent";
 import BarChartComponent from "@/components/BarChartComponent";
@@ -22,14 +22,18 @@ import {
   EXPENSE_CATEGORIES,
   INCOME_CATEGORIES,
   BUDGET_CATEGORIES,
+  EXPENSE_CATEGORIES2,
+  INCOME_CATEGORIES2,
 } from "@/constants/categories";
 import { getMonthlyBudget } from "@/services/budgetService";
 import { getMonthlyExpensesByCategory } from "@/services/recordService";
 import { useFocusEffect, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 const Stats = () => {
   const { theme } = useTheme();
+  const { translations } = useLanguage();
   const router = useRouter();
   const [monthlyBudgets, setMonthlyBudgets] = useState<any>(null);
   const [expensesByCategory, setExpensesByCategory] = useState<any>(null);
@@ -41,9 +45,17 @@ const Stats = () => {
   const [income, setIncome] = useState<number>(0);
   const [expense, setExpense] = useState<number>(0);
   const [eventLength, setEventLength] = useState<number>(0);
-
   const [expenseCategories, setExpenseCategories] = useState<any[]>([]);
   const [incomeCategories, setIncomeCategories] = useState<any[]>([]); // Income categories state
+
+  // 根据当前语言获取类别名称
+  // const getCategoryLabel = (category: any) => {
+  //   const categoryTranslations = translations?.categories || {};
+  //   return (
+  //     categoryTranslations[category.value] || category.label || category.value
+  //   );
+  // };
+  const { language } = useLanguage();
 
   useEffect(() => {
     const getInit = async () => {
@@ -117,16 +129,25 @@ const Stats = () => {
             }
             return categories;
           }, {});
-
-        const pieChartExpenseData = EXPENSE_CATEGORIES.map((category) => ({
-          name: category.label,
+        //
+        const pieChartExpenseData = (
+          language === "zh" ? EXPENSE_CATEGORIES2 : EXPENSE_CATEGORIES
+        ).map((category) => ({
+          name: category.label, // 使用 category.label 作为名称
           population: categoryData[category.value] || 0,
           color: getRandomColor(),
           legendFontColor: "#7f7f7f",
           legendFontSize: 15,
           icon: category.icon,
         }));
-
+        // const pieChartExpenseData = EXPENSE_CATEGORIES.map((category) => ({
+        //   name: translations.categories[category.value],
+        //   population: categoryData[category.value] || 0,
+        //   color: getRandomColor(),
+        //   legendFontColor: "#7f7f7f",
+        //   legendFontSize: 15,
+        //   icon: category.icon,
+        // }));
         const incomeCategoryData = filteredRecords
           .filter((record: any) => record.type === "income")
           .reduce((categories: any, record: any) => {
@@ -138,8 +159,9 @@ const Stats = () => {
             }
             return categories;
           }, {});
-
-        const pieChartIncomeData = INCOME_CATEGORIES.map((category) => ({
+        const pieChartIncomeData = (
+          language === "zh" ? INCOME_CATEGORIES2 : INCOME_CATEGORIES
+        ).map((category) => ({
           name: category.label,
           population: incomeCategoryData[category.value] || 0,
           color: getRandomColor(),
@@ -147,7 +169,14 @@ const Stats = () => {
           legendFontSize: 15,
           icon: category.icon,
         }));
-
+        // const pieChartIncomeData = INCOME_CATEGORIES.map((category) => ({
+        //   name: translations.categories[category.value],
+        //   population: incomeCategoryData[category.value] || 0,
+        //   color: getRandomColor(),
+        //   legendFontColor: "#7f7f7f",
+        //   legendFontSize: 15,
+        //   icon: category.icon,
+        // }));
         setExpenseCategories(pieChartExpenseData);
         setIncomeCategories(pieChartIncomeData);
 
@@ -238,13 +267,15 @@ const Stats = () => {
           return categories;
         }, {});
 
-      const pieChartExpenseData = EXPENSE_CATEGORIES.map((category) => ({
-        name: category.label,
-        population: categoryData[category.value] || 0,
-        color: getRandomColor(),
+      const pieChartExpenseData = (
+        language === "zh" ? EXPENSE_CATEGORIES2 : EXPENSE_CATEGORIES
+      ).map((category) => ({
+        name: category.label, // 使用 category.label 作为名称
+        population: categoryData[category.value] || 0, // 使用 categoryData 获取数据
+        color: getRandomColor(), // 假设 getRandomColor 已定义
         legendFontColor: "#7f7f7f",
         legendFontSize: 15,
-        icon: category.icon,
+        icon: category.icon, // 包含图标
       }));
 
       const incomeCategoryData = filteredRecords
@@ -259,7 +290,9 @@ const Stats = () => {
           return categories;
         }, {});
 
-      const pieChartIncomeData = INCOME_CATEGORIES.map((category) => ({
+      const pieChartIncomeData = (
+        language === "zh" ? INCOME_CATEGORIES2 : INCOME_CATEGORIES
+      ).map((category) => ({
         name: category.label,
         population: incomeCategoryData[category.value] || 0,
         color: getRandomColor(),
@@ -304,7 +337,7 @@ const Stats = () => {
           theme === "dark" ? "bg-quaternary" : "bg-white"
         }`}>
         <Text className="mt-20 text-4xl font-bold text-primary">
-          Data Overview
+          {translations.stats.title}
         </Text>
 
         {loading ? (
@@ -313,15 +346,15 @@ const Stats = () => {
           <>
             <View className="p-4">
               <Text className="text-xl font-semibold">
-                📅 Total Event:
+                📅 {translations.stats.records}:
                 <Text className="text-tertiary"> {eventLength}</Text>
               </Text>
               <Text className="text-xl font-semibold">
-                💳 Total Income:
+                💳 {translations.stats.income}:
                 <Text className="text-tertiary"> ${income}</Text>
               </Text>
               <Text className="text-xl font-semibold">
-                💵 Total Expense:
+                💵 {translations.stats.expense}:
                 <Text className="text-tertiary">${expense}</Text>
               </Text>
             </View>
@@ -330,7 +363,9 @@ const Stats = () => {
             <View className="flex flex-row justify-between items-center">
               <TouchableOpacity onPress={() => setIsIncome(!isIncome)}>
                 <Text className="text-xl font-bold text-secondary">
-                  {isIncome ? "Income Chart" : "Expense Chart"}
+                  {isIncome
+                    ? translations.stats.switchToIncome
+                    : translations.stats.switchToExpense}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -344,20 +379,6 @@ const Stats = () => {
                 data={isIncome ? incomeCategories : expenseCategories}
               />
             </View>
-
-            {/* <View className="p-4 rounded-2xl border border-gray-200">
-              <View className="flex flex-row flex-wrap justify-around">
-                {records.length > 0 ? (
-                  records.map((record: any) => (
-                    <View className="p-2 w-1/2" key={record.$id}>
-                      <RecordShowBox record={record} />
-                    </View>
-                  ))
-                ) : (
-                  <Text>No records found</Text>
-                )}
-              </View>
-            </View> */}
           </>
         )}
       </View>
@@ -369,7 +390,7 @@ const Stats = () => {
             className={`mb-2 mt-2 text-xl font-bold text-center ${
               theme === "dark" ? "text-gray-200" : "text-secondary"
             }`}>
-            This Month Budget
+            {translations.stats.total}
           </Text>
           {BUDGET_CATEGORIES.map((category) => {
             const budget = monthlyBudgets?.find(
@@ -400,7 +421,11 @@ const Stats = () => {
                     className={`text-base font-medium ${
                       theme === "dark" ? "text-gray-200" : "text-gray-700"
                     }`}>
-                    {category.label}
+                    {
+                      translations.categories[
+                        category.value as keyof typeof translations.categories
+                      ]
+                    }
                   </Text>
                 </View>
                 <View>
@@ -442,7 +467,7 @@ const Stats = () => {
                 className={`ml-4 text-lg font-semibold ${
                   theme === "dark" ? "text-gray-200" : "text-gray-700"
                 }`}>
-                Set Budget
+                {translations.stats.setBudget}
               </Text>
             </TouchableOpacity>
           </View>

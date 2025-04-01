@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-29 16:31:38
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 15:07:18
+ * @LastEditTime: 2025-04-01 13:52:49
  * @FilePath: /Money_Recorder/app/(func)/editRecord.tsx
  */
 import {
@@ -20,11 +20,22 @@ import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, router } from "expo-router";
 import { getRecordById, updateRecord } from "@/services/recordService";
 import { useTheme } from "../../contexts/ThemeContext";
-import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from "@/constants/categories";
+import { useLanguage } from "../../contexts/LanguageContext";
+import {
+  EXPENSE_CATEGORIES,
+  EXPENSE_CATEGORIES2,
+  INCOME_CATEGORIES,
+  INCOME_CATEGORIES2,
+} from "@/constants/categories";
 
 const EditRecord = () => {
   const { theme } = useTheme();
+  const { translations, language } = useLanguage();
   const isDark = theme === "dark";
+  const currentExpenseCategories =
+    language === "en" ? EXPENSE_CATEGORIES : EXPENSE_CATEGORIES2;
+  const currentIncomeCategories =
+    language === "en" ? INCOME_CATEGORIES : INCOME_CATEGORIES2;
   const { id } = useLocalSearchParams();
   const [record, setRecord] = useState<MoneyRecord | null>(null);
   const [loading, setLoading] = useState(true);
@@ -52,7 +63,10 @@ const EditRecord = () => {
         });
       } catch (error) {
         console.error("Error fetching record:", error);
-        Alert.alert("Error", "Failed to obtain records");
+        Alert.alert(
+          translations.common.error,
+          translations.alerts.clearCache.error,
+        );
       } finally {
         setLoading(false);
       }
@@ -78,15 +92,22 @@ const EditRecord = () => {
         type: updateData.type as "income" | "expense",
       };
       await updateRecord(id as string, validatedData);
-      Alert.alert("Success", "Record updated", [
-        {
-          text: "OK",
-          onPress: () => router.back(),
-        },
-      ]);
+      Alert.alert(
+        translations.common.success,
+        translations.alerts.budget.updateMessage,
+        [
+          {
+            text: "OK",
+            onPress: () => router.back(),
+          },
+        ],
+      );
     } catch (error) {
       console.error("Error updating record:", error);
-      Alert.alert("Error", "Update record failed");
+      Alert.alert(
+        translations.common.error,
+        translations.alerts.clearCache.error,
+      );
     }
   };
 
@@ -107,7 +128,7 @@ const EditRecord = () => {
             className={`mt-12 text-2xl font-bold mb-5 text-center ${
               isDark ? "text-secondary" : "text-quaternary"
             }`}>
-            Edit Record
+            {translations.record.title}
           </Text>
 
           {/* 金额输入 */}
@@ -119,7 +140,7 @@ const EditRecord = () => {
               className={`mb-2 text-base font-medium ${
                 isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              Amount
+              {translations.record.amount}
             </Text>
             <TouchableOpacity
               onPress={() => {}}
@@ -131,7 +152,7 @@ const EditRecord = () => {
                 $
               </Text>
               <TextInput
-                placeholder="0.00"
+                placeholder={translations.record.amountPlaceholder}
                 placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
                 keyboardType="numeric"
                 value={formData.moneyAmount}
@@ -154,7 +175,7 @@ const EditRecord = () => {
               className={`mb-2 text-base font-medium ${
                 isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              Type
+              {translations.record.type}
             </Text>
             <View
               className={`${
@@ -171,12 +192,12 @@ const EditRecord = () => {
                     : "bg-white text-gray-800"
                 }`}>
                 <Picker.Item
-                  label="Expense"
+                  label={translations.record.expense}
                   value="expense"
                   color={isDark ? "#EF4444" : "#DC2626"}
                 />
                 <Picker.Item
-                  label="Income"
+                  label={translations.record.income}
                   value="income"
                   color={isDark ? "#10B981" : "#059669"}
                 />
@@ -194,14 +215,14 @@ const EditRecord = () => {
               className={`mb-2 text-base font-medium ${
                 isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              Category
+              {translations.record.category}
             </Text>
             <View
               className={`${
                 isDark ? "" : "bg-white"
               }overflow-hidden  rounded-lg`}>
               <Picker
-                selectedValue={record?.category || ""}
+                selectedValue={record?.category}
                 onValueChange={(value) =>
                   setRecord(
                     record
@@ -215,13 +236,13 @@ const EditRecord = () => {
                     : "bg-white text-gray-800"
                 }`}>
                 <Picker.Item
-                  label="Choose category"
-                  value="Choose category"
+                  label={translations.record.chooseCategory}
+                  value={translations.record.chooseCategory}
                   color={isDark ? "#1e67e5" : "#1c64f3"}
                 />
                 {(record!.type === "expense"
-                  ? EXPENSE_CATEGORIES
-                  : INCOME_CATEGORIES
+                  ? currentExpenseCategories
+                  : currentIncomeCategories
                 ).map((category) => (
                   <Picker.Item
                     key={category.value}
@@ -243,7 +264,7 @@ const EditRecord = () => {
               className={`mb-2 text-base font-medium ${
                 isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              Payment Method
+              {translations.record.method}
             </Text>
             <View className="flex-row justify-around">
               <TouchableOpacity
@@ -261,7 +282,7 @@ const EditRecord = () => {
                       ? "text-white"
                       : "text-gray-700"
                   }`}>
-                  Card
+                  {translations.categories.card}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -279,7 +300,7 @@ const EditRecord = () => {
                       ? "text-white"
                       : "text-gray-700"
                   }`}>
-                  Transfer
+                  {translations.categories.transfer}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -297,7 +318,7 @@ const EditRecord = () => {
                       ? "text-white"
                       : "text-gray-700"
                   }`}>
-                  Cash
+                  {translations.categories.cash}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -312,11 +333,11 @@ const EditRecord = () => {
               className={`mb-2 text-base font-medium ${
                 isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              Location
+              {translations.record.location}
             </Text>
             <View className={`flex-row items-center p-3 bg-white rounded-lg`}>
               <TextInput
-                placeholder="enter the location..."
+                placeholder={translations.record.locationPlaceholder}
                 placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
                 value={formData.location}
                 onSubmitEditing={Keyboard.dismiss}
@@ -338,11 +359,11 @@ const EditRecord = () => {
               className={`mb-2 text-base font-medium ${
                 isDark ? "text-gray-200" : "text-gray-700"
               }`}>
-              Comment
+              {translations.record.comment}
             </Text>
             <View className={`flex-row items-start p-3 bg-white rounded-lg`}>
               <TextInput
-                placeholder="add comment..."
+                placeholder={translations.record.commentPlaceholder}
                 placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
                 value={formData.comment}
                 onSubmitEditing={Keyboard.dismiss}
@@ -362,7 +383,7 @@ const EditRecord = () => {
             onPress={handleUpdate}
             className="px-6 py-4 mt-6 rounded-full shadow-lg bg-primary">
             <Text className="text-lg font-semibold text-center text-white">
-              Save Updates
+              {translations.record.update}
             </Text>
           </TouchableOpacity>
         </View>

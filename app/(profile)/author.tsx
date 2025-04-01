@@ -1,6 +1,7 @@
 import { View, Text, Image, Animated } from "react-native";
 import React, { useEffect, useRef } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 const Author = () => {
   // 动画值
@@ -42,6 +43,7 @@ const Author = () => {
   }, []);
 
   const { theme } = useTheme();
+  const { translations } = useLanguage();
   return (
     <View
       className={`flex-1 justify-center items-center p-6 ${
@@ -90,9 +92,7 @@ const Author = () => {
         className={`${
           theme === "dark" ? "text-quinary" : "text-gray-600"
         } px-8 mt-4 text-lg leading-relaxed text-center `}>
-        Hello! I am an IT developer who has studied at Monash and Melbourne
-        University. As a passionate developer, I am constantly learning and
-        growing, hoping to make achievements in the IT field.
+        {translations.author.introduction}
       </Text>
 
       {/* 技能展示部分，添加渐显动画 */}
@@ -100,7 +100,7 @@ const Author = () => {
 
       {/* 联系方式部分，淡入效果 */}
       <Text className="mt-36 text-3xl font-semibold text-secondary">
-        Contact Me
+        {translations.author.contactMe}
       </Text>
       <Animated.View style={{ opacity: fadeAnim }} className="mt-4 space-y-2">
         <Text className="text-lg text-gray-700">
@@ -140,7 +140,7 @@ const Author = () => {
         <Animated.Text
           style={{ opacity: fadeAnim }}
           className="mt-8 italic font-bold text-center text-gray-600 text-[12px]">
-          "Building innovative solutions, one project at a time."
+          {translations.author.motto}
         </Animated.Text>
       </View>
     </View>

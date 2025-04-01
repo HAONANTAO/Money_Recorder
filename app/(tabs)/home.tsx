@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
-
+import { useLanguage } from "../../contexts/LanguageContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StorageKeys, StorageService } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
@@ -28,7 +28,9 @@ import { Ionicons } from "@expo/vector-icons";
 // 获取当前日期
 const getCurrentDate = () => {
   const date = new Date();
-  return date.toLocaleDateString("en-US", {
+  const { language } = useLanguage();
+  const locale = language === "zh" ? "zh-CN" : "en-US";
+  return date.toLocaleDateString(locale, {
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -38,6 +40,7 @@ const getCurrentDate = () => {
 
 const Home = () => {
   const { theme } = useTheme();
+  const { translations } = useLanguage();
   const isDark = theme === "dark";
   // const [user, setUser] = useState<any>(null);
   const [records, setRecords] = useState<any[]>([]);
@@ -151,7 +154,7 @@ const Home = () => {
                 className={`text-base ${
                   isDark ? "text-gray-300" : "text-gray-500"
                 }`}>
-                Search your records...
+                {translations.home.search}
               </Text>
             </View>
             <View>
@@ -174,7 +177,7 @@ const Home = () => {
               className={`${
                 isDark ? "text-white" : ""
               } text-base font-bold text-gray-700`}>
-              Monthly Income
+              {translations.home.monthlyIncome}
             </Text>
             <Text className="text-2xl font-extrabold text-green-500">
               ${monthlyIncome.toFixed(2)}
@@ -187,7 +190,7 @@ const Home = () => {
               className={`${
                 isDark ? "text-white" : ""
               } text-base font-bold text-gray-700`}>
-              Monthly Expense
+              {translations.home.monthlyExpense}
             </Text>
             <Text className="text-2xl font-extrabold text-red-500">
               ${monthlyExpense.toFixed(2)}
@@ -201,7 +204,7 @@ const Home = () => {
             isDark ? "bg-secondary" : "bg-blue-100"
           }`}>
           <Text className="text-2xl font-bold text-gray-700">
-            Net Income This Month
+            {translations.home.monthlyNetIncome}
           </Text>
           <Text
             className={`text-5xl font-extrabold ${

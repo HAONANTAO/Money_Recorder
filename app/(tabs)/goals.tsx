@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-28 20:17:02
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 15:08:19
+ * @LastEditTime: 2025-04-01 14:04:37
  * @FilePath: /Money_Recorder/app/(tabs)/goals.tsx
  */
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
@@ -11,10 +11,12 @@ import { useTheme } from "../../contexts/ThemeContext";
 import DepositBox from "../../components/DepositBox";
 
 import { Ionicons } from "@expo/vector-icons";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 const Goals = () => {
   const router = useRouter();
   const { theme } = useTheme();
+  const { translations } = useLanguage();
 
   return (
     <View
@@ -22,7 +24,7 @@ const Goals = () => {
         theme === "dark" ? "bg-quaternary" : "bg-gray-100"
       }`}>
       <Text className="text-2xl font-extrabold text-secondary">
-        Deposit Goal
+        {translations.goals.title}
       </Text>
       <DepositBox />
 

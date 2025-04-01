@@ -10,9 +10,12 @@ import { Ionicons } from "@expo/vector-icons";
 import { View, Text } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useTheme } from "../../contexts/ThemeContext";
+import { useLanguage } from "../../contexts/LanguageContext";
+
 // 主页面的基础配置
 export default function RootLayout() {
   const { theme } = useTheme();
+  const { translations } = useLanguage();
   const isDark = theme === "dark";
 
   return (
@@ -43,7 +46,7 @@ export default function RootLayout() {
         <Tabs.Screen
           name="home"
           options={{
-            title: "Home",
+            title: translations.tabs.home,
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <View className="flex flex-col items-center">
@@ -53,7 +56,7 @@ export default function RootLayout() {
                     isDark ? "text-primary " : ""
                   } text-xs font-bold`}
                   numberOfLines={1}>
-                  Main
+                  {translations.tabs.home}
                 </Text>
               </View>
             ),
@@ -62,7 +65,7 @@ export default function RootLayout() {
         <Tabs.Screen
           name="stats"
           options={{
-            title: "Stats",
+            title: translations.tabs.stats,
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <View className="flex flex-col items-center">
@@ -76,7 +79,7 @@ export default function RootLayout() {
                     isDark ? "text-primary " : ""
                   } text-xs font-bold`}
                   numberOfLines={1}>
-                  Stats
+                  {translations.tabs.stats}
                 </Text>
               </View>
             ),
@@ -85,7 +88,7 @@ export default function RootLayout() {
         <Tabs.Screen
           name="record"
           options={{
-            title: "Record",
+            title: translations.tabs.record,
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <View className="flex flex-col items-center">
@@ -102,7 +105,7 @@ export default function RootLayout() {
         <Tabs.Screen
           name="goals"
           options={{
-            title: "Goal",
+            title: translations.tabs.goal,
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <View className="flex flex-col items-center">
@@ -112,7 +115,7 @@ export default function RootLayout() {
                     isDark ? "text-primary " : ""
                   } text-xs font-bold`}
                   numberOfLines={1}>
-                  Goal
+                  {translations.tabs.goal}
                 </Text>
               </View>
             ),
@@ -121,7 +124,7 @@ export default function RootLayout() {
         <Tabs.Screen
           name="profile"
           options={{
-            title: "My",
+            title: translations.tabs.profile,
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <View className="flex flex-col items-center">
@@ -131,7 +134,7 @@ export default function RootLayout() {
                     isDark ? "text-primary " : ""
                   } text-xs font-bold`}
                   numberOfLines={1}>
-                  My
+                  {translations.tabs.profile}
                 </Text>
               </View>
             ),

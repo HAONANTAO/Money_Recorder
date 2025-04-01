@@ -13,9 +13,11 @@ import { StorageService } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
 import { backupUserData, restoreUserData } from "@/services/cloudBackupService";
 import { Alert } from "react-native";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 const More = () => {
   const { theme } = useTheme();
+  const { translations } = useLanguage();
   // React Native 提供了一个名为 react-native-device-info 的库，可以用来获取应用的版本号、构建号等信息。你可以按照以下步骤集成它来动态获取版本号：
   const appVersion = "1.0.0";
   const [refreshing, setRefreshing] = useState(false);
@@ -85,28 +87,31 @@ const More = () => {
 
   const menuItems = [
     {
-      title: "Data",
+      title: translations.settings.title,
       items: [
         {
-          label: "Last Backup",
-          value: backupInfo.backupDate || "No backup yet",
+          label: translations.settings.language,
+          value: backupInfo.backupDate || translations.record.none,
         },
       ],
     },
     {
-      title: "Application Information",
+      title: translations.settings.title,
       items: [
-        { label: "Version", value: appVersion },
-        { label: "Last Updated", value: usageStats.lastUpdate },
+        { label: translations.settings.version, value: appVersion },
+        { label: translations.settings.title, value: usageStats.lastUpdate },
       ],
     },
     {
-      title: "Usage Statistics",
+      title: translations.stats.title,
       items: [
-        { label: "Use days", value: `${usageStats.daysUsed} days` },
         {
-          label: "Total number of records",
-          value: `${usageStats.totalRecords} records`,
+          label: translations.stats.records,
+          value: `${usageStats.daysUsed} ${translations.stats.records}`,
+        },
+        {
+          label: translations.stats.total,
+          value: `${usageStats.totalRecords} ${translations.stats.records}`,
         },
       ],
     },
@@ -123,7 +128,7 @@ const More = () => {
           className={`text-2xl font-bold mb-6 ${
             theme === "dark" ? "text-white" : "text-secondary"
           }`}>
-          More
+          {translations.profile.more}
         </Text>
 
         {menuItems.map((section, sectionIndex) => (
@@ -175,7 +180,7 @@ const More = () => {
                     style: "cancel",
                   },
                   {
-                    text: "OK",
+                    text: translations.common.confirm,
                     onPress: async () => {
                       try {
                         const email = await StorageService.getEmail();
@@ -189,7 +194,7 @@ const More = () => {
                           backupDate: backupResult.backupDate,
                         });
                         alert(
-                          `Data backup successful! Backup time: ${new Date(
+                          `${translations.alerts.clearCache.success} ${new Date(
                             backupResult.backupDate,
                           ).toLocaleString("zh-CN", { hour12: false })}`,
                         );
@@ -212,10 +217,10 @@ const More = () => {
               className={`text-lg font-medium text-center ${
                 theme === "dark" ? "text-white" : "text-quaternary"
               }`}>
-              Backup Data
+              {translations.settings.backup}
             </Text>
           </TouchableOpacity>
-         
+
           <TouchableOpacity
             onPress={() => {
               Alert.alert(
@@ -228,16 +233,14 @@ const More = () => {
                     style: "cancel",
                   },
                   {
-                    text: "OK",
+                    text: translations.common.confirm,
                     onPress: async () => {
                       try {
                         const email = await StorageService.getEmail();
                         const userInfo = await getUserByEmail(email as string);
                         const backupInfo = await StorageService.getBackupInfo();
                         if (!backupInfo) {
-                          throw new Error(
-                            "No backup information found, please back up your data first",
-                          );
+                          throw new Error(translations.record.none);
                         }
                         const result = await restoreUserData(
                           email as string,
@@ -245,7 +248,7 @@ const More = () => {
                           userInfo.$id,
                         );
                         alert(
-                          `Data recovery successful! Recovery time: ${new Date(
+                          `${translations.alerts.clearCache.success} ${new Date(
                             result.restoreDate,
                           ).toLocaleString("zh-CN", { hour12: false })}`,
                         );
@@ -272,7 +275,7 @@ const More = () => {
               className={`text-lg font-medium text-center ${
                 theme === "dark" ? "text-white" : "text-quaternary"
               }`}>
-              Restore Data
+              {translations.settings.restore}
             </Text>
           </TouchableOpacity>
           {/* Terms of Use Button */}
@@ -291,7 +294,7 @@ const More = () => {
               className={`text-lg font-medium text-center ${
                 theme === "dark" ? "text-white" : "text-quaternary"
               }`}>
-              Terms Of Use
+              {translations.settings.termsofuse}
             </Text>
           </TouchableOpacity>
           {/* Privacy Policy Button */}
@@ -310,7 +313,7 @@ const More = () => {
               className={`text-lg font-medium text-center ${
                 theme === "dark" ? "text-white" : "text-quaternary"
               }`}>
-              Privacy Policy
+              {translations.settings.privacyPolicy}
             </Text>
           </TouchableOpacity>
         </View>
