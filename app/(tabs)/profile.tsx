@@ -28,6 +28,7 @@ import {
 import { uploadAvatar } from "@/services/bucketStorageService";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useLanguage } from "../../contexts/LanguageContext";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Profile = () => {
   const { theme } = useTheme();
@@ -128,8 +129,8 @@ const Profile = () => {
 
   // main body
   return (
-    <View
-      className={`flex-1 p-6 mt-16 ${
+    <SafeAreaView
+      className={`flex-1 p-6 ${
         theme === "dark" ? "bg-quaternary" : "bg-gray-100"
       }`}>
       {/* front profile info */}
@@ -361,7 +362,7 @@ const Profile = () => {
       <View className="absolute right-0 bottom-0 px-4 py-2">
         <Text className="text-[10px] text-gray-400">Developed by AaronTAO</Text>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

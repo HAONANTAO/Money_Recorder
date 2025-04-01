@@ -9,6 +9,7 @@ import React from "react";
 import { useRouter } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
 import DepositBox from "../../components/DepositBox";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Ionicons } from "@expo/vector-icons";
 import { useLanguage } from "../../contexts/LanguageContext";
@@ -19,8 +20,8 @@ const Goals = () => {
   const { translations } = useLanguage();
 
   return (
-    <View
-      className={`flex-1 mt-20 items-center ${
+    <SafeAreaView
+      className={`flex-1 items-center ${
         theme === "dark" ? "bg-quaternary" : "bg-gray-100"
       }`}>
       <Text className="text-2xl font-extrabold text-secondary">
@@ -36,7 +37,7 @@ const Goals = () => {
         }`}>
         <Ionicons name="add" size={30} color="white" />
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 

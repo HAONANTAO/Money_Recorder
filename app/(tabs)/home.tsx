@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-31 15:24:45
+ * @LastEditTime: 2025-04-01 15:43:14
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
@@ -122,15 +122,17 @@ const Home = () => {
     <ScrollView
       contentContainerStyle={{ flexGrow: 1 }}
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          tintColor={theme === "dark" ? "#1477f1" : "#0d6df4"}
+          progressBackgroundColor={theme === "dark" ? "#333" : "#fff"}
+        />
       }>
-      <View
-        className={`mt-8 flex-1 ${
-          isDark ? "bg-gray-900" : "bg-white"
-        } pt-10 px-4 `}>
+      <View className={`flex-1 ${isDark ? "bg-gray-900" : "bg-white"} px-4`}>
         {/* 今天日期 */}
         <Text
-          className={`${
+          className={`mt-20 ${
             isDark ? "text-white" : ""
           } text-2xl font-bold text-center text-gray-800`}>
           {getCurrentDate()}

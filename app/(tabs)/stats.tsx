@@ -48,13 +48,6 @@ const Stats = () => {
   const [expenseCategories, setExpenseCategories] = useState<any[]>([]);
   const [incomeCategories, setIncomeCategories] = useState<any[]>([]); // Income categories state
 
-  // 根据当前语言获取类别名称
-  // const getCategoryLabel = (category: any) => {
-  //   const categoryTranslations = translations?.categories || {};
-  //   return (
-  //     categoryTranslations[category.value] || category.label || category.value
-  //   );
-  // };
   const { language } = useLanguage();
 
   useEffect(() => {
@@ -336,7 +329,7 @@ const Stats = () => {
         className={`flex-1 justify-start items-center ${
           theme === "dark" ? "bg-quaternary" : "bg-white"
         }`}>
-        <Text className="mt-20 text-4xl font-bold text-primary">
+        <Text className="mt-20 text-4xl font-bold text-secondary">
           {translations.stats.title}
         </Text>
 
