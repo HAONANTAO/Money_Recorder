@@ -67,6 +67,8 @@ interface Translations {
     none: string;
   };
   stats: {
+    days: string;
+    daysUsed: string;
     title: string;
     records: string;
     income: string;
@@ -274,6 +276,8 @@ const enTranslations: Translations = {
     none: "None",
   },
   stats: {
+    days: "Days",
+    daysUsed: "Days Used",
     title: "Stats",
     records: "Records",
     income: "Income",
@@ -471,6 +475,8 @@ const zhTranslations: Translations = {
     none: "无",
   },
   stats: {
+    days: "天",
+    daysUsed: "使用天数",
     title: "统计",
     records: "记录",
     income: "收入",

@@ -40,8 +40,9 @@ const getCurrentDate = () => {
 
 const Home = () => {
   const { theme } = useTheme();
+    const isDark = theme === "dark";
   const { translations } = useLanguage();
-  const isDark = theme === "dark";
+
   // const [user, setUser] = useState<any>(null);
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);

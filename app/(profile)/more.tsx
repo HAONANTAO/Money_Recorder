@@ -106,8 +106,8 @@ const More = () => {
       title: translations.stats.title,
       items: [
         {
-          label: translations.stats.records,
-          value: `${usageStats.daysUsed} ${translations.stats.records}`,
+          label: translations.stats.daysUsed,
+          value: `${usageStats.daysUsed} ${translations.stats.days}`,
         },
         {
           label: translations.stats.total,
