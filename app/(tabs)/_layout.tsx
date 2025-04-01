@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 21:07:12
+ * @LastEditTime: 2025-04-01 20:14:38
  * @FilePath: /Money_Recorder/app/(tabs)/_layout.tsx
  */
 import { Stack, Tabs } from "expo-router";
@@ -11,7 +11,7 @@ import { View, Text } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useLanguage } from "../../contexts/LanguageContext";
-
+import UserGuide from "../../components/UserGuide";
 // 主页面的基础配置
 export default function RootLayout() {
   const { theme } = useTheme();
@@ -141,6 +141,7 @@ export default function RootLayout() {
           }}
         />
       </Tabs>
+      <UserGuide />
     </SafeAreaProvider>
   );
 }

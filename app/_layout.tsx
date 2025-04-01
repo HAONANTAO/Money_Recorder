@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-22 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-31 22:55:22
+ * @LastEditTime: 2025-04-01 20:14:47
  * @FilePath: /Money_Recorder/app/_layout.tsx
  */
 import { Stack } from "expo-router";
@@ -10,6 +10,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { View } from "react-native";
 import { ThemeProvider } from "../contexts/ThemeContext";
 import { LanguageProvider } from "../contexts/LanguageContext";
+// import UserGuide from "../components/UserGuide";
 import "./globals.css";
 
 export default function RootLayout() {
@@ -34,6 +35,7 @@ export default function RootLayout() {
                     animation: "slide_from_right",
                   }}
                 />
+                {/* <UserGuide /> */}
               </SafeAreaProvider>
             </View>
           </LanguageProvider>
