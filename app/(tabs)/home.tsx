@@ -1,11 +1,11 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-01 15:43:14
+ * @LastEditTime: 2025-04-01 15:54:48
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
-  StyleSheet,
+
   Text,
   View,
   ActivityIndicator,
@@ -142,7 +142,7 @@ const Home = () => {
           <TouchableOpacity
             onPress={() => router.push("/(func)/searchbar")}
             className={`p-4 rounded-2xl shadow-lg ${
-              isDark ? "bg-secondary" : "bg-white"
+              isDark ? "bg-quaternary" : "bg-white"
             } w-full active:opacity-80 flex-row items-center justify-between`}>
             <View className="flex-row flex-1 items-center">
               <View className="mr-3">
@@ -171,7 +171,7 @@ const Home = () => {
         {/* 第二个 View - 净资产 */}
         <View
           className={`mt-6 p-4 flex flex-row justify-between gap-2 rounded-lg ${
-            isDark ? "bg-primary" : "bg-gray-100"
+            isDark ? "bg-quaternary" : "bg-gray-100"
           }`}>
           {/* Net Worth View */}
           <View className="p-4 rounded-3xl border border-gray-300">
@@ -203,9 +203,12 @@ const Home = () => {
         {/* 第三个 View - 本月支出 */}
         <View
           className={`mt-6 p-6 rounded-2xl ${
-            isDark ? "bg-secondary" : "bg-blue-100"
+            isDark ? "bg-quaternary" : "bg-blue-100"
           }`}>
-          <Text className="text-2xl font-bold text-gray-700">
+          <Text
+            className={` ${
+              isDark ? "text-white " : "text-gray-700"
+            } text-2xl font-bold `}>
             {translations.home.monthlyNetIncome}
           </Text>
           <Text

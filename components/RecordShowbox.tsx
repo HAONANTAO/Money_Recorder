@@ -1,13 +1,14 @@
 /*
  * @Date: 2025-03-26 17:16:29
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 20:44:49
+ * @LastEditTime: 2025-04-01 15:57:47
  * @FilePath: /Money_Recorder/components/RecordShowbox.tsx
  */
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { useLanguage } from "../contexts/LanguageContext";
+import { useTheme } from "@/contexts/ThemeContext";
 
 //
 interface RecordShowBoxProps {
@@ -15,6 +16,8 @@ interface RecordShowBoxProps {
 }
 
 const RecordShowBox: React.FC<RecordShowBoxProps> = ({ record }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const { translations } = useLanguage();
   const formatDate = (date: Date | string | number) => {
     const { language } = useLanguage();
@@ -29,7 +32,9 @@ const RecordShowBox: React.FC<RecordShowBoxProps> = ({ record }) => {
   return (
     <TouchableOpacity
       onPress={handlePress}
-      className="w-[48%] p-3 mb-4 bg-white rounded-lg shadow-md border border-blue-200  active:opacity-80">
+      className={`${
+        isDark ? "border-white" : "bg-white border-blue-200"
+      }w-[48%] p-3 mb-4  rounded-lg shadow-md border   active:opacity-80`}>
       <Text
         className={`text-lg font-bold ${
           record.type === "income" ? "text-green-500" : "text-red-500"
@@ -39,19 +44,19 @@ const RecordShowBox: React.FC<RecordShowBoxProps> = ({ record }) => {
           : translations.record.expense}
         : ${record.moneyAmount}
       </Text>
-      <Text className="text-sm text-gray-600">
+      <Text className={`${isDark ? "text-white" : "text-gray-600"} text-sm `}>
         <Text className="text-secondary">{translations.record.category}: </Text>
         {record.category}
       </Text>
-      <Text className="text-sm text-gray-600 dark:text-gray-400">
+      <Text className={`${isDark ? "text-white" : "text-gray-600"} text-sm `}>
         <Text className="text-secondary">{translations.record.date}: </Text>
         {formatDate(record.createAt)}
       </Text>
-      <Text className="text-sm text-gray-600">
+      <Text className={`${isDark ? "text-white" : "text-gray-600"} text-sm `}>
         <Text className="text-secondary">{translations.record.method}: </Text>
         {record.paymentMethod}
       </Text>
-      <Text className="text-sm text-gray-600">
+      <Text className={`${isDark ? "text-white" : "text-gray-600"} text-sm `}>
         <Text className="text-secondary">{translations.record.location}: </Text>
         {record.location || "N/A"}
       </Text>
@@ -59,18 +64,32 @@ const RecordShowBox: React.FC<RecordShowBoxProps> = ({ record }) => {
       <Text className="mt-2 text-sm text-secondary">
         {translations.record.tags}:
         {record.tags === "" ? (
-          <Text className="text-gray-600">{translations.record.none}</Text>
+          <Text
+            className={`${isDark ? "text-white" : "text-gray-600"} text-sm `}>
+            {translations.record.none}
+          </Text>
         ) : (
-          <Text className="text-gray-600"> {record.tags}</Text>
+          <Text
+            className={`${isDark ? "text-white" : "text-gray-600"} text-sm `}>
+            {" "}
+            {record.tags}
+          </Text>
         )}
       </Text>
 
       <Text className="mt-2 text-sm text-secondary">
         {translations.record.comment}:
         {record.comment === "" ? (
-          <Text className="text-gray-600">{translations.record.none}</Text>
+          <Text
+            className={`${isDark ? "text-white" : "text-gray-600"} text-sm `}>
+            {translations.record.none}
+          </Text>
         ) : (
-          <Text className="text-gray-600"> {record.comment}</Text>
+          <Text
+            className={`${isDark ? "text-white" : "text-gray-600"} text-sm `}>
+            {" "}
+            {record.comment}
+          </Text>
         )}
       </Text>
     </TouchableOpacity>
