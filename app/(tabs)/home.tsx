@@ -1,11 +1,11 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-01 15:54:48
+ * @LastEditTime: 2025-03-31 15:24:45
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
-
+  StyleSheet,
   Text,
   View,
   ActivityIndicator,
@@ -40,9 +40,8 @@ const getCurrentDate = () => {
 
 const Home = () => {
   const { theme } = useTheme();
-    const isDark = theme === "dark";
   const { translations } = useLanguage();
-
+  const isDark = theme === "dark";
   // const [user, setUser] = useState<any>(null);
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -123,19 +122,17 @@ const Home = () => {
     <ScrollView
       contentContainerStyle={{ flexGrow: 1 }}
       refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-          tintColor={theme === "dark" ? "#1477f1" : "#0d6df4"}
-          progressBackgroundColor={theme === "dark" ? "#333" : "#fff"}
-        />
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
-      <View className={`flex-1 ${isDark ? "bg-gray-900" : "bg-white"} px-4`}>
+      <View
+        className={`mt-8 flex-1 ${
+          isDark ? "bg-gray-900" : "bg-white"
+        } pt-10 px-4 `}>
         {/* 今天日期 */}
         <Text
-          className={`mt-20 ${
-            isDark ? "text-white" : ""
-          } text-2xl font-bold text-center text-gray-800`}>
+          className={`text-2xl font-bold text-center ${
+            isDark ? "text-white" : "text-gray-800"
+          }`}>
           {getCurrentDate()}
         </Text>
         {/* search bar */}
@@ -143,7 +140,7 @@ const Home = () => {
           <TouchableOpacity
             onPress={() => router.push("/(func)/searchbar")}
             className={`p-4 rounded-2xl shadow-lg ${
-              isDark ? "bg-quaternary" : "bg-white"
+              isDark ? "bg-secondary" : "bg-white"
             } w-full active:opacity-80 flex-row items-center justify-between`}>
             <View className="flex-row flex-1 items-center">
               <View className="mr-3">
@@ -172,7 +169,7 @@ const Home = () => {
         {/* 第二个 View - 净资产 */}
         <View
           className={`mt-6 p-4 flex flex-row justify-between gap-2 rounded-lg ${
-            isDark ? "bg-quaternary" : "bg-gray-100"
+            isDark ? "bg-primary" : "bg-gray-100"
           }`}>
           {/* Net Worth View */}
           <View className="p-4 rounded-3xl border border-gray-300">
@@ -204,12 +201,12 @@ const Home = () => {
         {/* 第三个 View - 本月支出 */}
         <View
           className={`mt-6 p-6 rounded-2xl ${
-            isDark ? "bg-quaternary" : "bg-blue-100"
+            isDark ? "bg-secondary" : "bg-blue-100"
           }`}>
           <Text
-            className={` ${
-              isDark ? "text-white " : "text-gray-700"
-            } text-2xl font-bold `}>
+            className={`text-2xl font-bold ${
+              isDark ? "text-white" : "text-gray-700"
+            }`}>
             {translations.home.monthlyNetIncome}
           </Text>
           <Text
@@ -223,10 +220,16 @@ const Home = () => {
         </View>
 
         {/* details */}
-        <View className="p-4 mt-6 rounded-2xl border border-gray-200">
+        <View
+          className={`p-4 mt-6 rounded-2xl border ${
+            isDark ? "border-gray-700" : "border-gray-200"
+          }`}>
           <View className="flex flex-row flex-wrap justify-around">
             {loading ? (
-              <ActivityIndicator size="large" color="#0000ff" />
+              <ActivityIndicator
+                size="large"
+                color={isDark ? "#fff" : "#0000ff"}
+              />
             ) : records.length > 0 ? (
               records.map((record: any) => (
                 <View className="p-2 w-1/2" key={record.$id}>
@@ -234,7 +237,9 @@ const Home = () => {
                 </View>
               ))
             ) : (
-              <Text>No records found</Text>
+              <Text className={isDark ? "text-white" : "text-gray-700"}>
+                No records found
+              </Text>
             )}
           </View>
         </View>

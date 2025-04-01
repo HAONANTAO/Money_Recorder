@@ -33,8 +33,6 @@ import { useLanguage } from "../../contexts/LanguageContext";
 
 const Stats = () => {
   const { theme } = useTheme();
-  const isDark = theme === "dark";
-
   const { translations } = useLanguage();
   const router = useRouter();
   const [monthlyBudgets, setMonthlyBudgets] = useState<any>(null);
@@ -50,6 +48,13 @@ const Stats = () => {
   const [expenseCategories, setExpenseCategories] = useState<any[]>([]);
   const [incomeCategories, setIncomeCategories] = useState<any[]>([]); // Income categories state
 
+  // 根据当前语言获取类别名称
+  // const getCategoryLabel = (category: any) => {
+  //   const categoryTranslations = translations?.categories || {};
+  //   return (
+  //     categoryTranslations[category.value] || category.label || category.value
+  //   );
+  // };
   const { language } = useLanguage();
 
   useEffect(() => {
@@ -331,7 +336,7 @@ const Stats = () => {
         className={`flex-1 justify-start items-center ${
           theme === "dark" ? "bg-quaternary" : "bg-white"
         }`}>
-        <Text className="mt-20 text-4xl font-bold text-secondary">
+        <Text className="mt-20 text-4xl font-bold text-primary">
           {translations.stats.title}
         </Text>
 
@@ -340,32 +345,17 @@ const Stats = () => {
         ) : (
           <>
             <View className="p-4">
-              <Text
-                className={`${
-                  isDark ? "text-secondary" : ""
-                } text-xl font-semibold`}>
+              <Text className="text-xl font-semibold">
                 📅 {translations.stats.records}:
-                <Text className={`${isDark ? "text-white" : "text-tertiary"}`}>
-                  {eventLength}
-                </Text>
+                <Text className="text-tertiary"> {eventLength}</Text>
               </Text>
-              <Text
-                className={`${
-                  isDark ? "text-secondary" : ""
-                } text-xl font-semibold`}>
+              <Text className="text-xl font-semibold">
                 💳 {translations.stats.income}:
-                <Text className={`${isDark ? "text-white" : "text-tertiary"}`}>
-                  ${income}
-                </Text>
+                <Text className="text-tertiary"> ${income}</Text>
               </Text>
-              <Text
-                className={`${
-                  isDark ? "text-secondary" : ""
-                } text-xl font-semibold`}>
+              <Text className="text-xl font-semibold">
                 💵 {translations.stats.expense}:
-                <Text className={`${isDark ? "text-white" : "text-tertiary"}`}>
-                  ${expense}
-                </Text>
+                <Text className="text-tertiary">${expense}</Text>
               </Text>
             </View>
 
@@ -398,9 +388,9 @@ const Stats = () => {
         <View className="px-4 mb-6 w-full">
           <Text
             className={`mb-2 mt-2 text-xl font-bold text-center ${
-              theme === "dark" ? "" : "text-secondary"
+              theme === "dark" ? "text-gray-200" : "text-secondary"
             }`}>
-            {translations.stats.totalBudget}
+            {translations.stats.total}
           </Text>
           {BUDGET_CATEGORIES.map((category) => {
             const budget = monthlyBudgets?.find(
@@ -423,7 +413,7 @@ const Stats = () => {
                   });
                 }}
                 className={`flex-row items-center justify-between p-3 mb-2 rounded-lg ${
-                  theme === "dark" ? "bg-secondary" : "bg-white"
+                  theme === "dark" ? "bg-tertiary" : "bg-white"
                 }`}>
                 <View className="flex-row items-center">
                   <Text className="mr-2 text-lg">{category.icon}</Text>
@@ -464,9 +454,9 @@ const Stats = () => {
             <TouchableOpacity
               onPress={() => router.push("/(func)/Budget")}
               className={`flex-row justify-center items-center px-4 py-2 border-gray-200 shadow-md border rounded-full ${
-                theme === "dark" ? "bg-primary" : "bg-[#e6f7ff]"
+                theme === "dark" ? "bg-secondary" : "bg-[#e6f7ff]"
               }`}
-              style={{ width: "60%" }} // 控制宽度更短
+              style={{ width: "70%" }} // 控制宽度更短
             >
               <Ionicons
                 name="wallet-outline"

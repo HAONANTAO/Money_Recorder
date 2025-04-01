@@ -14,10 +14,6 @@ import { getUserByEmail } from "@/services/userManagement";
 import { backupUserData, restoreUserData } from "@/services/cloudBackupService";
 import { Alert } from "react-native";
 import { useLanguage } from "../../contexts/LanguageContext";
-import { router } from "expo-router";
-
-// "https://www.termsfeed.com/live/3cacc431-dc86-4318-b0c9-7c785b79577c",
-// https://www.termsfeed.com/live/995afd4d-fa4d-4c85-8f05-4c00d3e17928
 
 const More = () => {
   const { theme } = useTheme();
@@ -110,8 +106,8 @@ const More = () => {
       title: translations.stats.title,
       items: [
         {
-          label: translations.stats.daysUsed,
-          value: `${usageStats.daysUsed} ${translations.stats.days}`,
+          label: translations.stats.records,
+          value: `${usageStats.daysUsed} ${translations.stats.records}`,
         },
         {
           label: translations.stats.total,
@@ -284,7 +280,11 @@ const More = () => {
           </TouchableOpacity>
           {/* Terms of Use Button */}
           <TouchableOpacity
-            onPress={() => router.push("/user-agreement")}
+            onPress={() =>
+              Linking.openURL(
+                "https://www.termsfeed.com/live/3cacc431-dc86-4318-b0c9-7c785b79577c",
+              )
+            }
             className={`p-4 rounded-3xl ${
               theme === "dark" ? "bg-gray-800" : "bg-blue-100"
             } shadow-lg active:opacity-80 transform transition-all duration-200 border ${
@@ -299,7 +299,11 @@ const More = () => {
           </TouchableOpacity>
           {/* Privacy Policy Button */}
           <TouchableOpacity
-            onPress={() => router.push("/privacy-policy")}
+            onPress={() =>
+              Linking.openURL(
+                "https://www.termsfeed.com/live/995afd4d-fa4d-4c85-8f05-4c00d3e17928",
+              )
+            }
             className={`p-4 rounded-3xl ${
               theme === "dark" ? "bg-gray-800" : "bg-blue-100"
             } shadow-lg active:opacity-80 transform transition-all duration-200 border ${

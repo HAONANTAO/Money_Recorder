@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-01 22:51:52
+ * @LastEditTime: 2025-03-30 20:55:01
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -28,7 +28,6 @@ import {
 import { uploadAvatar } from "@/services/bucketStorageService";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useLanguage } from "../../contexts/LanguageContext";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const Profile = () => {
   const { theme } = useTheme();
@@ -129,17 +128,20 @@ const Profile = () => {
 
   // main body
   return (
-    <SafeAreaView
-      className={`flex-1 p-6 ${
-        theme === "dark" ? "bg-quaternary" : "bg-gray-100"
+    <View
+      className={`flex-1 p-6 mt-16 ${
+        theme === "dark" ? "bg-gray-900" : "bg-gray-100"
       }`}>
       {/* front profile info */}
       <View
         className={`p-6 mb-4 ${
-          theme === "dark" ? "bg-quaternary" : "bg-gray-50"
+          theme === "dark" ? "bg-gray-800" : "bg-gray-50"
         } rounded-xl shadow-md`}>
         <View className="flex justify-center items-center">
-          <Text className="mb-6 text-3xl font-bold text-secondary">
+          <Text
+            className={`mb-6 text-3xl font-bold ${
+              theme === "dark" ? "text-white" : "text-secondary"
+            }`}>
             {translations.tabs.profile}
           </Text>
           {/* 有avatar就显示 */}
@@ -147,12 +149,12 @@ const Profile = () => {
             {avatar ? (
               <Image
                 source={{ uri: avatar }}
-                className="w-28 h-28 rounded-full border border-gray-100"
+                className="w-28 h-28 rounded-full border border-gray-600"
               />
             ) : (
               <Image
                 source={require("../../assets/images/DefaultUser.png")}
-                className="w-28 h-28 rounded-full border border-gray-100"
+                className="w-28 h-28 rounded-full border border-gray-600"
               />
             )}
           </TouchableOpacity>
@@ -162,20 +164,18 @@ const Profile = () => {
         {edit && username && email && (
           <>
             <View className="flex justify-center items-center mt-4">
-              {/* <Text className="mb-1 text-gray-500">Username</Text> */}
               <Text
-                className={`${
-                  theme === "dark" ? "text-quinary" : ""
-                } text-lg font-semibold`}>
+                className={`text-lg font-semibold ${
+                  theme === "dark" ? "text-gray-300" : "text-gray-700"
+                }`}>
                 {username}
               </Text>
             </View>
             <View className="flex justify-center items-center mt-4 mb-4">
-              {/* <Text className="mb-1 text-gray-500">Email:</Text> */}
               <Text
-                className={`${
-                  theme === "dark" ? "text-quinary" : ""
-                } text-lg font-semibold`}>
+                className={`text-lg font-semibold ${
+                  theme === "dark" ? "text-gray-300" : "text-gray-700"
+                }`}>
                 {email}
               </Text>
             </View>
@@ -183,13 +183,13 @@ const Profile = () => {
               <Button
                 title={translations.common.edit}
                 onPress={() => handleEdit()}
-                color="#E63946"
+                color={theme === "dark" ? "#60A5FA" : "#E63946"}
               />
             ) : (
               <Button
                 title={translations.common.save}
                 onPress={() => handleSave()}
-                color=""
+                color={theme === "dark" ? "#60A5FA" : "#2c78e3"}
               />
             )}
           </>
@@ -254,7 +254,10 @@ const Profile = () => {
                 source={require("../../assets/images/icons/setting.png")}
                 className="w-12 h-12"
               />
-              <Text className="mt-2 text-sm font-bold text-quaternary">
+              <Text
+                className={`mt-2 text-sm font-bold ${
+                  theme === "dark" ? "text-white" : "text-quaternary"
+                }`}>
                 {translations.settings.title}
               </Text>
             </TouchableOpacity>
@@ -268,9 +271,9 @@ const Profile = () => {
               onPress={async () => {
                 try {
                   if (Platform.OS === "ios") {
-                    // 替换为实际的App Store ID
+                    // TODO:替换为实际的App Store ID
                     await Linking.openURL(
-                      "https://apps.apple.com/app/id6744058988?action=write-review",
+                      "https://apps.apple.com/app/idYOUR_APP_ID?action=write-review",
                     );
                   } else {
                     Alert.alert(
@@ -290,7 +293,10 @@ const Profile = () => {
                 source={require("../../assets/images/icons/rating.png")}
                 className="w-10 h-10"
               />
-              <Text className="mt-2 font-bold text-quaternary">
+              <Text
+                className={`mt-2 font-bold ${
+                  theme === "dark" ? "text-white" : "text-quaternary"
+                }`}>
                 {translations.profile.rating}
               </Text>
             </TouchableOpacity>
@@ -308,8 +314,10 @@ const Profile = () => {
                 source={require("../../assets/images/icons/author.png")}
                 className="w-10 h-10"
               />
-
-              <Text className="font-bold text-quaternary">
+              <Text
+                className={`font-bold ${
+                  theme === "dark" ? "text-white" : "text-quaternary"
+                }`}>
                 {translations.profile.author}
               </Text>
             </TouchableOpacity>
@@ -325,7 +333,7 @@ const Profile = () => {
                 source={require("../../assets/images/icons/help.png")}
                 className="w-10 h-10"
               />
-              <Text className="font-bold text-quaternary">
+              <Text className={`font-bold text-quaternary`}>
                 {translations.profile.faq}
               </Text>
             </TouchableOpacity>
@@ -341,7 +349,7 @@ const Profile = () => {
                 source={require("../../assets/images/icons/more.png")}
                 className="w-10 h-10"
               />
-              <Text className="font-bold text-quaternary">
+              <Text className={`font-bold text-quaternary`}>
                 {translations.profile.more}
               </Text>
             </TouchableOpacity>
@@ -362,7 +370,7 @@ const Profile = () => {
       <View className="absolute right-0 bottom-0 px-4 py-2">
         <Text className="text-[10px] text-gray-400">Developed by AaronTAO</Text>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

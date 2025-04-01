@@ -20,10 +20,8 @@ import { useLanguage } from "../contexts/LanguageContext";
 
 const DepositBox = () => {
   const router = useRouter();
-
-  const { translations } = useLanguage();
   const { theme } = useTheme();
-  const isDark = theme === "dark";
+  const { translations } = useLanguage();
 
   const [userId, setUserId] = useState("");
   const [deposits, setDeposits] = useState<any>([]);
@@ -160,7 +158,7 @@ const DepositBox = () => {
               </View>
               <Text
                 className={`text-3xl font-bold ml-4 ${
-                  theme === "dark" ? "text-white" : "text-blue-600"
+                  theme === "dark" ? "text-blue-400" : "text-blue-600"
                 }`}>
                 ${deposit.amount}
               </Text>
@@ -303,7 +301,10 @@ const DepositBox = () => {
                       "number-pad",
                     );
                   }}>
-                  <Text className={"font-extrabold text-2xl text-green-500"}>
+                  <Text
+                    className={`font-extrabold text-2xl ${
+                      theme === "dark" ? "text-blue-400" : "text-green-500"
+                    }`}>
                     +
                   </Text>
                 </TouchableOpacity>
@@ -366,7 +367,10 @@ const DepositBox = () => {
                     );
                   }}>
                   {/* decrease */}
-                  <Text className={"font-extrabold text-2xl text-red-500"}>
+                  <Text
+                    className={`font-extrabold text-2xl ${
+                      theme === "dark" ? "text-red-400" : "text-red-500"
+                    }`}>
                     -
                   </Text>
                 </TouchableOpacity>
@@ -431,7 +435,7 @@ const DepositBox = () => {
                 />
                 <Text
                   className={`ml-2 font-semibold text-sm ${
-                    theme === "dark" ? "text-white" : "text-blue-600"
+                    theme === "dark" ? "text-blue-400" : "text-blue-600"
                   }`}>
                   Update
                 </Text>
@@ -510,10 +514,10 @@ const DepositBox = () => {
                   className={`ml-2 font-semibold text-sm ${
                     deposit.completed
                       ? theme === "dark"
-                        ? "text-white"
+                        ? "text-green-400"
                         : "text-green-600"
                       : theme === "dark"
-                      ? "text-white"
+                      ? "text-blue-400"
                       : "text-blue-600"
                   }`}>
                   {deposit.completed ? "Completed" : "Complete"}

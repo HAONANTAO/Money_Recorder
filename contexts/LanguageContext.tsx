@@ -6,36 +6,6 @@ type Language = "en" | "zh";
 
 // 定义翻译内容的接口
 interface Translations {
-  agreement: {
-    title: string;
-    title2: string;
-    title3: string;
-    title4: string;
-    title5: string;
-    title6: string;
-    first: string;
-    second: string;
-    third: string;
-    fourth: string;
-    fifth: string;
-    sixth: string;
-    date: string;
-  };
-  privacy: {
-    title: string;
-    title2: string;
-    title3: string;
-    title4: string;
-    title5: string;
-    title6: string;
-    first: string;
-    second: string;
-    third: string;
-    fourth: string;
-    fifth: string;
-    sixth: string;
-    date: string;
-  };
   author: {
     introduction: string;
     contactMe: string;
@@ -97,9 +67,6 @@ interface Translations {
     none: string;
   };
   stats: {
-    totalBudget: string;
-    days: string;
-    daysUsed: string;
     title: string;
     records: string;
     income: string;
@@ -154,7 +121,6 @@ interface Translations {
     other: string;
   };
   settings: {
-    userAgreement: string;
     restore: string;
     privacyPolicy: string;
     termsofuse: string;
@@ -219,47 +185,6 @@ interface LanguageContextType {
 
 // 英文翻译
 const enTranslations: Translations = {
-  agreement: {
-    title: "User Agreement",
-    title2: "1. Description of Services",
-    title3: "2. User Responsibilities",
-    title4: `3. Data Usage`,
-    title5: "4. Disclaimer",
-    title6: "5. Modification of the Agreement",
-    first: ` Welcome to the Money
-Recorder app. Please read this user agreement carefully. By using this app, you agree to all the following terms.`,
-    second: `Money
-Recorder is a personal accounting application that provides accounting, budget management, savings goals and other functions. We reserve the right to modify, interrupt or terminate the service at any time.`,
-    third: `• You are responsible for the security of your account • Protect personal data and privacy information • Comply with relevant laws and regulations •
-Do not engage in any illegal or improper behavior`,
-    fourth: `• You retain ownership of your personal data • We only use data to the extent necessary to provide the service •
-You can export or delete your personal data at any time`,
-    fifth: `We are not responsible for data loss or damage • It is recommended to back up important data regularly •
-We are not responsible for service interruptions caused by force majeure`,
-    sixth:
-      "We reserve the right to modify this Agreement, and the modified Agreement will be published in the App. By continuing to use this App, you agree to accept the modified Agreement.",
-    date: "Last updated: April 1, 2025",
-  },
-  privacy: {
-    title: "Privacy Policy",
-    title2: "Information Collection",
-    title3: "Use of Information",
-    title4: "Information Security",
-    title5: "Data storage",
-    title6: "Contact Us",
-    first: ` Welcome to the Money
-Recorder app. We take your privacy very seriously and are committed to protecting your personal information. This privacy policy explains how we collect, use and protect your information.`,
-    second: ` We only collect information necessary for the app to function, including: • Accounting data • Budget settings • Savings goals
-• App preferences`,
-    third: ` The information collected is only used to: • Provide accounting services • Generate statistical reports • Improve user experience •
-Provide technical support`,
-    fourth: ` We use industry-standard security measures to protect your data, including: • Encrypted data storage •
-Secure data transmission • Regular security audits`,
-    fifth:
-      "Your data is mainly stored in the appwrite database, and you can choose whether to enable the cloud backup function.",
-    sixth: ` If you have any questions about this Privacy Policy, please contact us through the feedback function within the app.`,
-    date: " Last updated: April 1, 2025",
-  },
   author: {
     introduction: `Hello! I am an IT developer who has studied at Monash and Melbourne
         University. As a passionate developer, I am constantly learning and
@@ -349,9 +274,6 @@ Secure data transmission • Regular security audits`,
     none: "None",
   },
   stats: {
-    totalBudget: "Total Budget",
-    days: "Days",
-    daysUsed: "Days Used",
     title: "Stats",
     records: "Records",
     income: "Income",
@@ -406,7 +328,6 @@ Secure data transmission • Regular security audits`,
     other: "Other",
   },
   settings: {
-    userAgreement: "User Agreement",
     restore: "Restore",
     privacyPolicy: "Privacy Policy",
     termsofuse: "Terms of Use",
@@ -464,43 +385,6 @@ Secure data transmission • Regular security audits`,
 
 // 中文翻译
 const zhTranslations: Translations = {
-  agreement: {
-    title: "用户协议",
-    title2: " 1. 服务说明",
-    title3: "2. 用户责任",
-    title4: `3. 数据使用`,
-    title5: "4. 免责声明",
-    title6: "5. 协议修改",
-    first: ` 欢迎使用小陶记账应用。请仔细阅读本用户协议，使用本应用即表示您同意接受以下所有条款。`,
-    second: `小陶记账是一款个人记账应用，提供记账、预算管理、存款目标等功能。我们保留随时修改、中断或终止服务的权利。`,
-    third: ` • 您应对账号安全负责 • 保护个人数据和隐私信息 • 遵守相关法律法规 •
-          不得从事任何违法或不当行为`,
-    fourth: ` • 您保留对个人数据的所有权 • 我们仅在提供服务必需的范围内使用数据 •
-          您可以随时导出或删除个人数据`,
-    fifth: ` • 我们不对数据丢失或损坏承担责任 • 建议定期备份重要数据 •
-          我们不对因不可抗力导致的服务中断负责`,
-    sixth:
-      "我们保留修改本协议的权利，修改后的协议将在应用内公布。继续使用本应用即表示您同意接受修改后的协议。",
-    date: "最后更新日期：2025年4月1日",
-  },
-  privacy: {
-    title: "隐私政策",
-    title2: "信息收集",
-    title3: "信息使用",
-    title4: "信息安全",
-    title5: "数据存储",
-    title6: "联系我们",
-    first: ` 欢迎使用小陶记账应用。我们非常重视您的隐私保护，并致力于保护您的个人信息安全。本隐私政策说明了我们如何收集、使用和保护您的信息。`,
-    second: ` 我们只收集应用功能必需的信息，包括： • 记账数据 • 预算设置 • 存款目标
-          • 应用偏好设置`,
-    third: ` 收集的信息仅用于： • 提供记账服务 • 生成统计报告 • 改善用户体验 •
-          提供技术支持`,
-    fourth: ` 我们采用业界标准的安全措施保护您的数据，包括： • 数据加密存储 •
-          安全的数据传输 • 定期安全审查`,
-    fifth: "您的数据主要存储在appwrite数据库，您可以选择是否启用云端备份功能。",
-    sixth: ` 如果您对本隐私政策有任何疑问，请通过应用内的反馈功能联系我们。`,
-    date: " 最后更新日期:2025年4月1日",
-  },
   author: {
     introduction:
       "你好！我是一名 IT 开发人员，曾就读于莫纳什大学和墨尔本大学。作为一名充满激情的开发人员，我不断学习和成长，希望在 IT 领域有所成就。",
@@ -587,9 +471,6 @@ const zhTranslations: Translations = {
     none: "无",
   },
   stats: {
-    totalBudget: "总预算",
-    days: "天",
-    daysUsed: "使用天数",
     title: "统计",
     records: "记录",
     income: "收入",
@@ -644,7 +525,6 @@ const zhTranslations: Translations = {
     other: "其他",
   },
   settings: {
-    userAgreement: "用户协议",
     restore: "恢复数据",
     privacyPolicy: "隐私政策",
     termsofuse: "使用条款",

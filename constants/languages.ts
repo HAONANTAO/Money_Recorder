@@ -20,8 +20,6 @@ export const zhCN = {
     clearCache: "清除缓存",
     language: "语言",
     version: "应用版本",
-    privacyPolicy: "隐私政策",
-    userAgreement: "用户协议",
   },
   record: {
     title: "记录",
@@ -114,8 +112,6 @@ export const enUS = {
     clearCache: "Clear Cache",
     language: "Language",
     version: "App Version",
-    privacyPolicy: "Privacy Policy",
-    userAgreement: "User Agreement",
   },
   record: {
     title: "Record",

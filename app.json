@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Money Recorder",
+    "name": "Money_Recorder",
     "slug": "Money_Recorder",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -10,14 +10,14 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.aarontao.haonanmoneyrecorder"
+      "bundleIdentifier": "com.anonymous.Money-Recorder"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.aarontao.MoneyRecorder"
+      "package": "com.anonymous.MoneyRecorder"
     },
     "web": {
       "bundler": "metro",
@@ -29,7 +29,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/adaptive-icon.png",
+          "image": "./assets/images/First.png",
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }

@@ -1,8 +1,10 @@
 import {
+  StyleSheet,
   Text,
   View,
   TouchableOpacity,
   TextInput,
+  RefreshControl,
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
@@ -30,7 +32,6 @@ import { ScrollView } from "react-native";
 const DepositGoal = () => {
   const router = useRouter();
   const { theme } = useTheme();
-  const isDark = theme === "dark";
   const { translations } = useLanguage();
   const { depositId } = useLocalSearchParams();
   // const [user, setUser] = useState<any>(null);
@@ -162,27 +163,18 @@ const DepositGoal = () => {
             {translations.goals.depositGoal.title}
           </Text>
           <View className="mt-6 w-80">
-            <Text
-              className={`${
-                isDark ? "text-white" : ""
-              } mt-4 mb-2 text-base font-bold`}>
+            <Text className="mt-4 mb-2 text-base font-bold">
               {translations.goals.depositGoal.name}
             </Text>
             <TextInput
               value={name}
               onChangeText={setName}
               placeholder={translations.goals.depositGoal.namePlaceholder}
-              className={`${
-                isDark ? "text-white" : "text-black"
-              } p-4 rounded-lg border border-gray-300`}
+              className="p-4 rounded-lg border border-gray-300"
               returnKeyType="done"
               onSubmitEditing={Keyboard.dismiss}
-              placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"} // 这里设置占位符颜色
             />
-            <Text
-              className={`${
-                isDark ? "text-white" : ""
-              } mt-4 mb-2 text-base font-bold`}>
+            <Text className="mt-4 mb-2 text-base font-bold">
               {translations.goals.depositGoal.amount}
             </Text>
             <TextInput
@@ -190,18 +182,12 @@ const DepositGoal = () => {
               onChangeText={setAmount}
               placeholder={translations.goals.depositGoal.amountPlaceholder}
               keyboardType="numeric"
-              className={`${
-                isDark ? "text-white" : "text-black"
-              } p-4 rounded-lg border border-gray-300`}
+              className="p-4 rounded-lg border border-gray-300"
               returnKeyType="done"
               onSubmitEditing={Keyboard.dismiss}
-              placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"} // 这里设置占位符颜色
             />
             <View className="overflow-hidden mt-4 rounded-lg border border-gray-300">
-              <Text
-                className={`${
-                  isDark ? "text-white" : ""
-                } mt-4 mb-2 text-base font-bold`}>
+              <Text className="mt-2 text-base font-bold">
                 {translations.goals.depositGoal.category}
               </Text>
               <Picker
@@ -236,19 +222,13 @@ const DepositGoal = () => {
               value={note}
               onChangeText={setNote}
               placeholder={translations.goals.depositGoal.notePlaceholder}
-              className={`${
-                isDark ? "text-white" : "text-black"
-              } p-4 rounded-lg border border-gray-300`}
+              className="p-4 mt-4 rounded-lg border border-gray-300"
               returnKeyType="done"
               onSubmitEditing={Keyboard.dismiss}
-              placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"} // 这里设置占位符颜色
             />
             <View className="flex-row mt-4 space-x-4">
               <View className="flex-1">
-                <Text
-                  className={`${
-                    isDark ? "text-white" : ""
-                  } mt-4 mb-2 text-base font-bold`}>
+                <Text className="mb-2 font-bold">
                   {translations.goals.depositGoal.startDate}
                 </Text>
                 <View className="overflow-hidden rounded-lg border border-gray-300">
@@ -304,10 +284,7 @@ const DepositGoal = () => {
               </View>
 
               <View className="flex-1">
-                <Text
-                  className={`${
-                    isDark ? "text-white" : ""
-                  } mt-4 mb-2 text-base font-bold`}>
+                <Text className="mb-2 font-bold">
                   {translations.goals.depositGoal.endDate}
                 </Text>
                 <View className="overflow-hidden rounded-lg border border-gray-300">
