@@ -400,7 +400,7 @@ const Stats = () => {
             className={`mb-2 mt-2 text-xl font-bold text-center ${
               theme === "dark" ? "" : "text-secondary"
             }`}>
-            {translations.stats.total}
+            {translations.stats.totalBudget}
           </Text>
           {BUDGET_CATEGORIES.map((category) => {
             const budget = monthlyBudgets?.find(

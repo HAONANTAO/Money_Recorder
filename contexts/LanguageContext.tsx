@@ -67,6 +67,7 @@ interface Translations {
     none: string;
   };
   stats: {
+    totalBudget: string;
     days: string;
     daysUsed: string;
     title: string;
@@ -276,6 +277,7 @@ const enTranslations: Translations = {
     none: "None",
   },
   stats: {
+    totalBudget: "Total Budget",
     days: "Days",
     daysUsed: "Days Used",
     title: "Stats",
@@ -475,6 +477,7 @@ const zhTranslations: Translations = {
     none: "无",
   },
   stats: {
+    totalBudget: "总预算",
     days: "天",
     daysUsed: "使用天数",
     title: "统计",
