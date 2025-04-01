@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-30 15:09:05
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-01 15:08:11
+ * @LastEditTime: 2025-04-01 15:59:28
  * @FilePath: /Money_Recorder/app/(profile)/faq.tsx
  */
 import React from "react";
@@ -80,7 +80,10 @@ const FAQ = () => {
           </TouchableOpacity>
         ))}
       </ScrollView>
-      <View className="absolute right-0 bottom-0 left-0 p-4 bg-white border-t border-gray-200">
+      <View
+        className={`${
+          theme === "dark" ? "" : "bg-white"
+        }absolute right-0 bottom-0 left-0 p-4  border-t border-gray-200`}>
         <TouchableOpacity
           onPress={() =>
             Linking.openURL(
