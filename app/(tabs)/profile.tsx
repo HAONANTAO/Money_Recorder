@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 20:55:01
+ * @LastEditTime: 2025-04-01 22:51:52
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -268,9 +268,9 @@ const Profile = () => {
               onPress={async () => {
                 try {
                   if (Platform.OS === "ios") {
-                    // TODO:替换为实际的App Store ID
+                    // 替换为实际的App Store ID
                     await Linking.openURL(
-                      "https://apps.apple.com/app/idYOUR_APP_ID?action=write-review",
+                      "https://apps.apple.com/app/id6744058988?action=write-review",
                     );
                   } else {
                     Alert.alert(
