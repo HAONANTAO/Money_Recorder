@@ -1,80 +1,126 @@
 # Money Recorder
 
-A modern, feature-rich personal finance management mobile application built with React Native and Appwrite. Track your expenses, set budgets, monitor savings goals, and gain insights into your financial habits.
+A modern, feature-rich personal finance management mobile application built with React Native and Appwrite. Track your expenses, set budgets, monitor savings goals, and gain insights into your financial habits with a beautiful and intuitive interface.
 
 ## Features
 
 ### 💰 Expense & Income Tracking
 
 - Record daily expenses and income with detailed categorization
-- Support multiple expense categories (Eating, Traffic, Shopping, etc.)
-- Add custom tags and comments to transactions
-- View transaction history with detailed information
+- Support multiple expense categories (Eating, Traffic, Shopping, Entertainment, Living, etc.)
+- Add custom tags, locations, and comments to transactions
+- View transaction history with comprehensive filtering and search capabilities
+- Multiple payment method support (Cash, Card, Transfer)
 
 ### 📊 Financial Analytics
 
-- Visual representation of expenses through pie and bar charts
-- Category-wise expense breakdown
-- Income vs. Expense analysis
-- Monthly financial overview
+- Interactive pie charts for expense and income category distribution
+- Dynamic bar charts for monthly financial trends
+- Detailed category-wise expense breakdown
+- Income vs. Expense analysis with monthly comparisons
+- Real-time financial statistics and insights
 
 ### 💹 Budget Management
 
-- Set monthly budgets for different categories
-- Real-time budget tracking and monitoring
-- Visual budget progress indicators
-- Budget alerts and notifications
+- Set and manage monthly budgets for different expense categories
+- Real-time budget tracking with visual progress indicators
+- Category-specific budget monitoring
+- Smart budget alerts and notifications
+- Historical budget performance analysis
 
 ### 🎯 Savings Goals
 
-- Set and track deposit goals
+- Create and track multiple savings goals
+- Set target amounts and deadlines for financial objectives
+- Monitor progress with visual indicators
+- Categorize savings goals for better organization
+- Track completion status and history
 
-- Monitor progress towards financial targets
+### 🌓 User Experience
 
-- Visual progress tracking
-
-  
+- Intuitive and responsive user interface
+- Dark mode support for comfortable viewing
+- Multi-language support (English and Chinese)
+- Offline data persistence
+- Real-time data synchronization
+- Smart search functionality
 
 ## Technology Stack
 
 ### Frontend Framework
-- **React Native with Expo**: A framework for building cross-platform mobile applications using React Native. Expo simplifies the development process and streamlines deployment.
+
+- **React Native with Expo**: A powerful framework for building cross-platform mobile applications, providing a smooth and native user experience.
 
 ### UI/Styling
-- **NativeWind (TailwindCSS for React Native)**: Utility-first CSS for React Native that brings the power of TailwindCSS to mobile app development, providing rapid styling and customization.
+
+- **NativeWind (TailwindCSS for React Native)**: Utility-first CSS framework that enables rapid UI development with consistent styling.
+- **@expo/vector-icons**: Comprehensive icon set for enhanced UI elements.
 
 ### Backend Service
-- **Appwrite**: A self-hosted backend platform that provides services like authentication, database management, file storage, and more, making it easy to build secure and scalable web and mobile applications.
+
+- **Appwrite**: Secure and scalable backend platform providing:
+  - User authentication and management
+  - Real-time database operations
+  - File storage and management
+  - Cloud functions and automation
 
 ### State Management
-- **React Context API**: A simple and effective way to manage global state across the app without relying on external state management libraries like Redux.
+
+- **React Context API**: Efficient global state management for:
+  - Theme preferences (Light/Dark mode)
+  - Language settings
+  - User authentication state
+  - App configuration
 
 ### Data Visualization
-- **React Native Chart Kit**: A library to create interactive and customizable charts and graphs for visualizing data in the app, perfect for displaying budget reports, financial charts, and more.
+
+- **React Native Chart Kit**: Advanced charting library for:
+  - Interactive pie charts
+  - Dynamic bar charts
+  - Financial trend analysis
+  - Budget progress visualization
 
 ### Navigation
-- **Expo Router**: A file-based routing solution for Expo apps, providing a simple and flexible way to manage navigation and screens in your React Native app.
 
----
+- **Expo Router**: File-based routing system providing:
+  - Seamless screen navigation
+  - Deep linking support
+  - Type-safe routing
+  - Nested navigation structures
 
-### Additional Dependencies:
-- **@expo/vector-icons**: A collection of customizable icons to use in the app.
-- **@react-navigation/native**: A popular navigation library for React Native, enabling screen transitions and stack management.
-- **@react-native-async-storage/async-storage**: For persisting key-value pairs locally on the device.
-- **React Native Reanimated**: A library for building complex animations in React Native with a smooth performance.
-- **Victory Native**: A library for data visualization with support for charts and graphs.
-- **React Native Safe Area Context**: Helps manage safe areas and ensure UI elements don't overlap with system UI.
+### Storage & Persistence
 
----
+- **@react-native-async-storage/async-storage**: Local data persistence for:
+  - User preferences
+  - Offline data access
+  - Cache management
+  - Session handling
 
-### Dev Tools:
-- **TypeScript**: A statically typed language that enhances JavaScript with type safety, improving code quality and developer experience.
-- **Jest**: A testing framework used to write and run tests for your React Native app.
-- **Expo CLI**: Command-line tools provided by Expo to develop, build, and deploy React Native apps.
+### Animation & Interaction
 
----
+- **React Native Reanimated**: Fluid animations and interactions
+- **React Native Safe Area Context**: Adaptive layout management
 
-This tech stack offers a modern, scalable, and developer-friendly environment to build a mobile application with clean code and beautiful design. The combination of React Native with Expo, Appwrite backend services, and NativeWind for styling ensures fast development and smooth deployment across platforms.
+## Project Structure
+
+```
+├── app/                  # Main application screens
+│   ├── (func)/          # Core functionality components
+│   │   ├── Budget.tsx   # Budget management
+│   │   ├── depositGoal.tsx # Savings goals
+│   │   └── searchbar.tsx   # Search functionality
+│   ├── (profile)/       # User profile related screens
+│   └── (tabs)/          # Main navigation tabs
+├── components/          # Reusable UI components
+├── constants/           # App constants and configurations
+│   ├── categories.ts    # Transaction categories
+│   └── languages.ts     # Internationalization
+├── contexts/            # Global state management
+│   ├── LanguageContext.tsx # Language settings
+│   └── ThemeContext.tsx    # Theme management
+├── services/            # API and backend services
+└── utils/               # Utility functions
+```
 
 ## Getting Started
 
@@ -118,21 +164,6 @@ npx expo start
 - Scan the QR code with Expo Go (iOS/Android)
 - Press 'i' for iOS simulator
 - Press 'a' for Android emulator
-
-## Project Structure
-
-```
-├── app/                  # Main application screens
-│   ├── (func)/          # Functional components
-│   ├── (profile)/       # Profile related screens
-│   └── (tabs)/          # Tab navigation screens
-├── assets/              # Static assets
-├── components/          # Reusable components
-├── constants/           # Constants and configurations
-├── contexts/            # React Context providers
-├── services/            # API and service integrations
-└── utils/               # Utility functions
-```
 
 ## Contributing
 
