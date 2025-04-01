@@ -45,6 +45,32 @@ A modern, feature-rich personal finance management mobile application built with
 - Real-time data synchronization
 - Smart search functionality
 
+## Demo
+
+### Home Page
+
+![Home Page](assets/Demo1.jpg)
+
+### Stats Page1
+
+![Stats Page1](assets/Demo2.jpg)
+
+### Record Page2
+
+![Record Page2](assets/Demo3.jpg)
+
+### Record Page
+
+![Record Page](assets/Demo4.jpg)
+
+### Deposit Goal Page
+
+![Deposit Goal Page](assets/Demo5.jpg)
+
+### My Profile Page
+
+![My Profile Page](assets/Demo6.jpg)
+
 ## Technology Stack
 
 ### Frontend Framework
