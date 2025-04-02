@@ -17,6 +17,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useLanguage } from "../../contexts/LanguageContext";
+import BackButton from "@/components/BackButton";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StorageKeys, StorageService } from "@/utils/storageService";
@@ -156,6 +157,9 @@ const DepositGoal = () => {
         className={`flex-1 ${
           theme === "dark" ? "bg-quaternary" : "bg-gray-100"
         }`}>
+        <View className="relative left-10 top-16">
+          <BackButton />
+        </View>
         <ScrollView
           className="flex-1"
           contentContainerStyle={{

@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-30 12:28:24
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 14:26:16
+ * @LastEditTime: 2025-04-02 22:47:02
  * @FilePath: /Money_Recorder/app/(func)/searchbar.tsx
  */
 import {
@@ -23,6 +23,7 @@ import { getUserByEmail } from "@/services/userManagement";
 import { useTheme } from "@/contexts/ThemeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StorageKeys } from "@/utils/storageService";
+import BackButton from "@/components/BackButton";
 
 const Searchbar = () => {
   const { theme } = useTheme();
@@ -82,6 +83,10 @@ const Searchbar = () => {
       className={`flex-1 p-6 mt-24 ${
         theme === "dark" ? "bg-quaternary" : "bg-white"
       }`}>
+      <View className="relative bottom-14">
+        <BackButton />
+      </View>
+
       <View className="space-y-12">
         <View>
           <View className="flex-row items-center mb-8 space-x-2">

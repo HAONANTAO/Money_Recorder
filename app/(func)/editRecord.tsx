@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-29 16:31:38
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-01 13:52:49
+ * @LastEditTime: 2025-04-02 22:49:57
  * @FilePath: /Money_Recorder/app/(func)/editRecord.tsx
  */
 import {
@@ -21,6 +21,7 @@ import { useLocalSearchParams, router } from "expo-router";
 import { getRecordById, updateRecord } from "@/services/recordService";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useLanguage } from "../../contexts/LanguageContext";
+import BackButton from "@/components/BackButton";
 import {
   EXPENSE_CATEGORIES,
   EXPENSE_CATEGORIES2,
@@ -123,6 +124,9 @@ const EditRecord = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView
         className={`flex-1 ${isDark ? "bg-quaternary" : "bg-gray-100"}`}>
+        <View className="relative left-10 top-16">
+          <BackButton />
+        </View>
         <View className="p-5">
           <Text
             className={`mt-12 text-2xl font-bold mb-5 text-center ${

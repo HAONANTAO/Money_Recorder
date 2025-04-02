@@ -10,6 +10,7 @@ import React, { useCallback } from "react";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useLanguage } from "../../contexts/LanguageContext";
+import BackButton from "@/components/BackButton";
 import { deleteRecord, getRecordById } from "@/services/recordService";
 import {
   EXPENSE_CATEGORIES2,
@@ -74,6 +75,9 @@ const RecordDetail = () => {
         padding: 16,
       }}
       className={`${theme === "dark" ? "bg-gray-900" : "bg-gray-100"} flex-1`}>
+      <View className="relative right-10 top-20">
+        <BackButton />
+      </View>
       <View className="p-6 mt-36 w-full max-w-lg bg-white rounded-3xl shadow-lg">
         <Text className="mb-6 text-5xl font-extrabold text-center text-secondary">
           ${record.moneyAmount.toLocaleString()}

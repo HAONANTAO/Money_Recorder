@@ -4,6 +4,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { deleteBudget, updateBudget } from "@/services/budgetService";
+import BackButton from "@/components/BackButton";
 
 const BudgetDetail = () => {
   const { theme } = useTheme();
@@ -91,6 +92,10 @@ const BudgetDetail = () => {
       className={`flex-1 p-8 justify-center items-center ${
         theme === "dark" ? "bg-dark-900" : "bg-gray-50"
       }`}>
+      <View className="relative right-6 bottom-32">
+        <BackButton />
+      </View>
+
       <Text
         className={`text-3xl font-bold mb-6 ${
           theme === "dark" ? "text-white" : "text-gray-900"

@@ -1,8 +1,8 @@
 /*
  * @Date: 2025-03-28 15:21:48
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-29 12:29:42
- * @FilePath: /Money_Recorder/app/(func)/budget.tsx
+ * @LastEditTime: 2025-04-02 22:52:58
+ * @FilePath: /Money_Recorder/app/(func)/Budget.tsx
  */
 import { View } from "react-native";
 import React, { useEffect, useState } from "react";

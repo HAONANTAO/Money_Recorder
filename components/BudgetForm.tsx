@@ -15,6 +15,7 @@ import { useTheme } from "../contexts/ThemeContext";
 import { useLanguage } from "../contexts/LanguageContext";
 import { createBudget } from "../services/budgetService";
 import { BUDGET_CATEGORIES } from "../constants/categories";
+import BackButton from "./BackButton";
 
 interface BudgetFormProps {
   userId: string;
@@ -81,6 +82,9 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
           className={`mt-12 p-4  rounded-lg ${
             theme === "dark" ? "bg-quaternary" : "bg-white"
           }`}>
+          <View className="relative bottom-4 left-8">
+            <BackButton />
+          </View>
           <Text
             className={`text-center text-lg font-bold mb-2 ${
               theme === "dark" ? "text-white" : "text-secondary"
