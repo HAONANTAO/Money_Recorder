@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-30 15:09:05
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-01 15:08:11
+ * @LastEditTime: 2025-04-02 23:25:31
  * @FilePath: /Money_Recorder/app/(profile)/faq.tsx
  */
 import React from "react";
@@ -15,6 +15,7 @@ import {
 import { useTheme } from "../../contexts/ThemeContext";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { useState } from "react";
+import BackButton from "@/components/BackButton";
 
 const FAQ = () => {
   const { theme } = useTheme();
@@ -91,6 +92,9 @@ const FAQ = () => {
           <Text className="font-semibold text-white">
             {translations.author.contactMe}
           </Text>
+          <View className="right-12 bottom-24">
+            <BackButton navigateTo="/(tabs)/profile" />
+          </View>
         </TouchableOpacity>
       </View>
     </View>

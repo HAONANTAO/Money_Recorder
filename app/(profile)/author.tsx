@@ -2,6 +2,7 @@ import { View, Text, Image, Animated } from "react-native";
 import React, { useEffect, useRef } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useLanguage } from "../../contexts/LanguageContext";
+import BackButton from "@/components/BackButton";
 
 const Author = () => {
   // 动画值
@@ -49,6 +50,9 @@ const Author = () => {
       className={`flex-1 justify-center items-center p-6 ${
         theme === "dark" ? "bg-quaternary" : "bg-gray-100"
       }`}>
+      <View className="right-4 bottom-14">
+        <BackButton navigateTo="/(tabs)/profile" />
+      </View>
       {/* 头像带放大和透明度动画 */}
       <Animated.View
         style={{

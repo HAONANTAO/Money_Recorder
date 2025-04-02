@@ -12,6 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons"; // 引入图标库
 import { useTheme } from "../../contexts/ThemeContext";
 import { useLanguage } from "../../contexts/LanguageContext";
+import BackButton from "@/components/BackButton";
 
 const Settings = () => {
   // Use the theme context and language context
@@ -83,6 +84,10 @@ const Settings = () => {
       className={`flex-1 ${
         theme === "dark" ? "bg-quaternary" : "bg-gray-100"
       }`}>
+      {/* 层级问题 */}
+      <View className="top-44 left-48" style={{ zIndex: 999 }}>
+        <BackButton navigateTo="/(tabs)/profile" />
+      </View>
       <ScrollView
         contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}>
         <View className="px-6 py-10">

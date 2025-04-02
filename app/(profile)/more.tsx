@@ -14,6 +14,7 @@ import { getUserByEmail } from "@/services/userManagement";
 import { backupUserData, restoreUserData } from "@/services/cloudBackupService";
 import { Alert } from "react-native";
 import { useLanguage } from "../../contexts/LanguageContext";
+import BackButton from "@/components/BackButton";
 
 const More = () => {
   const { theme } = useTheme();
@@ -123,6 +124,9 @@ const More = () => {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
+      <View className="top-24 left-80">
+        <BackButton navigateTo="/(tabs)/profile" />
+      </View>
       <View className="p-6 mt-20">
         <Text
           className={`text-2xl font-bold mb-6 ${
