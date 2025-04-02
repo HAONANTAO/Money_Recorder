@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-02 11:18:25
+ * @LastEditTime: 2025-04-02 15:03:23
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -37,6 +37,7 @@ const Profile = () => {
   const [edit, setEdit] = useState(true);
   const [avatar, setAvatar] = useState("");
   const [userId, setUserId] = useState("");
+  const [isGuest, setIsGuest] = useState<boolean>();
   // for edit considering
   // const [showSuccessModal, setShowSuccessModal] = useState(false);
   // logout functions
@@ -48,6 +49,13 @@ const Profile = () => {
   useEffect(() => {
     const getEmailNow = async () => {
       try {
+        const isGuest = await StorageService.getIsGuest();
+        setIsGuest(isGuest);
+        if (isGuest === true) {
+          setUsername("admin");
+          setEmail("admin@gmail.com");
+          return;
+        }
         const email = await StorageService.getEmail();
         // user info
         const userInfo = await getUserByEmail(email as string);
@@ -359,6 +367,7 @@ const Profile = () => {
       {/* delete account and logout buttons */}
       <View className="flex justify-end items-center mt-12">
         <TouchableOpacity
+          disabled={isGuest === true}
           onPress={() => {
             Alert.alert(
               translations.common.warning,
@@ -389,7 +398,9 @@ const Profile = () => {
               ],
             );
           }}
-          className="py-3 mt-2 rounded-lg w-[140px] bg-red-500">
+          className={`py-3 mt-2 rounded-lg w-[140px] ${
+            isGuest === true ? "bg-gray-400" : "bg-red-500"
+          }`}>
           <Text className="font-bold text-center text-white">
             {translations.profile.deleteAccount}
           </Text>
