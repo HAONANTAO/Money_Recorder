@@ -192,6 +192,7 @@ const Profile = () => {
                 title={translations.common.edit}
                 onPress={() => handleEdit()}
                 color={theme === "dark" ? "#60A5FA" : "#E63946"}
+                disabled={isGuest === true}
               />
             ) : (
               <Button
