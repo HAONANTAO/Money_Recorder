@@ -12,6 +12,7 @@ interface Translations {
     motto: string;
   };
   profile: {
+    deleteAccount: string;
     faqContent: any;
     username: string;
     rating: string;
@@ -135,6 +136,7 @@ interface Translations {
     version: string;
   };
   common: {
+    warning: string;
     confirm: string | undefined;
     edit: string;
     save: string;
@@ -148,7 +150,10 @@ interface Translations {
     update: string;
   };
   alerts: {
-    updateSuccess: string | undefined;
+    deleteAccountError: string;
+    deleteAccountConfirm: string;
+
+    updateSuccess: string;
     createSuccess: string;
     fillAmountCategory: string;
     record: string;
@@ -193,6 +198,7 @@ const enTranslations: Translations = {
     motto: `Building innovative solutions, one project at a time.`,
   },
   profile: {
+    deleteAccount: "deleteAccount",
     username: "Username",
     rating: "Rating",
     author: "Author",
@@ -342,6 +348,7 @@ const enTranslations: Translations = {
     version: "App Version",
   },
   common: {
+    warning: "warning",
     confirm: "Confirm",
     edit: "Edit",
     save: "Save", // 新增的翻译，用于保存按钮的文本
@@ -355,6 +362,9 @@ const enTranslations: Translations = {
     update: "Update",
   },
   alerts: {
+    deleteAccountError: "deleteAccountError",
+    deleteAccountConfirm:
+      "Are you sure you want to delete your account? All account data will be lost",
     updateSuccess: "Update Record Success",
     createSuccess: "Create Record Success",
     fillAmountCategory: "Please fill in the amount and category.",
@@ -392,6 +402,7 @@ const zhTranslations: Translations = {
     motto: "生活就是像极了生活",
   },
   profile: {
+    deleteAccount: "删除账号",
     username: "用户名",
     rating: "评分",
     author: "作者",
@@ -539,6 +550,7 @@ const zhTranslations: Translations = {
     version: "应用版本",
   },
   common: {
+    warning: "警告",
     confirm: "确认",
     edit: "编辑",
     save: "保存", // 新增的翻译，用于保存按钮的文本
@@ -552,6 +564,8 @@ const zhTranslations: Translations = {
     update: "更新",
   },
   alerts: {
+    deleteAccountError: "删除账号异常",
+    deleteAccountConfirm: "你确定要删除账号？所有账号的数据将会丢失",
     updateSuccess: "更新记录成功",
     createSuccess: "创建记录成功",
     fillAmountCategory: "请填写金额和类别。",

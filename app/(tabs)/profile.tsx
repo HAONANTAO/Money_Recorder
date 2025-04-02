@@ -1,12 +1,11 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 20:55:01
+ * @LastEditTime: 2025-04-02 11:18:25
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
   Button,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -24,6 +23,7 @@ import {
   getUserByEmail,
   updateAvatar,
   updateUser,
+  deleteUser,
 } from "@/services/userManagement";
 import { uploadAvatar } from "@/services/bucketStorageService";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -356,11 +356,46 @@ const Profile = () => {
           </View>
         </View>
       </View>
-      {/* logout button */}
+      {/* delete account and logout buttons */}
       <View className="flex justify-end items-center mt-12">
         <TouchableOpacity
+          onPress={() => {
+            Alert.alert(
+              translations.common.warning,
+              translations.alerts.deleteAccountConfirm,
+              [
+                {
+                  text: translations.common.cancel,
+                  style: "cancel",
+                },
+                {
+                  text: translations.common.confirm,
+                  style: "destructive",
+                  onPress: async () => {
+                    try {
+                      await deleteUser(userId);
+                      await StorageService.clearEmail();
+                      router.replace("/");
+                    } catch (error) {
+                      console.error("Error deleting account:", error);
+                      Alert.alert(
+                        translations.common.error,
+                        translations.alerts.deleteAccountError,
+                      );
+                    }
+                  },
+                },
+              ],
+            );
+          }}
+          className="py-3 mt-2 rounded-lg w-[140px] bg-red-500">
+          <Text className="font-bold text-center text-white">
+            {translations.profile.deleteAccount}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => handleLogOut()}
-          className="py-3 mt-2  rounded-lg w-[140px] bg-tertiary ">
+          className="py-3 mt-2 rounded-lg w-[140px] bg-tertiary">
           <Text className="font-bold text-center text-white">
             {translations.profile.logout}
           </Text>
