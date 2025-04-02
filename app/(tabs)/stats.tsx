@@ -30,6 +30,7 @@ import { getMonthlyExpensesByCategory } from "@/services/recordService";
 import { useFocusEffect, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useLanguage } from "../../contexts/LanguageContext";
+import { demoRecords, demoBudget } from "@/constants/demoData";
 
 const Stats = () => {
   const { theme } = useTheme();
@@ -60,6 +61,86 @@ const Stats = () => {
   useEffect(() => {
     const getInit = async () => {
       try {
+        const isGuest = await StorageService.getIsGuest();
+        if (isGuest) {
+          // 使用演示数据
+          const filteredRecords = DateChecker(
+            demoRecords as unknown as MoneyRecord[],
+          );
+          setRecords(filteredRecords);
+          setEventLength(demoRecords.length);
+
+          // 计算收入和支出
+          const incomeTotal = demoRecords
+            .filter((record: any) => record.type === "income")
+            .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
+
+          const expenseTotal = demoRecords
+            .filter((record: any) => record.type === "expense")
+            .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
+
+          setIncome(incomeTotal);
+          setExpense(expenseTotal);
+
+          // 设置预算数据
+          setMonthlyBudgets(demoBudget);
+
+          // 计算每个类别的支出
+          const expenseCategoryData = demoRecords
+            .filter((record: any) => record.type === "expense")
+            .reduce((categories: any, record: any) => {
+              const category = record.category;
+              if (categories[category]) {
+                categories[category] += record.moneyAmount;
+              } else {
+                categories[category] = record.moneyAmount;
+              }
+              return categories;
+            }, {});
+
+          setExpensesByCategory(expenseCategoryData);
+
+          // 设置分类数据
+          const pieChartExpenseData = (
+            language === "zh" ? EXPENSE_CATEGORIES2 : EXPENSE_CATEGORIES
+          ).map((category) => ({
+            name: category.label,
+            population: expenseCategoryData[category.value] || 0,
+            color: getRandomColor(),
+            legendFontColor: "#7f7f7f",
+            legendFontSize: 15,
+            icon: category.icon,
+          }));
+
+          const incomeCategoryData = demoRecords
+            .filter((record: any) => record.type === "income")
+            .reduce((categories: any, record: any) => {
+              const category = record.category;
+              if (categories[category]) {
+                categories[category] += record.moneyAmount;
+              } else {
+                categories[category] = record.moneyAmount;
+              }
+              return categories;
+            }, {});
+
+          const pieChartIncomeData = (
+            language === "zh" ? INCOME_CATEGORIES2 : INCOME_CATEGORIES
+          ).map((category) => ({
+            name: category.label,
+            population: incomeCategoryData[category.value] || 0,
+            color: getRandomColor(),
+            legendFontColor: "#7f7f7f",
+            legendFontSize: 15,
+            icon: category.icon,
+          }));
+
+          setExpenseCategories(pieChartExpenseData);
+          setIncomeCategories(pieChartIncomeData);
+          setLoading(false);
+          return;
+        }
+
         const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
         if (!email) return;
 
@@ -480,6 +561,3 @@ const Stats = () => {
 const styles = StyleSheet.create({});
 
 export default Stats;
-function getInit() {
-  throw new Error("Function not implemented.");
-}

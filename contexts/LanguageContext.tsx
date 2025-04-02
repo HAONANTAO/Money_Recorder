@@ -6,6 +6,21 @@ type Language = "en" | "zh";
 
 // 定义翻译内容的接口
 interface Translations {
+  budget: {
+    title: string;
+    date: string;
+    amount: string;
+    amountPlaceholder: string;
+    category: string;
+    comments: string;
+    commentsPlaceholder: string;
+    save: string;
+  };
+  guestmode: {
+    record: string;
+    depositgoal: string;
+    budget: string;
+  };
   author: {
     introduction: string;
     contactMe: string;
@@ -190,6 +205,25 @@ interface LanguageContextType {
 
 // 英文翻译
 const enTranslations: Translations = {
+   budget: {
+    title: "Set The Budget",
+    date: " Budget Date",
+    amount: " Budget Amount",
+    amountPlaceholder: "Please enter amount",
+    category: "Budget Category",
+    comments:"Comments",
+    commentsPlaceholder: "Please enter comments",
+    save: " Save The Budget",
+  },
+  guestmode: {
+    depositgoal:
+      "Deposit target cannot be saved in guest mode, please log in and try again",
+    record:
+      " Unable to save records in guest mode, please log in and try again",
+    budget:
+      " Unable to save budget in guest mode, please log in and try again",
+  },
+
   author: {
     introduction: `Hello! I am an IT developer who has studied at Monash and Melbourne
         University. As a passionate developer, I am constantly learning and
@@ -395,6 +429,21 @@ const enTranslations: Translations = {
 
 // 中文翻译
 const zhTranslations: Translations = {
+  budget: {
+    title: "设定预算",
+    date: " 预算日期",
+    amount: " 预算金额",
+    amountPlaceholder: "请输入金额",
+    category: "预算类别",
+    comments: "评论",
+    commentsPlaceholder: "请输入评论...",
+    save: " 保存预算",
+  },
+  guestmode: {
+    depositgoal: "游客模式下无法保存存款目标，请登录后重试",
+    record: "游客模式下无法保存记录，请登录后重试",
+    budget: "访客模式下无法保存预算，请登录后重试",
+  },
   author: {
     introduction:
       "你好！我是一名 IT 开发人员，曾就读于莫纳什大学和墨尔本大学。作为一名充满激情的开发人员，我不断学习和成长，希望在 IT 领域有所成就。",

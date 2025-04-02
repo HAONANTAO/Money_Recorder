@@ -19,9 +19,32 @@ export const StorageKeys = {
   BACKUP_INFO: "backupInfo",
   // 标记用户是否已删除
   IS_DELETED: "isDeleted",
+  // 标记用户是否为游客模式
+  IS_GUEST: "isGuest",
 } as const;
 
 export const StorageService = {
+  // 设置游客模式状态
+  setIsGuest: async (isGuest: boolean) => {
+    try {
+      await AsyncStorage.setItem(StorageKeys.IS_GUEST, isGuest.toString());
+    } catch (error) {
+      console.error("Error setting isGuest:", error);
+      throw error;
+    }
+  },
+
+  // 获取游客模式状态
+  getIsGuest: async () => {
+    try {
+      const isGuest = await AsyncStorage.getItem(StorageKeys.IS_GUEST);
+      return isGuest === "true";
+    } catch (error) {
+      console.error("Error getting isGuest:", error);
+      throw error;
+    }
+  },
+
   // 设置用户删除状态
   setIsDeleted: async (isDeleted: boolean) => {
     try {

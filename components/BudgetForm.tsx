@@ -12,16 +12,23 @@ import {
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useTheme } from "../contexts/ThemeContext";
+import { useLanguage } from "../contexts/LanguageContext";
 import { createBudget } from "../services/budgetService";
 import { BUDGET_CATEGORIES } from "../constants/categories";
 
 interface BudgetFormProps {
   userId: string;
   onSuccess?: () => void;
+  isGuest?: boolean;
 }
 
-const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
+const BudgetForm: React.FC<BudgetFormProps> = ({
+  userId,
+  onSuccess,
+  isGuest = false,
+}) => {
   const { theme } = useTheme();
+  const { translations } = useLanguage();
   const [amount, setAmount] = useState("");
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth() + 1);
@@ -33,8 +40,12 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
 
   const handleSubmit = async () => {
     try {
+      if (isGuest) {
+        alert(translations.guestmode.budget);
+        return;
+      }
       if (!amount) {
-        setError("Enter budget amount");
+        setError(translations.alerts.fillAmountCategory);
         return;
       }
 
@@ -57,7 +68,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
         onSuccess();
       }
     } catch (err) {
-      setError("create budget failed,pls try again");
+      setError(translations.alerts.createError);
       setShowErrorModal(true);
       console.error("create budget failed:", err);
     }
@@ -74,7 +85,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
             className={`text-center text-lg font-bold mb-2 ${
               theme === "dark" ? "text-white" : "text-secondary"
             }`}>
-            Set The Budget
+            {translations.budget.title}
           </Text>
 
           <View className="mb-4">
@@ -82,7 +93,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
               className={`mb-2 ${
                 theme === "dark" ? "text-white" : "text-black"
               }`}>
-              Budget Date
+              {translations.budget.date}
             </Text>
             <View className="flex-row space-x-2">
               <View
@@ -139,7 +150,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
               className={`mb-2 ${
                 theme === "dark" ? "text-white" : "text-black"
               }`}>
-              Budget Amount
+              {translations.budget.amount}
             </Text>
             <TextInput
               className={`border rounded-md p-2 ${
@@ -149,7 +160,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
               }`}
               value={amount}
               onChangeText={setAmount}
-              placeholder="Please enter amount"
+              placeholder={translations.budget.amountPlaceholder}
               keyboardType="numeric"
               placeholderTextColor={theme === "dark" ? "#9CA3AF" : "#6B7280"}
               returnKeyType="done"
@@ -162,7 +173,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
               className={`mb-2 ${
                 theme === "dark" ? "text-white" : "text-black"
               }`}>
-              Budget Category
+              {translations.budget.category}
             </Text>
             <View
               className={`border rounded-md overflow-hidden ${
@@ -192,7 +203,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
               className={`mb-2 ${
                 theme === "dark" ? "text-white" : "text-black"
               }`}>
-              Comments
+              {translations.budget.comments}
             </Text>
             <TextInput
               className={`border rounded-md p-2 ${
@@ -202,7 +213,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
               }`}
               value={note}
               onChangeText={setNote}
-              placeholder="Please enter comments"
+              placeholder={translations.budget.commentsPlaceholder}
               placeholderTextColor={theme === "dark" ? "#9CA3AF" : "#6B7280"}
               returnKeyType="done"
               onSubmitEditing={Keyboard.dismiss}
@@ -211,11 +222,20 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
 
           {error ? <Text className="mb-4 text-red-500">{error}</Text> : null}
 
+          {isGuest && (
+            <Text className="mb-4 text-center text-red-500">
+              {translations.guestmode.budget}
+            </Text>
+          )}
+
           <TouchableOpacity
-            className="py-3 rounded-md bg-primary"
-            onPress={handleSubmit}>
+            className={`py-3 rounded-md ${
+              isGuest ? "bg-gray-400" : "bg-primary"
+            }`}
+            onPress={handleSubmit}
+            disabled={isGuest}>
             <Text className="font-semibold text-center text-white">
-              Save The Budget
+              {translations.budget.save}
             </Text>
           </TouchableOpacity>
 
@@ -234,12 +254,14 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
                   className={`text-lg font-bold mb-4 text-center ${
                     theme === "dark" ? "text-white" : "text-black"
                   }`}>
-                  Create Budget Successfully
+                  {translations.alerts.createSuccess}
                 </Text>
                 <TouchableOpacity
                   className="px-4 py-2 rounded-md bg-primary"
                   onPress={() => setShowSuccessModal(false)}>
-                  <Text className="text-center text-white">Confirmed</Text>
+                  <Text className="text-center text-white">
+                    {translations.common.confirm}
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -260,12 +282,14 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ userId, onSuccess }) => {
                   className={`text-lg font-bold mb-4 text-center ${
                     theme === "dark" ? "text-white" : "text-black"
                   }`}>
-                  Create Budget Failed
+                  {translations.alerts.createError}
                 </Text>
                 <TouchableOpacity
                   className="px-4 py-2 rounded-md bg-primary"
                   onPress={() => setShowErrorModal(false)}>
-                  <Text className="text-center text-white">Confirmed</Text>
+                  <Text className="text-center text-white">
+                    {translations.common.confirm}
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>

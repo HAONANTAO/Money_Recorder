@@ -32,7 +32,7 @@ const Record = () => {
     language === "en" ? INCOME_CATEGORIES : INCOME_CATEGORIES2;
 
   const [record, setRecord] = useState({
-    userId: "",
+    userId: "guest",
     moneyAmount: "",
     // ，'as'是类型断言操作符。这里'expense' as 'income' | 'expense'的作用是告诉TypeScript编译器将'expense'字符串值明确地视为'income'或'expense'联合类型中的一个。
     type: "expense" as "income" | "expense",
@@ -62,6 +62,10 @@ const Record = () => {
 
   const handleSubmit = async () => {
     try {
+      if (record.userId === "guest") {
+        alert("请登录后再试");
+        return;
+      }
       if (!record.moneyAmount || !record.category) {
         alert(translations.alerts.fillAmountCategory);
         return;
@@ -93,6 +97,12 @@ const Record = () => {
       <ScrollView
         className={`flex-1 ${isDark ? "bg-quaternary" : "bg-gray-100"}`}>
         <View className="p-5">
+          {record.userId === "guest" ||
+            (record.userId === "" && (
+              <Text className="mb-4 text-center text-red-500">
+                游客模式下无法保存记录，请登录后再试
+              </Text>
+            ))}
           <Text
             className={`mt-12 text-2xl font-bold mb-5 text-center ${
               isDark ? "text-secondary" : "text-quaternary"
@@ -369,12 +379,19 @@ const Record = () => {
           </View>
 
           {/* 提交按钮 */}
+          {record.userId === "guest" && (
+            <Text className="mt-4 mb-4 text-center text-red-500">
+              {translations.guestmode.record}
+             
+            </Text>
+          )}
           <TouchableOpacity
+            className={`py-3 rounded-md ${
+              record.userId === "guest" ? "bg-gray-400" : "bg-primary"
+            }`}
             onPress={handleSubmit}
-            className={`p-4 rounded-xl mb-6 mt-2 ${
-              isDark ? "bg-blue-700" : "bg-blue-500"
-            }`}>
-            <Text className="text-base font-semibold text-center text-white">
+            disabled={record.userId === "guest" || record.userId === ""}>
+            <Text className="font-semibold text-center text-white">
               {translations.record.save}
             </Text>
           </TouchableOpacity>

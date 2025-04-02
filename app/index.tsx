@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-30 20:56:44
+ * @LastEditTime: 2025-04-02 13:20:46
  * @FilePath: /Money_Recorder/app/index.tsx
  */
 import { useEffect, useState } from "react";
@@ -119,6 +119,16 @@ export default function Index() {
       throw new Error("Failed action. pls try again!");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGuestLogin = async () => {
+    try {
+      await StorageService.setIsGuest(true);
+      router.replace("/(tabs)/home");
+    } catch (error) {
+      console.error("Error during guest login:", error);
+      throw new Error("Failed to login as guest. Please try again!");
     }
   };
 
@@ -245,6 +255,11 @@ export default function Index() {
             </TouchableOpacity>
           </View>
         )}
+        <TouchableOpacity
+          onPress={handleGuestLogin}
+          className="mt-4 text-center">
+          <Text className="text-sm text-gray-600">Continue as Guest</Text>
+        </TouchableOpacity>
       </View>
 
       {/* 成功提示Modal */}

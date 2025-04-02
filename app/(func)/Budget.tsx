@@ -29,7 +29,11 @@ const Budget = () => {
       className={`flex-1 p-4 ${
         theme === "dark" ? "bg-quaternary" : "bg-white"
       }`}>
-      {userId && <BudgetForm userId={userId} />}
+      {userId ? (
+        <BudgetForm userId={userId} />
+      ) : (
+        <BudgetForm userId="guest" isGuest={true} />
+      )}
     </View>
   );
 };

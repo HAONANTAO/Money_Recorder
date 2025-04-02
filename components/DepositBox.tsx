@@ -18,7 +18,17 @@ import { deleteDeposit, completeDeposit } from "@/services/depositGoal";
 import { updateSaveAmount } from "@/services/depositGoal";
 import { useLanguage } from "../contexts/LanguageContext";
 
-const DepositBox = () => {
+interface DepositBoxProps {
+  demoData?: {
+    goalName: string;
+    targetAmount: number;
+    currentAmount: number;
+    deadline: string;
+    description: string;
+  }[];
+}
+
+const DepositBox: React.FC<DepositBoxProps> = ({ demoData }) => {
   const router = useRouter();
   const { theme } = useTheme();
   const { translations } = useLanguage();
@@ -33,6 +43,21 @@ const DepositBox = () => {
   useEffect(() => {
     const getInitInfo = async () => {
       try {
+        if (demoData) {
+          const formattedDemoData = demoData.map((goal) => ({
+            Name: goal.goalName,
+            amount: goal.targetAmount,
+            startYear: new Date().getFullYear(),
+            startMonth: new Date().getMonth() + 1,
+            endYear: new Date(goal.deadline).getFullYear(),
+            endMonth: new Date(goal.deadline).getMonth() + 1,
+            completed: false,
+          }));
+          setDeposits(formattedDemoData);
+          setLoading(false);
+          return;
+        }
+
         const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
         if (!email) return;
 
@@ -47,7 +72,7 @@ const DepositBox = () => {
       }
     };
     getInitInfo();
-  }, [refresh]); // 添加refresh依赖，当refresh变化时重新加载数据
+  }, [refresh, demoData]); // 添加refresh依赖，当refresh变化时重新加载数据
 
   if (loading) {
     return (
@@ -74,7 +99,7 @@ const DepositBox = () => {
               className={`text-center font-medium ${
                 !showCompleted ? "text-white" : "text-gray-700"
               }`}>
-              {translations.common.completed}
+              {translations.common.uncompleted}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -86,7 +111,7 @@ const DepositBox = () => {
               className={`text-center font-medium ${
                 showCompleted ? "text-white" : "text-gray-700"
               }`}>
-              {translations.common.uncompleted}
+              {translations.common.completed}
             </Text>
           </TouchableOpacity>
         </View>

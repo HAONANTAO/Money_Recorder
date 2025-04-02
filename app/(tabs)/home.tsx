@@ -24,6 +24,7 @@ import RecordShowBox from "@/components/RecordShowbox";
 import DateChecker from "@/utils/dateChecker";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { demoRecords } from "@/constants/demoData";
 
 // 获取当前日期
 const getCurrentDate = () => {
@@ -76,6 +77,17 @@ const Home = () => {
 
   const getInit = async () => {
     try {
+      const isGuest = await StorageService.getIsGuest();
+      if (isGuest) {
+        const filteredRecords = DateChecker(
+          demoRecords as unknown as MoneyRecord[],
+        );
+        setRecords(filteredRecords);
+        calculateMonthlyStats(filteredRecords);
+        setLoading(false);
+        return;
+      }
+
       const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
       if (!email) return;
 
@@ -230,20 +242,22 @@ const Home = () => {
           }`}>
           <View className="flex flex-row flex-wrap justify-around">
             {loading ? (
-              <ActivityIndicator
-                size="large"
-                color={isDark ? "#fff" : "#0000ff"}
-              />
-            ) : records.length > 0 ? (
-              records.map((record: any) => (
-                <View className="p-2 w-1/2" key={record.$id}>
-                  <RecordShowBox record={record} />
-                </View>
-              ))
+              <ActivityIndicator size="large" color="#0000ff" />
+            ) : records.length === 0 ? (
+              <View className="flex-1 justify-center items-center">
+                <Text
+                  className={`text-lg font-bold ${
+                    isDark ? "text-white" : "text-gray-800"
+                  }`}>
+                  {translations.record.none}
+                </Text>
+              </View>
             ) : (
-              <Text className={isDark ? "text-white" : "text-gray-700"}>
-                No records found
-              </Text>
+              <View className="flex-row flex-wrap justify-between mt-6">
+                {records.map((record) => (
+                  <RecordShowBox key={record.$id} record={record} />
+                ))}
+              </View>
             )}
           </View>
         </View>

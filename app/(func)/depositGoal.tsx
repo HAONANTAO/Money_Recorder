@@ -19,7 +19,7 @@ import { useTheme } from "../../contexts/ThemeContext";
 import { useLanguage } from "../../contexts/LanguageContext";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StorageKeys } from "@/utils/storageService";
+import { StorageKeys, StorageService } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
 import {
   createDeposit,
@@ -54,11 +54,16 @@ const DepositGoal = () => {
 
   useEffect(() => {
     const getInitInfo = async () => {
+      const isGuest = await StorageService.getIsGuest();
+      if (isGuest) {
+        setUserId("guest");
+        return;
+      }
+
       const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
       if (!email) return;
 
       const userData = await getUserByEmail(email);
-
       setUserId(userData.$id);
 
       if (depositId) {
@@ -339,9 +344,17 @@ const DepositGoal = () => {
                 </View>
               </View>
             </View>
+            {userId === "guest" && (
+              <Text className="mt-4 mb-4 text-center text-red-500">
+                {translations.guestmode.depositgoal}
+              </Text>
+            )}
             <TouchableOpacity
               onPress={() => handleDepositSubmit("Deposit", amount)}
-              className="p-4 mt-6 bg-blue-500 rounded-lg">
+              disabled={userId === "guest"}
+              className={`p-4 mt-6 rounded-lg ${
+                userId === "guest" ? "bg-gray-400" : "bg-blue-500"
+              }`}>
               <Text className="font-semibold text-center text-white">
                 {depositId
                   ? translations.goals.depositGoal.updateButton
