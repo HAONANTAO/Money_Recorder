@@ -96,6 +96,7 @@ export default function Index() {
         const user = await loginUser(email, password);
         console.log("Login successful:", user);
         await StorageService.saveEmail(email);
+        await StorageService.setIsDeleted(false);
         setShowSuccessModal(true);
       } else {
         // 注册按钮

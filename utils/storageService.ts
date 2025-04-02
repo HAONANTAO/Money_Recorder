@@ -17,9 +17,32 @@ export const StorageKeys = {
   LAST_FETCH: "lastFetch",
   // 存储最新的备份信息
   BACKUP_INFO: "backupInfo",
+  // 标记用户是否已删除
+  IS_DELETED: "isDeleted",
 } as const;
 
 export const StorageService = {
+  // 设置用户删除状态
+  setIsDeleted: async (isDeleted: boolean) => {
+    try {
+      await AsyncStorage.setItem(StorageKeys.IS_DELETED, isDeleted.toString());
+    } catch (error) {
+      console.error("Error setting isDeleted:", error);
+      throw error;
+    }
+  },
+
+  // 获取用户删除状态
+  getIsDeleted: async () => {
+    try {
+      const isDeleted = await AsyncStorage.getItem(StorageKeys.IS_DELETED);
+      return isDeleted === "true";
+    } catch (error) {
+      console.error("Error getting isDeleted:", error);
+      throw error;
+    }
+  },
+
   // 保存用户ID
   saveEmail: async (email: string) => {
     try {

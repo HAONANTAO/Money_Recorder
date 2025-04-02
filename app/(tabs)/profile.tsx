@@ -373,6 +373,7 @@ const Profile = () => {
                   style: "destructive",
                   onPress: async () => {
                     try {
+                      await StorageService.setIsDeleted(true);
                       await deleteUser(userId);
                       await StorageService.clearEmail();
                       router.replace("/");
@@ -403,7 +404,7 @@ const Profile = () => {
       </View>
       {/* footer */}
       <View className="absolute right-0 bottom-0 px-4 py-2">
-        <Text className="text-[10px] text-gray-400">Developed by AaronTAO</Text>
+        <Text className="text-[10px] text-gray-400">Developed by TAO</Text>
       </View>
     </View>
   );

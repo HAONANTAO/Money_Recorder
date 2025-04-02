@@ -1,12 +1,15 @@
 /*
  * @Date: 2025-03-20 18:36:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-24 13:21:36
+ * @LastEditTime: 2025-04-02 11:46:57
  * @FilePath: /Money_Recorder/services/userManagement.ts
  */
 
 import { Client, Databases, ID, Query } from "react-native-appwrite";
 import bcrypt from "react-native-bcrypt";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StorageKeys } from "../utils/storageService";
+import { router } from "expo-router";
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID;
 const USERS_COLLECTION_ID =
@@ -156,8 +159,68 @@ export const deleteUser = async (userId: string) => {
       throw new Error("Database configuration is missing");
     }
 
+    // 删除用户的所有记录
+    const records = await database.listDocuments(
+      DATABASE_ID,
+      process.env.EXPO_PUBLIC_APPWRITE_RECORD_COLLECTION_ID!,
+      [Query.equal("userId", userId)],
+    ); // 批量删除用户的所有记录
+
+    const recordDeletions = records.documents.map((record) =>
+      database.deleteDocument(
+        DATABASE_ID,
+        process.env.EXPO_PUBLIC_APPWRITE_RECORD_COLLECTION_ID!,
+        record.$id,
+      ),
+    );
+
+    // 删除用户的所有预算
+    const budgets = await database.listDocuments(
+      DATABASE_ID,
+      process.env.EXPO_PUBLIC_APPWRITE_BUDGET_COLLECTION_ID!,
+      [Query.equal("userId", userId)],
+    );
+
+    // 批量删除用户的所有预算
+    const budgetDeletions = budgets.documents.map((budget) =>
+      database.deleteDocument(
+        DATABASE_ID,
+        process.env.EXPO_PUBLIC_APPWRITE_BUDGET_COLLECTION_ID!,
+        budget.$id,
+      ),
+    );
+
+    // 删除用户的所有存款目标
+    const deposits = await database.listDocuments(
+      DATABASE_ID,
+      process.env.EXPO_PUBLIC_APPWRITE_DEPOSIT_COLLECTION_ID!,
+      [Query.equal("userId", userId)],
+    );
+
+    // 批量删除用户的所有存款目标
+    const depositDeletions = deposits.documents.map((deposit) =>
+      database.deleteDocument(
+        DATABASE_ID,
+        process.env.EXPO_PUBLIC_APPWRITE_DEPOSIT_COLLECTION_ID!,
+        deposit.$id,
+      ),
+    );
+
+    // 并行执行所有删除操作
+    await Promise.all([
+      ...recordDeletions,
+      ...budgetDeletions,
+      ...depositDeletions,
+    ]);
+
     // 删除用户文档
     await database.deleteDocument(DATABASE_ID, USERS_COLLECTION_ID, userId);
+
+    // 清除所有本地存储的数据
+    await AsyncStorage.multiRemove(Object.values(StorageKeys));
+
+    // 使用React Navigation导航到登录页面
+    router.replace("/");
 
     return true;
   } catch (error) {

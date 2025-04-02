@@ -79,6 +79,10 @@ const Home = () => {
       const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
       if (!email) return;
 
+      // 检查用户是否已删除账号
+      const isDeleted = await StorageService.getIsDeleted();
+      if (isDeleted) return;
+
       // 尝试从缓存获取数据
       const cachedRecords = await StorageService.getCachedRecords();
       if (cachedRecords) {
