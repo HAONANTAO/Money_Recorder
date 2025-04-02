@@ -148,3 +148,20 @@ export const loginUser = async (email: string, password: string) => {
     throw error;
   }
 };
+
+// 删除用户
+export const deleteUser = async (userId: string) => {
+  try {
+    if (!DATABASE_ID || !USERS_COLLECTION_ID) {
+      throw new Error("Database configuration is missing");
+    }
+
+    // 删除用户文档
+    await database.deleteDocument(DATABASE_ID, USERS_COLLECTION_ID, userId);
+
+    return true;
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw error;
+  }
+};
