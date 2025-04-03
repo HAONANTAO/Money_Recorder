@@ -54,7 +54,10 @@ const FAQ = () => {
       className={`flex-1 p-4 ${
         theme === "dark" ? "bg-quaternary" : "bg-white"
       }`}>
-      <View className="flex justify-center items-center mb-6">
+      <View className="absolute left-4 top-12 z-50">
+        <BackButton />
+      </View>
+      <View className="flex justify-center items-center mt-24 mb-6">
         <Text
           className={`text-2xl font-bold ${
             theme === "dark" ? "text-white" : "text-quaternary"
@@ -92,9 +95,6 @@ const FAQ = () => {
           <Text className="font-semibold text-white">
             {translations.author.contactMe}
           </Text>
-          <View className="right-12 bottom-24">
-            <BackButton navigateTo="/(tabs)/profile" />
-          </View>
         </TouchableOpacity>
       </View>
     </View>

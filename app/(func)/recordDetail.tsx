@@ -75,7 +75,7 @@ const RecordDetail = () => {
         padding: 16,
       }}
       className={`${theme === "dark" ? "bg-gray-900" : "bg-gray-100"} flex-1`}>
-      <View className="relative right-10 top-20">
+      <View className="absolute left-4 top-12 z-50">
         <BackButton />
       </View>
       <View className="p-6 mt-36 w-full max-w-lg bg-white rounded-3xl shadow-lg">

@@ -92,7 +92,7 @@ const BudgetDetail = () => {
       className={`flex-1 p-8 justify-center items-center ${
         theme === "dark" ? "bg-dark-900" : "bg-gray-50"
       }`}>
-      <View className="relative right-6 bottom-32">
+      <View className="absolute left-4 top-12 z-50">
         <BackButton />
       </View>
 

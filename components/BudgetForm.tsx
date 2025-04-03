@@ -82,7 +82,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
           className={`mt-12 p-4  rounded-lg ${
             theme === "dark" ? "bg-quaternary" : "bg-white"
           }`}>
-          <View className="relative bottom-4 left-8">
+          <View className="absolute top-2 left-2 z-50">
             <BackButton />
           </View>
           <Text

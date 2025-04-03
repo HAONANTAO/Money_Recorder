@@ -157,7 +157,7 @@ const DepositGoal = () => {
         className={`flex-1 ${
           theme === "dark" ? "bg-quaternary" : "bg-gray-100"
         }`}>
-        <View className="relative left-10 top-16">
+        <View className="absolute left-4 top-12 z-50">
           <BackButton />
         </View>
         <ScrollView

@@ -6,6 +6,7 @@ type Language = "en" | "zh";
 
 // 定义翻译内容的接口
 interface Translations {
+  back: string;
   budget: {
     title: string;
     date: string;
@@ -205,13 +206,14 @@ interface LanguageContextType {
 
 // 英文翻译
 const enTranslations: Translations = {
-   budget: {
+  back: "Back",
+  budget: {
     title: "Set The Budget",
     date: " Budget Date",
     amount: " Budget Amount",
     amountPlaceholder: "Please enter amount",
     category: "Budget Category",
-    comments:"Comments",
+    comments: "Comments",
     commentsPlaceholder: "Please enter comments",
     save: " Save The Budget",
   },
@@ -220,8 +222,7 @@ const enTranslations: Translations = {
       "Deposit target cannot be saved in guest mode, please log in and try again",
     record:
       " Unable to save records in guest mode, please log in and try again",
-    budget:
-      " Unable to save budget in guest mode, please log in and try again",
+    budget: " Unable to save budget in guest mode, please log in and try again",
   },
 
   author: {
@@ -429,6 +430,7 @@ const enTranslations: Translations = {
 
 // 中文翻译
 const zhTranslations: Translations = {
+  back: "返回",
   budget: {
     title: "设定预算",
     date: " 预算日期",

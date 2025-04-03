@@ -124,7 +124,7 @@ const EditRecord = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView
         className={`flex-1 ${isDark ? "bg-quaternary" : "bg-gray-100"}`}>
-        <View className="relative left-10 top-16">
+        <View className="absolute left-4 top-12 z-50">
           <BackButton />
         </View>
         <View className="p-5">

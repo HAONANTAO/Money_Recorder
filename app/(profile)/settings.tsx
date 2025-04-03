@@ -84,8 +84,7 @@ const Settings = () => {
       className={`flex-1 ${
         theme === "dark" ? "bg-quaternary" : "bg-gray-100"
       }`}>
-      {/* 层级问题 */}
-      <View className="top-44 left-48" style={{ zIndex: 999 }}>
+      <View className="absolute left-4 top-12 z-50">
         <BackButton navigateTo="/(tabs)/profile" />
       </View>
       <ScrollView

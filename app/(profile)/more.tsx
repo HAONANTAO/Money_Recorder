@@ -124,7 +124,7 @@ const More = () => {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
-      <View className="top-24 left-80">
+      <View className="absolute left-4 top-12 z-50">
         <BackButton navigateTo="/(tabs)/profile" />
       </View>
       <View className="p-6 mt-20">
