@@ -27,6 +27,7 @@ export default function Index() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
   // 第一次进入检查本地存储的userId
   useEffect(() => {
@@ -225,11 +226,20 @@ export default function Index() {
                 placeholderTextColor="#9CA3AF" // 添加这行来设置 placeholder 的颜色
                 value={password}
                 onChangeText={setPassword}
-                secureTextEntry
-                className="py-3 pr-4 pl-10 text-gray-800 bg-gray-100 rounded-lg"
+                secureTextEntry={!showPassword}
+                className="py-3 pr-10 pl-10 text-gray-800 bg-gray-100 rounded-lg"
                 autoComplete="off"
                 textContentType="none"
               />
+              <TouchableOpacity
+                onPress={() => setShowPassword(!showPassword)}
+                style={{ position: "absolute", right: 12, top: 12 }}>
+                <Ionicons
+                  name={showPassword ? "eye-outline" : "eye-off-outline"}
+                  size={20}
+                  color="#9CA3AF"
+                />
+              </TouchableOpacity>
             </View>
 
             {/* 按钮触发 */}
