@@ -31,6 +31,7 @@ import { useFocusEffect, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { demoRecords, demoBudget } from "@/constants/demoData";
+import CHART_COLORS from "@/constants/colors";
 
 const Stats = () => {
   const { theme } = useTheme();
@@ -41,21 +42,14 @@ const Stats = () => {
   const [user, setUser] = useState<any>(null);
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [isIncome, setIsIncome] = useState<boolean>(false); // State to toggle between income and expense charts
-  // const [refreashing, setRefreshing] = useState<boolean>(false);
+  const [isIncome, setIsIncome] = useState<boolean>(false); // State to toggle between income and
   const [income, setIncome] = useState<number>(0);
   const [expense, setExpense] = useState<number>(0);
   const [eventLength, setEventLength] = useState<number>(0);
   const [expenseCategories, setExpenseCategories] = useState<any[]>([]);
   const [incomeCategories, setIncomeCategories] = useState<any[]>([]); // Income categories state
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
-  // 根据当前语言获取类别名称
-  // const getCategoryLabel = (category: any) => {
-  //   const categoryTranslations = translations?.categories || {};
-  //   return (
-  //     categoryTranslations[category.value] || category.label || category.value
-  //   );
-  // };
   const { language } = useLanguage();
 
   useEffect(() => {
@@ -271,32 +265,12 @@ const Stats = () => {
     getInit();
   }, []);
 
-  const CHART_COLORS: string[] = [
-    "#FF6384",
-    "#36A2EB",
-    "#FFCE56",
-    "#4BC0C0",
-    "#9966FF",
-    "#FF9F40",
-    "#E7E9ED",
-    "#2ECC71",
-    "#E74C3C",
-    "#3498DB",
-    "#F1C40F",
-    "#9B59B6",
-    "#1ABC9C",
-    "#E67E22",
-    "#34495E",
-  ];
-
-  // const [colorIndex, setColorIndex] = useState<number>(0);
   const getRandomColor = () => {
     // 随机获取一个颜色
     const randomIndex = Math.floor(Math.random() * CHART_COLORS.length);
     return CHART_COLORS[randomIndex];
   };
 
-  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   const fetchData = async () => {
     setIsRefreshing(true);

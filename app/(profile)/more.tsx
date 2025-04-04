@@ -19,8 +19,11 @@ import BackButton from "@/components/BackButton";
 const More = () => {
   const { theme } = useTheme();
   const { translations } = useLanguage();
-  // React Native 提供了一个名为 react-native-device-info 的库，可以用来获取应用的版本号、构建号等信息。你可以按照以下步骤集成它来动态获取版本号：
-  const appVersion = "1.0.0";
+  const { language } = useLanguage();
+  console.log(language);
+  // react-native-device-info 的库，可以用来获取应用的版本号、构建号等信息。你可以按照以下步骤集成它来动态获取版本号：
+  // 可惜expo go不支持！
+  const appVersion = "1.0.2";
   const [refreshing, setRefreshing] = useState(false);
   const [backupInfo, setBackupInfo] = useState({
     backupDate: "",
@@ -92,7 +95,7 @@ const More = () => {
       items: [
         {
           label: translations.settings.language,
-          value: backupInfo.backupDate || translations.record.none,
+          value: language === "en" ? "English" : "中文",
         },
       ],
     },

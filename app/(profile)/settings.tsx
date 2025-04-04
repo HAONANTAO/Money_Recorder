@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,17 +7,34 @@ import {
   Alert,
   Linking,
   Platform,
+  Switch,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons"; // 引入图标库
 import { useTheme } from "../../contexts/ThemeContext";
 import { useLanguage } from "../../contexts/LanguageContext";
 import BackButton from "@/components/BackButton";
+import {
+  requestNotificationPermissions,
+  scheduleDailyReminder,
+  checkNotificationStatus,
+  cancelAllNotifications,
+} from "@/services/notificationService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Settings = () => {
   // Use the theme context and language context
   const { theme, toggleTheme } = useTheme();
   const { language, setLanguage, translations } = useLanguage();
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+
+  // 检查通知状态
+  useEffect(() => {
+    const checkNotifications = async () => {
+      const isEnabled = await AsyncStorage.getItem("notificationsEnabled");
+      setNotificationsEnabled(isEnabled === "true");
+    };
+    checkNotifications();
+  }, []);
 
   // 清除缓存函数
   const handleClearCache = async () => {
@@ -48,35 +65,47 @@ const Settings = () => {
     );
   };
 
-  // 打开通知设置的函数
-  const openNotificationSettings = () => {
-    Alert.alert(
-      translations.alerts.notifications.title,
-      translations.alerts.notifications.message,
-      [
-        {
-          text: translations.common.cancel,
-          style: "cancel",
-        },
-        {
-          text: translations.common.open,
-          onPress: () => {
-            if (Platform.OS === "ios") {
-              // 打开 iOS 设置页面
-              Linking.openURL("app-settings:").catch((err) =>
-                console.error("Failed to open settings:", err),
-              );
-            } else {
-              Alert.alert(
-                translations.settings.notifications,
-                translations.alerts.notifications.iosOnly,
-              );
-            }
-          },
-          style: "default",
-        },
-      ],
-    );
+  // 处理通知开关变化
+  const handleNotificationToggle = async (value: boolean) => {
+    if (value) {
+      const hasPermission = await requestNotificationPermissions();
+      if (hasPermission) {
+        await scheduleDailyReminder();
+        await AsyncStorage.setItem("notificationsEnabled", "true");
+        setNotificationsEnabled(true);
+        Alert.alert(
+          translations.common.success,
+          translations.notifications.enableSuccess,
+        );
+      } else {
+        Alert.alert(
+          translations.notifications.permissionRequired,
+          translations.notifications.openSettings,
+          [
+            { text: translations.common.cancel, style: "cancel" },
+            {
+              text: translations.common.settings,
+              onPress: () => {
+                if (Platform.OS === "ios") {
+                  Linking.openURL("app-settings:");
+                } else {
+                  Linking.openSettings();
+                }
+              },
+            },
+          ],
+        );
+        setNotificationsEnabled(false);
+      }
+    } else {
+      await cancelAllNotifications();
+      await AsyncStorage.setItem("notificationsEnabled", "false");
+      setNotificationsEnabled(false);
+      Alert.alert(
+        translations.common.success,
+        translations.notifications.disableSuccess,
+      );
+    }
   };
 
   return (
@@ -98,23 +127,36 @@ const Settings = () => {
           </Text>
 
           <View className="gap-4 space-y-6">
-            {/* Notifications 按钮 */}
+            {/* Notifications 设置 */}
             <TouchableOpacity
-              onPress={openNotificationSettings}
-              className={`flex-row items-center p-4 rounded-xl shadow-md ${
+              onPress={() => {
+                if (Platform.OS === "ios") {
+                  Linking.openURL("app-settings:");
+                } else {
+                  Linking.openSettings();
+                }
+              }}
+              className={`flex-row items-center justify-between p-4 rounded-xl shadow-md ${
                 theme === "dark" ? "bg-quaternary" : "bg-white"
               }`}>
+              <View className="flex-row items-center">
+                <Ionicons
+                  name="notifications-outline"
+                  size={24}
+                  color={theme === "dark" ? "#60A5FA" : "#4B5563"}
+                />
+                <Text
+                  className={`ml-4 text-lg font-semibold ${
+                    theme === "dark" ? "text-gray-200" : "text-gray-700"
+                  }`}>
+                  {translations.settings.notifications}
+                </Text>
+              </View>
               <Ionicons
-                name="notifications-outline"
+                name="chevron-forward-outline"
                 size={24}
                 color={theme === "dark" ? "#60A5FA" : "#4B5563"}
               />
-              <Text
-                className={`ml-4 text-lg font-semibold ${
-                  theme === "dark" ? "text-gray-200" : "text-gray-700"
-                }`}>
-                {translations.settings.notifications}
-              </Text>
             </TouchableOpacity>
 
             {/* 主题切换按钮 */}
@@ -184,7 +226,7 @@ const Settings = () => {
               className={`text-sm text-center ${
                 theme === "dark" ? "text-gray-400" : "text-gray-500"
               }`}>
-              {translations.settings.version}: 1.0.0
+              {translations.settings.version}: 1.0.2
             </Text>
           </View>
         </View>

@@ -6,6 +6,14 @@ type Language = "en" | "zh";
 
 // 定义翻译内容的接口
 interface Translations {
+  notifications: {
+    disableSuccess: string | undefined;
+    openSettings: string | undefined;
+    permissionRequired: string;
+    enableSuccess: string | undefined;
+    title: string;
+    body: string;
+  };
   back: string;
   budget: {
     title: string;
@@ -152,6 +160,7 @@ interface Translations {
     version: string;
   };
   common: {
+    settings: string | undefined;
     warning: string;
     confirm: string | undefined;
     edit: string;
@@ -206,6 +215,14 @@ interface LanguageContextType {
 
 // 英文翻译
 const enTranslations: Translations = {
+  notifications: {
+    title: "Money Recorder",
+    body: "Just a gentle nudge to track your spending today",
+    permissionRequired: "Permission required",
+    enableSuccess: "Notifications enabled successfully",
+    disableSuccess: "Notifications disabled successfully",
+    openSettings: "Open settings",
+  },
   back: "Back",
   budget: {
     title: "Set The Budget",
@@ -315,7 +332,7 @@ const enTranslations: Translations = {
     none: "None",
   },
   stats: {
-    title: "Stats",
+    title: "Data Stats",
     records: "Records",
     income: "Income",
     expense: "Expense",
@@ -383,6 +400,7 @@ const enTranslations: Translations = {
     version: "App Version",
   },
   common: {
+    settings: "Settings",
     warning: "warning",
     confirm: "Confirm",
     edit: "Edit",
@@ -430,6 +448,15 @@ const enTranslations: Translations = {
 
 // 中文翻译
 const zhTranslations: Translations = {
+  notifications: {
+    title: "小陶(✧∇✧)╯╰(✧∇✧)̣",
+    body: "小陶提醒你注意记录今天开支",
+
+    permissionRequired: "需要权限许可",
+    enableSuccess: "通知启用成功",
+    disableSuccess: "通知已禁用",
+    openSettings: "打开设置",
+  },
   back: "返回",
   budget: {
     title: "设定预算",
@@ -545,7 +572,7 @@ const zhTranslations: Translations = {
   },
   tabs: {
     home: "主页",
-    stats: "统计",
+    stats: "数据统计",
     record: "记录",
     goal: "目标",
     profile: "我的",
@@ -601,6 +628,7 @@ const zhTranslations: Translations = {
     version: "应用版本",
   },
   common: {
+    settings: "设置",
     warning: "警告",
     confirm: "确认",
     edit: "编辑",

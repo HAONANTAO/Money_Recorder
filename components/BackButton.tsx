@@ -19,7 +19,6 @@ const BackButton: React.FC<BackButtonProps> = ({
   const { theme } = useTheme();
   const isDark = theme === "dark";
   const handlePress = () => {
-    console.log("BackButton clicked");
     if (navigateTo) {
       console.log(`Navigating to: ${navigateTo}`);
       router.push(navigateTo as unknown as RelativePathString);
@@ -31,11 +30,12 @@ const BackButton: React.FC<BackButtonProps> = ({
   return (
     <TouchableOpacity
       onPress={handlePress}
-      className={`items-center justify-center px-2 py-2 ${customStyle}`}
+      className={`items-center justify-center px-2 py-2 absolute top-0 left-0 ${customStyle}`}
       style={{
         backgroundColor: "transparent",
         minWidth: 44,
         minHeight: 44,
+        zIndex: 10,
       }}>
       <Ionicons
         name="chevron-back"

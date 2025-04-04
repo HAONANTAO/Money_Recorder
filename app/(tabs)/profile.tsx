@@ -280,19 +280,18 @@ const Profile = () => {
               onPress={async () => {
                 try {
                   if (Platform.OS === "ios") {
-                    // TODO:替换为实际的App Store ID
                     await Linking.openURL(
-                      "https://apps.apple.com/app/idYOUR_APP_ID?action=write-review",
+                      "https://apps.apple.com/app/money-recorder/id6476311617?action=write-review",
                     );
                   } else {
                     Alert.alert(
-                      "hint",
-                      "This feature is only available on iOS devices.",
+                      translations.common.warning,
+                      translations.alerts.notifications.iosOnly,
                     );
                   }
                 } catch (error) {
                   Alert.alert(
-                    "Error",
+                    translations.common.error,
                     "Unable to open App Store, please try again later",
                   );
                 }

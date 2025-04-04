@@ -1,4 +1,10 @@
 /*
+ * @Date: 2025-04-04 20:11:58
+ * @LastEditors: 陶浩南 taoaaron5@gmail.com
+ * @LastEditTime: 2025-04-04 20:17:36
+ * @FilePath: /Money_Recorder/app/(tabs)/_layout.tsx
+ */
+/*
  * @Date: 2025-03-21 20:33:40
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
  * @LastEditTime: 2025-03-30 21:07:12
@@ -54,7 +60,7 @@ export default function RootLayout() {
                 <Text
                   className={`${
                     isDark ? "text-primary " : ""
-                  } text-xs font-bold`}
+                  } text-[10px] font-bold`}
                   numberOfLines={1}>
                   {translations.tabs.home}
                 </Text>

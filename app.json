@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Money_Recorder",
-    "slug": "Money_Recorder",
-    "version": "1.0.1",
+    "name": "Money Recorder",
+    "slug": "Money Recorder",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "Money_Recorder",
@@ -29,9 +29,9 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/adaptive-icon.png",
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "image": "./assets/images/splash-icon.png",
+          "resizeMode": "cover",
+          "backgroundColor": "#f3f4f6"
         }
       ]
     ],
