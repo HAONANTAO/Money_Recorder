@@ -43,7 +43,7 @@ const RecordShowBox: React.FC<RecordShowBoxProps> = ({ record }) => {
           ellipsizeMode="tail"
           className="overflow-hidden text-sm text-gray-600 text-ellipsis">
           <Text className="text-secondary">
-            {translations.record.category}:{" "}
+            {translations.record.category}:
           </Text>
           {record.category}
         </Text>

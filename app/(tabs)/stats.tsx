@@ -37,7 +37,7 @@ const Stats = () => {
   const { theme } = useTheme();
   const { translations } = useLanguage();
   const router = useRouter();
-  const [monthlyBudgets, setMonthlyBudgets] = useState<any>(null);
+  const [monthlyBudgets, setMonthlyBudgets] = useState<any[]>([]);
   const [expensesByCategory, setExpensesByCategory] = useState<any>(null);
   const [user, setUser] = useState<any>(null);
   const [records, setRecords] = useState<any[]>([]);
@@ -271,7 +271,6 @@ const Stats = () => {
     return CHART_COLORS[randomIndex];
   };
 
-
   const fetchData = async () => {
     setIsRefreshing(true);
     try {
@@ -402,15 +401,15 @@ const Stats = () => {
             <View className="p-4">
               <Text className="text-xl font-semibold">
                 📅 {translations.stats.records}:
-                <Text className="text-tertiary"> {eventLength}</Text>
-              </Text>
+                <Text className="text-black"> {eventLength}</Text>
+              </Text>{" "}
               <Text className="text-xl font-semibold">
                 💳 {translations.stats.income}:
-                <Text className="text-tertiary"> ${income}</Text>
+                <Text className="text-green-500"> ${income}</Text>
               </Text>
               <Text className="text-xl font-semibold">
                 💵 {translations.stats.expense}:
-                <Text className="text-tertiary">${expense}</Text>
+                <Text className="text-red-500">${expense}</Text>
               </Text>
             </View>
 

@@ -340,7 +340,7 @@ const enTranslations: Translations = {
     switchToIncome: "Switch to Income",
     switchToExpense: "Switch to Expense",
     total: "Total",
-    noData: "No data",
+    noData: "No data,create first",
     setBudget: "Set Budget",
   },
   tabs: {
@@ -440,10 +440,10 @@ const enTranslations: Translations = {
       iosOnly: "This functionality is only available on iOS.",
     },
     budget: {
-      deleteTitle: "deleteTitle",
-      deleteMessage: "deleteMessage",
-      updateTitle: "updateTitle",
-      updateMessage: "updateMessage",
+      deleteTitle: "Delete Title",
+      deleteMessage: "Delete Message",
+      updateTitle: "Update Title",
+      updateMessage: "update Message",
     },
   },
 };

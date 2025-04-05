@@ -144,7 +144,7 @@ const DepositBox: React.FC<DepositBoxProps> = ({ demoData }) => {
               </View>
 
               {/* 右边图标 */}
-              <View className="flex-row items-center space-x-2">
+              {/* <View className="flex-row items-center space-x-2">
                 <View
                   className={`p-2.5 rounded-xl ${
                     theme === "dark"
@@ -166,7 +166,7 @@ const DepositBox: React.FC<DepositBoxProps> = ({ demoData }) => {
                     />
                   )}
                 </View>
-              </View>
+              </View> */}
             </View>
             <View className="flex-row items-center mb-4">
               <View

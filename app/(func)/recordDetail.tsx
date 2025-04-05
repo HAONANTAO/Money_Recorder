@@ -86,7 +86,7 @@ const RecordDetail = () => {
         <View className="space-y-6">
           <View className="flex-row justify-between items-center pb-3 border-b border-gray-300">
             <Text className="text-lg font-semibold text-black">
-              {translations.record.category}
+              {translations.record.type}
             </Text>
             <Text className="text-xl font-bold text-black">
               {record.type === "income"
