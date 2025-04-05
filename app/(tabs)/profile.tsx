@@ -364,55 +364,7 @@ const Profile = () => {
           </View>
         </View>
       </View>
-      {/* delete account and logout buttons */}
-      <View className="flex justify-end items-center mt-12">
-        <TouchableOpacity
-          disabled={isGuest === true}
-          onPress={() => {
-            Alert.alert(
-              translations.common.warning,
-              translations.alerts.deleteAccountConfirm,
-              [
-                {
-                  text: translations.common.cancel,
-                  style: "cancel",
-                },
-                {
-                  text: translations.common.confirm,
-                  style: "destructive",
-                  onPress: async () => {
-                    try {
-                      await StorageService.setIsDeleted(true);
-                      await deleteUser(userId);
-                      await StorageService.clearEmail();
-                      router.replace("/");
-                    } catch (error) {
-                      console.error("Error deleting account:", error);
-                      Alert.alert(
-                        translations.common.error,
-                        translations.alerts.deleteAccountError,
-                      );
-                    }
-                  },
-                },
-              ],
-            );
-          }}
-          className={`py-3 mt-2 rounded-lg w-[140px] ${
-            isGuest === true ? "bg-gray-400" : "bg-red-500"
-          }`}>
-          <Text className="font-bold text-center text-white">
-            {translations.profile.deleteAccount}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => handleLogOut()}
-          className="py-3 mt-2 rounded-lg w-[140px] bg-tertiary">
-          <Text className="font-bold text-center text-white">
-            {translations.profile.logout}
-          </Text>
-        </TouchableOpacity>
-      </View>
+
       {/* footer */}
       <View className="absolute right-0 bottom-0 px-4 py-2">
         <Text className="text-[10px] text-gray-400">Developed by TAO</Text>

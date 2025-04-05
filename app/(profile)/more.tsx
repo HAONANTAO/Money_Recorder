@@ -23,7 +23,7 @@ const More = () => {
   console.log(language);
   // react-native-device-info 的库，可以用来获取应用的版本号、构建号等信息。你可以按照以下步骤集成它来动态获取版本号：
   // 可惜expo go不支持！
-  const appVersion = "1.0.2";
+  const appVersion = "1.1.0";
   const [refreshing, setRefreshing] = useState(false);
   const [backupInfo, setBackupInfo] = useState({
     backupDate: "",

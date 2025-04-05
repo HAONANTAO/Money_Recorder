@@ -9,6 +9,8 @@ import {
   Platform,
   Switch,
 } from "react-native";
+import { router } from "expo-router";
+import { deleteUser, getUserByEmail } from "@/services/userManagement";
 import { Ionicons } from "@expo/vector-icons"; // 引入图标库
 import { useTheme } from "../../contexts/ThemeContext";
 import { useLanguage } from "../../contexts/LanguageContext";
@@ -20,12 +22,28 @@ import {
   cancelAllNotifications,
 } from "@/services/notificationService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StorageService } from "@/utils/storageService";
 
 const Settings = () => {
   // Use the theme context and language context
   const { theme, toggleTheme } = useTheme();
   const { language, setLanguage, translations } = useLanguage();
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [isGuest, setIsGuest] = useState<boolean>();
+  const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    const getInitialUser = async () => {
+      const isGuest = await StorageService.getIsGuest();
+      setIsGuest(isGuest);
+      if (!isGuest) {
+        const email = await StorageService.getEmail();
+        const user = await getUserByEmail(email as string);
+        setUserId(user.$id);
+      }
+    };
+    getInitialUser();
+  }, []);
 
   // 检查通知状态
   useEffect(() => {
@@ -63,49 +81,6 @@ const Settings = () => {
         },
       ],
     );
-  };
-
-  // 处理通知开关变化
-  const handleNotificationToggle = async (value: boolean) => {
-    if (value) {
-      const hasPermission = await requestNotificationPermissions();
-      if (hasPermission) {
-        await scheduleDailyReminder();
-        await AsyncStorage.setItem("notificationsEnabled", "true");
-        setNotificationsEnabled(true);
-        Alert.alert(
-          translations.common.success,
-          translations.notifications.enableSuccess,
-        );
-      } else {
-        Alert.alert(
-          translations.notifications.permissionRequired,
-          translations.notifications.openSettings,
-          [
-            { text: translations.common.cancel, style: "cancel" },
-            {
-              text: translations.common.settings,
-              onPress: () => {
-                if (Platform.OS === "ios") {
-                  Linking.openURL("app-settings:");
-                } else {
-                  Linking.openSettings();
-                }
-              },
-            },
-          ],
-        );
-        setNotificationsEnabled(false);
-      }
-    } else {
-      await cancelAllNotifications();
-      await AsyncStorage.setItem("notificationsEnabled", "false");
-      setNotificationsEnabled(false);
-      Alert.alert(
-        translations.common.success,
-        translations.notifications.disableSuccess,
-      );
-    }
   };
 
   return (
@@ -152,11 +127,6 @@ const Settings = () => {
                   {translations.settings.notifications}
                 </Text>
               </View>
-              <Ionicons
-                name="chevron-forward-outline"
-                size={24}
-                color={theme === "dark" ? "#60A5FA" : "#4B5563"}
-              />
             </TouchableOpacity>
 
             {/* 主题切换按钮 */}
@@ -221,12 +191,65 @@ const Settings = () => {
             </TouchableOpacity>
           </View>
 
-          <View className="mt-16">
+          {/* Delete Account and Logout buttons */}
+          <View className="gap-3 mt-12 space-y-8">
+            <TouchableOpacity
+              disabled={isGuest === true}
+              onPress={() => {
+                Alert.alert(
+                  translations.common.warning,
+                  translations.alerts.deleteAccountConfirm,
+                  [
+                    {
+                      text: translations.common.cancel,
+                      style: "cancel",
+                    },
+                    {
+                      text: translations.common.confirm,
+                      style: "destructive",
+                      onPress: async () => {
+                        try {
+                          await StorageService.setIsDeleted(true);
+                          await deleteUser(userId);
+                          await StorageService.clearEmail();
+                          router.replace("/");
+                        } catch (error) {
+                          console.error("Error deleting account:", error);
+                          Alert.alert(
+                            translations.common.error,
+                            translations.alerts.deleteAccountError,
+                          );
+                        }
+                      },
+                    },
+                  ],
+                );
+              }}
+              className={`py-2 rounded-full w-3/5 mx-auto ${
+                isGuest === true ? "bg-gray-400" : "bg-red-500"
+              }`}>
+              <Text className="text-sm font-bold text-center text-white">
+                {translations.profile.deleteAccount}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={async () => {
+                await StorageService.clearEmail();
+                router.replace("/");
+              }}
+              className="py-2 mx-auto w-3/5 rounded-full bg-secondary">
+              <Text className="text-sm font-bold text-center text-white">
+                {translations.profile.logout}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View className="mt-8">
             <Text
               className={`text-sm text-center ${
                 theme === "dark" ? "text-gray-400" : "text-gray-500"
               }`}>
-              {translations.settings.version}: 1.0.2
+              {translations.settings.version}: 1.1.0
             </Text>
           </View>
         </View>
