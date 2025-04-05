@@ -388,8 +388,14 @@ const Profile = () => {
       </View>
 
       {/* footer */}
-      <View className="absolute bottom-0 right-28 px-4 py-2">
-        <Text className="text-[12px] text-gray-400">Developed by AaronTAO</Text>
+      <View className="absolute right-0 bottom-0 left-0 px-4 py-3 bg-opacity-80">
+        <View className="flex-row justify-center items-center space-x-2">
+          <Text className="text-[12px] text-gray-400">Developed by</Text>
+          <Text className="text-[12px] text-gray-400 font-semibold">
+            AaronTAO
+          </Text>
+          <Ionicons name="heart" size={12} color="#9CA3AF" />
+        </View>
       </View>
     </View>
   );
