@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-05 14:52:42
+ * @LastEditTime: 2025-04-05 15:12:10
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
@@ -141,7 +141,7 @@ const Home = () => {
       }>
       <View
         className={`mt-8 flex-1 ${
-          isDark ? "bg-gray-900" : "bg-white"
+          isDark ? "bg-gray-900" : "bg-gray-100"
         } pt-10 px-4 `}>
         {/* 今天日期 */}
         <Text
@@ -150,37 +150,7 @@ const Home = () => {
           }`}>
           {getCurrentDate()}
         </Text>
-        {/* search bar
-        <View className="flex items-center mt-6">
-          <TouchableOpacity
-            onPress={() => router.push("/(func)/searchbar")}
-            className={`p-4 rounded-2xl shadow-lg ${
-              isDark ? "bg-secondary" : "bg-white"
-            } w-full active:opacity-80 flex-row items-center justify-between`}>
-            <View className="flex-row flex-1 items-center">
-              <View className="mr-3">
-                <Ionicons
-                  name="search-outline"
-                  size={24}
-                  color={isDark ? "#fff" : "#4B5563"}
-                />
-              </View>
-              <Text
-                className={`text-base ${
-                  isDark ? "text-gray-300" : "text-gray-500"
-                }`}>
-                {translations.home.search}
-              </Text>
-            </View>
-            <View>
-              <Ionicons
-                name="chevron-forward-outline"
-                size={24}
-                color={isDark ? "#fff" : "#4B5563"}
-              />
-            </View>
-          </TouchableOpacity>
-        </View> */}
+
         {/* 第二个 View - 净资产 */}
         <View
           className={`mt-6 p-4 flex flex-row justify-between gap-2 rounded-lg ${
