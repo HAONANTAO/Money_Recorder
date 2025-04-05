@@ -160,9 +160,10 @@ interface Translations {
     version: string;
   };
   common: {
-    settings: string | undefined;
+    search: string;
+    settings: string;
     warning: string;
-    confirm: string | undefined;
+    confirm: string;
     edit: string;
     save: string;
     uncompleted: string;
@@ -400,6 +401,7 @@ const enTranslations: Translations = {
     version: "App Version",
   },
   common: {
+    search: "Search",
     settings: "Settings",
     warning: "warning",
     confirm: "Confirm",
@@ -628,6 +630,7 @@ const zhTranslations: Translations = {
     version: "应用版本",
   },
   common: {
+    search: "搜索",
     settings: "设置",
     warning: "警告",
     confirm: "确认",

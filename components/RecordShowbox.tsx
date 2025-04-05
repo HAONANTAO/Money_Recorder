@@ -29,7 +29,7 @@ const RecordShowBox: React.FC<RecordShowBoxProps> = ({ record }) => {
   return (
     <TouchableOpacity
       onPress={handlePress}
-      className="w-[48%] p-3 mb-4 bg-white rounded-lg shadow-md border border-blue-200  active:opacity-80">
+      className="w-[32%] p-2 mb-3 bg-white rounded-lg shadow-md border border-blue-200 active:opacity-80">
       <Text
         className={`text-lg font-bold ${
           record.type === "income" ? "text-green-500" : "text-red-500"

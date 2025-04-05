@@ -1,11 +1,10 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-31 15:24:45
+ * @LastEditTime: 2025-04-05 14:52:42
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
-  StyleSheet,
   Text,
   View,
   ActivityIndicator,
@@ -43,7 +42,7 @@ const Home = () => {
   const { theme } = useTheme();
   const { translations } = useLanguage();
   const isDark = theme === "dark";
-  // const [user, setUser] = useState<any>(null);
+
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [monthlyIncome, setMonthlyIncome] = useState<number>(0);
@@ -151,7 +150,7 @@ const Home = () => {
           }`}>
           {getCurrentDate()}
         </Text>
-        {/* search bar */}
+        {/* search bar
         <View className="flex items-center mt-6">
           <TouchableOpacity
             onPress={() => router.push("/(func)/searchbar")}
@@ -181,7 +180,7 @@ const Home = () => {
               />
             </View>
           </TouchableOpacity>
-        </View>
+        </View> */}
         {/* 第二个 View - 净资产 */}
         <View
           className={`mt-6 p-4 flex flex-row justify-between gap-2 rounded-lg ${

@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-02 15:03:23
+ * @LastEditTime: 2025-04-05 15:04:40
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -28,6 +28,7 @@ import {
 import { uploadAvatar } from "@/services/bucketStorageService";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useLanguage } from "../../contexts/LanguageContext";
+import { Ionicons } from "@expo/vector-icons";
 
 const Profile = () => {
   const { theme } = useTheme();
@@ -271,7 +272,65 @@ const Profile = () => {
               </Text>
             </TouchableOpacity>
           </View>
+          {/* search box */}
+          <View
+            className={`${
+              theme === "dark" ? "bg-blue-200" : "bg-white "
+            } flex justify-center items-center w-24 h-24 rounded-xl border border-gray-200 shadow-md`}>
+            <TouchableOpacity
+              onPress={() => router.push("/(func)/searchbar")}
+              className="flex justify-center items-center w-full h-full">
+              <Image
+                source={require("../../assets/images/icons/search.png")}
+                className="w-10 h-10"
+              />
+              <Text className={`mt-2 font-bold text-quaternary`}>
+                {translations.common.search || "搜索"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          {/* faq */}
+          <View
+            className={`${
+              theme === "dark" ? "bg-blue-200" : "bg-white "
+            } flex justify-center items-center w-24 h-24 rounded-xl border border-gray-200 shadow-md`}>
+            <TouchableOpacity
+              onPress={() => router.push("/(profile)/faq")}
+              className="flex justify-center items-center w-full h-full">
+              <Image
+                source={require("../../assets/images/icons/help.png")}
+                className="w-10 h-10"
+              />
+              <Text className={`font-bold text-quaternary`}>
+                {translations.profile.faq}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
+        <View className="flex flex-row justify-around items-center mt-4 mb-2">
+          {/* author box */}
+          <View
+            className={`${
+              theme === "dark" ? "bg-blue-200" : "bg-white "
+            } flex justify-center items-center w-24 h-24 rounded-xl border border-gray-200 shadow-md`}>
+            <TouchableOpacity
+              onPress={() => router.push("/(profile)/author")}
+              className="flex justify-center items-center w-full h-full">
+              <Image
+                source={require("../../assets/images/icons/author.png")}
+                className="w-10 h-10"
+              />
+              <Text
+                className={`font-bold ${
+                  theme === "dark" ? "text-white" : "text-quaternary"
+                }`}>
+                {translations.profile.author}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* rating box */}
           <View
             className={`${
               theme === "dark" ? "bg-blue-200" : "bg-white "
@@ -309,43 +368,6 @@ const Profile = () => {
               </Text>
             </TouchableOpacity>
           </View>
-        </View>
-        <View className="flex flex-row justify-around items-center mt-4 mb-2">
-          <View
-            className={`${
-              theme === "dark" ? "bg-blue-200" : "bg-white "
-            } flex justify-center items-center w-24 h-24 rounded-xl border border-gray-200 shadow-md`}>
-            <TouchableOpacity
-              onPress={() => router.push("/(profile)/author")}
-              className="flex justify-center items-center w-full h-full">
-              <Image
-                source={require("../../assets/images/icons/author.png")}
-                className="w-10 h-10"
-              />
-              <Text
-                className={`font-bold ${
-                  theme === "dark" ? "text-white" : "text-quaternary"
-                }`}>
-                {translations.profile.author}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View
-            className={`${
-              theme === "dark" ? "bg-blue-200" : "bg-white "
-            } flex justify-center items-center w-24 h-24 rounded-xl border border-gray-200 shadow-md`}>
-            <TouchableOpacity
-              onPress={() => router.push("/(profile)/faq")}
-              className="flex justify-center items-center w-full h-full">
-              <Image
-                source={require("../../assets/images/icons/help.png")}
-                className="w-10 h-10"
-              />
-              <Text className={`font-bold text-quaternary`}>
-                {translations.profile.faq}
-              </Text>
-            </TouchableOpacity>
-          </View>
           <View
             className={`${
               theme === "dark" ? "bg-blue-200" : "bg-white "
@@ -366,8 +388,8 @@ const Profile = () => {
       </View>
 
       {/* footer */}
-      <View className="absolute right-0 bottom-0 px-4 py-2">
-        <Text className="text-[10px] text-gray-400">Developed by TAO</Text>
+      <View className="absolute bottom-0 right-28 px-4 py-2">
+        <Text className="text-[12px] text-gray-400">Developed by AaronTAO</Text>
       </View>
     </View>
   );
