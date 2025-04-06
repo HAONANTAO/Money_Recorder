@@ -402,7 +402,7 @@ const Stats = () => {
               <Text className="text-xl font-semibold">
                 📅 {translations.stats.records}:
                 <Text className="text-black"> {eventLength}</Text>
-              </Text>{" "}
+              </Text>
               <Text className="text-xl font-semibold">
                 💳 {translations.stats.income}:
                 <Text className="text-green-500"> ${income}</Text>

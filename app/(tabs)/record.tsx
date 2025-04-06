@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
 import { createRecord } from "../../services/recordService";
 import { StorageService } from "@/utils/storageService";
@@ -45,7 +45,7 @@ const Record = () => {
   });
 
   // 获取用户ID
-  React.useEffect(() => {
+  useEffect(() => {
     const getUserId = async () => {
       try {
         const email = await StorageService.getEmail();
@@ -100,12 +100,13 @@ const Record = () => {
           {record.userId === "guest" ||
             (record.userId === "" && (
               <Text className="mb-4 text-center text-red-500">
-                游客模式下无法保存记录，请登录后再试
+                Unable to save records in guest mode, please log in and try
+                again
               </Text>
             ))}
           <Text
             className={`mt-12 text-2xl font-bold mb-5 text-center ${
-              isDark ? "text-secondary" : "text-quaternary"
+              isDark ? "text-black" : "text-secondary"
             }`}>
             {translations.record.title}
           </Text>
@@ -154,29 +155,51 @@ const Record = () => {
               }`}>
               {translations.record.type}
             </Text>
-            <View
-              className={`${
-                isDark ? "" : "bg-white"
-              }overflow-hidden  rounded-lg`}>
-              <Picker
-                selectedValue={record.type}
-                onValueChange={(value) => setRecord({ ...record, type: value })}
-                className={`h-12 ${
-                  isDark
-                    ? "bg-gray-700 text-gray-200"
-                    : "bg-white text-gray-800"
+            <View className="flex-row gap-2 justify-between">
+              <TouchableOpacity
+                onPress={() => setRecord({ ...record, type: "expense" })}
+                className={`flex-1 p-3 rounded-lg ${
+                  record.type === "expense"
+                    ? isDark
+                      ? "bg-red-700"
+                      : "bg-red-500"
+                    : isDark
+                    ? "bg-gray-700"
+                    : "bg-gray-200"
                 }`}>
-                <Picker.Item
-                  label={translations.record.expense}
-                  value="expense"
-                  color={isDark ? "#EF4444" : "#DC2626"}
-                />
-                <Picker.Item
-                  label={translations.record.income}
-                  value="income"
-                  color={isDark ? "#10B981" : "#059669"}
-                />
-              </Picker>
+                <Text
+                  className={`text-center font-medium ${
+                    record.type === "expense"
+                      ? "text-white"
+                      : isDark
+                      ? "text-gray-200"
+                      : "text-gray-700"
+                  }`}>
+                  {translations.record.expense}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setRecord({ ...record, type: "income" })}
+                className={`flex-1 p-3 rounded-lg ${
+                  record.type === "income"
+                    ? isDark
+                      ? "bg-green-700"
+                      : "bg-green-500"
+                    : isDark
+                    ? "bg-gray-700"
+                    : "bg-gray-200"
+                }`}>
+                <Text
+                  className={`text-center font-medium ${
+                    record.type === "income"
+                      ? "text-white"
+                      : isDark
+                      ? "text-gray-200"
+                      : "text-gray-700"
+                  }`}>
+                  {translations.record.income}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -191,37 +214,37 @@ const Record = () => {
               }`}>
               {translations.record.category}
             </Text>
-            <View
-              className={`${
-                isDark ? "" : "bg-white"
-              }overflow-hidden  rounded-lg`}>
-              <Picker
-                selectedValue={record.category}
-                onValueChange={(value) =>
-                  setRecord({ ...record, category: value })
-                }
-                className={`h-12 ${
-                  isDark
-                    ? "bg-gray-700 text-gray-200"
-                    : "bg-white text-gray-800"
-                }`}>
-                <Picker.Item
-                  label={translations.record.chooseCategory}
-                  value={translations.record.chooseCategory}
-                  color={isDark ? "#1e67e5" : "#1c64f3"}
-                />
-                {(record.type === "expense"
-                  ? currentExpenseCategories
-                  : currentIncomeCategories
-                ).map((category) => (
-                  <Picker.Item
-                    key={category.value}
-                    label={`${category.icon} ${category.label}`}
-                    value={category.value}
-                    color={isDark ? "#E5E7EB" : "#1F2937"}
-                  />
-                ))}
-              </Picker>
+            <View className="flex-row flex-wrap gap-2">
+              {(record.type === "expense"
+                ? currentExpenseCategories
+                : currentIncomeCategories
+              ).map((category) => (
+                <TouchableOpacity
+                  key={category.value}
+                  onPress={() =>
+                    setRecord({ ...record, category: category.value })
+                  }
+                  className={`p-3 rounded-lg flex-grow ${
+                    record.category === category.value
+                      ? isDark
+                        ? "bg-blue-700"
+                        : "bg-blue-500"
+                      : isDark
+                      ? "bg-gray-700"
+                      : "bg-gray-200"
+                  }`}>
+                  <Text
+                    className={`text-center font-medium ${
+                      record.category === category.value
+                        ? "text-white"
+                        : isDark
+                        ? "text-gray-200"
+                        : "text-gray-700"
+                    }`}>
+                    {`${category.icon} ${category.label}`}
+                  </Text>
+                </TouchableOpacity>
+              ))}
             </View>
           </View>
 
@@ -382,12 +405,11 @@ const Record = () => {
           {record.userId === "guest" && (
             <Text className="mt-4 mb-4 text-center text-red-500">
               {translations.guestmode.record}
-             
             </Text>
           )}
           <TouchableOpacity
             className={`py-3 rounded-md ${
-              record.userId === "guest" ? "bg-gray-400" : "bg-primary"
+              record.userId === "guest" ? "bg-gray-400" : "bg-secondary"
             }`}
             onPress={handleSubmit}
             disabled={record.userId === "guest" || record.userId === ""}>
