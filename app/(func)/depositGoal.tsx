@@ -1,12 +1,12 @@
 import {
-  StyleSheet,
   Text,
   View,
   TouchableOpacity,
   TextInput,
-  RefreshControl,
   TouchableWithoutFeedback,
   Keyboard,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import {
@@ -33,9 +33,10 @@ import { ScrollView } from "react-native";
 const DepositGoal = () => {
   const router = useRouter();
   const { theme } = useTheme();
+  const isDark = theme === "dark";
   const { translations } = useLanguage();
   const { depositId } = useLocalSearchParams();
-  // const [user, setUser] = useState<any>(null);
+
   const { language } = useLanguage();
   const currentDepositCategory =
     language === "zh" ? DEPOSIT_CATEGORIES2 : DEPOSIT_CATEGORIES;
@@ -89,9 +90,11 @@ const DepositGoal = () => {
     getInitInfo();
   }, [depositId]);
   // check
+
   useEffect(() => {
     console.log(depositId);
   }, []);
+
   const handleDepositSubmit = async (goal: string, amount: string) => {
     if (!amount) {
       alert(translations.goals.depositGoal.enterAmount);
@@ -150,182 +153,214 @@ const DepositGoal = () => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View
-        className={`flex-1 ${
-          theme === "dark" ? "bg-quaternary" : "bg-gray-100"
-        }`}>
-        <View className="absolute left-4 top-12 z-50">
-          <BackButton />
-        </View>
-        <ScrollView
-          className="flex-1"
-          contentContainerStyle={{
-            flexGrow: 1,
-            alignItems: "center",
-            paddingBottom: 20,
-          }}
-          keyboardShouldPersistTaps="handled">
-          <Text className="mt-20 text-xl font-extrabold text-secondary">
-            {translations.goals.depositGoal.title}
-          </Text>
-          <View className="mt-6 w-80">
-            <Text className="mt-4 mb-2 text-base font-bold">
-              {translations.goals.depositGoal.name}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View className={`flex-1 ${isDark ? "bg-gray-700" : "bg-gray-100"}`}>
+          <View className="absolute left-4 top-12 z-50">
+            <BackButton />
+          </View>
+          <ScrollView
+            className="flex-1"
+            contentContainerStyle={{
+              flexGrow: 1,
+              alignItems: "center",
+              paddingBottom: 20,
+            }}
+            keyboardShouldPersistTaps="handled">
+            <Text
+              className={`mt-20 text-xl font-extrabold text-secondary ${
+                isDark ? "text-white" : "text-secondary"
+              }`}>
+              {translations.goals.depositGoal.title}
             </Text>
-            <TextInput
-              value={name}
-              onChangeText={setName}
-              placeholder={translations.goals.depositGoal.namePlaceholder}
-              className="p-4 rounded-lg border border-gray-300"
-              returnKeyType="done"
-              onSubmitEditing={Keyboard.dismiss}
-            />
-            <Text className="mt-4 mb-2 text-base font-bold">
-              {translations.goals.depositGoal.amount}
-            </Text>
-            <TextInput
-              value={amount}
-              onChangeText={setAmount}
-              placeholder={translations.goals.depositGoal.amountPlaceholder}
-              keyboardType="numeric"
-              className="p-4 rounded-lg border border-gray-300"
-              returnKeyType="done"
-              onSubmitEditing={Keyboard.dismiss}
-            />
-            {/* category */}
-            <View
-              className={`mb-4 ${
-                theme === "dark" ? "bg-quaternary" : "bg-white"
-              } rounded-xl p-4`}>
+            <View className="mt-6 w-80">
               <Text
-                className={`mb-2 text-base font-bold ${
-                  theme === "dark" ? "text-gray-200" : "text-gray-700"
+                className={`mt-4 mb-2 text-base font-bold ${
+                  isDark ? "text-white" : ""
                 }`}>
-                {translations.goals.depositGoal.category}
+                {translations.goals.depositGoal.name}
               </Text>
-              <View className="flex-row flex-wrap gap-2">
-                {currentDepositCategory.map((cat) => (
-                  <TouchableOpacity
-                    key={cat.value}
-                    onPress={() => setCategory(cat.value)}
-                    className={`p-3 rounded-lg flex-grow ${
-                      category === cat.value
-                        ? theme === "dark"
-                          ? "bg-blue-700"
-                          : "bg-blue-500"
-                        : theme === "dark"
-                        ? "bg-gray-700"
-                        : "bg-gray-200"
-                    }`}>
-                    <Text
-                      className={`text-center font-medium ${
-                        category === cat.value
-                          ? "text-white"
-                          : theme === "dark"
-                          ? "text-gray-200"
-                          : "text-gray-700"
-                      }`}>
-                      {`${cat.icon} ${cat.label}`}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-            {/*  */}
-            <Text>{translations.goals.comment}</Text>
-            <TextInput
-              value={note}
-              onChangeText={setNote}
-              placeholder={translations.goals.depositGoal.notePlaceholder}
-              className="p-4 mt-4 rounded-lg border border-gray-300"
-              returnKeyType="done"
-              onSubmitEditing={Keyboard.dismiss}
-            />
-            <View className="flex-row mt-4 space-x-4">
-              <View className="flex-1">
-                <Text className="mb-2 font-bold">
-                  {translations.goals.depositGoal.startDate}
-                </Text>
-                <TouchableOpacity
-                  onPress={() => setShowStartDatePicker(true)}
-                  className={`p-3 border rounded-md ${
-                    theme === "dark"
-                      ? "border-gray-600 bg-tertiary"
-                      : "border-gray-300 bg-white"
+              <TextInput
+                value={name}
+                onChangeText={setName}
+                placeholder={translations.goals.depositGoal.namePlaceholder}
+                className={`p-4 rounded-lg border  ${
+                  isDark ? "border-black text-white " : "border-gray-300"
+                }`}
+                returnKeyType="done"
+                onSubmitEditing={Keyboard.dismiss}
+              />
+
+              <Text
+                className={`mt-4 mb-2 text-base font-bold ${
+                  isDark ? "text-white" : ""
+                }`}>
+                {translations.goals.depositGoal.amount}
+              </Text>
+              <TextInput
+                value={amount}
+                onChangeText={setAmount}
+                placeholder={translations.goals.depositGoal.amountPlaceholder}
+                keyboardType="numeric"
+                className={`p-4 rounded-lg border  ${
+                  isDark ? "border-black text-white " : "border-gray-300"
+                }`}
+                returnKeyType="done"
+                onSubmitEditing={Keyboard.dismiss}
+              />
+              {/* category */}
+              <View
+                className={`mb-4 mt-4 ${
+                  isDark ? "bg-transparent border border-black " : "bg-white "
+                } rounded-xl p-4`}>
+                <Text
+                  className={`mb-2 text-base font-bold ${
+                    isDark ? "text-gray-200" : "text-gray-700"
                   }`}>
-                  <Text
-                    className={theme === "dark" ? "text-white" : "text-black"}>
-                    {`${startDate.getFullYear()}/${startDate.getMonth() + 1}`}
-                  </Text>
-                </TouchableOpacity>
-                {showStartDatePicker && (
-                  <DateTimePicker
-                    value={startDate}
-                    mode="date"
-                    display="spinner"
-                    onChange={(event, selectedDate) => {
-                      setShowStartDatePicker(false);
-                      if (selectedDate) {
-                        setStartDate(selectedDate);
-                      }
-                    }}
-                  />
-                )}
+                  {translations.goals.depositGoal.category}
+                </Text>
+                <View className="flex-row flex-wrap gap-2">
+                  {currentDepositCategory.map((cat) => (
+                    <TouchableOpacity
+                      key={cat.value}
+                      onPress={() => setCategory(cat.value)}
+                      className={`p-3 rounded-lg flex-grow ${
+                        isDark ? "border border-white" : ""
+                      } ${
+                        category === cat.value
+                          ? isDark
+                            ? "bg-blue-700"
+                            : "bg-blue-500"
+                          : isDark
+                          ? "bg-gray-700"
+                          : "bg-gray-200"
+                      }`}>
+                      <Text
+                        className={`text-center font-medium ${
+                          category === cat.value
+                            ? "text-white"
+                            : isDark
+                            ? "text-gray-200"
+                            : "text-gray-700"
+                        }`}>
+                        {`${cat.icon} ${cat.label}`}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
               </View>
 
-              <View className="flex-1">
-                <Text className="mb-2 font-bold">
-                  {translations.goals.depositGoal.endDate}
-                </Text>
-                <TouchableOpacity
-                  onPress={() => setShowEndDatePicker(true)}
-                  className={`p-3 border rounded-md ${
-                    theme === "dark"
-                      ? "border-gray-600 bg-tertiary"
-                      : "border-gray-300 bg-white"
-                  }`}>
+              {/*comment  */}
+              <Text
+                className={`mb-2 text-base font-bold ${
+                  isDark ? "text-white" : ""
+                }`}>
+                {translations.goals.comment}
+              </Text>
+
+              <TextInput
+                value={name}
+                onChangeText={setName}
+                placeholder={translations.goals.depositGoal.notePlaceholder}
+                className={`p-4 rounded-lg border  ${
+                  isDark ? "border-black text-white " : "border-gray-300"
+                }`}
+                returnKeyType="done"
+                onSubmitEditing={Keyboard.dismiss}
+              />
+              <View className="flex-row mt-4 space-x-4">
+                <View className="flex-1">
                   <Text
-                    className={theme === "dark" ? "text-white" : "text-black"}>
-                    {`${endDate.getFullYear()}/${endDate.getMonth() + 1}`}
+                    className={`mb-2 text-base font-bold ${
+                      isDark ? "text-gray-200" : "text-gray-700"
+                    }`}>
+                    {translations.goals.depositGoal.startDate}
                   </Text>
-                </TouchableOpacity>
-                {showEndDatePicker && (
-                  <DateTimePicker
-                    value={endDate}
-                    mode="date"
-                    display="spinner"
-                    onChange={(event, selectedDate) => {
-                      setShowEndDatePicker(false);
-                      if (selectedDate) {
-                        setEndDate(selectedDate);
-                      }
-                    }}
-                  />
-                )}
+
+                  <TouchableOpacity
+                    onPress={() => setShowStartDatePicker(true)}
+                    className={`p-3 border rounded-md ${
+                      isDark
+                        ? "border-gray-600 bg-tertiary"
+                        : "border-gray-300 bg-white"
+                    }`}>
+                    <Text className={"text-black"}>
+                      {`${startDate.getFullYear()}/${startDate.getMonth() + 1}`}
+                    </Text>
+                  </TouchableOpacity>
+                  {showStartDatePicker && (
+                    <DateTimePicker
+                      value={startDate}
+                      mode="date"
+                      display="spinner"
+                      onChange={(event, selectedDate) => {
+                        setShowStartDatePicker(false);
+                        if (selectedDate) {
+                          setStartDate(selectedDate);
+                        }
+                      }}
+                    />
+                  )}
+                </View>
+
+                <View className="flex-1">
+                  <Text
+                    className={`mb-2 text-base font-bold ${
+                      isDark ? "text-gray-200" : "text-gray-700"
+                    }`}>
+                    {translations.goals.depositGoal.endDate}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => setShowEndDatePicker(true)}
+                    className={`p-3 border rounded-md ${
+                      isDark
+                        ? "border-gray-600 bg-tertiary"
+                        : "border-gray-300 bg-white"
+                    }`}>
+                    <Text className={"text-black"}>
+                      {`${endDate.getFullYear()}/${endDate.getMonth() + 1}`}
+                    </Text>
+                  </TouchableOpacity>
+                  {showEndDatePicker && (
+                    <DateTimePicker
+                      value={endDate}
+                      mode="date"
+                      display="spinner"
+                      onChange={(event, selectedDate) => {
+                        setShowEndDatePicker(false);
+                        if (selectedDate) {
+                          setEndDate(selectedDate);
+                        }
+                      }}
+                    />
+                  )}
+                </View>
               </View>
+              {userId === "guest" && (
+                <Text className="mt-4 mb-4 text-center text-red-500">
+                  {translations.guestmode.depositgoal}
+                </Text>
+              )}
+              <TouchableOpacity
+                onPress={() => handleDepositSubmit("Deposit", amount)}
+                disabled={userId === "guest"}
+                className={`p-4 mt-6 rounded-lg ${
+                  userId === "guest" ? "bg-gray-400" : "bg-blue-500"
+                }`}>
+                <Text className="font-semibold text-center text-white">
+                  {depositId
+                    ? translations.goals.depositGoal.updateButton
+                    : translations.goals.depositGoal.createButton}
+                </Text>
+              </TouchableOpacity>
             </View>
-            {userId === "guest" && (
-              <Text className="mt-4 mb-4 text-center text-red-500">
-                {translations.guestmode.depositgoal}
-              </Text>
-            )}
-            <TouchableOpacity
-              onPress={() => handleDepositSubmit("Deposit", amount)}
-              disabled={userId === "guest"}
-              className={`p-4 mt-6 rounded-lg ${
-                userId === "guest" ? "bg-gray-400" : "bg-blue-500"
-              }`}>
-              <Text className="font-semibold text-center text-white">
-                {depositId
-                  ? translations.goals.depositGoal.updateButton
-                  : translations.goals.depositGoal.createButton}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </View>
-    </TouchableWithoutFeedback>
+          </ScrollView>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 

@@ -304,7 +304,7 @@ const enTranslations: Translations = {
       updateButton: "Update Deposit Goal",
       namePlaceholder: "Please enter the deposit name...",
       amountPlaceholder: "Please enter the deposit amount...",
-      notePlaceholder: "Add a note",
+      notePlaceholder: "Please enter the deposit note...",
       enterAmount: "Please enter the deposit amount",
       endDateError: "End date cannot be earlier than start date",
       updateSuccess: "Deposit target updated successfully!",
@@ -481,7 +481,7 @@ const zhTranslations: Translations = {
     introduction:
       "你好！我是一名 IT 开发人员，曾就读于莫纳什大学和墨尔本大学。作为一名充满激情的开发人员，我不断学习和成长，希望在 IT 领域有所成就。",
     contactMe: "欢迎联系",
-    motto: "生活就是像极了生活",
+    motto: "登高望远",
   },
   profile: {
     deleteAccount: "删除账号",

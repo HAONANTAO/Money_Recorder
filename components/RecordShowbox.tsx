@@ -24,7 +24,9 @@ const RecordShowBox: React.FC<RecordShowBoxProps> = ({ record }) => {
   return (
     <TouchableOpacity
       onPress={handlePress}
-      className={`overflow-hidden p-3 mb-3  rounded-lg border border-blue-200 shadow-md active:opacity-80 `}
+      className={`overflow-hidden p-3 mb-3  rounded-lg border ${
+        isDark ? "border-blue-200" : " border-gray-200"
+      } shadow-md active:opacity-80 `}
       // 直接用 style 固定宽度，防止 NativeWind 某些情况下 w-[48%] 不生效
       style={{ width: "48%" }} // ✅ 固定宽度为 48%
     >

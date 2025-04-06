@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-30 15:09:05
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-02 23:25:31
+ * @LastEditTime: 2025-04-06 20:32:43
  * @FilePath: /Money_Recorder/app/(profile)/faq.tsx
  */
 import React from "react";
@@ -19,6 +19,7 @@ import BackButton from "@/components/BackButton";
 
 const FAQ = () => {
   const { theme } = useTheme();
+  const isDark = theme === "dark";
   const { translations } = useLanguage();
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
@@ -50,17 +51,14 @@ const FAQ = () => {
   };
 
   return (
-    <View
-      className={`flex-1 p-4 ${
-        theme === "dark" ? "bg-quaternary" : "bg-white"
-      }`}>
+    <View className={`flex-1 p-4 ${isDark ? "bg-quaternary" : "bg-white"}`}>
       <View className="absolute left-4 top-12 z-50">
         <BackButton />
       </View>
       <View className="flex justify-center items-center mt-24 mb-6">
         <Text
           className={`text-2xl font-bold ${
-            theme === "dark" ? "text-white" : "text-quaternary"
+            isDark ? "text-white" : "text-quaternary"
           }`}>
           {translations.profile.faq}
         </Text>
@@ -71,7 +69,7 @@ const FAQ = () => {
             key={index}
             onPress={() => toggleExpand(index)}
             className={`mb-4 rounded-lg overflow-hidden ${
-              theme === "dark" ? "bg-blue-200" : "bg-gray-100"
+              isDark ? "bg-blue-200" : "bg-gray-100"
             }`}>
             <View className="p-4">
               <Text className="text-lg font-semibold text-quaternary">
@@ -84,14 +82,16 @@ const FAQ = () => {
           </TouchableOpacity>
         ))}
       </ScrollView>
-      <View className="absolute right-0 bottom-0 left-0 p-4 bg-white border-t border-gray-200">
+      <View className="absolute right-0 bottom-0 left-0 p-4 mb-4">
         <TouchableOpacity
           onPress={() =>
             Linking.openURL(
               "mailto:taoaaron5@gmail.com?subject=Feedback%20for%20Money%20Recorder",
             )
           }
-          className="flex-row justify-center items-center p-3 rounded-lg bg-secondary">
+          className={`flex-row justify-center items-center p-3 rounded-lg ${
+            isDark ? "bg-secondary " : "bg-secondary "
+          }`}>
           <Text className="font-semibold text-white">
             {translations.author.contactMe}
           </Text>

@@ -18,9 +18,10 @@ import BackButton from "@/components/BackButton";
 
 const More = () => {
   const { theme } = useTheme();
+  const isDark = theme === "dark";
   const { translations } = useLanguage();
   const { language } = useLanguage();
-  console.log(language);
+
   // react-native-device-info 的库，可以用来获取应用的版本号、构建号等信息。你可以按照以下步骤集成它来动态获取版本号：
   // 可惜expo go不支持！
   const appVersion = "1.1.0";
@@ -123,7 +124,7 @@ const More = () => {
 
   return (
     <ScrollView
-      className={`flex-1 ${theme === "dark" ? "bg-quaternary" : "bg-gray-100"}`}
+      className={`flex-1 ${isDark ? "bg-quaternary" : "bg-gray-100"}`}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
@@ -133,7 +134,7 @@ const More = () => {
       <View className="p-6 mt-20">
         <Text
           className={`text-2xl font-bold mb-6 ${
-            theme === "dark" ? "text-white" : "text-secondary"
+            isDark ? "text-white" : "text-secondary"
           }`}>
           {translations.profile.more}
         </Text>
@@ -142,11 +143,11 @@ const More = () => {
           <View
             key={sectionIndex}
             className={`mb-6 rounded-lg overflow-hidden ${
-              theme === "dark" ? "bg-gray-800" : "bg-white"
+              isDark ? "bg-transparent" : "bg-white"
             } shadow-sm`}>
             <Text
               className={`px-4 py-2 text-lg font-semibold ${
-                theme === "dark" ? "text-white" : "text-quaternary"
+                isDark ? "text-white" : "text-quaternary"
               }`}>
               {section.title}
             </Text>
@@ -154,17 +155,15 @@ const More = () => {
               <View
                 key={itemIndex}
                 className={`flex-row justify-between items-center p-4 border-t ${
-                  theme === "dark" ? "border-gray-700" : "border-gray-100"
+                  isDark ? "border-gray-700" : "border-gray-100"
                 }`}>
                 <Text
-                  className={`${
-                    theme === "dark" ? "text-gray-300" : "text-gray-600"
-                  }`}>
+                  className={`${isDark ? "text-gray-300" : "text-gray-600"}`}>
                   {item.label}
                 </Text>
                 <Text
                   className={`font-medium ${
-                    theme === "dark" ? "text-white" : "text-quaternary"
+                    isDark ? "text-white" : "text-quaternary"
                   }`}>
                   {item.value}
                 </Text>
@@ -216,13 +215,13 @@ const More = () => {
               );
             }}
             className={`p-4 rounded-3xl ${
-              theme === "dark" ? "bg-gray-800" : "bg-blue-100"
+              isDark ? "bg-secondary" : "bg-blue-100"
             } shadow-lg active:opacity-80 transform transition-all duration-200 border ${
-              theme === "dark" ? "border-gray-700" : "border-gray-200"
+              isDark ? "border-gray-700" : "border-gray-200"
             } w-80`}>
             <Text
               className={`text-lg font-medium text-center ${
-                theme === "dark" ? "text-white" : "text-quaternary"
+                isDark ? "text-white" : "text-quaternary"
               }`}>
               {translations.settings.backup}
             </Text>
@@ -274,13 +273,13 @@ const More = () => {
               );
             }}
             className={`p-4 rounded-3xl ${
-              theme === "dark" ? "bg-gray-800" : "bg-blue-100"
+              isDark ? "bg-secondary" : "bg-blue-100"
             } shadow-lg active:opacity-80 transform transition-all duration-200 border ${
-              theme === "dark" ? "border-gray-700" : "border-gray-200"
+              isDark ? "border-gray-700" : "border-gray-200"
             } w-80`}>
             <Text
               className={`text-lg font-medium text-center ${
-                theme === "dark" ? "text-white" : "text-quaternary"
+                isDark ? "text-white" : "text-quaternary"
               }`}>
               {translations.settings.restore}
             </Text>
@@ -293,13 +292,13 @@ const More = () => {
               )
             }
             className={`p-4 rounded-3xl ${
-              theme === "dark" ? "bg-gray-800" : "bg-blue-100"
+              isDark ? "bg-secondary" : "bg-blue-100"
             } shadow-lg active:opacity-80 transform transition-all duration-200 border ${
-              theme === "dark" ? "border-gray-700" : "border-gray-200"
+              isDark ? "border-gray-700" : "border-gray-200"
             } w-80`}>
             <Text
               className={`text-lg font-medium text-center ${
-                theme === "dark" ? "text-white" : "text-quaternary"
+                isDark ? "text-white" : "text-quaternary"
               }`}>
               {translations.settings.termsofuse}
             </Text>
@@ -312,13 +311,13 @@ const More = () => {
               )
             }
             className={`p-4 rounded-3xl ${
-              theme === "dark" ? "bg-gray-800" : "bg-blue-100"
+              isDark ? "bg-secondary" : "bg-blue-100"
             } shadow-lg active:opacity-80 transform transition-all duration-200 border ${
-              theme === "dark" ? "border-gray-700" : "border-gray-200"
+              isDark ? "border-gray-700" : "border-gray-200"
             } w-80`}>
             <Text
               className={`text-lg font-medium text-center ${
-                theme === "dark" ? "text-white" : "text-quaternary"
+                isDark ? "text-white" : "text-quaternary"
               }`}>
               {translations.settings.privacyPolicy}
             </Text>

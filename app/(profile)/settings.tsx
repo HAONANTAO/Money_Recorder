@@ -15,18 +15,14 @@ import { Ionicons } from "@expo/vector-icons"; // 引入图标库
 import { useTheme } from "../../contexts/ThemeContext";
 import { useLanguage } from "../../contexts/LanguageContext";
 import BackButton from "@/components/BackButton";
-import {
-  requestNotificationPermissions,
-  scheduleDailyReminder,
-  checkNotificationStatus,
-  cancelAllNotifications,
-} from "@/services/notificationService";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StorageService } from "@/utils/storageService";
 
 const Settings = () => {
   // Use the theme context and language context
   const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
   const { language, setLanguage, translations } = useLanguage();
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [isGuest, setIsGuest] = useState<boolean>();
@@ -84,10 +80,7 @@ const Settings = () => {
   };
 
   return (
-    <View
-      className={`flex-1 ${
-        theme === "dark" ? "bg-quaternary" : "bg-gray-100"
-      }`}>
+    <View className={`flex-1 ${isDark ? "bg-quaternary" : "bg-gray-100"}`}>
       <View className="absolute left-4 top-12 z-50">
         <BackButton navigateTo="/(tabs)/profile" />
       </View>
@@ -96,7 +89,7 @@ const Settings = () => {
         <View className="px-6 py-10">
           <Text
             className={`mb-8 text-3xl font-extrabold text-center ${
-              theme === "dark" ? "text-gray-200" : "text-gray-800"
+              isDark ? "text-gray-200" : "text-gray-800"
             }`}>
             {translations.settings.title}
           </Text>
@@ -112,17 +105,17 @@ const Settings = () => {
                 }
               }}
               className={`flex-row items-center justify-between p-4 rounded-xl shadow-md ${
-                theme === "dark" ? "bg-quaternary" : "bg-white"
+                isDark ? "bg-quaternary" : "bg-white"
               }`}>
               <View className="flex-row items-center">
                 <Ionicons
                   name="notifications-outline"
                   size={24}
-                  color={theme === "dark" ? "#60A5FA" : "#4B5563"}
+                  color={isDark ? "#60A5FA" : "#4B5563"}
                 />
                 <Text
                   className={`ml-4 text-lg font-semibold ${
-                    theme === "dark" ? "text-gray-200" : "text-gray-700"
+                    isDark ? "text-gray-200" : "text-gray-700"
                   }`}>
                   {translations.settings.notifications}
                 </Text>
@@ -133,16 +126,16 @@ const Settings = () => {
             <TouchableOpacity
               onPress={toggleTheme} // 使用context中的toggleTheme函数
               className={`flex-row items-center p-4 rounded-xl shadow-md ${
-                theme === "dark" ? "bg-quaternary" : "bg-white"
+                isDark ? "bg-quaternary" : "bg-white"
               }`}>
               <Ionicons
-                name={theme === "dark" ? "sunny-outline" : "moon-outline"}
+                name={isDark ? "sunny-outline" : "moon-outline"}
                 size={24}
-                color={theme === "dark" ? "#60A5FA" : "#4B5563"}
+                color={isDark ? "#60A5FA" : "#4B5563"}
               />
               <Text
                 className={`ml-4 text-lg font-semibold ${
-                  theme === "dark" ? "text-gray-200" : "text-gray-700"
+                  isDark ? "text-gray-200" : "text-gray-700"
                 }`}>
                 {translations.settings.theme}:{" "}
                 {theme === "light"
@@ -155,16 +148,16 @@ const Settings = () => {
             <TouchableOpacity
               onPress={handleClearCache}
               className={`flex-row items-center p-4 rounded-xl shadow-md ${
-                theme === "dark" ? "bg-quaternary" : "bg-white"
+                isDark ? "bg-quaternary" : "bg-white"
               }`}>
               <Ionicons
                 name="trash-outline"
                 size={24}
-                color={theme === "dark" ? "#60A5FA" : "#4B5563"}
+                color={isDark ? "#60A5FA" : "#4B5563"}
               />
               <Text
                 className={`ml-4 text-lg font-semibold ${
-                  theme === "dark" ? "text-gray-200" : "text-gray-700"
+                  isDark ? "text-gray-200" : "text-gray-700"
                 }`}>
                 {translations.settings.clearCache}
               </Text>
@@ -174,16 +167,16 @@ const Settings = () => {
             <TouchableOpacity
               onPress={() => setLanguage(language === "en" ? "zh" : "en")}
               className={`flex-row items-center p-4 rounded-xl shadow-md ${
-                theme === "dark" ? "bg-quaternary" : "bg-white"
+                isDark ? "bg-quaternary" : "bg-white"
               }`}>
               <Ionicons
                 name="language-outline"
                 size={24}
-                color={theme === "dark" ? "#60A5FA" : "#4B5563"}
+                color={isDark ? "#60A5FA" : "#4B5563"}
               />
               <Text
                 className={`ml-4 text-lg font-semibold ${
-                  theme === "dark" ? "text-gray-200" : "text-gray-700"
+                  isDark ? "text-gray-200" : "text-gray-700"
                 }`}>
                 {translations.settings.language}:{" "}
                 {language === "en" ? "English" : "中文"}
@@ -247,7 +240,7 @@ const Settings = () => {
           <View className="mt-8">
             <Text
               className={`text-sm text-center ${
-                theme === "dark" ? "text-gray-400" : "text-gray-500"
+                isDark ? "text-gray-400" : "text-gray-500"
               }`}>
               {translations.settings.version}: 1.1.0
             </Text>

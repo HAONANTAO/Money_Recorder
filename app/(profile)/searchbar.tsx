@@ -1,8 +1,8 @@
 /*
  * @Date: 2025-03-30 12:28:24
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-02 22:47:02
- * @FilePath: /Money_Recorder/app/(func)/searchbar.tsx
+ * @LastEditTime: 2025-04-06 20:30:32
+ * @FilePath: /Money_Recorder/app/(profile)/searchbar.tsx
  */
 import {
   StyleSheet,
@@ -27,6 +27,7 @@ import BackButton from "@/components/BackButton";
 
 const Searchbar = () => {
   const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [userId, setUserId] = useState("");
   const [tagSearch, setTagSearch] = useState("");
   const [commentSearch, setCommentSearch] = useState("");
@@ -80,9 +81,7 @@ const Searchbar = () => {
 
   return (
     <View
-      className={`flex-1 p-6 mt-24 ${
-        theme === "dark" ? "bg-quaternary" : "bg-white"
-      }`}>
+      className={`flex-1 p-6 pt-24 ${isDark ? "bg-quaternary" : "bg-white"}`}>
       <View className="relative bottom-14">
         <BackButton />
       </View>
@@ -92,19 +91,19 @@ const Searchbar = () => {
           <View className="flex-row items-center mb-8 space-x-2">
             <TextInput
               className={`flex-1 p-4 rounded-xl border ${
-                theme === "dark"
+                isDark
                   ? "border-gray-600 text-white bg-tertiary"
                   : "border-gray-300 text-black bg-gray-50"
               } shadow-sm`}
               placeholder="Search by tags"
-              placeholderTextColor={theme === "dark" ? "#9ca3af" : "#6b7280"}
+              placeholderTextColor={isDark ? "#9ca3af" : "#6b7280"}
               value={tagSearch}
               onChangeText={setTagSearch}
             />
             <TouchableOpacity
               onPress={handleTagSearch}
               className={`ml-2 p-4 rounded-3xl ${
-                theme === "dark" ? "bg-blue-600" : "bg-blue-500"
+                isDark ? "bg-blue-600" : "bg-blue-500"
               } shadow-sm`}>
               <Ionicons name="search" size={24} color="white" />
             </TouchableOpacity>
@@ -115,10 +114,10 @@ const Searchbar = () => {
                 <View
                   key={record.$id}
                   className={`p-6 mb-6 rounded-3xl shadow-lg ${
-                    theme === "dark" ? "bg-tertiary" : "bg-white"
+                    isDark ? "bg-tertiary" : "bg-white"
                   }`}
                   style={{
-                    shadowColor: theme === "dark" ? "#000" : "#718096",
+                    shadowColor: isDark ? "#000" : "#718096",
                     shadowOffset: { width: 0, height: 6 },
                     shadowOpacity: 0.35,
                     shadowRadius: 8,
@@ -127,25 +126,25 @@ const Searchbar = () => {
                   <View className="flex-row justify-between items-center mb-2">
                     <Text
                       className={`text-2xl font-bold ${
-                        theme === "dark" ? "text-white" : "text-gray-800"
+                        isDark ? "text-white" : "text-gray-800"
                       }`}>
                       ${record.moneyAmount.toLocaleString()}
                     </Text>
                     <Text
                       className={`px-3 py-1 rounded-full ${
                         record.type === "income"
-                          ? theme === "dark"
+                          ? isDark
                             ? "bg-green-700"
                             : "bg-green-100"
-                          : theme === "dark"
+                          : isDark
                           ? "bg-red-700"
                           : "bg-red-100"
                       } ${
                         record.type === "income"
-                          ? theme === "dark"
+                          ? isDark
                             ? "text-green-100"
                             : "text-green-800"
-                          : theme === "dark"
+                          : isDark
                           ? "text-red-100"
                           : "text-red-800"
                       }`}>
@@ -155,21 +154,18 @@ const Searchbar = () => {
                   <View className="flex-row items-center mt-2 mb-3">
                     <Text
                       className={`mr-3 text-sm ${
-                        theme === "dark" ? "text-gray-300" : "text-gray-600"
+                        isDark ? "text-gray-300" : "text-gray-600"
                       }`}>
                       Category:
                     </Text>
-                    <Text
-                      className={
-                        theme === "dark" ? "text-white" : "text-gray-800"
-                      }>
+                    <Text className={isDark ? "text-white" : "text-gray-800"}>
                       {record.category}
                     </Text>
                   </View>
                   <View className="flex-row items-center mt-2 mb-3">
                     <Text
                       className={`mr-3 text-sm ${
-                        theme === "dark" ? "text-gray-300" : "text-gray-600"
+                        isDark ? "text-gray-300" : "text-gray-600"
                       }`}>
                       Tags:
                     </Text>
@@ -179,7 +175,7 @@ const Searchbar = () => {
                           <Text
                             key={index}
                             className={`px-3 py-1.5 rounded-full text-sm font-medium ${
-                              theme === "dark"
+                              isDark
                                 ? "bg-gray-700 text-gray-300"
                                 : "bg-gray-200 text-gray-700"
                             }`}>
@@ -191,42 +187,33 @@ const Searchbar = () => {
                   <View className="flex-row items-center mt-2 mb-3">
                     <Text
                       className={`mr-3 text-sm ${
-                        theme === "dark" ? "text-gray-300" : "text-gray-600"
+                        isDark ? "text-gray-300" : "text-gray-600"
                       }`}>
                       Location:
                     </Text>
-                    <Text
-                      className={
-                        theme === "dark" ? "text-white" : "text-gray-800"
-                      }>
+                    <Text className={isDark ? "text-white" : "text-gray-800"}>
                       {record.location || "N/A"}
                     </Text>
                   </View>
                   <View className="flex-row items-center mt-2 mb-3">
                     <Text
                       className={`mr-3 text-sm ${
-                        theme === "dark" ? "text-gray-300" : "text-gray-600"
+                        isDark ? "text-gray-300" : "text-gray-600"
                       }`}>
                       Method:
                     </Text>
-                    <Text
-                      className={
-                        theme === "dark" ? "text-white" : "text-gray-800"
-                      }>
+                    <Text className={isDark ? "text-white" : "text-gray-800"}>
                       {record.paymentMethod}
                     </Text>
                   </View>
                   <View className="flex-row items-center mt-2 mb-3">
                     <Text
                       className={`mr-3 text-sm ${
-                        theme === "dark" ? "text-gray-300" : "text-gray-600"
+                        isDark ? "text-gray-300" : "text-gray-600"
                       }`}>
                       Date:
                     </Text>
-                    <Text
-                      className={
-                        theme === "dark" ? "text-white" : "text-gray-800"
-                      }>
+                    <Text className={isDark ? "text-white" : "text-gray-800"}>
                       {new Date(record.createAt).toLocaleDateString()}
                     </Text>
                   </View>
@@ -234,13 +221,13 @@ const Searchbar = () => {
                     <View className="mt-1">
                       <Text
                         className={`mr-3 text-sm ${
-                          theme === "dark" ? "text-gray-300" : "text-gray-600"
+                          isDark ? "text-gray-300" : "text-gray-600"
                         }`}>
                         Comment:
                       </Text>
                       <Text
                         className={`${
-                          theme === "dark" ? "text-gray-400" : "text-gray-600"
+                          isDark ? "text-gray-400" : "text-gray-600"
                         }`}>
                         {record.comment}
                       </Text>
@@ -251,7 +238,7 @@ const Searchbar = () => {
             ) : tagSearch.trim() ? (
               <Text
                 className={`text-center py-4 ${
-                  theme === "dark" ? "text-gray-400" : "text-gray-600"
+                  isDark ? "text-gray-400" : "text-gray-600"
                 }`}>
                 No results found for tags.
               </Text>
@@ -264,19 +251,19 @@ const Searchbar = () => {
             <View className="flex-row items-center mb-8 space-x-2">
               <TextInput
                 className={`flex-1 p-4 rounded-xl border ${
-                  theme === "dark"
+                  isDark
                     ? "border-gray-600 text-white bg-tertiary"
                     : "border-gray-300 text-black bg-gray-50"
                 } shadow-sm`}
                 placeholder="Search by comments"
-                placeholderTextColor={theme === "dark" ? "#9ca3af" : "#6b7280"}
+                placeholderTextColor={isDark ? "#9ca3af" : "#6b7280"}
                 value={commentSearch}
                 onChangeText={setCommentSearch}
               />
               <TouchableOpacity
                 onPress={handleCommentSearch}
                 className={`ml-2 p-4 rounded-3xl ${
-                  theme === "dark" ? "bg-blue-600" : "bg-blue-500"
+                  isDark ? "bg-blue-600" : "bg-blue-500"
                 } shadow-sm`}>
                 <Ionicons name="search" size={24} color="white" />
               </TouchableOpacity>
@@ -287,10 +274,10 @@ const Searchbar = () => {
                   <View
                     key={record.$id}
                     className={`p-6 mb-6 rounded-3xl shadow-lg ${
-                      theme === "dark" ? "bg-tertiary" : "bg-white"
+                      isDark ? "bg-tertiary" : "bg-white"
                     }`}
                     style={{
-                      shadowColor: theme === "dark" ? "#000" : "#718096",
+                      shadowColor: isDark ? "#000" : "#718096",
                       shadowOffset: { width: 0, height: 6 },
                       shadowOpacity: 0.35,
                       shadowRadius: 8,
@@ -299,25 +286,25 @@ const Searchbar = () => {
                     <View className="flex-row justify-between items-center mb-4">
                       <Text
                         className={`text-2xl font-bold ${
-                          theme === "dark" ? "text-white" : "text-gray-800"
+                          isDark ? "text-white" : "text-gray-800"
                         }`}>
                         ${record.moneyAmount.toLocaleString()}
                       </Text>
                       <Text
                         className={`px-4 py-2 rounded-full text-sm font-medium ${
                           record.type === "income"
-                            ? theme === "dark"
+                            ? isDark
                               ? "bg-green-700"
                               : "bg-green-100"
-                            : theme === "dark"
+                            : isDark
                             ? "bg-red-700"
                             : "bg-red-100"
                         } ${
                           record.type === "income"
-                            ? theme === "dark"
+                            ? isDark
                               ? "text-green-100"
                               : "text-green-800"
-                            : theme === "dark"
+                            : isDark
                             ? "text-red-100"
                             : "text-red-800"
                         }`}>
@@ -327,21 +314,18 @@ const Searchbar = () => {
                     <View className="flex-row items-center mt-2 mb-3">
                       <Text
                         className={`mr-3 text-sm ${
-                          theme === "dark" ? "text-gray-300" : "text-gray-600"
+                          isDark ? "text-gray-300" : "text-gray-600"
                         }`}>
                         Category:
                       </Text>
-                      <Text
-                        className={
-                          theme === "dark" ? "text-white" : "text-gray-800"
-                        }>
+                      <Text className={isDark ? "text-white" : "text-gray-800"}>
                         {record.category}
                       </Text>
                     </View>
                     <View className="flex-row items-center mt-2 mb-3">
                       <Text
                         className={`mr-3 text-sm ${
-                          theme === "dark" ? "text-gray-300" : "text-gray-600"
+                          isDark ? "text-gray-300" : "text-gray-600"
                         }`}>
                         Tags:
                       </Text>
@@ -351,7 +335,7 @@ const Searchbar = () => {
                             <Text
                               key={index}
                               className={`px-3 py-1.5 rounded-full text-sm font-medium ${
-                                theme === "dark"
+                                isDark
                                   ? "bg-gray-700 text-gray-300"
                                   : "bg-gray-200 text-gray-700"
                               }`}>
@@ -363,42 +347,33 @@ const Searchbar = () => {
                     <View className="flex-row items-center mt-2 mb-3">
                       <Text
                         className={`mr-3 text-sm ${
-                          theme === "dark" ? "text-gray-300" : "text-gray-600"
+                          isDark ? "text-gray-300" : "text-gray-600"
                         }`}>
                         Location:
                       </Text>
-                      <Text
-                        className={
-                          theme === "dark" ? "text-white" : "text-gray-800"
-                        }>
+                      <Text className={isDark ? "text-white" : "text-gray-800"}>
                         {record.location || "N/A"}
                       </Text>
                     </View>
                     <View className="flex-row items-center mt-2 mb-3">
                       <Text
                         className={`mr-3 text-sm ${
-                          theme === "dark" ? "text-gray-300" : "text-gray-600"
+                          isDark ? "text-gray-300" : "text-gray-600"
                         }`}>
                         Method:
                       </Text>
-                      <Text
-                        className={
-                          theme === "dark" ? "text-white" : "text-gray-800"
-                        }>
+                      <Text className={isDark ? "text-white" : "text-gray-800"}>
                         {record.paymentMethod}
                       </Text>
                     </View>
                     <View className="flex-row items-center mt-2 mb-3">
                       <Text
                         className={`mr-3 text-sm ${
-                          theme === "dark" ? "text-gray-300" : "text-gray-600"
+                          isDark ? "text-gray-300" : "text-gray-600"
                         }`}>
                         Date:
                       </Text>
-                      <Text
-                        className={
-                          theme === "dark" ? "text-white" : "text-gray-800"
-                        }>
+                      <Text className={isDark ? "text-white" : "text-gray-800"}>
                         {new Date(record.createAt).toLocaleDateString()}
                       </Text>
                     </View>
@@ -406,13 +381,13 @@ const Searchbar = () => {
                       <View className="mt-1">
                         <Text
                           className={`mr-3 text-sm ${
-                            theme === "dark" ? "text-gray-300" : "text-gray-600"
+                            isDark ? "text-gray-300" : "text-gray-600"
                           }`}>
                           Comment:
                         </Text>
                         <Text
                           className={`${
-                            theme === "dark" ? "text-gray-400" : "text-gray-600"
+                            isDark ? "text-gray-400" : "text-gray-600"
                           }`}>
                           {record.comment}
                         </Text>
@@ -423,7 +398,7 @@ const Searchbar = () => {
               ) : commentSearch.trim() ? (
                 <Text
                   className={`text-center py-4 ${
-                    theme === "dark" ? "text-gray-400" : "text-gray-600"
+                    isDark ? "text-gray-400" : "text-gray-600"
                   }`}>
                   无搜索结果
                 </Text>

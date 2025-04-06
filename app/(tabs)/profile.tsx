@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-05 15:04:40
+ * @LastEditTime: 2025-04-06 20:28:03
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -33,19 +33,13 @@ import { Ionicons } from "@expo/vector-icons";
 const Profile = () => {
   const { theme } = useTheme();
   const { translations } = useLanguage();
+  const isDark = theme === "dark";
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [edit, setEdit] = useState(true);
   const [avatar, setAvatar] = useState("");
   const [userId, setUserId] = useState("");
   const [isGuest, setIsGuest] = useState<boolean>();
-  // for edit considering
-  // const [showSuccessModal, setShowSuccessModal] = useState(false);
-  // logout functions
-  const handleLogOut = async () => {
-    await StorageService.clearEmail();
-    router.replace("/");
-  };
 
   useEffect(() => {
     const getEmailNow = async () => {
@@ -79,6 +73,7 @@ const Profile = () => {
     // start to edit and change display
     setEdit(!edit);
   };
+
   // 处理头像选择
   const handleAvatarPress = async () => {
     try {
@@ -138,9 +133,7 @@ const Profile = () => {
   // main body
   return (
     <View
-      className={`flex-1 p-6 mt-16 ${
-        theme === "dark" ? "bg-gray-900" : "bg-gray-100"
-      }`}>
+      className={`flex-1 p-6 mt-16 ${isDark ? "bg-gray-900" : "bg-gray-100"}`}>
       {/* front profile info */}
       <View
         className={`p-6 mb-4 ${
@@ -264,10 +257,7 @@ const Profile = () => {
                 source={require("../../assets/images/icons/setting.png")}
                 className="w-12 h-12"
               />
-              <Text
-                className={`mt-2 text-sm font-bold ${
-                  theme === "dark" ? "text-white" : "text-quaternary"
-                }`}>
+              <Text className={`mt-2 text-sm font-bold ${"text-quaternary"}`}>
                 {translations.settings.title}
               </Text>
             </TouchableOpacity>
@@ -278,7 +268,7 @@ const Profile = () => {
               theme === "dark" ? "bg-blue-200" : "bg-white "
             } flex justify-center items-center w-24 h-24 rounded-xl border border-gray-200 shadow-md`}>
             <TouchableOpacity
-              onPress={() => router.push("/(func)/searchbar")}
+              onPress={() => router.push("/(profile)/searchbar")}
               className="flex justify-center items-center w-full h-full">
               <Image
                 source={require("../../assets/images/icons/search.png")}
@@ -321,10 +311,7 @@ const Profile = () => {
                 source={require("../../assets/images/icons/author.png")}
                 className="w-10 h-10"
               />
-              <Text
-                className={`font-bold ${
-                  theme === "dark" ? "text-white" : "text-quaternary"
-                }`}>
+              <Text className={`font-bold ${"text-quaternary"}`}>
                 {translations.profile.author}
               </Text>
             </TouchableOpacity>
@@ -360,10 +347,7 @@ const Profile = () => {
                 source={require("../../assets/images/icons/rating.png")}
                 className="w-10 h-10"
               />
-              <Text
-                className={`mt-2 font-bold ${
-                  theme === "dark" ? "text-white" : "text-quaternary"
-                }`}>
+              <Text className={`mt-2 font-bold ${"text-quaternary"}`}>
                 {translations.profile.rating}
               </Text>
             </TouchableOpacity>

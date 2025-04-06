@@ -44,11 +44,12 @@ const Author = () => {
   }, []);
 
   const { theme } = useTheme();
+  const isDark = theme === "dark";
   const { translations } = useLanguage();
   return (
     <View
       className={`flex-1 justify-center items-center p-6 ${
-        theme === "dark" ? "bg-quaternary" : "bg-gray-100"
+        isDark ? "bg-quaternary" : "bg-gray-100"
       }`}>
       <View className="right-4 bottom-14">
         <BackButton navigateTo="/(tabs)/profile" />
@@ -94,7 +95,7 @@ const Author = () => {
       {/* 简介 */}
       <Text
         className={`${
-          theme === "dark" ? "text-quinary" : "text-gray-600"
+          isDark ? "text-quinary" : "text-gray-600"
         } px-8 mt-4 text-lg leading-relaxed text-center `}>
         {translations.author.introduction}
       </Text>
@@ -110,14 +111,11 @@ const Author = () => {
         <Text className="text-lg text-gray-700">
           <Text
             className={`${
-              theme === "dark" ? "text-primary" : "text-quaternary"
+              isDark ? "text-primary" : "text-quaternary"
             } font-bold `}>
             📧 Email:
           </Text>
-          <Text
-            className={`${
-              theme === "dark" ? "text-quinary" : "text-gray-600"
-            }`}>
+          <Text className={`${isDark ? "text-quinary" : "text-gray-600"}`}>
             {" "}
             taoaaron5@gmail.com
           </Text>
@@ -125,14 +123,11 @@ const Author = () => {
         <Text className="text-lg text-gray-700">
           <Text
             className={`${
-              theme === "dark" ? "text-primary" : "text-quaternary"
+              isDark ? "text-primary" : "text-quaternary"
             } font-bold `}>
             🌐 WeChat:
           </Text>{" "}
-          <Text
-            className={`${
-              theme === "dark" ? "text-quinary" : "text-gray-600"
-            }`}>
+          <Text className={`${isDark ? "text-quinary" : "text-gray-600"}`}>
             {" "}
             taohaonan001
           </Text>
@@ -143,7 +138,9 @@ const Author = () => {
       <View className="absolute bottom-8 w-full">
         <Animated.Text
           style={{ opacity: fadeAnim }}
-          className="mt-8 italic font-bold text-center text-gray-600 text-[12px]">
+          className={`mt-8 italic font-bold text-center  text-[12px] ${
+            isDark ? "text-black" : "text-gray-600"
+          } `}>
           {translations.author.motto}
         </Animated.Text>
       </View>

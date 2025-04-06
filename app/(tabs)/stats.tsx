@@ -483,8 +483,8 @@ const Stats = () => {
                     },
                   });
                 }}
-                className={`flex-row items-center justify-between p-3 mb-2 rounded-lg border ${
-                  theme === "dark" ? "bg-transparent" : "bg-white"
+                className={`flex-row items-center justify-between p-3 mb-2 rounded-lg  ${
+                  isDark ? "border bg-transparent" : "bg-white"
                 }`}>
                 <View className="flex-row items-center">
                   <Text className="mr-2 text-lg">{category.icon}</Text>
