@@ -574,7 +574,7 @@ const zhTranslations: Translations = {
   },
   tabs: {
     home: "主页",
-    stats: "数据统计",
+    stats: "统计",
     record: "记录",
     goal: "目标",
     profile: "我的",

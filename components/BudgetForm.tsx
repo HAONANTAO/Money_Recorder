@@ -4,13 +4,12 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
   Keyboard,
   TouchableWithoutFeedback,
   ScrollView,
   Modal,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { useTheme } from "../contexts/ThemeContext";
 import { useLanguage } from "../contexts/LanguageContext";
 import { createBudget } from "../services/budgetService";
@@ -31,8 +30,8 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
   const { theme } = useTheme();
   const { translations } = useLanguage();
   const [amount, setAmount] = useState("");
-  const [year, setYear] = useState(new Date().getFullYear());
-  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const [category, setCategory] = useState(BUDGET_CATEGORIES[0].value);
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
@@ -53,8 +52,8 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
       const budgetData = {
         userId,
         amount: parseFloat(amount),
-        year,
-        month,
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
         category,
         note,
       };
@@ -79,77 +78,53 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView>
         <View
-          className={`mt-12 p-4  rounded-lg ${
+          className={`mt-16 p-6 rounded-lg ${
             theme === "dark" ? "bg-quaternary" : "bg-white"
           }`}>
           <View className="absolute top-2 left-2 z-50">
             <BackButton />
           </View>
           <Text
-            className={`text-center text-lg font-bold mb-2 ${
+            className={`text-center text-lg font-bold mb-6 ${
               theme === "dark" ? "text-white" : "text-secondary"
             }`}>
             {translations.budget.title}
           </Text>
 
-          <View className="mb-4">
+          <View className="mb-6">
             <Text
               className={`mb-2 ${
                 theme === "dark" ? "text-white" : "text-black"
               }`}>
               {translations.budget.date}
             </Text>
-            <View className="flex-row space-x-2">
-              <View
-                className={`flex-1 border rounded-md overflow-hidden ${
-                  theme === "dark" ? "border-gray-600" : "border-gray-300"
-                }`}>
-                <Picker
-                  selectedValue={String(year)}
-                  onValueChange={(itemValue) => setYear(Number(itemValue))}
-                  style={{
-                    backgroundColor: theme === "dark" ? "#374151" : "#FFFFFF",
-                    color: theme === "dark" ? "#FFFFFF" : "#000000",
-                  }}
-                  itemStyle={{
-                    color: theme === "dark" ? "#FFFFFF" : "#000000",
-                  }}>
-                  {Array.from({ length: 11 }, (_, i) => (
-                    <Picker.Item
-                      key={i}
-                      label={String(new Date().getFullYear() - 5 + i)}
-                      value={String(new Date().getFullYear() - 5 + i)}
-                    />
-                  ))}
-                </Picker>
-              </View>
-              <View
-                className={`flex-1 border rounded-md overflow-hidden ${
-                  theme === "dark" ? "border-gray-600" : "border-gray-300"
-                }`}>
-                <Picker
-                  selectedValue={String(month)}
-                  onValueChange={(itemValue) => setMonth(Number(itemValue))}
-                  style={{
-                    backgroundColor: theme === "dark" ? "#374151" : "#FFFFFF",
-                    color: theme === "dark" ? "#FFFFFF" : "#000000",
-                  }}
-                  itemStyle={{
-                    color: theme === "dark" ? "#FFFFFF" : "#000000",
-                  }}>
-                  {Array.from({ length: 12 }, (_, i) => (
-                    <Picker.Item
-                      key={i}
-                      label={String(i + 1)}
-                      value={String(i + 1)}
-                    />
-                  ))}
-                </Picker>
-              </View>
-            </View>
+            <TouchableOpacity
+              onPress={() => setShowDatePicker(true)}
+              className={`p-3 border rounded-md ${
+                theme === "dark"
+                  ? "border-gray-600 bg-tertiary"
+                  : "border-gray-300 bg-white"
+              }`}>
+              <Text className={theme === "dark" ? "text-white" : "text-black"}>
+                {`${date.getFullYear()}/ ${date.getMonth() + 1}`}
+              </Text>
+            </TouchableOpacity>
+            {showDatePicker && (
+              <DateTimePicker
+                value={date}
+                mode="date"
+                display="spinner"
+                onChange={(event, selectedDate) => {
+                  setShowDatePicker(false);
+                  if (selectedDate) {
+                    setDate(selectedDate);
+                  }
+                }}
+              />
+            )}
           </View>
 
-          <View className="mb-4">
+          <View className="mb-6">
             <Text
               className={`mb-2 ${
                 theme === "dark" ? "text-white" : "text-black"
@@ -172,37 +147,43 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
             />
           </View>
 
-          <View className="mb-4">
+          <View className="mb-6">
             <Text
               className={`mb-2 ${
                 theme === "dark" ? "text-white" : "text-black"
               }`}>
               {translations.budget.category}
             </Text>
-            <View
-              className={`border rounded-md overflow-hidden ${
-                theme === "dark" ? "border-gray-600" : "border-gray-300"
-              }`}>
-              <Picker
-                selectedValue={category}
-                onValueChange={(itemValue: string) => setCategory(itemValue)}
-                style={{
-                  backgroundColor: theme === "dark" ? "#374151" : "#FFFFFF",
-                  color: theme === "dark" ? "#FFFFFF" : "#000000",
-                }}
-                itemStyle={{ color: theme === "dark" ? "#FFFFFF" : "#000000" }}>
-                {BUDGET_CATEGORIES.map((cat) => (
-                  <Picker.Item
-                    key={cat.value}
-                    label={`${cat.icon} ${cat.label}`}
-                    value={cat.value}
-                  />
-                ))}
-              </Picker>
+            <View className="flex-row flex-wrap gap-2">
+              {BUDGET_CATEGORIES.map((cat) => (
+                <TouchableOpacity
+                  key={cat.value}
+                  onPress={() => setCategory(cat.value)}
+                  className={`p-3 rounded-lg flex-grow ${
+                    category === cat.value
+                      ? theme === "dark"
+                        ? "bg-blue-700"
+                        : "bg-blue-500"
+                      : theme === "dark"
+                      ? "bg-gray-700"
+                      : "bg-gray-200"
+                  }`}>
+                  <Text
+                    className={`text-center font-medium ${
+                      category === cat.value
+                        ? "text-white"
+                        : theme === "dark"
+                        ? "text-gray-200"
+                        : "text-gray-700"
+                    }`}>
+                    {`${cat.icon} ${cat.label}`}
+                  </Text>
+                </TouchableOpacity>
+              ))}
             </View>
           </View>
 
-          <View className="mb-4">
+          <View className="mb-6">
             <Text
               className={`mb-2 ${
                 theme === "dark" ? "text-white" : "text-black"
@@ -234,7 +215,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
 
           <TouchableOpacity
             className={`py-3 rounded-md ${
-              isGuest ? "bg-gray-400" : "bg-primary"
+              isGuest ? "bg-gray-400" : "bg-secondary"
             }`}
             onPress={handleSubmit}
             disabled={isGuest}>
