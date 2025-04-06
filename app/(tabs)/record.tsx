@@ -1,5 +1,4 @@
 import {
-  StyleSheet,
   Text,
   View,
   TextInput,
@@ -8,7 +7,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+
 import React, { useEffect, useState } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
 import { createRecord } from "../../services/recordService";
@@ -95,7 +94,7 @@ const Record = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView
-        className={`flex-1 ${isDark ? "bg-quaternary" : "bg-gray-100"}`}>
+        className={`flex-1 ${isDark ? "bg-gray-700" : "bg-gray-100"}`}>
         <View className="p-5">
           {record.userId === "guest" ||
             (record.userId === "" && (
@@ -104,17 +103,18 @@ const Record = () => {
                 again
               </Text>
             ))}
+
           <Text
-            className={`mt-12 text-2xl font-bold mb-5 text-center ${
-              isDark ? "text-black" : "text-secondary"
+            className={`mt-12 text-2xl font-bold mb-5 text-center  ${
+              isDark ? "text-white" : "text-secondary"
             }`}>
             {translations.record.title}
           </Text>
 
           {/* 金额输入 */}
           <View
-            className={`mb-4 ${
-              isDark ? "bg-quaternary" : "bg-white"
+            className={`mb-4 border  ${
+              isDark ? "bg-transparent" : "bg-white"
             } rounded-xl p-4`}>
             <Text
               className={`mb-2 text-base font-medium ${
@@ -122,10 +122,10 @@ const Record = () => {
               }`}>
               {translations.record.amount}
             </Text>
-            <View className={`flex-row items-center p-3 bg-white rounded-lg`}>
+            <View className={`flex-row items-center p-3 bg-white rounded-lg `}>
               <Text
                 className={`text-xl mr-2 font-medium ${
-                  isDark ? "text-gray-200" : "text-gray-700"
+                  isDark ? "text-black" : "text-gray-700"
                 }`}>
                 $
               </Text>
@@ -146,19 +146,19 @@ const Record = () => {
 
           {/* 类型选择 */}
           <View
-            className={`mb-4 ${
-              isDark ? "bg-quaternary" : "bg-white"
+            className={`mb-4 border ${
+              isDark ? "bg-transparent" : "bg-white"
             } rounded-xl p-4`}>
             <Text
               className={`mb-2 text-base font-medium ${
-                isDark ? "text-gray-200" : "text-gray-700"
+                isDark ? "text-white" : "text-gray-700"
               }`}>
               {translations.record.type}
             </Text>
             <View className="flex-row gap-2 justify-between">
               <TouchableOpacity
                 onPress={() => setRecord({ ...record, type: "expense" })}
-                className={`flex-1 p-3 rounded-lg ${
+                className={`flex-1 p-3 rounded-lg border border-gray-200 ${
                   record.type === "expense"
                     ? isDark
                       ? "bg-red-700"
@@ -194,7 +194,7 @@ const Record = () => {
                     record.type === "income"
                       ? "text-white"
                       : isDark
-                      ? "text-gray-200"
+                      ? "text-white"
                       : "text-gray-700"
                   }`}>
                   {translations.record.income}
@@ -205,12 +205,12 @@ const Record = () => {
 
           {/* 类别选择 */}
           <View
-            className={`mb-4 ${
-              isDark ? "bg-quaternary" : "bg-white"
+            className={`mb-4 border ${
+              isDark ? "bg-transparent" : "bg-white"
             } rounded-xl p-4`}>
             <Text
               className={`mb-2 text-base font-medium ${
-                isDark ? "text-gray-200" : "text-gray-700"
+                isDark ? "text-white" : "text-gray-700"
               }`}>
               {translations.record.category}
             </Text>
@@ -224,7 +224,7 @@ const Record = () => {
                   onPress={() =>
                     setRecord({ ...record, category: category.value })
                   }
-                  className={`p-3 rounded-lg flex-grow ${
+                  className={`p-3 rounded-lg flex-grow border border-gray-200 ${
                     record.category === category.value
                       ? isDark
                         ? "bg-blue-700"
@@ -250,19 +250,19 @@ const Record = () => {
 
           {/* 支付方式 */}
           <View
-            className={`mb-4 ${
-              isDark ? "bg-quaternary" : "bg-white"
+            className={`mb-4 border ${
+              isDark ? "bg-transparent" : "bg-white"
             } rounded-xl p-4`}>
             <Text
               className={`mb-2 text-base font-medium ${
-                isDark ? "text-gray-200" : "text-gray-700"
+                isDark ? "text-white" : "text-gray-700"
               }`}>
               {translations.record.method}
             </Text>
             <View className="flex-row gap-2 justify-between">
               <TouchableOpacity
                 onPress={() => setRecord({ ...record, paymentMethod: "Card" })}
-                className={`flex-1 p-3 rounded-lg ${
+                className={`flex-1 p-3 rounded-lg border border-gray-200 ${
                   record.paymentMethod === "Card"
                     ? isDark
                       ? "bg-blue-700"
@@ -333,8 +333,8 @@ const Record = () => {
 
           {/* 地点输入 */}
           <View
-            className={`mb-4 ${
-              isDark ? "bg-quaternary" : "bg-white"
+            className={`mb-4 border ${
+              isDark ? "bg-transparent" : "bg-white"
             } rounded-xl p-4`}>
             <Text
               className={`mb-2 text-base font-medium ${
@@ -343,7 +343,7 @@ const Record = () => {
               {translations.record.location}
             </Text>
             <TextInput
-              className={`p-3 rounded-lg text-base ${
+              className={`p-3 rounded-lg text-base border border-gray-200 ${
                 isDark ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"
               }`}
               placeholder={translations.record.locationPlaceholder}
@@ -357,8 +357,8 @@ const Record = () => {
 
           {/* 标签 */}
           <View
-            className={`mb-4 ${
-              isDark ? "bg-quaternary" : "bg-white"
+            className={`mb-4 border ${
+              isDark ? "bg-transparent" : "bg-white"
             } rounded-xl p-4`}>
             <Text
               className={`mb-2 text-base font-medium ${
@@ -367,7 +367,7 @@ const Record = () => {
               {translations.record.tags}
             </Text>
             <TextInput
-              className={`p-3 rounded-lg text-base ${
+              className={`p-3 rounded-lg text-base border border-gray-200 ${
                 isDark ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"
               }`}
               placeholder={translations.record.tags}
@@ -379,8 +379,8 @@ const Record = () => {
 
           {/* 备注 */}
           <View
-            className={`mb-4 ${
-              isDark ? "bg-quaternary" : "bg-white"
+            className={`mb-4 border  ${
+              isDark ? "bg-transparent" : "bg-white"
             } rounded-xl p-4`}>
             <Text
               className={`mb-2 text-base font-medium ${
@@ -389,7 +389,7 @@ const Record = () => {
               {translations.record.comment}
             </Text>
             <TextInput
-              className={`p-3 rounded-lg text-base ${
+              className={`p-3 rounded-lg text-base border border-gray-200 ${
                 isDark ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"
               }`}
               placeholder={translations.record.amountPlaceholder}
@@ -409,8 +409,8 @@ const Record = () => {
           )}
           <TouchableOpacity
             className={`py-3 rounded-md ${
-              record.userId === "guest" ? "bg-gray-400" : "bg-secondary"
-            }`}
+              record.userId === "guest" ? "bg-white" : "bg-secondary"
+            } `}
             onPress={handleSubmit}
             disabled={record.userId === "guest" || record.userId === ""}>
             <Text className="font-semibold text-center text-white">
