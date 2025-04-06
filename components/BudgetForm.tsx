@@ -28,6 +28,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
   isGuest = false,
 }) => {
   const { theme } = useTheme();
+  const isDark = theme === "dark";
   const { translations } = useLanguage();
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState(new Date());
@@ -79,29 +80,26 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
       <ScrollView>
         <View
           className={`mt-16 p-6 rounded-lg ${
-            theme === "dark" ? "bg-quaternary" : "bg-white"
+            isDark ? "bg-transparent" : "bg-white"
           }`}>
           <View className="absolute top-2 left-2 z-50">
             <BackButton />
           </View>
           <Text
             className={`text-center text-lg font-bold mb-6 ${
-              theme === "dark" ? "text-white" : "text-secondary"
+              isDark ? "text-white" : "text-secondary"
             }`}>
             {translations.budget.title}
           </Text>
 
           <View className="mb-6">
-            <Text
-              className={`mb-2 ${
-                theme === "dark" ? "text-white" : "text-black"
-              }`}>
+            <Text className={`mb-2 ${isDark ? "text-white" : "text-black"}`}>
               {translations.budget.date}
             </Text>
             <TouchableOpacity
               onPress={() => setShowDatePicker(true)}
               className={`p-3 border rounded-md ${
-                theme === "dark"
+                isDark
                   ? "border-gray-600 bg-tertiary"
                   : "border-gray-300 bg-white"
               }`}>
@@ -125,15 +123,12 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
           </View>
 
           <View className="mb-6">
-            <Text
-              className={`mb-2 ${
-                theme === "dark" ? "text-white" : "text-black"
-              }`}>
+            <Text className={`mb-2 ${isDark ? "text-white" : "text-black"}`}>
               {translations.budget.amount}
             </Text>
             <TextInput
               className={`border rounded-md p-2 ${
-                theme === "dark"
+                isDark
                   ? "bg-tertiary text-white border-gray-600"
                   : "bg-white text-black border-gray-300"
               }`}
@@ -141,17 +136,15 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
               onChangeText={setAmount}
               placeholder={translations.budget.amountPlaceholder}
               keyboardType="numeric"
-              placeholderTextColor={theme === "dark" ? "#9CA3AF" : "#6B7280"}
+              placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
               returnKeyType="done"
               onSubmitEditing={Keyboard.dismiss}
             />
           </View>
 
-          <View className="mb-6">
-            <Text
-              className={`mb-2 ${
-                theme === "dark" ? "text-white" : "text-black"
-              }`}>
+          {/* category */}
+          <View className="mb-6 border border-gray-200">
+            <Text className={`mb-2 ${isDark ? "text-white" : "text-black"}`}>
               {translations.budget.category}
             </Text>
             <View className="flex-row flex-wrap gap-2">

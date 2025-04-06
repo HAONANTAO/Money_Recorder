@@ -29,7 +29,7 @@ const PieChartComponent: React.FC<PieChartComponentProps> = ({ data }) => {
         chartConfig={{
           backgroundColor: isDark ? "#1f2937" : "#ffffff",
           backgroundGradientFrom: isDark ? "#374151" : "#f3f4f6",
-          backgroundGradientTo: isDark ? "#1f2937" : "#ffffff",
+          backgroundGradientTo: isDark ? "#371f2b" : "#ffffff",
           decimalPlaces: 2,
           color: (opacity = 1) =>
             isDark

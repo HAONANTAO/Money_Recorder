@@ -550,6 +550,4 @@ const Stats = () => {
   );
 }; // Stats组件结束
 
-const styles = StyleSheet.create({});
-
 export default Stats;
