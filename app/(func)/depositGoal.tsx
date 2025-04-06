@@ -8,7 +8,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import {
   DEPOSIT_CATEGORIES,
   DEPOSIT_CATEGORIES2,
@@ -46,10 +46,10 @@ const DepositGoal = () => {
   // 预算类别
   const [note, setNote] = useState(""); // 备注
   const [userId, setUserId] = useState("");
-  const [startYear, setStartYear] = useState(new Date().getFullYear()); // 起始年份
-  const [startMonth, setStartMonth] = useState(new Date().getMonth() + 1); // 起始月份
-  const [endYear, setEndYear] = useState(new Date().getFullYear()); // 结束年份
-  const [endMonth, setEndMonth] = useState(new Date().getMonth() + 1); // 结束月份
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [amount, setAmount] = useState(""); // 存款目标金额
   const [name, setName] = useState(""); // 存款名称
 
@@ -75,10 +75,10 @@ const DepositGoal = () => {
             setCategory(depositData.category || "");
             setNote(depositData.note || "");
             setName(depositData.Name || "");
-            setStartYear(depositData.startYear);
-            setStartMonth(depositData.startMonth);
-            setEndYear(depositData.endYear);
-            setEndMonth(depositData.endMonth);
+            setStartDate(
+              new Date(depositData.startYear, depositData.startMonth - 1),
+            );
+            setEndDate(new Date(depositData.endYear, depositData.endMonth - 1));
           }
         } catch (error) {
           console.error("获取存款目标数据失败:", error);
@@ -99,8 +99,6 @@ const DepositGoal = () => {
     }
 
     // 验证结束日期不早于开始日期
-    const startDate = new Date(startYear, startMonth - 1);
-    const endDate = new Date(endYear, endMonth - 1);
     if (endDate < startDate) {
       alert(translations.goals.depositGoal.endDateError);
       return;
@@ -110,10 +108,10 @@ const DepositGoal = () => {
       userId: userId,
       amount: parseFloat(amount),
       Name: name,
-      startYear: startYear,
-      startMonth: startMonth,
-      endYear: endYear,
-      endMonth: endMonth,
+      startYear: startDate.getFullYear(),
+      startMonth: startDate.getMonth() + 1,
+      endYear: endDate.getFullYear(),
+      endMonth: endDate.getMonth() + 1,
       category: category || undefined,
       note: note || "",
     };
@@ -195,38 +193,47 @@ const DepositGoal = () => {
               returnKeyType="done"
               onSubmitEditing={Keyboard.dismiss}
             />
-            <View className="overflow-hidden mt-4 rounded-lg border border-gray-300">
-              <Text className="mt-2 text-base font-bold">
+            {/* category */}
+            <View
+              className={`mb-4 ${
+                theme === "dark" ? "bg-quaternary" : "bg-white"
+              } rounded-xl p-4`}>
+              <Text
+                className={`mb-2 text-base font-bold ${
+                  theme === "dark" ? "text-gray-200" : "text-gray-700"
+                }`}>
                 {translations.goals.depositGoal.category}
               </Text>
-              <Picker
-                selectedValue={category}
-                onValueChange={(itemValue: string) => setCategory(itemValue)}
-                style={{
-                  backgroundColor: theme === "dark" ? "#374151" : "#FFFFFF",
-                  color: theme === "dark" ? "#FFFFFF" : "#000000",
-                  height: 200,
-                  marginVertical: 10,
-                  paddingHorizontal: 16,
-                  width: "100%",
-                  borderRadius: 8,
-                }}
-                itemStyle={{
-                  color: theme === "dark" ? "#FFFFFF" : "#000000",
-                  fontSize: 20,
-                  height: 150,
-                  textAlign: "center",
-                  paddingVertical: 12,
-                }}>
+              <View className="flex-row flex-wrap gap-2">
                 {currentDepositCategory.map((cat) => (
-                  <Picker.Item
+                  <TouchableOpacity
                     key={cat.value}
-                    label={`${cat.icon} ${cat.label}`}
-                    value={cat.value}
-                  />
+                    onPress={() => setCategory(cat.value)}
+                    className={`p-3 rounded-lg flex-grow ${
+                      category === cat.value
+                        ? theme === "dark"
+                          ? "bg-blue-700"
+                          : "bg-blue-500"
+                        : theme === "dark"
+                        ? "bg-gray-700"
+                        : "bg-gray-200"
+                    }`}>
+                    <Text
+                      className={`text-center font-medium ${
+                        category === cat.value
+                          ? "text-white"
+                          : theme === "dark"
+                          ? "text-gray-200"
+                          : "text-gray-700"
+                      }`}>
+                      {`${cat.icon} ${cat.label}`}
+                    </Text>
+                  </TouchableOpacity>
                 ))}
-              </Picker>
+              </View>
             </View>
+            {/*  */}
+            <Text>{translations.goals.comment}</Text>
             <TextInput
               value={note}
               onChangeText={setNote}
@@ -240,112 +247,62 @@ const DepositGoal = () => {
                 <Text className="mb-2 font-bold">
                   {translations.goals.depositGoal.startDate}
                 </Text>
-                <View className="overflow-hidden rounded-lg border border-gray-300">
-                  <Picker
-                    selectedValue={startYear.toString()}
-                    onValueChange={(itemValue) =>
-                      setStartYear(parseInt(itemValue))
-                    }
-                    style={{
-                      backgroundColor: theme === "dark" ? "#374151" : "#FFFFFF",
-                      color: theme === "dark" ? "#FFFFFF" : "#000000",
-                      height: 100,
+                <TouchableOpacity
+                  onPress={() => setShowStartDatePicker(true)}
+                  className={`p-3 border rounded-md ${
+                    theme === "dark"
+                      ? "border-gray-600 bg-tertiary"
+                      : "border-gray-300 bg-white"
+                  }`}>
+                  <Text
+                    className={theme === "dark" ? "text-white" : "text-black"}>
+                    {`${startDate.getFullYear()}/${startDate.getMonth() + 1}`}
+                  </Text>
+                </TouchableOpacity>
+                {showStartDatePicker && (
+                  <DateTimePicker
+                    value={startDate}
+                    mode="date"
+                    display="spinner"
+                    onChange={(event, selectedDate) => {
+                      setShowStartDatePicker(false);
+                      if (selectedDate) {
+                        setStartDate(selectedDate);
+                      }
                     }}
-                    itemStyle={{
-                      color: theme === "dark" ? "#FFFFFF" : "#000000",
-                      fontSize: 16,
-                      height: 100,
-                    }}>
-                    {Array.from({ length: 11 }, (_, i) => (
-                      <Picker.Item
-                        key={i}
-                        label={String(new Date().getFullYear() - 5 + i)}
-                        value={String(new Date().getFullYear() - 5 + i)}
-                      />
-                    ))}
-                  </Picker>
-                </View>
-                <View className="overflow-hidden mt-2 rounded-lg border border-gray-300">
-                  <Picker
-                    selectedValue={startMonth.toString()}
-                    onValueChange={(itemValue) =>
-                      setStartMonth(parseInt(itemValue))
-                    }
-                    style={{
-                      backgroundColor: theme === "dark" ? "#374151" : "#FFFFFF",
-                      color: theme === "dark" ? "#FFFFFF" : "#000000",
-                      height: 100,
-                    }}
-                    itemStyle={{
-                      color: theme === "dark" ? "#FFFFFF" : "#000000",
-                      fontSize: 16,
-                      height: 100,
-                    }}>
-                    {Array.from({ length: 12 }, (_, i) => (
-                      <Picker.Item
-                        key={i}
-                        label={String(i + 1)}
-                        value={String(i + 1)}
-                      />
-                    ))}
-                  </Picker>
-                </View>
+                  />
+                )}
               </View>
 
               <View className="flex-1">
                 <Text className="mb-2 font-bold">
                   {translations.goals.depositGoal.endDate}
                 </Text>
-                <View className="overflow-hidden rounded-lg border border-gray-300">
-                  <Picker
-                    selectedValue={endYear.toString()}
-                    onValueChange={(itemValue) =>
-                      setEndYear(parseInt(itemValue))
-                    }
-                    style={{
-                      backgroundColor: theme === "dark" ? "#374151" : "#FFFFFF",
-                      color: theme === "dark" ? "#FFFFFF" : "#000000",
-                      height: 100,
+                <TouchableOpacity
+                  onPress={() => setShowEndDatePicker(true)}
+                  className={`p-3 border rounded-md ${
+                    theme === "dark"
+                      ? "border-gray-600 bg-tertiary"
+                      : "border-gray-300 bg-white"
+                  }`}>
+                  <Text
+                    className={theme === "dark" ? "text-white" : "text-black"}>
+                    {`${endDate.getFullYear()}/${endDate.getMonth() + 1}`}
+                  </Text>
+                </TouchableOpacity>
+                {showEndDatePicker && (
+                  <DateTimePicker
+                    value={endDate}
+                    mode="date"
+                    display="spinner"
+                    onChange={(event, selectedDate) => {
+                      setShowEndDatePicker(false);
+                      if (selectedDate) {
+                        setEndDate(selectedDate);
+                      }
                     }}
-                    itemStyle={{
-                      color: theme === "dark" ? "#FFFFFF" : "#000000",
-                      fontSize: 16,
-                      height: 100,
-                    }}>
-                    {Array.from({ length: 11 }, (_, i) => (
-                      <Picker.Item
-                        key={i}
-                        label={String(new Date().getFullYear() - 5 + i)}
-                        value={String(new Date().getFullYear() - 5 + i)}
-                      />
-                    ))}
-                  </Picker>
-                </View>
-                <View className="overflow-hidden mt-2 rounded-lg border border-gray-300">
-                  <Picker
-                    selectedValue={endMonth.toString()}
-                    onValueChange={(itemValue) =>
-                      setEndMonth(parseInt(itemValue))
-                    }
-                    style={{
-                      backgroundColor: theme === "dark" ? "#374151" : "#FFFFFF",
-                      color: theme === "dark" ? "#FFFFFF" : "#000000",
-                      height: 100,
-                    }}
-                    itemStyle={{
-                      color: theme === "dark" ? "#FFFFFF" : "#000000",
-                      fontSize: 16,
-                      height: 100,
-                    }}>
-                    {Array.from({ length: 12 }, (_, i) => (
-                      <Picker.Item
-                        key={i}
-                        label={String(i + 1)}
-                        value={String(i + 1)}
-                      />
-                    ))}
-                  </Picker>
-                </View>
+                  />
+                )}
               </View>
             </View>
             {userId === "guest" && (

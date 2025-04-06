@@ -46,6 +46,7 @@ interface Translations {
     logout: string;
   };
   goals: {
+    comment: string;
     noCompletedData: string;
     noUnCompletedData: string;
     title: string;
@@ -287,6 +288,7 @@ const enTranslations: Translations = {
     },
   },
   goals: {
+    comment: "comment",
     noCompletedData: "No completed data",
     noUnCompletedData: "No uncompleted data",
     title: "Goals",
@@ -517,6 +519,7 @@ const zhTranslations: Translations = {
     },
   },
   goals: {
+    comment: "备注",
     title: "存款目标",
     noCompletedData: "暂无完成后的数据，请先设置目标",
     noUnCompletedData: "暂无未完成后的数据，请先设置目标",
