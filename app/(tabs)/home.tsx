@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-05 15:12:10
+ * @LastEditTime: 2025-04-06 18:16:56
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
@@ -10,9 +10,8 @@ import {
   ActivityIndicator,
   ScrollView,
   RefreshControl,
-  TouchableOpacity,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useLanguage } from "../../contexts/LanguageContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,8 +20,7 @@ import { getUserByEmail } from "@/services/userManagement";
 import { getRecords } from "@/services/recordService";
 import RecordShowBox from "@/components/RecordShowbox";
 import DateChecker from "@/utils/dateChecker";
-import { router } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
+
 import { demoRecords } from "@/constants/demoData";
 
 // 获取当前日期
@@ -124,7 +122,7 @@ const Home = () => {
     }
   };
 
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     getInit().then(() => setRefreshing(false));
   }, []);
@@ -140,12 +138,12 @@ const Home = () => {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
       <View
-        className={`mt-8 flex-1 ${
+        className={` flex-1 ${
           isDark ? "bg-gray-900" : "bg-gray-100"
         } pt-10 px-4 `}>
         {/* 今天日期 */}
         <Text
-          className={`text-2xl font-bold text-center ${
+          className={`mt-8 text-2xl font-bold text-center ${
             isDark ? "text-white" : "text-gray-800"
           }`}>
           {getCurrentDate()}
@@ -154,7 +152,7 @@ const Home = () => {
         {/* 第二个 View - 净资产 */}
         <View
           className={`mt-6 p-4 flex flex-row justify-between gap-2 rounded-lg ${
-            isDark ? "bg-primary" : "bg-gray-100"
+            isDark ? "" : "bg-gray-100"
           }`}>
           {/* Net Worth View */}
           <View className="p-4 rounded-3xl border border-gray-300">
@@ -184,10 +182,7 @@ const Home = () => {
         </View>
 
         {/* 第三个 View - 本月支出 */}
-        <View
-          className={`mt-6 p-6 rounded-2xl ${
-            isDark ? "bg-secondary" : "bg-blue-100"
-          }`}>
+        <View className={`mt-6 p-6 rounded-2xl ${isDark ? "" : "bg-blue-100"}`}>
           <Text
             className={`text-2xl font-bold ${
               isDark ? "text-white" : "text-gray-700"
