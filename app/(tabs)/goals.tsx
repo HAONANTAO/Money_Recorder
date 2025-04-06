@@ -1,10 +1,10 @@
 /*
  * @Date: 2025-03-28 20:17:02
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-02 13:23:29
+ * @LastEditTime: 2025-04-06 19:13:11
  * @FilePath: /Money_Recorder/app/(tabs)/goals.tsx
  */
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -20,7 +20,7 @@ const Goals = () => {
   const { theme } = useTheme();
   const { translations } = useLanguage();
   const [isGuest, setIsGuest] = useState(false);
-
+  const isDark = theme === "dark";
   useEffect(() => {
     const checkGuestMode = async () => {
       const isGuest = await StorageService.getIsGuest();
@@ -31,10 +31,11 @@ const Goals = () => {
 
   return (
     <View
-      className={`flex-1 mt-20 items-center ${
-        theme === "dark" ? "bg-quaternary" : "bg-gray-100"
+      className={`flex-1  items-center ${
+        isDark ? "bg-gray-700" : "bg-gray-100"
       }`}>
-      <Text className="text-2xl font-extrabold text-secondary">
+      {/* title */}
+      <Text className="mt-20 text-2xl font-extrabold text-white">
         {translations.goals.title}
       </Text>
       <DepositBox demoData={isGuest ? demoGoals : undefined} />

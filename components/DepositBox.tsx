@@ -32,7 +32,7 @@ const DepositBox: React.FC<DepositBoxProps> = ({ demoData }) => {
   const router = useRouter();
   const { theme } = useTheme();
   const { translations } = useLanguage();
-
+  const isDark = theme === "dark";
   const [userId, setUserId] = useState("");
   const [deposits, setDeposits] = useState<any>([]);
   const [loading, setLoading] = useState(true);
@@ -89,6 +89,7 @@ const DepositBox: React.FC<DepositBoxProps> = ({ demoData }) => {
   return (
     <ScrollView className="flex-1 w-[80%]">
       <View className="relative p-4 w-full">
+        {/* 2 top clickable button */}
         <View className="flex-row mb-4 space-x-2">
           <TouchableOpacity
             onPress={() => setShowCompleted(false)}
@@ -115,29 +116,29 @@ const DepositBox: React.FC<DepositBoxProps> = ({ demoData }) => {
             </Text>
           </TouchableOpacity>
         </View>
+
         {/* main body */}
         {filteredDeposits.map((deposit: any, index: number) => (
           <View
             key={index}
             className={`p-6 mb-5 rounded-3xl shadow-2xl w-full ${
-              theme === "dark"
+              isDark
                 ? "bg-gradient-to-br from-gray-800/95 via-gray-800/90 to-gray-800/85"
                 : "bg-gradient-to-br from-white via-blue-50 to-cyan-100"
-            } border ${
-              theme === "dark" ? "border-blue-900/20" : "border-blue-200/40"
-            }`}
+            } border ${isDark ? "border-blue-900/20" : "border-blue-200/40"}`}
             style={{
-              shadowColor: theme === "dark" ? "#1e293b" : "#0891b2",
+              shadowColor: isDark ? "#1e293b" : "#0891b2",
               shadowOffset: { width: 0, height: 8 },
               shadowOpacity: 0.3,
               shadowRadius: 16,
               elevation: 10,
             }}>
             <View className="flex-row justify-between items-center mb-5">
+              {/* name */}
               <View className="flex-row justify-center items-center">
                 <Text
                   className={`text-2xl font-bold ${
-                    theme === "dark" ? "text-gray-200" : "text-secondary"
+                    isDark ? "text-white" : "text-secondary"
                   }`}>
                   {deposit.Name}
                 </Text>
@@ -146,19 +147,19 @@ const DepositBox: React.FC<DepositBoxProps> = ({ demoData }) => {
             <View className="flex-row items-center mb-4">
               <View
                 className={`p-2.5 rounded-2xl ${
-                  theme === "dark"
+                  isDark
                     ? "bg-gradient-to-br from-blue-900/40 to-blue-900/20"
                     : "bg-gradient-to-br from-blue-100 to-blue-50"
                 }`}>
                 <Ionicons
                   name="wallet-outline"
                   size={32}
-                  color={theme === "dark" ? "#60a5fa" : "#2563eb"}
+                  color={isDark ? "#60a5fa" : "#2563eb"}
                 />
               </View>
               <Text
                 className={`text-3xl font-bold ml-4 ${
-                  theme === "dark" ? "text-blue-400" : "text-blue-600"
+                  isDark ? "text-white" : "text-blue-600"
                 }`}>
                 ${deposit.amount}
               </Text>
@@ -168,19 +169,19 @@ const DepositBox: React.FC<DepositBoxProps> = ({ demoData }) => {
               <View className="flex-row items-center">
                 <View
                   className={`p-2 rounded-lg mr-3 ${
-                    theme === "dark"
+                    isDark
                       ? "bg-gradient-to-br from-gray-700/60 to-gray-700/40"
                       : "bg-gradient-to-br from-gray-100 to-gray-50"
                   }`}>
                   <Ionicons
                     name="calendar-outline"
                     size={22}
-                    color={theme === "dark" ? "#9ca3af" : "#4b5563"}
+                    color={isDark ? "#9ca3af" : "#4b5563"}
                   />
                 </View>
                 <Text
                   className={`${
-                    theme === "dark" ? "text-gray-300" : "text-gray-700"
+                    isDark ? "text-gray-300" : "text-gray-700"
                   } text-base font-medium`}>
                   {deposit.startYear}.{deposit.startMonth} - {deposit.endYear}.
                   {deposit.endMonth}
@@ -189,31 +190,36 @@ const DepositBox: React.FC<DepositBoxProps> = ({ demoData }) => {
               <View className="flex-row items-center">
                 <View
                   className={`p-2 rounded-lg mr-3 ${
-                    theme === "dark"
+                    isDark
                       ? "bg-gradient-to-br from-gray-700/60 to-gray-700/40"
                       : "bg-gradient-to-br from-gray-100 to-gray-50"
                   }`}>
                   <Ionicons
                     name="cash-outline"
                     size={22}
-                    color={theme === "dark" ? "#9ca3af" : "#4b5563"}
+                    color={isDark ? "#9ca3af" : "#4b5563"}
                   />
                 </View>
                 <View className="flex-1">
                   <Text
                     className={`${
-                      theme === "dark" ? "text-gray-300" : "text-gray-700"
+                      isDark ? "text-gray-300" : "text-gray-700"
                     } text-base font-medium mb-2`}>
                     Deposited : ${deposit.saveAmount || 0}
                     <Text
                       className={`ml-2 ${
                         Number(deposit.saveAmount || 0) / deposit.amount >= 0.7
                           ? "text-green-500"
-                          : "text-gray-600"
+                          : "text-gray-200"
                       } ${
                         Number(deposit.saveAmount || 0) / deposit.amount >= 0.5
                           ? "text-green-100"
-                          : "text-gray-600"
+                          : "text-gray-400"
+                      }
+                      ${
+                        Number(deposit.saveAmount || 0) / deposit.amount <= 0.2
+                          ? "text-gray-600"
+                          : "text-gray-800"
                       }`}>
                       (
                       {(
@@ -225,22 +231,24 @@ const DepositBox: React.FC<DepositBoxProps> = ({ demoData }) => {
                   </Text>
                 </View>
               </View>
+
               <View className="flex-row items-center">
                 <View
                   className={`p-2 rounded-lg mr-3 ${
-                    theme === "dark"
+                    isDark
                       ? "bg-gradient-to-br from-gray-700/60 to-gray-700/40"
                       : "bg-gradient-to-br from-gray-100 to-gray-50"
                   }`}>
                   <Ionicons
                     name="pricetag-outline"
                     size={22}
-                    color={theme === "dark" ? "#9ca3af" : "#4b5563"}
+                    color={isDark ? "#9ca3af" : "#4b5563"}
                   />
                 </View>
+                {/* category */}
                 <Text
                   className={`${
-                    theme === "dark" ? "text-gray-300" : "text-gray-700"
+                    isDark ? "text-gray-300" : "text-gray-700"
                   } text-base font-medium`}>
                   {deposit.category}
                 </Text>
@@ -283,9 +291,10 @@ const DepositBox: React.FC<DepositBoxProps> = ({ demoData }) => {
                 <Ionicons
                   name="pencil-outline"
                   size={22}
-                  color={theme === "dark" ? "#60a5fa" : "#2563eb"}
+                  color={isDark ? "#60a5fa" : "#2563eb"}
                 />
               </TouchableOpacity>
+
               {/* complete button */}
               <TouchableOpacity
                 className={`w-32 right-20 flex-row items-center justify-center px-3 py-3.5 rounded-xl transform active:scale-95 transition-all $`}
@@ -344,7 +353,7 @@ const DepositBox: React.FC<DepositBoxProps> = ({ demoData }) => {
                         ? "#4ade80"
                         : "#16a34a"
                       : theme === "dark"
-                      ? "#60a5fa"
+                      ? "#c1d2e7"
                       : "#2563eb"
                   }
                 />
@@ -382,11 +391,7 @@ const DepositBox: React.FC<DepositBoxProps> = ({ demoData }) => {
                     ],
                   );
                 }}>
-                <Ionicons
-                  name="trash-outline"
-                  size={22}
-                  color={theme === "dark" ? "#f87171" : "#dc2626"}
-                />
+                <Ionicons name="trash-outline" size={22} color={"#dc2626"} />
               </TouchableOpacity>
 
               {/* + */}
@@ -469,17 +474,14 @@ const DepositBox: React.FC<DepositBoxProps> = ({ demoData }) => {
                     "number-pad",
                   );
                 }}>
-                <Text
-                  className={`font-extrabold text-2xl ${
-                    theme === "dark" ? "text-blue-400" : "text-green-500"
-                  }`}>
+                <Text className={`font-extrabold text-2xl ${"text-green-500"}`}>
                   +
                 </Text>
               </TouchableOpacity>
               {/* - */}
               <TouchableOpacity
                 className={`ml-4 px-4 py-2 rounded-full shadow-lg transform active:scale-95 transition-all ${
-                  theme === "dark" ? "bg-red-600/20" : "bg-red-100"
+                  isDark ? "bg-red-600/20" : "bg-red-100"
                 }`}
                 onPress={() => {
                   Alert.prompt(
@@ -535,10 +537,7 @@ const DepositBox: React.FC<DepositBoxProps> = ({ demoData }) => {
                   );
                 }}>
                 {/* decrease */}
-                <Text
-                  className={`font-extrabold text-3xl ${
-                    theme === "dark" ? "text-red-400" : "text-red-500"
-                  }`}>
+                <Text className={`font-extrabold text-3xl ${"text-red-500"}`}>
                   -
                 </Text>
               </TouchableOpacity>
@@ -576,7 +575,7 @@ const DepositBox: React.FC<DepositBoxProps> = ({ demoData }) => {
             </View>
             <Text
               className={`text-lg font-medium ${
-                theme === "dark" ? "text-gray-400" : "text-gray-500"
+                isDark ? "text-gray-200" : "text-gray-500"
               }`}>
               {showCompleted
                 ? translations.goals.noCompletedData
@@ -590,5 +589,3 @@ const DepositBox: React.FC<DepositBoxProps> = ({ demoData }) => {
 };
 
 export default DepositBox;
-
-const styles = StyleSheet.create({});
