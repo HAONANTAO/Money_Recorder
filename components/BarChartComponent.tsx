@@ -45,7 +45,8 @@ const BarChartComponent: React.FC<BarChartComponentProps> = ({ data }) => {
         fromZero // 图表从 0 开始
         chartConfig={{
           backgroundColor: isDark ? "#374151" : "#ffffff",
-
+          backgroundGradientFrom: isDark ? "#374151" : "#f3f4f6",
+          backgroundGradientTo: isDark ? "#374151" : "#ffffff",
           decimalPlaces: 0, // 显示整数
           color: (opacity = 1) =>
             isDark

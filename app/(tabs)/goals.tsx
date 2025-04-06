@@ -35,7 +35,10 @@ const Goals = () => {
         isDark ? "bg-gray-700" : "bg-gray-100"
       }`}>
       {/* title */}
-      <Text className="mt-20 text-2xl font-extrabold text-white">
+      <Text
+        className={`mt-20 text-2xl font-extrabold  ${
+          isDark ? "text-white" : "text-secondary"
+        }`}>
         {translations.goals.title}
       </Text>
       <DepositBox demoData={isGuest ? demoGoals : undefined} />
