@@ -7,6 +7,7 @@
 import React from "react";
 import { View, Dimensions } from "react-native";
 import { BarChart } from "react-native-chart-kit";
+import { useTheme } from "../contexts/ThemeContext";
 
 interface BarChartComponentProps {
   data: {
@@ -17,6 +18,8 @@ interface BarChartComponentProps {
 }
 
 const BarChartComponent: React.FC<BarChartComponentProps> = ({ data }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const screenWidth = Dimensions.get("window").width; // 动态获取屏幕宽度
 
   const chartData = {
@@ -29,7 +32,10 @@ const BarChartComponent: React.FC<BarChartComponentProps> = ({ data }) => {
   };
 
   return (
-    <View className="p-4 rounded-2xl border border-gray-200">
+    <View
+      className={`p-4 rounded-2xl border ${
+        isDark ? "border-gray-600" : "border-gray-200"
+      }`}>
       <BarChart
         yAxisSuffix=""
         data={chartData}
@@ -38,11 +44,13 @@ const BarChartComponent: React.FC<BarChartComponentProps> = ({ data }) => {
         yAxisLabel="$" // 如果不需要前缀，留空即可
         fromZero // 图表从 0 开始
         chartConfig={{
-          backgroundColor: "#fff",
-          backgroundGradientFrom: "#fff",
-          backgroundGradientTo: "#fff",
+          backgroundColor: isDark ? "#374151" : "#ffffff",
+
           decimalPlaces: 0, // 显示整数
-          color: (opacity = 1) => `rgba(59, 130, 246, ${opacity})`,
+          color: (opacity = 1) =>
+            isDark
+              ? `rgba(147, 197, 253, ${opacity})`
+              : `rgba(59, 130, 246, ${opacity})`,
           barPercentage: 0.5, // 将 barPercentage 移到 chartConfig 中
           style: {
             borderRadius: 16,

@@ -32,9 +32,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { demoRecords, demoBudget } from "@/constants/demoData";
 import CHART_COLORS from "@/constants/colors";
+import { ID } from "react-native-appwrite";
 
 const Stats = () => {
   const { theme } = useTheme();
+  const isDark = theme === "dark";
   const { translations } = useLanguage();
   const router = useRouter();
   const [monthlyBudgets, setMonthlyBudgets] = useState<any[]>([]);
@@ -377,7 +379,7 @@ const Stats = () => {
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1 }}
-      className="flex-1"
+      className={`flex-1 ${isDark ? "bg-gray-900" : ""} `}
       refreshControl={
         <RefreshControl
           refreshing={isRefreshing}
@@ -388,9 +390,12 @@ const Stats = () => {
       }>
       <View
         className={`flex-1 justify-start items-center ${
-          theme === "dark" ? "bg-quaternary" : "bg-white"
+          isDark ? "bg-gray-900" : "bg-white"
         }`}>
-        <Text className="mt-20 text-4xl font-bold text-primary">
+        <Text
+          className={`mt-20 text-4xl font-bold text-primary ${
+            isDark ? "text-white" : ""
+          } `}>
           {translations.stats.title}
         </Text>
 
@@ -399,15 +404,27 @@ const Stats = () => {
         ) : (
           <>
             <View className="p-4">
-              <Text className="text-xl font-semibold">
+              <Text
+                className={`text-xl font-semibold ${
+                  isDark ? "text-white" : ""
+                }`}>
                 📅 {translations.stats.records}:
-                <Text className="text-black"> {eventLength}</Text>
+                <Text
+                  className={` ${isDark ? "text-secondary" : "text-black"}`}>
+                  {eventLength}
+                </Text>
               </Text>
-              <Text className="text-xl font-semibold">
+              <Text
+                className={`text-xl font-semibold ${
+                  isDark ? "text-white" : ""
+                }`}>
                 💳 {translations.stats.income}:
                 <Text className="text-green-500"> ${income}</Text>
               </Text>
-              <Text className="text-xl font-semibold">
+              <Text
+                className={`text-xl font-semibold ${
+                  isDark ? "text-white" : ""
+                }`}>
                 💵 {translations.stats.expense}:
                 <Text className="text-red-500">${expense}</Text>
               </Text>
@@ -439,10 +456,10 @@ const Stats = () => {
 
       {/* Budget Section */}
       {!loading && (
-        <View className="px-4 mb-6 w-full">
+        <View className={`px-4 mb-6 w-full ${isDark ? "bg-gray-900" : ""} `}>
           <Text
             className={`mb-2 mt-2 text-xl font-bold text-center ${
-              theme === "dark" ? "text-gray-200" : "text-secondary"
+              theme === "dark" ? "text-white" : "text-secondary"
             }`}>
             {translations.stats.total}
           </Text>
@@ -466,14 +483,14 @@ const Stats = () => {
                     },
                   });
                 }}
-                className={`flex-row items-center justify-between p-3 mb-2 rounded-lg ${
-                  theme === "dark" ? "bg-tertiary" : "bg-white"
+                className={`flex-row items-center justify-between p-3 mb-2 rounded-lg border ${
+                  theme === "dark" ? "bg-transparent" : "bg-white"
                 }`}>
                 <View className="flex-row items-center">
                   <Text className="mr-2 text-lg">{category.icon}</Text>
                   <Text
                     className={`text-base font-medium ${
-                      theme === "dark" ? "text-gray-200" : "text-gray-700"
+                      theme === "dark" ? "text-white" : "text-gray-700"
                     }`}>
                     {
                       translations.categories[
@@ -485,7 +502,7 @@ const Stats = () => {
                 <View>
                   <Text
                     className={`text-base font-semibold ${
-                      theme === "dark" ? "text-gray-200" : "text-gray-700"
+                      theme === "dark" ? "text-secondary" : "text-gray-700"
                     }`}>
                     ${expense}/{budget?.budgetAmount}
                   </Text>
@@ -496,6 +513,8 @@ const Stats = () => {
                           ? "green"
                           : budget?.budgetAmount - expense < 0
                           ? "red"
+                          : isDark
+                          ? "white"
                           : "black",
                     }}>
                     ${budget?.budgetAmount - expense}
@@ -508,18 +527,18 @@ const Stats = () => {
             <TouchableOpacity
               onPress={() => router.push("/(func)/Budget")}
               className={`flex-row justify-center items-center px-4 py-2 border-gray-200 shadow-md border rounded-full ${
-                theme === "dark" ? "bg-secondary" : "bg-[#e6f7ff]"
+                isDark ? "bg-secondary" : "bg-[#e6f7ff]"
               }`}
               style={{ width: "70%" }} // 控制宽度更短
             >
               <Ionicons
                 name="wallet-outline"
                 size={24}
-                color={theme === "dark" ? "#1477f1" : "#0d6df4"}
+                color={isDark ? "#1477f1" : "#0d6df4"}
               />
               <Text
                 className={`ml-4 text-lg font-semibold ${
-                  theme === "dark" ? "text-gray-200" : "text-gray-700"
+                  isDark ? "text-white" : "text-gray-700"
                 }`}>
                 {translations.stats.setBudget}
               </Text>
