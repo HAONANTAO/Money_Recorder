@@ -49,27 +49,26 @@ A modern, feature-rich personal finance management mobile application built with
 
 ### Home Page
 
-![Home Page](assets/Demo1.jpg)
+<img src="assets/Demo1.jpg" width="300" height="600" alt="Home Page" />
 
-### Stats Page1
+### Stats Page
 
-![Stats Page1](assets/Demo2.jpg)
+<img src="assets/Demo2.jpg" width="300" height="600" alt="Stats Page1" />
 
-### Record Page2
+### Record Management
 
-![Record Page2](assets/Demo3.jpg)
-
-### Record Page
-
-![Record Page](assets/Demo4.jpg)
+<div align="center">
+  <img src="assets/Demo3.jpg" width="300" height="600" alt="Record Page2" />
+  <img src="assets/Demo4.jpg" width="300" height="600" alt="Record Page" />
+</div>
 
 ### Deposit Goal Page
 
-![Deposit Goal Page](assets/Demo5.jpg)
+<img src="assets/Demo5.jpg" width="300" height="600" alt="Deposit Goal Page" />
 
 ### My Profile Page
 
-![My Profile Page](assets/Demo6.jpg)
+<img src="assets/Demo6.jpg" width="300" height="600" alt="My Profile Page" />
 
 ## Technology Stack
 
@@ -127,6 +126,23 @@ A modern, feature-rich personal finance management mobile application built with
 - **React Native Reanimated**: Fluid animations and interactions
 - **React Native Safe Area Context**: Adaptive layout management
 
+## Development Environment
+
+### Required Software
+
+- Node.js (v14 or higher)
+- npm (v6 or higher) or Yarn
+- Expo CLI
+- Xcode (for iOS development)
+- Android Studio (for Android development)
+- Git
+
+### Recommended Tools
+
+- VS Code with React Native extensions
+- React Native Debugger
+- Expo Go mobile app for testing
+
 ## Project Structure
 
 ```
@@ -134,27 +150,33 @@ A modern, feature-rich personal finance management mobile application built with
 │   ├── (func)/          # Core functionality components
 │   │   ├── Budget.tsx   # Budget management
 │   │   ├── depositGoal.tsx # Savings goals
-│   │   └── searchbar.tsx   # Search functionality
+│   │   ├── editRecord.tsx  # Record editing
+│   │   └── recordDetail.tsx # Record details
 │   ├── (profile)/       # User profile related screens
+│   │   ├── settings.tsx # App settings
+│   │   └── more.tsx     # Additional features
 │   └── (tabs)/          # Main navigation tabs
+├── assets/              # Static assets and images
 ├── components/          # Reusable UI components
 ├── constants/           # App constants and configurations
-│   ├── categories.ts    # Transaction categories
-│   └── languages.ts     # Internationalization
 ├── contexts/            # Global state management
-│   ├── LanguageContext.tsx # Language settings
-│   └── ThemeContext.tsx    # Theme management
-├── services/            # API and backend services
-└── utils/               # Utility functions
+├── services/            # Backend services and API
+├── utils/               # Utility functions and helpers
+│   ├── __tests__/      # Unit tests
+│   ├── themeUtils.ts   # Theme utilities
+│   └── validationUtils.ts # Input validation
 ```
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- Expo CLI
-- Appwrite Server
+1. Install Node.js and npm
+2. Install Expo CLI globally:
+
+```bash
+npm install -g expo-cli
+```
 
 ### Installation
 
@@ -172,7 +194,7 @@ npm install
 ```
 
 3. Configure environment variables
-   Create a `.env` file in the root directory and add your Appwrite configuration:
+   Create a `.env` file in the root directory:
 
 ```env
 APPWRITE_ENDPOINT=your_appwrite_endpoint
@@ -185,16 +207,44 @@ APPWRITE_PROJECT_ID=your_project_id
 npx expo start
 ```
 
-5. Run on your device
+### Running Tests
 
-- Scan the QR code with Expo Go (iOS/Android)
-- Press 'i' for iOS simulator
-- Press 'a' for Android emulator
+Run unit tests:
+
+```bash
+npm test
+```
+
+Run tests with coverage:
+
+```bash
+npm test -- --coverage
+```
+
+### Development
+
+1. Start the development server:
+
+```bash
+npm run dev
+```
+
+2. Run on devices:
+
+- iOS: Press 'i' to open iOS simulator
+- Android: Press 'a' to open Android emulator
+- Physical device: Scan QR code with Expo Go app
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+Haonan Tao - taoaaron5@gmail.com
+
+Project Link: [https://github.com/HAONANTAO/Money_Recorder](https://github.com/HAONANTAO/Money_Recorder)
