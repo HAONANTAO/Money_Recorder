@@ -31,7 +31,7 @@ export const backupUserData = async (userId: string, email: string) => {
     const records = await getRecords(userId);
     const budgets = await getBudgets(userId);
     const depositGoals = await getDeposits(userId);
-    console.log("需要备份的数据：", depositGoals);
+   
 
     // 创建备份数据对象（包括 email）
     const backupData = {

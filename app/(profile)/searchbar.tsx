@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-30 12:28:24
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-06 20:30:32
+ * @LastEditTime: 2025-04-07 12:34:38
  * @FilePath: /Money_Recorder/app/(profile)/searchbar.tsx
  */
 import {
@@ -54,9 +54,8 @@ const Searchbar = () => {
       return;
     }
     try {
-      // console.log("搜索标签:", tagSearch);
       const results = await searchRecordsByTags(userId, tagSearch);
-      // console.log("标签搜索结果:", results);
+
       setTagResults(results);
     } catch (error) {
       setTagResults([]);
@@ -69,24 +68,26 @@ const Searchbar = () => {
       return;
     }
     try {
-      console.log("搜索评论:", commentSearch);
       const results = await searchRecordsByComments(userId, commentSearch);
-      console.log("评论搜索结果:", results);
+
       setCommentResults(results);
     } catch (error) {
-      console.error("评论搜索错误:", error);
+      console.error("error:", error);
       setCommentResults([]);
     }
   };
 
   return (
     <View
-      className={`flex-1 p-6 pt-24 ${isDark ? "bg-quaternary" : "bg-white"}`}>
+      className={`flex-1 p-6 pt-24 mb-12 ${
+        isDark ? "bg-quaternary" : "bg-white"
+      }`}>
       <View className="relative bottom-14">
         <BackButton />
       </View>
 
-      <View className="space-y-12">
+      <View className="mt-12 space-y-12">
+        {/* 1 */}
         <View>
           <View className="flex-row items-center mb-8 space-x-2">
             <TextInput
@@ -246,7 +247,8 @@ const Searchbar = () => {
           </ScrollView>
         </View>
 
-        <View className="mt-8">
+        {/* 2 */}
+        <View className="mt-40">
           <View>
             <View className="flex-row items-center mb-8 space-x-2">
               <TextInput

@@ -258,20 +258,16 @@ export const searchRecordsByTags = async (
       throw new Error("Database configuration is missing");
     }
 
-    console.log("开始搜索标签，用户ID:", userId);
-    console.log("搜索的标签字符串:", searchTags);
-
+  
     // 分割并去掉空格的标签
     const tagsArray = searchTags
       .split(/[\s,]+/)
       .map((tag) => tag.trim())
       .filter((tag) => tag);
 
-    console.log("处理后的标签数组:", tagsArray);
-
     // 如果没有有效的标签，返回空数组
     if (tagsArray.length === 0) {
-      console.log("没有有效的标签，返回空数组");
+     
       return [];
     }
 
@@ -293,9 +289,7 @@ export const searchRecordsByTags = async (
       queries,
     );
 
-    // console.log("构建的查询条件:", queries);
-    // console.log("查询结果:", records.documents);
-
+  
     // 处理返回的记录，确保tags字段是数组
     const processedRecords = records.documents.map((record) => {
       // 如果tags是字符串，尝试将其解析为数组

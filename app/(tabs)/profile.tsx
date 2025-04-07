@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-06 20:28:03
+ * @LastEditTime: 2025-04-07 12:34:53
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -101,7 +101,7 @@ const Profile = () => {
 
         // 上传头像到Storage并获取URL
         const avatarUrl = await uploadAvatar(base64Image, avatar);
-        // console.log("这里看", avatarUrl);
+      
         // 存数据库
         updateAvatar(userId, avatarUrl);
         setAvatar(avatarUrl);

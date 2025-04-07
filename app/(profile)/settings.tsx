@@ -237,7 +237,7 @@ const Settings = () => {
             </TouchableOpacity>
           </View>
 
-          <View className="mt-8">
+          <View className="relative top-52">
             <Text
               className={`text-sm text-center ${
                 isDark ? "text-gray-400" : "text-gray-500"
