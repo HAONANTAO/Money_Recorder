@@ -1,3 +1,9 @@
+/*
+ * @Date: 2025-03-25 22:32:32
+ * @LastEditors: 陶浩南 taoaaron5@gmail.com
+ * @LastEditTime: 2025-04-07 13:09:03
+ * @FilePath: /Money_Recorder/utils/themeUtils.ts
+ */
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { useTheme } from "../contexts/ThemeContext";
@@ -10,17 +16,10 @@ export const useThemeClass = () => {
   const { theme } = useTheme();
   const colorScheme = useColorScheme();
 
-  // Apply the theme class to the document body
+  // No need to apply theme class in React Native
   useEffect(() => {
-    // For React Native Web, we can apply the class to the document body
-    // For native, this won't have any effect but won't cause errors
-    if (typeof document !== "undefined") {
-      if (theme === "dark") {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-    }
+    // Theme changes are handled by React Native's appearance API
+    // and style system automatically
   }, [theme]);
 
   return { theme, systemTheme: colorScheme };

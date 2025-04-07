@@ -1,3 +1,9 @@
+/*
+ * @Date: 2025-03-26 20:37:32
+ * @LastEditors: 陶浩南 taoaaron5@gmail.com
+ * @LastEditTime: 2025-04-07 13:00:11
+ * @FilePath: /Money_Recorder/utils/dateChecker.ts
+ */
 const DateChecker = (records: MoneyRecord[]): MoneyRecord[] => {
   // 获取当前的月份和年份
   const currentMonth = new Date().getMonth(); // 当前月份 (0-11)
@@ -8,7 +14,7 @@ const DateChecker = (records: MoneyRecord[]): MoneyRecord[] => {
 
     //检查 createdAt 是否为有效日期
     if (isNaN(recordDate.getTime())) {
-      console.warn(`Invalid date for record: ${record.createdAt}`);
+      console.warn(`Invalid date for record: ${record.createAt}`);
       return false; // 如果日期无效，排除这个记录
     }
 
