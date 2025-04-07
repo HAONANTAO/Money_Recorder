@@ -24,6 +24,7 @@
     "@types/react-native-bcrypt": "^2.4.6",
     "appwrite": "^17.0.1",
     "base-64": "^1.0.0",
+    "image-size": "^1.2.1",
     "expo": "~52.0.40",
     "expo-blur": "~14.0.3",
     "expo-constants": "~17.0.8",

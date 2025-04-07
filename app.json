@@ -24,17 +24,12 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": [
-      "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash-icon.png",
-          "resizeMode": "cover",
-          "backgroundColor": "#f3f4f6"
-        }
-      ]
-    ],
+    "plugins": ["expo-router"],
+    "splash": {
+      "image": "./assets/images/splash-icon.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#f3f4f6"
+    },
     "experiments": {
       "typedRoutes": true
     }
