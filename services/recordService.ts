@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-20 18:36:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-07 12:43:56
+ * @LastEditTime: 2025-04-07 12:51:40
  * @FilePath: /Money_Recorder/services/recordService.ts
  * @Description: 记账服务模块，提供记账相关的所有数据库操作
  *
@@ -20,6 +20,7 @@
 
 import { Client, Databases, ID, Query } from "react-native-appwrite";
 import { StorageService } from "../utils/storageService";
+import { updateRecordCacheAndStats } from "@/utils/cacheUtils";
 
 // 数据库配置信息
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID;
@@ -78,35 +79,20 @@ export const createRecord = async (
     // 优化缓存更新逻辑
     const userId = record.userId;
     const cachedRecords = await StorageService.getCachedRecords();
-    // 这段代码是在实现缓存优化。一开始不获取全部记录是因为使用了增量更新的策略：
     const updatedRecords = cachedRecords
       ? [...cachedRecords, newRecord]
       : [newRecord];
-    await StorageService.cacheRecords(updatedRecords);
 
-    // 优化月度统计缓存更新
+    // 如果是收入或支出类型的记录，更新统计数据
     if (record.type === "expense" || record.type === "income") {
-      const date = new Date();
-      const monthlyStats = await getMonthlyExpensesByCategory(
+      await updateRecordCacheAndStats(
+        updatedRecords,
         userId,
-        date.getFullYear(),
-        date.getMonth() + 1,
+        new Date(),
+        getMonthlyExpensesByCategory,
       );
-
-      const incomeTotal = updatedRecords
-        .filter((r: any) => r.type === "income")
-        .reduce((sum: number, r: any) => sum + r.moneyAmount, 0);
-      const expenseTotal = updatedRecords
-        .filter((r: any) => r.type === "expense")
-        .reduce((sum: number, r: any) => sum + r.moneyAmount, 0);
-
-      await StorageService.cacheMonthlyStats({
-        budgets: monthlyStats,
-        expenses: monthlyStats,
-        records: updatedRecords,
-        incomeTotal,
-        expenseTotal,
-      });
+    } else {
+      await StorageService.cacheRecords(updatedRecords);
     }
 
     return newRecord;
@@ -153,31 +139,17 @@ export const deleteRecord = async (recordId: string) => {
       const updatedRecords = cachedRecords.filter(
         (r: any) => r.$id !== recordId,
       );
-      await StorageService.cacheRecords(updatedRecords);
 
       // 仅在必要时更新月度统计缓存
       if (record.type === "expense" || record.type === "income") {
-        const date = new Date(record.createAt);
-        const monthlyStats = await getMonthlyExpensesByCategory(
+        await updateRecordCacheAndStats(
+          updatedRecords,
           record.userId,
-          date.getFullYear(),
-          date.getMonth() + 1,
+          new Date(record.createAt),
+          getMonthlyExpensesByCategory,
         );
-
-        const incomeTotal = updatedRecords
-          .filter((r: any) => r.type === "income")
-          .reduce((sum: number, r: any) => sum + r.moneyAmount, 0);
-        const expenseTotal = updatedRecords
-          .filter((r: any) => r.type === "expense")
-          .reduce((sum: number, r: any) => sum + r.moneyAmount, 0);
-
-        await StorageService.cacheMonthlyStats({
-          budgets: monthlyStats,
-          expenses: monthlyStats,
-          records: updatedRecords,
-          incomeTotal,
-          expenseTotal,
-        });
+      } else {
+        await StorageService.cacheRecords(updatedRecords);
       }
     }
 
@@ -236,31 +208,17 @@ export const updateRecord = async (
       const updatedRecords = cachedRecords.map((r: any) =>
         r.$id === recordId ? updatedRecord : r,
       );
-      await StorageService.cacheRecords(updatedRecords);
 
       // 仅在必要时更新月度统计缓存
       if (updatedRecord.type === "expense" || updatedRecord.type === "income") {
-        const date = new Date(updatedRecord.createAt);
-        const monthlyStats = await getMonthlyExpensesByCategory(
+        await updateRecordCacheAndStats(
+          updatedRecords,
           updatedRecord.userId,
-          date.getFullYear(),
-          date.getMonth() + 1,
+          new Date(updatedRecord.createAt),
+          getMonthlyExpensesByCategory,
         );
-
-        const incomeTotal = updatedRecords
-          .filter((r: any) => r.type === "income")
-          .reduce((sum: number, r: any) => sum + r.moneyAmount, 0);
-        const expenseTotal = updatedRecords
-          .filter((r: any) => r.type === "expense")
-          .reduce((sum: number, r: any) => sum + r.moneyAmount, 0);
-
-        await StorageService.cacheMonthlyStats({
-          budgets: monthlyStats,
-          expenses: monthlyStats,
-          records: updatedRecords,
-          incomeTotal,
-          expenseTotal,
-        });
+      } else {
+        await StorageService.cacheRecords(updatedRecords);
       }
     }
 
