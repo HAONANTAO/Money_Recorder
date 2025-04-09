@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-29 16:31:38
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-09 15:16:22
+ * @LastEditTime: 2025-04-09 15:43:59
  * @FilePath: /Money_Recorder/app/(func)/editRecord.tsx
  */
 import {
@@ -181,31 +181,51 @@ const EditRecord = () => {
             } rounded-xl p-4`}>
             <Text
               className={`mb-2 text-base font-medium ${
-                isDark ? "text-gray-200" : "text-gray-700"
+                isDark ? "text-white" : "text-gray-700"
               }`}>
               {translations.record.type}
             </Text>
             <View className="flex-row justify-around space-x-4">
               <TouchableOpacity
                 onPress={() => setFormData({ ...formData, type: "expense" })}
-                className={`flex-1 p-4 rounded-xl ${
-                  formData.type === "expense" ? "bg-red-500" : "bg-gray-200"
+                className={`flex-1 p-3 rounded-lg border border-gray-200 ${
+                  formData.type === "expense"
+                    ? isDark
+                      ? "bg-red-700"
+                      : "bg-red-500"
+                    : isDark
+                    ? "bg-gray-700"
+                    : "bg-gray-200"
                 }`}>
                 <Text
                   className={`text-center font-medium ${
-                    formData.type === "expense" ? "text-white" : "text-gray-700"
+                    formData.type === "expense"
+                      ? "text-white"
+                      : isDark
+                      ? "text-gray-200"
+                      : "text-gray-700"
                   }`}>
                   {translations.record.expense}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => setFormData({ ...formData, type: "income" })}
-                className={`flex-1 p-4 rounded-xl ${
-                  formData.type === "income" ? "bg-green-500" : "bg-gray-200"
+                className={`flex-1 p-3 rounded-lg border border-gray-200 ${
+                  formData.type === "income"
+                    ? isDark
+                      ? "bg-green-700"
+                      : "bg-green-500"
+                    : isDark
+                    ? "bg-gray-700"
+                    : "bg-gray-200"
                 }`}>
                 <Text
                   className={`text-center font-medium ${
-                    formData.type === "income" ? "text-white" : "text-gray-700"
+                    formData.type === "income"
+                      ? "text-white"
+                      : isDark
+                      ? "text-gray-200"
+                      : "text-gray-700"
                   }`}>
                   {translations.record.income}
                 </Text>
@@ -276,13 +296,19 @@ const EditRecord = () => {
                 }
                 className={`flex-1 mx-1 p-4 rounded-lg ${
                   formData.paymentMethod === "Card"
-                    ? "bg-primary"
+                    ? isDark
+                      ? "bg-blue-700"
+                      : "bg-blue-500"
+                    : isDark
+                    ? "bg-gray-700"
                     : "bg-gray-200"
-                }`}>
+                } ${isDark ? "border border-gray-200" : ""}`}>
                 <Text
                   className={`text-center font-medium ${
                     formData.paymentMethod === "Card"
                       ? "text-white"
+                      : isDark
+                      ? "text-gray-200"
                       : "text-gray-700"
                   }`}>
                   {translations.categories.card}
@@ -294,13 +320,19 @@ const EditRecord = () => {
                 }
                 className={`flex-1 mx-1 p-4 rounded-lg ${
                   formData.paymentMethod === "Transfer"
-                    ? "bg-primary"
+                    ? isDark
+                      ? "bg-blue-700"
+                      : "bg-blue-500"
+                    : isDark
+                    ? "bg-gray-700"
                     : "bg-gray-200"
-                }`}>
+                } ${isDark ? "border border-gray-200" : ""}`}>
                 <Text
                   className={`text-center font-medium ${
                     formData.paymentMethod === "Transfer"
                       ? "text-white"
+                      : isDark
+                      ? "text-gray-200"
                       : "text-gray-700"
                   }`}>
                   {translations.categories.transfer}
@@ -312,13 +344,19 @@ const EditRecord = () => {
                 }
                 className={`flex-1 mx-1 p-4 rounded-lg ${
                   formData.paymentMethod === "Cash"
-                    ? "bg-primary"
+                    ? isDark
+                      ? "bg-blue-700"
+                      : "bg-blue-500"
+                    : isDark
+                    ? "bg-gray-700"
                     : "bg-gray-200"
-                }`}>
+                } ${isDark ? "border border-gray-200" : ""}`}>
                 <Text
                   className={`text-center font-medium ${
                     formData.paymentMethod === "Cash"
                       ? "text-white"
+                      : isDark
+                      ? "text-gray-200"
                       : "text-gray-700"
                   }`}>
                   {translations.categories.cash}
@@ -338,7 +376,10 @@ const EditRecord = () => {
               }`}>
               {translations.record.location}
             </Text>
-            <View className={`flex-row items-center p-3 bg-white rounded-lg`}>
+            <View
+              className={`flex-row items-center p-3 rounded-lg ${
+                isDark ? "bg-gray-700" : "bg-white"
+              }`}>
               <TextInput
                 placeholder={translations.record.locationPlaceholder}
                 placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
@@ -348,7 +389,9 @@ const EditRecord = () => {
                 onChangeText={(text) =>
                   setFormData({ ...formData, location: text })
                 }
-                className="flex-1"
+                className={`flex-1 ${
+                  isDark ? "text-gray-200" : "text-gray-800"
+                }`}
               />
             </View>
           </View>
@@ -364,9 +407,12 @@ const EditRecord = () => {
               }`}>
               {translations.record.tags}
             </Text>
-            <View className={`flex-row items-start p-3 bg-white rounded-lg`}>
+            <View
+              className={`flex-row items-center p-3 rounded-lg ${
+                isDark ? "bg-gray-700" : "bg-white"
+              }`}>
               <TextInput
-                placeholder={translations.record.tags}
+                placeholder={translations.record.tagsPlaceholder}
                 placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
                 value={formData.tags}
                 onSubmitEditing={Keyboard.dismiss}
@@ -374,7 +420,9 @@ const EditRecord = () => {
                 onChangeText={(text) =>
                   setFormData({ ...formData, tags: text })
                 }
-                className="flex-1"
+                className={`flex-1 ${
+                  isDark ? "text-gray-200" : "text-gray-800"
+                }`}
               />
             </View>
           </View>
@@ -390,7 +438,10 @@ const EditRecord = () => {
               }`}>
               {translations.record.comment}
             </Text>
-            <View className={`flex-row items-start p-3 bg-white rounded-lg`}>
+            <View
+              className={`flex-row items-start p-3 rounded-lg ${
+                isDark ? "bg-gray-700" : "bg-white"
+              }`}>
               <TextInput
                 placeholder={translations.record.commentPlaceholder}
                 placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
@@ -398,11 +449,13 @@ const EditRecord = () => {
                 onSubmitEditing={Keyboard.dismiss}
                 returnKeyType="done"
                 multiline
-                numberOfLines={4}
+                numberOfLines={3}
                 onChangeText={(text) =>
                   setFormData({ ...formData, comment: text })
                 }
-                className="flex-1 min-h-[100px]"
+                className={`flex-1 ${
+                  isDark ? "text-gray-200" : "text-gray-800"
+                }`}
               />
             </View>
           </View>

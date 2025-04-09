@@ -191,7 +191,7 @@ const Record = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => setRecord({ ...record, type: "income" })}
-                  className={`flex-1 p-3 rounded-lg ${
+                  className={`flex-1 p-3 rounded-lg border border-gray-200 ${
                     record.type === "income"
                       ? isDark
                         ? "bg-green-700"
@@ -389,7 +389,7 @@ const Record = () => {
                     ? "bg-gray-700 text-gray-200"
                     : "bg-white text-gray-800"
                 }`}
-                placeholder={translations.record.tags}
+                placeholder={translations.record.tagsPlaceholder}
                 placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
                 value={record.tags}
                 onChangeText={(value) => setRecord({ ...record, tags: value })}

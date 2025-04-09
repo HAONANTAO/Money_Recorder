@@ -73,6 +73,7 @@ interface Translations {
     // noData: string;
   };
   record: {
+    tagsPlaceholder: string | undefined;
     createAt: string;
     save: string;
     commentPlaceholder: string;
@@ -316,6 +317,7 @@ const enTranslations: Translations = {
     // noData: "No data",
   },
   record: {
+    tagsPlaceholder: "Please enter tags",
     createAt: "Date",
     save: "Save", // 新增的翻译，用于保存按钮的文本
     commentPlaceholder: "Please enter comment",
@@ -547,6 +549,7 @@ const zhTranslations: Translations = {
     },
   },
   record: {
+    tagsPlaceholder: "请输入标签",
     createAt: "创建时间",
     save: "保存", // 新增的翻译，用于保存按钮的文本
     amountPlaceholder: "请输入金额",
