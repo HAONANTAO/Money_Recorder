@@ -24,7 +24,7 @@ const More = () => {
 
   // react-native-device-info 的库，可以用来获取应用的版本号、构建号等信息。你可以按照以下步骤集成它来动态获取版本号：
   // 可惜expo go不支持！
-  const appVersion = "1.1.0";
+  const appVersion = "1.1.1";
   const [refreshing, setRefreshing] = useState(false);
   const [backupInfo, setBackupInfo] = useState({
     backupDate: "",
@@ -124,7 +124,7 @@ const More = () => {
 
   return (
     <ScrollView
-      className={`flex-1 ${isDark ? "bg-quaternary" : "bg-gray-100"}`}
+      className={`flex-1 ${isDark ? "bg-gray-900" : "bg-gray-100"}`}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
@@ -143,8 +143,8 @@ const More = () => {
           <View
             key={sectionIndex}
             className={`mb-6 rounded-lg overflow-hidden ${
-              isDark ? "bg-transparent" : "bg-white"
-            } shadow-sm`}>
+              isDark ? "bg-gray-800" : "bg-white"
+            } shadow-md`}>
             <Text
               className={`px-4 py-2 text-lg font-semibold ${
                 isDark ? "text-white" : "text-quaternary"
@@ -155,10 +155,10 @@ const More = () => {
               <View
                 key={itemIndex}
                 className={`flex-row justify-between items-center p-4 border-t ${
-                  isDark ? "border-gray-700" : "border-gray-100"
+                  isDark ? "border-gray-600" : "border-gray-100"
                 }`}>
                 <Text
-                  className={`${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                  className={`${isDark ? "text-gray-200" : "text-gray-600"}`}>
                   {item.label}
                 </Text>
                 <Text

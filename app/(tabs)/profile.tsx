@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-07 12:34:53
+ * @LastEditTime: 2025-04-09 16:13:39
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -101,7 +101,7 @@ const Profile = () => {
 
         // 上传头像到Storage并获取URL
         const avatarUrl = await uploadAvatar(base64Image, avatar);
-      
+
         // 存数据库
         updateAvatar(userId, avatarUrl);
         setAvatar(avatarUrl);
@@ -327,7 +327,7 @@ const Profile = () => {
                 try {
                   if (Platform.OS === "ios") {
                     await Linking.openURL(
-                      "https://apps.apple.com/app/money-recorder/id6476311617?action=write-review",
+                      "https://apps.apple.com/app/id6744058988?action=write-review",
                     );
                   } else {
                     Alert.alert(
