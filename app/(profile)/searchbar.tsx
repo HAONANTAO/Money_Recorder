@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-30 12:28:24
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-07 12:34:38
+ * @LastEditTime: 2025-04-09 15:50:28
  * @FilePath: /Money_Recorder/app/(profile)/searchbar.tsx
  */
 import {
@@ -93,7 +93,7 @@ const Searchbar = () => {
             <TextInput
               className={`flex-1 p-4 rounded-xl border ${
                 isDark
-                  ? "border-gray-600 text-white bg-tertiary"
+                  ? "border-gray-600 text-white bg-gray-900"
                   : "border-gray-300 text-black bg-gray-50"
               } shadow-sm`}
               placeholder="Search by tags"
@@ -115,7 +115,7 @@ const Searchbar = () => {
                 <View
                   key={record.$id}
                   className={`p-6 mb-6 rounded-3xl shadow-lg ${
-                    isDark ? "bg-tertiary" : "bg-white"
+                    isDark ? "bg-gray-900" : "bg-white"
                   }`}
                   style={{
                     shadowColor: isDark ? "#000" : "#718096",
@@ -254,7 +254,7 @@ const Searchbar = () => {
               <TextInput
                 className={`flex-1 p-4 rounded-xl border ${
                   isDark
-                    ? "border-gray-600 text-white bg-tertiary"
+                    ? "border-gray-600 text-white bg-gray-900"
                     : "border-gray-300 text-black bg-gray-50"
                 } shadow-sm`}
                 placeholder="Search by comments"
@@ -338,7 +338,7 @@ const Searchbar = () => {
                               key={index}
                               className={`px-3 py-1.5 rounded-full text-sm font-medium ${
                                 isDark
-                                  ? "bg-gray-700 text-gray-300"
+                                  ? "bg-gray-800 text-white"
                                   : "bg-gray-200 text-gray-700"
                               }`}>
                               {tag}
