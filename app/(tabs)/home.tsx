@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-06 18:16:56
+ * @LastEditTime: 2025-04-09 14:51:04
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
@@ -182,7 +182,10 @@ const Home = () => {
         </View>
 
         {/* 第三个 View - 本月支出 */}
-        <View className={`mt-6 p-6 rounded-2xl ${isDark ? "" : "bg-blue-100"}`}>
+        <View
+          className={`mt-6 p-6 rounded-2xl ${
+            isDark ? "border border-white" : "bg-blue-100"
+          }`}>
           <Text
             className={`text-2xl font-bold ${
               isDark ? "text-white" : "text-gray-700"
@@ -202,7 +205,7 @@ const Home = () => {
         {/* details */}
         <View
           className={`p-4 mt-6 rounded-2xl border ${
-            isDark ? "border-gray-700" : "border-gray-200"
+            isDark ? "border-white" : "border-gray-200"
           }`}>
           <View className="flex flex-row flex-wrap justify-around">
             {loading ? (

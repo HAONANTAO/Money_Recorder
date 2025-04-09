@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-29 16:31:38
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-02 22:49:57
+ * @LastEditTime: 2025-04-09 15:16:22
  * @FilePath: /Money_Recorder/app/(func)/editRecord.tsx
  */
 import {
@@ -15,7 +15,7 @@ import {
   Keyboard,
   ActivityIndicator,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+// import { Picker } from "@react-native-picker/picker";
 import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, router } from "expo-router";
 import { getRecordById, updateRecord } from "@/services/recordService";
@@ -46,6 +46,7 @@ const EditRecord = () => {
     category: "",
     paymentMethod: "",
     location: "",
+    tags: "",
     comment: "",
   });
 
@@ -60,6 +61,7 @@ const EditRecord = () => {
           category: recordData.category,
           paymentMethod: recordData.paymentMethod,
           location: recordData.location || "",
+          tags: recordData.tags || "",
           comment: recordData.comment || "",
         });
       } catch (error) {
@@ -123,7 +125,7 @@ const EditRecord = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView
-        className={`flex-1 ${isDark ? "bg-quaternary" : "bg-gray-100"}`}>
+        className={`flex-1 ${isDark ? "bg-gray-700" : "bg-gray-100"}`}>
         <View className="absolute left-4 top-12 z-50">
           <BackButton />
         </View>
@@ -137,18 +139,20 @@ const EditRecord = () => {
 
           {/* 金额输入 */}
           <View
-            className={`mb-4 ${
-              isDark ? "bg-quaternary" : "bg-white"
+            className={`mb-4 border ${
+              isDark ? "bg-transparent" : "bg-white"
             } rounded-xl p-4`}>
             <Text
               className={`mb-2 text-base font-medium ${
-                isDark ? "text-gray-200" : "text-gray-700"
+                isDark ? " text-white" : "text-gray-700"
               }`}>
               {translations.record.amount}
             </Text>
             <TouchableOpacity
               onPress={() => {}}
-              className={`flex-row items-center p-3 bg-white rounded-lg`}>
+              className={`flex-row items-center p-3  rounded-lg ${
+                isDark ? "bg-transparent" : "bg-white"
+              }`}>
               <Text
                 className={`text-xl mr-2 font-medium ${
                   isDark ? "text-gray-200" : "text-gray-700"
@@ -157,7 +161,7 @@ const EditRecord = () => {
               </Text>
               <TextInput
                 placeholder={translations.record.amountPlaceholder}
-                placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
+                placeholderTextColor={isDark ? "white" : "#6B7280"}
                 keyboardType="numeric"
                 value={formData.moneyAmount}
                 onSubmitEditing={Keyboard.dismiss}
@@ -165,15 +169,15 @@ const EditRecord = () => {
                 onChangeText={(text) =>
                   setFormData({ ...formData, moneyAmount: text })
                 }
-                className="flex-1"
+                className={`flex-1 ${isDark ? "text-white" : ""}`}
               />
             </TouchableOpacity>
           </View>
 
           {/* 类型选择 */}
           <View
-            className={`mb-4 ${
-              isDark ? "bg-quaternary" : "bg-white"
+            className={`mb-4 border ${
+              isDark ? "bg-transparent" : "bg-white"
             } rounded-xl p-4`}>
             <Text
               className={`mb-2 text-base font-medium ${
@@ -181,39 +185,38 @@ const EditRecord = () => {
               }`}>
               {translations.record.type}
             </Text>
-            <View
-              className={`${
-                isDark ? "" : "bg-white"
-              }overflow-hidden rounded-lg`}>
-              <Picker
-                selectedValue={formData.type}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, type: value })
-                }
-                className={`h-12 ${
-                  isDark
-                    ? "bg-gray-700 text-gray-200"
-                    : "bg-white text-gray-800"
+            <View className="flex-row justify-around space-x-4">
+              <TouchableOpacity
+                onPress={() => setFormData({ ...formData, type: "expense" })}
+                className={`flex-1 p-4 rounded-xl ${
+                  formData.type === "expense" ? "bg-red-500" : "bg-gray-200"
                 }`}>
-                <Picker.Item
-                  label={translations.record.expense}
-                  value="expense"
-                  color={isDark ? "#EF4444" : "#DC2626"}
-                />
-                <Picker.Item
-                  label={translations.record.income}
-                  value="income"
-                  color={isDark ? "#10B981" : "#059669"}
-                />
-              </Picker>
+                <Text
+                  className={`text-center font-medium ${
+                    formData.type === "expense" ? "text-white" : "text-gray-700"
+                  }`}>
+                  {translations.record.expense}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setFormData({ ...formData, type: "income" })}
+                className={`flex-1 p-4 rounded-xl ${
+                  formData.type === "income" ? "bg-green-500" : "bg-gray-200"
+                }`}>
+                <Text
+                  className={`text-center font-medium ${
+                    formData.type === "income" ? "text-white" : "text-gray-700"
+                  }`}>
+                  {translations.record.income}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
 
           {/* 类别选择 */}
-
           <View
-            className={`mb-4 ${
-              isDark ? "bg-quaternary" : "bg-white"
+            className={`mb-4 border ${
+              isDark ? "bg-transparent" : "bg-white"
             } rounded-xl p-4`}>
             <Text
               className={`mb-2 text-base font-medium ${
@@ -221,48 +224,44 @@ const EditRecord = () => {
               }`}>
               {translations.record.category}
             </Text>
-            <View
-              className={`${
-                isDark ? "" : "bg-white"
-              }overflow-hidden  rounded-lg`}>
-              <Picker
-                selectedValue={record?.category}
-                onValueChange={(value) =>
-                  setRecord(
-                    record
-                      ? ({ ...record, category: value } as MoneyRecord)
-                      : null,
-                  )
-                }
-                className={`h-12 ${
-                  isDark
-                    ? "bg-gray-700 text-gray-200"
-                    : "bg-white text-gray-800"
-                }`}>
-                <Picker.Item
-                  label={translations.record.chooseCategory}
-                  value={translations.record.chooseCategory}
-                  color={isDark ? "#1e67e5" : "#1c64f3"}
-                />
-                {(record!.type === "expense"
-                  ? currentExpenseCategories
-                  : currentIncomeCategories
-                ).map((category) => (
-                  <Picker.Item
-                    key={category.value}
-                    label={`${category.icon} ${category.label}`}
-                    value={category.value}
-                    color={isDark ? "#E5E7EB" : "#1F2937"}
-                  />
-                ))}
-              </Picker>
+            <View className="flex-row flex-wrap gap-2">
+              {(formData.type === "expense"
+                ? currentExpenseCategories
+                : currentIncomeCategories
+              ).map((category) => (
+                <TouchableOpacity
+                  key={category.value}
+                  onPress={() =>
+                    setFormData({ ...formData, category: category.value })
+                  }
+                  className={`p-3 rounded-lg flex-grow border border-gray-200 ${
+                    formData.category === category.value
+                      ? isDark
+                        ? "bg-blue-700"
+                        : "bg-blue-500"
+                      : isDark
+                      ? "bg-gray-700"
+                      : "bg-gray-200"
+                  }`}>
+                  <Text
+                    className={`text-center font-medium ${
+                      formData.category === category.value
+                        ? "text-white"
+                        : isDark
+                        ? "text-gray-200"
+                        : "text-gray-700"
+                    }`}>
+                    {`${category.icon} ${category.label}`}
+                  </Text>
+                </TouchableOpacity>
+              ))}
             </View>
           </View>
 
           {/* 支付方式选择 */}
           <View
-            className={`mb-4 ${
-              isDark ? "bg-quaternary" : "bg-white"
+            className={`mb-4 border ${
+              isDark ? "bg-transparent" : "bg-white"
             } rounded-xl p-4`}>
             <Text
               className={`mb-2 text-base font-medium ${
@@ -330,8 +329,8 @@ const EditRecord = () => {
 
           {/* 位置输入 */}
           <View
-            className={`mb-4 ${
-              isDark ? "bg-quaternary" : "bg-white"
+            className={`mb-4 border ${
+              isDark ? "bg-transparent" : "bg-white"
             } rounded-xl p-4`}>
             <Text
               className={`mb-2 text-base font-medium ${
@@ -354,10 +353,36 @@ const EditRecord = () => {
             </View>
           </View>
 
+          {/* 标签输入 */}
+          <View
+            className={`mb-4 border ${
+              isDark ? "bg-transparent" : "bg-white"
+            } rounded-xl p-4`}>
+            <Text
+              className={`mb-2 text-base font-medium ${
+                isDark ? "text-gray-200" : "text-gray-700"
+              }`}>
+              {translations.record.tags}
+            </Text>
+            <View className={`flex-row items-start p-3 bg-white rounded-lg`}>
+              <TextInput
+                placeholder={translations.record.tags}
+                placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
+                value={formData.tags}
+                onSubmitEditing={Keyboard.dismiss}
+                returnKeyType="done"
+                onChangeText={(text) =>
+                  setFormData({ ...formData, tags: text })
+                }
+                className="flex-1"
+              />
+            </View>
+          </View>
+
           {/* 备注输入 */}
           <View
-            className={`mb-4 ${
-              isDark ? "bg-quaternary" : "bg-white"
+            className={`mb-4 border ${
+              isDark ? "bg-transparent" : "bg-white"
             } rounded-xl p-4`}>
             <Text
               className={`mb-2 text-base font-medium ${

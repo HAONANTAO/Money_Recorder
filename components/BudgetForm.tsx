@@ -149,7 +149,10 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
             </View>
 
             {/* category */}
-            <View className={`mb-6 border ${isDark ? "border-black" : ""}`}>
+            <View
+              className={`mb-6 border border-gray-200 ${
+                isDark ? "border-black" : ""
+              }`}>
               <Text className={`m-2 ${isDark ? "text-white" : "text-black"}`}>
                 {translations.budget.category}
               </Text>

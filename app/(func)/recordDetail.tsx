@@ -21,12 +21,13 @@ import {
 
 const RecordDetail = () => {
   const { theme } = useTheme();
+  const isDark = theme === "dark";
   const { translations } = useLanguage();
   const { id } = useLocalSearchParams();
   const [record, setRecord] = React.useState<MoneyRecord | null>(null);
   const [loading, setLoading] = React.useState(true);
   const { language } = useLanguage();
-  // console.log(language);
+
   useFocusEffect(
     // useCallback 是 React 的一个 性能优化 Hook，它的作用是 缓存函数，防止不必要的重新创建。
     useCallback(() => {
@@ -74,11 +75,14 @@ const RecordDetail = () => {
         alignItems: "center",
         padding: 16,
       }}
-      className={`${theme === "dark" ? "bg-gray-900" : "bg-gray-100"} flex-1`}>
+      className={`${isDark ? "bg-gray-900" : "bg-gray-100"} flex-1`}>
       <View className="absolute left-4 top-12 z-50">
         <BackButton />
       </View>
-      <View className="p-6 mt-36 w-full max-w-lg bg-white rounded-3xl shadow-lg">
+      <View
+        className={`p-6 mt-36 w-full max-w-lg  rounded-3xl shadow-lg ${
+          isDark ? "bg-gray-600" : "bg-white"
+        }`}>
         <Text className="mb-6 text-5xl font-extrabold text-center text-secondary">
           ${record.moneyAmount.toLocaleString()}
         </Text>

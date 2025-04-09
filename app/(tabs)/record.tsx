@@ -64,7 +64,7 @@ const Record = () => {
   const handleSubmit = async () => {
     try {
       if (record.userId === "guest") {
-        alert("请登录后再试");
+        alert("please login first");
         return;
       }
       if (!record.moneyAmount || !record.category) {
@@ -129,10 +129,12 @@ const Record = () => {
                 {translations.record.amount}
               </Text>
               <View
-                className={`flex-row items-center p-3 bg-white rounded-lg `}>
+                className={`flex-row items-center p-3  rounded-lg ${
+                  isDark ? "" : "bg-white"
+                }`}>
                 <Text
                   className={`text-xl mr-2 font-medium ${
-                    isDark ? "text-black" : "text-gray-700"
+                    isDark ? "text-white" : "text-gray-700"
                   }`}>
                   $
                 </Text>
@@ -146,7 +148,9 @@ const Record = () => {
                   onChangeText={(value) =>
                     setRecord({ ...record, moneyAmount: value })
                   }
-                  className="flex-1"
+                  className={`flex-1 ${
+                    isDark ? "text-white bg-transparent" : ""
+                  }`}
                 />
               </View>
             </View>
