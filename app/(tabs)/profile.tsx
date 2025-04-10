@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-09 16:13:39
+ * @LastEditTime: 2025-04-09 16:33:12
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -132,11 +132,10 @@ const Profile = () => {
 
   // main body
   return (
-    <View
-      className={`flex-1 p-6 mt-16 ${isDark ? "bg-gray-900" : "bg-gray-100"}`}>
+    <View className={`flex-1 p-6  ${isDark ? "bg-gray-900" : "bg-gray-100"}`}>
       {/* front profile info */}
       <View
-        className={`p-6 mb-4 ${
+        className={`p-6 mb-4 mt-16 ${
           theme === "dark" ? "bg-gray-800" : "bg-gray-50"
         } rounded-xl shadow-md`}>
         <View className="flex justify-center items-center">

@@ -7,22 +7,8 @@
 import DateChecker from "../dateChecker";
 
 describe("DateChecker", () => {
-  // Mock current date to ensure consistent test results
+  // 使用固定的测试日期
   const mockDate = new Date("2024-01-15");
-  const realDate = Date;
-
-  beforeAll(() => {
-    global.Date = class extends Date {
-      constructor() {
-        super();
-        return mockDate;
-      }
-    } as DateConstructor;
-  });
-
-  afterAll(() => {
-    global.Date = realDate;
-  });
 
   it("should filter records for current month and year", () => {
     const records = [
@@ -68,7 +54,7 @@ describe("DateChecker", () => {
       },
     ];
 
-    const filteredRecords = DateChecker(records as MoneyRecord[]);
+    const filteredRecords = DateChecker(records as MoneyRecord[], mockDate);
 
     expect(filteredRecords).toHaveLength(2);
     expect(filteredRecords).toEqual([
@@ -113,17 +99,28 @@ describe("DateChecker", () => {
     ];
 
     const consoleSpy = jest.spyOn(console, "warn").mockImplementation();
-    const filteredRecords = DateChecker(records as MoneyRecord[]);
+    const filteredRecords = DateChecker(records as MoneyRecord[], mockDate);
 
     expect(filteredRecords).toHaveLength(1);
-    expect(filteredRecords).toEqual([{ createAt: "2024-01-15", amount: 200 }]);
+    expect(filteredRecords).toEqual([
+      {
+        $id: "6",
+        userId: "user1",
+        createAt: "2024-01-15",
+        moneyAmount: 200,
+        type: "expense",
+        category: "food",
+        paymentMethod: "cash",
+        recurring: false,
+      },
+    ]);
     expect(consoleSpy).toHaveBeenCalledTimes(3);
     consoleSpy.mockRestore();
   });
 
   it("should handle empty records array", () => {
     const records: any[] = [];
-    const filteredRecords = DateChecker(records);
+    const filteredRecords = DateChecker(records, mockDate);
 
     expect(filteredRecords).toHaveLength(0);
     expect(filteredRecords).toEqual([]);
@@ -173,7 +170,7 @@ describe("DateChecker", () => {
       },
     ];
 
-    const filteredRecords = DateChecker(records as MoneyRecord[]);
+    const filteredRecords = DateChecker(records as MoneyRecord[], mockDate);
 
     expect(filteredRecords).toHaveLength(1);
     expect(filteredRecords).toEqual([

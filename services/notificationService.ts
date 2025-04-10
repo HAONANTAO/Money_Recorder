@@ -1,11 +1,12 @@
 /*
  * @Date: 2025-04-04 20:34:14
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-04 21:25:52
+ * @LastEditTime: 2025-04-10 15:44:17
  * @FilePath: /Money_Recorder/services/notificationService.ts
  */
 import * as Notifications from "expo-notifications";
 import { useLanguage } from "../contexts/LanguageContext";
+import { Linking } from "react-native";
 
 // 配置全局通知处理器
 // 定义如何在应用程序中显示通知
@@ -53,9 +54,14 @@ export const requestNotificationPermissions = async () => {
 export const scheduleDailyReminder = async (
   hour: number = 21,
   minute: number = 27,
+  translations: { notifications: { title: string; body: string } } = {
+    notifications: {
+      title: "记账提醒",
+      body: "别忘了记录今天的支出哦！",
+    },
+  },
 ) => {
   try {
-    const { translations } = useLanguage();
     await Notifications.cancelAllScheduledNotificationsAsync();
 
     await Notifications.scheduleNotificationAsync({
@@ -65,12 +71,11 @@ export const scheduleDailyReminder = async (
         sound: true,
       },
       trigger: {
-        // 只管ios
         type: "calendar",
         hour,
         minute,
         repeats: true,
-      } as unknown as Notifications.NotificationTriggerInput, // ✅ 加这行断言！
+      } as unknown as Notifications.NotificationTriggerInput, // ✅ 加这行断言！,
     });
 
     return true;
@@ -96,4 +101,12 @@ export const cancelAllNotifications = async () => {
 export const checkNotificationStatus = async () => {
   const settings = await Notifications.getPermissionsAsync();
   return settings.granted;
+};
+
+/**
+ * 打开系统通知设置
+ * 跳转到iOS系统设置中的应用通知设置页面
+ */
+export const openNotificationSettings = async () => {
+  await Linking.openSettings();
 };
