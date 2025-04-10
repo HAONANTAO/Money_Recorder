@@ -13,10 +13,8 @@
       "bundleIdentifier": "com.aarontao.haonanmoneyrecorder",
       "infoPlist": {
         "UIBackgroundModes": ["remote-notification"],
-        "NSUserNotificationUsageDescription": "we need send notifications",
-        "NSNotificationUsageDescription": "we need send notifications",
-        "NSUserTrackingUsageDescription": "we need send notifications",
-        "aps-environment": "development"
+        "aps-environment": "development",
+        "NSUserNotificationAlertUsageDescription": "We need permission to send you notifications."
       }
     },
     "android": {

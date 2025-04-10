@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-04-04 20:34:14
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-10 15:44:17
+ * @LastEditTime: 2025-04-10 23:29:44
  * @FilePath: /Money_Recorder/services/notificationService.ts
  */
 import * as Notifications from "expo-notifications";
@@ -52,12 +52,12 @@ export const requestNotificationPermissions = async () => {
  * @returns {Promise<boolean>} 设置成功返回true，失败返回false
  */
 export const scheduleDailyReminder = async (
-  hour: number = 21,
-  minute: number = 27,
+  hour: number = 8,
+  minute: number = 10,
   translations: { notifications: { title: string; body: string } } = {
     notifications: {
-      title: "记账提醒",
-      body: "别忘了记录今天的支出哦！",
+      title: "Accounting reminder",
+      body: "Don’t forget to record your spending today!",
     },
   },
 ) => {
@@ -109,4 +109,26 @@ export const checkNotificationStatus = async () => {
  */
 export const openNotificationSettings = async () => {
   await Linking.openSettings();
+};
+
+/**
+ * 发送测试通知
+ * 用于测试通知功能是否正常工作
+ * @returns {Promise<boolean>} 发送成功返回true，失败返回false
+ */
+export const sendTestNotification = async () => {
+  try {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "测试通知",
+        body: "如果你看到这条通知，说明通知功能正常工作！",
+        sound: true,
+      },
+      trigger: null, // 立即发送通知
+    });
+    return true;
+  } catch (error) {
+    console.error("sending test notification failed", error);
+    return false;
+  }
 };

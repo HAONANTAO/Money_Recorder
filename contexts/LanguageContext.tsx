@@ -163,6 +163,7 @@ interface Translations {
     version: string;
   };
   common: {
+    notice: string;
     search: string;
     settings: string;
     warning: string;
@@ -179,6 +180,7 @@ interface Translations {
     update: string;
   };
   alerts: {
+    enableNotifications: string | undefined;
     deleteAccountError: string;
     deleteAccountConfirm: string;
 
@@ -407,6 +409,7 @@ const enTranslations: Translations = {
     version: "App Version",
   },
   common: {
+    notice: "Notice",
     search: "Search",
     settings: "Settings",
     warning: "warning",
@@ -423,6 +426,7 @@ const enTranslations: Translations = {
     update: "Update",
   },
   alerts: {
+    enableNotifications: "enableNotifications",
     deleteAccountError: "deleteAccountError",
     deleteAccountConfirm:
       "Are you sure you want to delete your account? All account data will be lost",
@@ -639,6 +643,7 @@ const zhTranslations: Translations = {
     version: "应用版本",
   },
   common: {
+    notice: "提示",
     search: "搜索",
     settings: "设置",
     warning: "警告",
@@ -655,6 +660,7 @@ const zhTranslations: Translations = {
     update: "更新",
   },
   alerts: {
+    enableNotifications: "启用通知",
     deleteAccountError: "删除账号异常",
     deleteAccountConfirm: "你确定要删除账号？所有账号的数据将会丢失",
     updateSuccess: "更新记录成功",

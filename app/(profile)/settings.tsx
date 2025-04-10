@@ -5,10 +5,9 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
-  Linking,
-  Platform,
   Switch,
 } from "react-native";
+import * as Notifications from "expo-notifications";
 import { router } from "expo-router";
 import { deleteUser, getUserByEmail } from "@/services/userManagement";
 import { Ionicons } from "@expo/vector-icons"; // 引入图标库
@@ -18,6 +17,13 @@ import BackButton from "@/components/BackButton";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StorageService } from "@/utils/storageService";
+import {
+  requestNotificationPermissions,
+  checkNotificationStatus,
+  scheduleDailyReminder,
+  openNotificationSettings,
+  sendTestNotification,
+} from "@/services/notificationService";
 
 const Settings = () => {
   // Use the theme context and language context
@@ -27,6 +33,7 @@ const Settings = () => {
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [isGuest, setIsGuest] = useState<boolean>();
   const [userId, setUserId] = useState("");
+  const [reminderTime, setReminderTime] = useState({ hour: 20, minute: 0 });
 
   useEffect(() => {
     const getInitialUser = async () => {
@@ -44,8 +51,26 @@ const Settings = () => {
   // 检查通知状态
   useEffect(() => {
     const checkNotifications = async () => {
-      const isEnabled = await AsyncStorage.getItem("notificationsEnabled");
-      setNotificationsEnabled(isEnabled === "true");
+      const isEnabled = await checkNotificationStatus();
+      const storedEnabled = await AsyncStorage.getItem("notificationsEnabled");
+      setNotificationsEnabled(storedEnabled === "true" && isEnabled);
+
+      // 如果通知已启用，检查提醒时间设置
+      if (isEnabled && storedEnabled === "true") {
+        const savedHour = await AsyncStorage.getItem("reminderHour");
+        const savedMinute = await AsyncStorage.getItem("reminderMinute");
+        if (savedHour && savedMinute) {
+          setReminderTime({
+            hour: parseInt(savedHour),
+            minute: parseInt(savedMinute),
+          });
+          // 重新设置每日提醒
+          await scheduleDailyReminder(
+            parseInt(savedHour),
+            parseInt(savedMinute),
+          );
+        }
+      }
     };
     checkNotifications();
   }, []);
@@ -96,18 +121,11 @@ const Settings = () => {
 
           <View className="gap-4 space-y-6">
             {/* Notifications 设置 */}
-            <TouchableOpacity
-              onPress={() => {
-                if (Platform.OS === "ios") {
-                  Linking.openURL("app-settings:");
-                } else {
-                  Linking.openSettings();
-                }
-              }}
+            <View
               className={`flex-row items-center justify-between p-4 rounded-xl shadow-md ${
                 isDark ? "bg-quaternary" : "bg-white"
               }`}>
-              <View className="flex-row items-center">
+              <View className="flex-row flex-1 items-center">
                 <Ionicons
                   name="notifications-outline"
                   size={24}
@@ -120,7 +138,75 @@ const Settings = () => {
                   {translations.settings.notifications}
                 </Text>
               </View>
-            </TouchableOpacity>
+              <Switch
+                value={notificationsEnabled}
+                onValueChange={async (value) => {
+                  if (value) {
+                    const granted = await requestNotificationPermissions();
+                    if (granted) {
+                      setNotificationsEnabled(true);
+                      await AsyncStorage.setItem(
+                        "notificationsEnabled",
+                        "true",
+                      );
+                      await scheduleDailyReminder(
+                        reminderTime.hour,
+                        reminderTime.minute,
+                      );
+                      await AsyncStorage.setItem(
+                        "reminderHour",
+                        reminderTime.hour.toString(),
+                      );
+                      await AsyncStorage.setItem(
+                        "reminderMinute",
+                        reminderTime.minute.toString(),
+                      );
+                    } else {
+                      Alert.alert(
+                        translations.common.notice,
+                        translations.alerts.enableNotifications,
+                        [
+                          { text: translations.common.cancel, style: "cancel" },
+                          {
+                            text: translations.common.settings,
+                            onPress: openNotificationSettings,
+                          },
+                        ],
+                      );
+                    }
+                  } else {
+                    setNotificationsEnabled(false);
+                    await AsyncStorage.setItem("notificationsEnabled", "false");
+                    await Notifications.cancelAllScheduledNotificationsAsync();
+                  }
+                }}
+              />
+            </View>
+
+            {/* 测试通知按钮 */}
+            {/* {notificationsEnabled && (
+              <TouchableOpacity
+                onPress={async () => {
+                  await sendTestNotification();
+                }}
+                className={`flex-row items-center justify-between p-4 rounded-xl shadow-md ${
+                  isDark ? "bg-quaternary" : "bg-white"
+                }`}>
+                <View className="flex-row items-center">
+                  <Ionicons
+                    name="notifications"
+                    size={24}
+                    color={isDark ? "#60A5FA" : "#4B5563"}
+                  />
+                  <Text
+                    className={`ml-4 text-lg font-semibold ${
+                      isDark ? "text-gray-200" : "text-gray-700"
+                    }`}>
+                    测试
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            )} */}
 
             {/* 主题切换按钮 */}
             <TouchableOpacity
