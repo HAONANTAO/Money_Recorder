@@ -1,4 +1,5 @@
 # Money Recorder
+https://apps.apple.com/us/app/moneyrecorder/id6744058988
 
 A modern, feature-rich personal finance management mobile application built with React Native and Appwrite. Track your expenses, set budgets, monitor savings goals, and gain insights into your financial habits with a beautiful and intuitive interface.
 
