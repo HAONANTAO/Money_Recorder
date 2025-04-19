@@ -236,6 +236,56 @@ npm run dev
 - Android: Press 'a' to open Android emulator
 - Physical device: Scan QR code with Expo Go app
 
+## How to ditribute App in Ios Store
+<details>
+  <summary>📦 How to Publish React Native App to the iOS App Store</summary>
+
+  Here’s a high-level step-by-step guide to release a React Native app to the iOS App Store:
+
+  1. **Create an Apple Developer Account**
+     - Sign up at [developer.apple.com](https://developer.apple.com) ($99/year).
+
+  2. **Configure Your App for Release**
+     - Update `app.json` or `Info.plist` with proper `name`, `version`, `bundleIdentifier`, etc.
+     - Use production-ready assets (icons, splash screens).
+     - If using Expo: set `"ios": { "buildNumber": "1.0.0", "bundleIdentifier": "com.yourname.yourapp" }`.
+
+  3. **Set Up Certificates and Profiles**
+     - Use Xcode or [Apple Developer Console](https://developer.apple.com/account/resources/) to create:
+       - **App ID**
+       - **Provisioning Profile**
+       - **Distribution Certificate**
+
+  4. **Build the iOS App**
+     - **With Expo:**
+       ```bash
+       eas build --platform ios
+       ```
+       Make sure you're logged in to an Apple Developer account.
+     - **Without Expo (Bare React Native):**
+       ```bash
+       cd ios
+       pod install
+       open YourApp.xcworkspace
+       ```
+       Then build the archive using **Xcode** → **Product** → **Archive**.
+
+  5. **Test with TestFlight (optional but recommended)**
+     - Upload the archive using **Xcode** or **Transporter**.
+     - Set up internal/external testers in App Store Connect.
+
+  6. **Submit for Review**
+     - Go to [App Store Connect](https://appstoreconnect.apple.com/)
+     - Fill in app details, upload screenshots, set pricing and availability.
+     - Submit your build for review.
+
+  7. **Wait for Approval**
+     - Apple will review your app and usually respond within a few days.
+     - Once approved, your app will be available on the App Store.
+
+</details>
+
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
