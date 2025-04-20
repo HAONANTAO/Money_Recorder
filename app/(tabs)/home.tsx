@@ -220,9 +220,41 @@ const Home = () => {
                 </Text>
               </View>
             ) : (
-              <View className="flex-row flex-wrap justify-between mt-6">
-                {records.map((record) => (
-                  <RecordShowBox key={record.$id} record={record} />
+              <View className="flex-1 mt-6">
+                {Object.entries(
+                  records
+                    .sort(
+                      (a, b) =>
+                        new Date(b.createAt).getTime() -
+                        new Date(a.createAt).getTime(),
+                    )
+                    .reduce(
+                      (groups: { [key: string]: MoneyRecord[] }, record) => {
+                        const date = new Date(
+                          record.createAt,
+                        ).toLocaleDateString();
+                        if (!groups[date]) {
+                          groups[date] = [];
+                        }
+                        groups[date].push(record);
+                        return groups;
+                      },
+                      {},
+                    ),
+                ).map(([date, groupRecords]) => (
+                  <View key={date} className="mb-6">
+                    <Text
+                      className={`text-lg font-semibold mb-3 ${
+                        isDark ? "text-white" : "text-gray-800"
+                      }`}>
+                      {date}
+                    </Text>
+                    <View className="flex-row flex-wrap justify-between">
+                      {groupRecords.map((record) => (
+                        <RecordShowBox key={record.$id} record={record} />
+                      ))}
+                    </View>
+                  </View>
                 ))}
               </View>
             )}
