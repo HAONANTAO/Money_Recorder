@@ -97,7 +97,7 @@ const DepositBox: React.FC<DepositBoxProps> = ({ demoData }) => {
               !showCompleted ? "bg-blue-500" : "bg-gray-300"
             }`}>
             <Text
-              className={`text-center font-medium t ${
+              className={`text-center font-medium  ${
                 !showCompleted ? "text-white" : "text-gray-300"
               }`}>
               {translations.common.uncompleted}
@@ -105,7 +105,7 @@ const DepositBox: React.FC<DepositBoxProps> = ({ demoData }) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setShowCompleted(true)}
-            className={`flex-1 p-3 rounded-xl text-white${
+            className={`flex-1 p-3 rounded-xl text-white ${
               showCompleted ? "bg-blue-500" : "bg-gray-300"
             }`}>
             <Text
