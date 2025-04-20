@@ -328,7 +328,7 @@ const Settings = () => {
               className={`text-sm text-center ${
                 isDark ? "text-gray-400" : "text-gray-500"
               }`}>
-              {translations.settings.version}: 1.1.1
+              {translations.settings.version}: 1.2.0
             </Text>
           </View>
         </View>
