@@ -230,32 +230,68 @@ const Home = () => {
                     )
                     .reduce(
                       (groups: { [key: string]: MoneyRecord[] }, record) => {
-                        const date = new Date(
-                          record.createAt,
-                        ).toLocaleDateString();
-                        if (!groups[date]) {
-                          groups[date] = [];
+                        const date = new Date(record.createAt);
+                        const monthKey = date.toLocaleDateString(undefined, {
+                          year: "numeric",
+                          month: "long",
+                        });
+                        const dateKey = date.toLocaleDateString();
+                        if (!groups[dateKey]) {
+                          groups[dateKey] = [];
                         }
-                        groups[date].push(record);
+                        groups[dateKey].push(record);
                         return groups;
                       },
                       {},
                     ),
-                ).map(([date, groupRecords]) => (
-                  <View key={date} className="mb-6">
-                    <Text
-                      className={`text-lg font-semibold mb-3 ${
-                        isDark ? "text-white" : "text-gray-800"
-                      }`}>
-                      {date}
-                    </Text>
-                    <View className="flex-row flex-wrap justify-between">
-                      {groupRecords.map((record) => (
-                        <RecordShowBox key={record.$id} record={record} />
-                      ))}
+                ).map(([date, groupRecords], index, array) => {
+                  const currentMonth = new Date(date).toLocaleDateString(
+                    undefined,
+                    {
+                      year: "numeric",
+                      month: "long",
+                    },
+                  );
+                  const prevMonth =
+                    index > 0
+                      ? new Date(array[index - 1][0]).toLocaleDateString(
+                          undefined,
+                          {
+                            year: "numeric",
+                            month: "long",
+                          },
+                        )
+                      : null;
+
+                  return (
+                    <View key={date}>
+                      {(!prevMonth || currentMonth !== prevMonth) && (
+                        <View
+                          className={`mb-4 py-2 border-b ${
+                            isDark ? "border-gray-600" : "border-gray-300"
+                          }`}>
+                          <Text
+                            className={`text-xl font-bold ${
+                              isDark ? "text-white" : "text-gray-800"
+                            }`}>
+                            {currentMonth}
+                          </Text>
+                        </View>
+                      )}
+                      <Text
+                        className={`text-lg font-semibold mb-3 ${
+                          isDark ? "text-white" : "text-gray-800"
+                        }`}>
+                        {date}
+                      </Text>
+                      <View className="flex-row flex-wrap justify-between">
+                        {groupRecords.map((record) => (
+                          <RecordShowBox key={record.$id} record={record} />
+                        ))}
+                      </View>
                     </View>
-                  </View>
-                ))}
+                  );
+                })}
               </View>
             )}
           </View>
