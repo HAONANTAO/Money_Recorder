@@ -9,16 +9,32 @@ Built independently with React Native (Expo), Appwrite, and NativeWind, Money Re
 ---
 
 <p align="center">
-  <img src="screenshot1.png" width="240" alt="Money Recorder Home"/>
-  <img src="screenshot2.png" width="240" alt="Expense Tracking"/>
-  <img src="screenshot3.png" width="240" alt="Budget Overview"/>
+  <img src="assets/Demo1.jpg" width="240" alt="Money Recorder Home"/>
+  <img src="assets/Demo2.jpg" width="240" alt="Expense Tracking"/>
+  <img src="assets/Demo3.jpg" width="240" alt="Budget Overview"/>
+</p>
+<p align="center">
+  <img src="assets/Demo4.jpg" width="240" alt="Analytics"/>
+  <img src="assets/Demo5.jpg" width="240" alt="Settings"/>
 </p>
 
----
+## Table of Contents
 
+- [Description](#description)
+- [Features](#features)
+- [Demo](#demo)
+- [Technology Stack](#technology-stack)
+- [Getting Started](#getting-started)
+- [How to Distribute App in iOS Store](#how-to-distribute-app-in-ios-store)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
+
+---
 ## Description
 
-Money Recorder empowers users to:
+**Money Recorder** empowers users to:
 
 - **Track expenses and income** with automatic categorization and detailed breakdowns.
 - **Set and monitor budgets** to control spending and receive smart reminders.
@@ -38,147 +54,135 @@ Money Recorder empowers users to:
 
 > *Money Recorder provides deep insights into your financial habits, helping you achieve your financial goals efficiently and securely.*
 
-
 ## Features
 
 ### 💰 Expense & Income Tracking
-
 - Record daily expenses and income with detailed categorization
 - Support multiple expense categories (Eating, Traffic, Shopping, Entertainment, Living, etc.)
 - Add custom tags, locations, and comments to transactions
-- View transaction history with comprehensive filtering and search capabilities
+- View transaction history with comprehensive filtering and search
 - Multiple payment method support (Cash, Card, Transfer)
 
 ### 📊 Financial Analytics
-
-- Interactive pie charts for expense and income category distribution
+- Interactive pie charts for expense and income distribution
 - Dynamic bar charts for monthly financial trends
-- Detailed category-wise expense breakdown
-- Income vs. Expense analysis with monthly comparisons
-- Real-time financial statistics and insights
+- Detailed category-wise expense breakdowns
+- Income vs. expense analysis with monthly comparisons
+- Real-time statistics and actionable insights
 
 ### 💹 Budget Management
-
-- Set and manage monthly budgets for different expense categories
-- Real-time budget tracking with visual progress indicators
+- Set and manage monthly budgets for different categories
+- Real-time budget tracking with visual progress bars
 - Category-specific budget monitoring
 - Smart budget alerts and notifications
 - Historical budget performance analysis
 
 ### 🎯 Savings Goals
-
 - Create and track multiple savings goals
-- Set target amounts and deadlines for financial objectives
+- Set target amounts and deadlines for each goal
 - Monitor progress with visual indicators
-- Categorize savings goals for better organization
-- Track completion status and history
+- Categorize and organize savings objectives
+- Track completion status and goal history
 
 ### 🌓 User Experience
-
 - Intuitive and responsive user interface
 - Dark mode support for comfortable viewing
-- Multi-language support (English and Chinese)
-- Offline data persistence
-- Real-time data synchronization
-- Smart search functionality
+- Multi-language support (English & Chinese)
+- Offline data persistence for uninterrupted access
+- Real-time data synchronization across devices
+- Smart and fast search functionality
+
 
 ## Demo
 
 ### Home Page
-
-<img src="assets/Demo1.jpg" width="300" height="600" alt="Home Page" />
+<p align="center">
+  <img src="assets/Demo1.jpg" width="300" height="600" alt="Home Page" />
+</p>
 
 ### Stats Page
-
-<img src="assets/Demo2.jpg" width="300" height="600" alt="Stats Page1" />
+<p align="center">
+  <img src="assets/Demo2.jpg" width="300" height="600" alt="Stats Page" />
+</p>
 
 ### Record Management
-
-<div align="center">
-  <img src="assets/Demo3.jpg" width="300" height="600" alt="Record Page2" />
-  <img src="assets/Demo4.jpg" width="300" height="600" alt="Record Page" />
-</div>
+<p align="center">
+  <img src="assets/Demo3.jpg" width="300" height="600" alt="Record Page 1" />
+  <img src="assets/Demo4.jpg" width="300" height="600" alt="Record Page 2" />
+</p>
 
 ### Deposit Goal Page
-
-<img src="assets/Demo5.jpg" width="300" height="600" alt="Deposit Goal Page" />
+<p align="center">
+  <img src="assets/Demo5.jpg" width="300" height="600" alt="Deposit Goal Page" />
+</p>
 
 ### My Profile Page
-
-<img src="assets/Demo6.jpg" width="300" height="600" alt="My Profile Page" />
+<p align="center">
+  <img src="assets/Demo6.jpg" width="300" height="600" alt="My Profile Page" />
+</p>
 
 ## Technology Stack
 
-### Frontend Framework
+### 🖼️ Frontend Framework
+- **React Native with Expo**  
+  Build robust, cross-platform mobile apps with native-like performance and smooth user experience.
 
-- **React Native with Expo**: A powerful framework for building cross-platform mobile applications, providing a smooth and native user experience.
+### 🎨 UI & Styling
+- **NativeWind (TailwindCSS for React Native):** Rapid, utility-first styling for consistent UI.
+- **@expo/vector-icons:** Rich icon library for modern interfaces.
 
-### UI/Styling
+### 🔗 Backend Service
+- **Appwrite:** Secure, scalable backend platform featuring:
+  - User authentication & management
+  - Real-time database
+  - File storage
+  - Cloud functions & automation
 
-- **NativeWind (TailwindCSS for React Native)**: Utility-first CSS framework that enables rapid UI development with consistent styling.
-- **@expo/vector-icons**: Comprehensive icon set for enhanced UI elements.
+### 🗂️ State Management
+- **React Context API:** Efficient global state for:
+  - Theme (Light/Dark)
+  - Language
+  - Auth
+  - App config
 
-### Backend Service
+### 📊 Data Visualization
+- **React Native Chart Kit:** Advanced charting for:
+  - Interactive pie/bar charts
+  - Financial trends
+  - Budget progress
 
-- **Appwrite**: Secure and scalable backend platform providing:
-  - User authentication and management
-  - Real-time database operations
-  - File storage and management
-  - Cloud functions and automation
+### 🧭 Navigation
+- **Expo Router:** File-based routing, deep linking, type-safe navigation, nested routes.
 
-### State Management
-
-- **React Context API**: Efficient global state management for:
-  - Theme preferences (Light/Dark mode)
-  - Language settings
-  - User authentication state
-  - App configuration
-
-### Data Visualization
-
-- **React Native Chart Kit**: Advanced charting library for:
-  - Interactive pie charts
-  - Dynamic bar charts
-  - Financial trend analysis
-  - Budget progress visualization
-
-### Navigation
-
-- **Expo Router**: File-based routing system providing:
-  - Seamless screen navigation
-  - Deep linking support
-  - Type-safe routing
-  - Nested navigation structures
-
-### Storage & Persistence
-
-- **@react-native-async-storage/async-storage**: Local data persistence for:
+### 💾 Storage & Persistence
+- **@react-native-async-storage/async-storage:** Local storage for:
   - User preferences
-  - Offline data access
-  - Cache management
-  - Session handling
+  - Offline data
+  - Caching
+  - Session management
 
-### Animation & Interaction
+### 🎬 Animation & Interaction
+- **React Native Reanimated:** Smooth, performant animations.
+- **React Native Safe Area Context:** Adaptive layouts for all devices.
 
-- **React Native Reanimated**: Fluid animations and interactions
-- **React Native Safe Area Context**: Adaptive layout management
+---
 
 ## Development Environment
 
 ### Required Software
-
-- Node.js (v14 or higher)
-- npm (v6 or higher) or Yarn
+- Node.js (v14+)
+- npm (v6+) or Yarn
 - Expo CLI
-- Xcode (for iOS development)
-- Android Studio (for Android development)
+- Xcode (iOS)
+- Android Studio (Android)
 - Git
 
 ### Recommended Tools
-
-- VS Code with React Native extensions
+- VS Code (+ React Native extensions)
 - React Native Debugger
-- Expo Go mobile app for testing
+- Expo Go app for testing
+
+
 
 ## Project Structure
 
@@ -272,66 +276,95 @@ npm run dev
 - Android: Press 'a' to open Android emulator
 - Physical device: Scan QR code with Expo Go app
 
-## How to ditribute App in Ios Store
-<details>
-  <summary>📦 How to Publish React Native App to the iOS App Store</summary>
+## How to Distribute App in iOS Store
 
-  Here’s a high-level step-by-step guide to release a React Native app to the iOS App Store:
+<details>
+  <summary>📦 How to Publish React Native App to the iOS App Store (2025)</summary>
+
+  Here’s a high-level, up-to-date step-by-step guide to release a React Native app to the iOS App Store:
 
   1. **Create an Apple Developer Account**
      - Sign up at [developer.apple.com](https://developer.apple.com) ($99/year).
 
-  2. **Configure Your App for Release**
-     - Update `app.json` or `Info.plist` with proper `name`, `version`, `bundleIdentifier`, etc.
-     - Use production-ready assets (icons, splash screens).
-     - If using Expo: set `"ios": { "buildNumber": "1.0.0", "bundleIdentifier": "com.yourname.yourapp" }`.
+  2. **Ensure SDK and Xcode Requirements**
+     - As of April 2025, all iOS apps **must be built with Xcode 16+ and the iOS 18 SDK**.  
+       ([source][5][1][4])
+     - Update your local Xcode and Expo SDK (Expo 50+ recommended for managed workflow).
 
-  3. **Set Up Certificates and Profiles**
-     - Use Xcode or [Apple Developer Console](https://developer.apple.com/account/resources/) to create:
+  3. **Configure Your App for Release**
+     - Update `app.json` or `Info.plist` with correct `name`, `version`, `bundleIdentifier`, etc.
+     - Use production-ready assets (icons, splash screens).
+     - For Expo: set `"ios": { "buildNumber": "1.0.0", "bundleIdentifier": "com.yourname.yourapp" }`.
+
+  4. **Set Up Certificates and Profiles**
+     - In Xcode or the [Apple Developer Console](https://developer.apple.com/account/resources/):
        - **App ID**
        - **Provisioning Profile**
        - **Distribution Certificate**
 
-  4. **Build the iOS App**
-     - **With Expo:**
-       ```bash
+  5. **Build the iOS App**
+     - **Expo (Recommended):**
+       ```
        eas build --platform ios
        ```
-       Make sure you're logged in to an Apple Developer account.
-     - **Without Expo (Bare React Native):**
-       ```bash
+       - Make sure you’re logged in to your Apple Developer account.
+     - **Bare React Native:**
+       ```
        cd ios
        pod install
        open YourApp.xcworkspace
        ```
-       Then build the archive using **Xcode** → **Product** → **Archive**.
+       - Build archive via Xcode: **Product > Archive**.
 
-  5. **Test with TestFlight (optional but recommended)**
-     - Upload the archive using **Xcode** or **Transporter**.
-     - Set up internal/external testers in App Store Connect.
+  6. **Test with TestFlight (Recommended)**
+     - Upload the archive using Xcode Organizer or Transporter.
+     - Set up testers in App Store Connect.
 
-  6. **Submit for Review**
-     - Go to [App Store Connect](https://appstoreconnect.apple.com/)
-     - Fill in app details, upload screenshots, set pricing and availability.
+  7. **Submit for Review**
+     - Go to [App Store Connect](https://appstoreconnect.apple.com/).
+     - Fill in app details, upload screenshots, set pricing/availability.
      - Submit your build for review.
 
-  7. **Wait for Approval**
-     - Apple will review your app and usually respond within a few days.
-     - Once approved, your app will be available on the App Store.
+  8. **Wait for Approval**
+     - Apple reviews usually take 1–3 days.
+     - Once approved, your app will be live on the App Store.
+
+  ### Checklist Before Submitting
+  - ✅ Test thoroughly on real devices and via TestFlight
+  - ✅ Ensure all screenshots, descriptions, and metadata are ready
+  - ✅ Follow all [Apple App Store Guidelines](https://developer.apple.com/app-store/review/guidelines/)
+  - ✅ Provide a privacy policy URL
+  - ✅ Remove any placeholder or debug content
+  - ✅ Monitor app performance and crash logs
+
+  For more details, see [React Native Official Guide][2] or [Instabug 2025 Submission Guide][3].
 
 </details>
 
 
-## Contributing
+## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+Contributions are welcome!  
+If you have suggestions for improvements, bug fixes, or new features, please submit a Pull Request.  
+For major changes, open an Issue first to discuss your ideas with the project maintainers.
 
-## License
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/YourFeature`)
+3. Commit your changes (`git commit -m 'Add some feature'`)
+4. Push to the branch (`git push origin feature/YourFeature`)
+5. Open a Pull Request
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+---
 
-## Contact
+## 📄 License
 
-Haonan Tao - taoaaron5@gmail.com
+This project is licensed under the MIT License.  
+See the [LICENSE](LICENSE) file for details.
 
-Project Link: [https://github.com/HAONANTAO/Money_Recorder](https://github.com/HAONANTAO/Money_Recorder)
+---
+
+## 📬 Contact
+
+**Author:** Aaron Tao  
+**Email:** [taoaaron5@gmail.com](mailto:taoaaron5@gmail.com)  
+**Project Link:** [https://github.com/HAONANTAO/Money_Recorder](https://github.com/HAONANTAO/Money_Recorder)
