@@ -27,8 +27,9 @@ Built independently with React Native (Expo), Appwrite, and NativeWind, Money Re
 - [Getting Started](#getting-started)
 - [How to Distribute App in iOS Store](#how-to-distribute-app-in-ios-store)
 - [Contributing](#contributing)
-- [License](#license)
 - [Contact](#contact)
+- [License](#license)
+
 
 
 ---
@@ -356,15 +357,18 @@ For major changes, open an Issue first to discuss your ideas with the project ma
 
 ---
 
+## 📬 Contact
+
+- **Name:** Aaron TAO
+- **Email:** [taoaaron5@gmail.com](mailto:taoaaron5@gmail.com)
+- **GitHub:** [HAONANTAO](https://github.com/HAONANTAO)
+- **LinkedIn:** [Aaron Tao](https://www.linkedin.com/in/haonan-tao-aaron)
+- **Project Link:** [https://github.com/HAONANTAO/Money_Recorder](https://github.com/HAONANTAO/Money_Recorder)
+
+---
+
 ## 📄 License
 
 This project is licensed under the MIT License.  
 See the [LICENSE](LICENSE) file for details.
 
----
-
-## 📬 Contact
-
-**Author:** Aaron Tao  
-**Email:** [taoaaron5@gmail.com](mailto:taoaaron5@gmail.com)  
-**Project Link:** [https://github.com/HAONANTAO/Money_Recorder](https://github.com/HAONANTAO/Money_Recorder)
