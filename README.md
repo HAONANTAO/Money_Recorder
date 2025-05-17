@@ -6,6 +6,17 @@ A modern, feature-rich personal finance management app for iOS, designed to help
 
 Built independently with React Native (Expo), Appwrite, and NativeWind, Money Recorder delivers a seamless, cross-platform experience with real-time sync, interactive analytics, and robust privacy features.
 
+[![Expo](https://img.shields.io/badge/Expo-52.0.40-000020?logo=expo)](https://expo.dev/)
+[![React Native](https://img.shields.io/badge/React_Native-0.76.7-61DAFB?logo=react)](https://reactnative.dev/)
+[![React](https://img.shields.io/badge/React-18.3.1-61DAFB?logo=react)](https://react.dev/)
+[![Appwrite](https://img.shields.io/badge/Appwrite-17.0.1-F02E65?logo=appwrite)](https://appwrite.io/)
+[![React Navigation](https://img.shields.io/badge/React_Navigation-7.0.14-593196?logo=react-router)](https://reactnavigation.org/)
+[![Async Storage](https://img.shields.io/badge/Async_Storage-2.1.2-6DB33F?logo=react)](https://react-native-async-storage.github.io/async-storage/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4.17-38B2AC?logo=tailwindcss)](https://tailwindcss.com/)
+[![Victory Native](https://img.shields.io/badge/Victory_Native-41.16.1-4ECDC4?logo=chartdotjs)](https://formidable.com/open-source/victory/docs/native/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3.3-3178C6?logo=typescript)](https://www.typescriptlang.org/)
+[![Jest](https://img.shields.io/badge/Jest-29.2.1-C21325?logo=jest)](https://jestjs.io/)
+
 ---
 
 <p align="center">
