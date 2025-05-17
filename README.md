@@ -343,7 +343,7 @@ npm run dev
 </details>
 
 
-## 🤝 Contributing
+##  Contributing
 
 Contributions are welcome!  
 If you have suggestions for improvements, bug fixes, or new features, please submit a Pull Request.  
@@ -357,7 +357,7 @@ For major changes, open an Issue first to discuss your ideas with the project ma
 
 ---
 
-## 📬 Contact
+##  Contact
 
 - **Name:** Aaron TAO
 - **Email:** [taoaaron5@gmail.com](mailto:taoaaron5@gmail.com)
@@ -367,7 +367,7 @@ For major changes, open an Issue first to discuss your ideas with the project ma
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License.  
 See the [LICENSE](LICENSE) file for details.
