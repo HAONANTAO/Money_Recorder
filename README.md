@@ -1,10 +1,43 @@
-# Money Recorder
-https://apps.apple.com/us/app/moneyrecorder/id6744058988
+# 💰 Money Recorder
 
-Money Recorder is a modern, feature-rich personal finance management mobile app, independently developed with React Native and Appwrite. It empowers users to effortlessly track expenses and income, set and monitor budgets, and manage savings goals-all within an intuitive, visually appealing interface.
-The app offers advanced features such as real-time data synchronization, interactive financial analytics, multi-language support (English & Chinese), and offline data persistence.
-Built with a robust technology stack-including React Native (Expo), NativeWind for styling, Appwrite for secure backend services, and advanced charting libraries-Money Recorder delivers a seamless, cross-platform experience on iOS.
-With its comprehensive admin and user features, Money Recorder provides deep insights into financial habits, helping users achieve their financial goals efficiently and securely.
+[Download on the App Store](https://apps.apple.com/us/app/moneyrecorder/id6744058988)
+
+A modern, feature-rich personal finance management app for iOS, designed to help you effortlessly track expenses, set budgets, and achieve your savings goals-all within an intuitive, visually appealing interface.
+
+Built independently with React Native (Expo), Appwrite, and NativeWind, Money Recorder delivers a seamless, cross-platform experience with real-time sync, interactive analytics, and robust privacy features.
+
+---
+
+<p align="center">
+  <img src="screenshot1.png" width="240" alt="Money Recorder Home"/>
+  <img src="screenshot2.png" width="240" alt="Expense Tracking"/>
+  <img src="screenshot3.png" width="240" alt="Budget Overview"/>
+</p>
+
+---
+
+## Description
+
+Money Recorder empowers users to:
+
+- **Track expenses and income** with automatic categorization and detailed breakdowns.
+- **Set and monitor budgets** to control spending and receive smart reminders.
+- **Manage savings goals** with real-time progress tracking.
+- **Analyze finances** using interactive charts and detailed financial reports.
+- **Enjoy a beautiful, intuitive interface** designed for ease of use and efficiency.
+
+### Highlights
+
+- 🔄 Real-time cloud sync for seamless access across devices
+- 🌏 Multi-language support (English & Chinese)
+- 📊 Advanced financial analytics and interactive charts
+- 🔒 Secure data storage and privacy protection
+- 📱 Offline data persistence for uninterrupted access
+
+---
+
+> *Money Recorder provides deep insights into your financial habits, helping you achieve your financial goals efficiently and securely.*
+
 
 ## Features
 
