@@ -22,6 +22,7 @@ import RecordShowBox from "@/components/RecordShowbox";
 import DateChecker from "@/utils/dateChecker";
 
 import { demoRecords } from "@/constants/demoData";
+import BudgetDisplayBar from "@/components/BudgetDisplayBar";
 
 // 获取当前日期，只需要月份就可以了
 const getCurrentDate = () => {
@@ -194,8 +195,13 @@ const Home = () => {
           </View>
         </View>
 
-{/* myBudget预算bar显示 */}
-
+        {/* myBudget预算bar显示 */}
+        <View className="mt-6">
+          <BudgetDisplayBar
+            currentBudget={monthlyExpense}
+            totalBudget={2000} // 设置一个固定的月度预算
+          />
+        </View>
         {/* details */}
         <View
           className={`p-4 mt-6 rounded-2xl border ${

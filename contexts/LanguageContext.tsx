@@ -72,6 +72,7 @@ interface Translations {
     };
     // noData: string;
   };
+  BudgetUsage: string;
   record: {
     tagsPlaceholder: string | undefined;
     createAt: string;
@@ -221,6 +222,7 @@ interface LanguageContextType {
 
 // 英文翻译
 const enTranslations: Translations = {
+  BudgetUsage: " BudgetUsage",
   notifications: {
     title: "Money Recorder",
     body: "Just a gentle nudge to track your spending today",
@@ -460,6 +462,7 @@ const enTranslations: Translations = {
 
 // 中文翻译
 const zhTranslations: Translations = {
+  BudgetUsage: "本月预算使用情况",
   notifications: {
     title: "小陶(✧∇✧)╯╰(✧∇✧)̣",
     body: "小陶提醒你注意记录今天开支",
