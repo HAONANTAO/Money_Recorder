@@ -360,10 +360,10 @@ const enTranslations: Translations = {
   },
   home: {
     search: "Search your records...",
-    monthlyIncome: "Monthly Income",
-    monthlyExpense: "Monthly Expense",
+    monthlyIncome: "Total Income",
+    monthlyExpense: "Total Expense",
     recentRecords: "Recent Records",
-    monthlyNetIncome: "Monthly Net Income",
+    monthlyNetIncome: "Total Net Income",
   },
   categories: {
     cash: "Cash",

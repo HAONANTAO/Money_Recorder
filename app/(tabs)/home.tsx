@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-09 14:51:04
+ * @LastEditTime: 2025-06-24 22:15:23
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
@@ -23,16 +23,16 @@ import DateChecker from "@/utils/dateChecker";
 
 import { demoRecords } from "@/constants/demoData";
 
-// 获取当前日期
+// 获取当前日期，只需要月份就可以了
 const getCurrentDate = () => {
   const date = new Date();
   const { language } = useLanguage();
   const locale = language === "zh" ? "zh-CN" : "en-US";
   return date.toLocaleDateString(locale, {
-    weekday: "long",
-    year: "numeric",
+    // weekday: "long",
     month: "long",
-    day: "numeric",
+    year: "numeric",
+    // day: "numeric",
   });
 };
 
@@ -149,58 +149,52 @@ const Home = () => {
           {getCurrentDate()}
         </Text>
 
-        {/* 第二个 View - 净资产 */}
+        {/* 总金额View - 本月总和和明细 */}
         <View
-          className={`mt-6 p-4 flex flex-row justify-between gap-2 rounded-lg ${
-            isDark ? "" : "bg-gray-100"
+          className={`mt-6 p-6 rounded-2xl space-y-4 ${
+            isDark ? "border border-white" : "bg-gray-800"
           }`}>
-          {/* Net Worth View */}
-          <View className="p-4 rounded-3xl border border-gray-300">
+          <View className="flex flex-row justify-between items-center">
             <Text
-              className={`${
-                isDark ? "text-white" : ""
-              } text-base font-bold text-gray-700`}>
+              className={`text-3xl font-bold ${
+                isDark ? "text-white" : "text-gray-200"
+              }`}>
               {translations.home.monthlyIncome}
             </Text>
-            <Text className="text-2xl font-extrabold text-green-500">
-              ${monthlyIncome.toFixed(2)}
-            </Text>
-          </View>
-
-          {/* Loss View */}
-          <View className="p-4 rounded-3xl border border-gray-300">
             <Text
-              className={`${
-                isDark ? "text-white" : ""
-              } text-base font-bold text-gray-700`}>
-              {translations.home.monthlyExpense}
+              className={`text-4xl font-extrabold ml-2 ${
+                monthlyIncome - monthlyExpense >= 0
+                  ? "text-green-500"
+                  : "text-red-500"
+              }`}>
+              ${(monthlyIncome - monthlyExpense).toFixed(2)}
             </Text>
-            <Text className="text-2xl font-extrabold text-red-500">
-              ${monthlyExpense.toFixed(2)}
-            </Text>
+          </View>
+          {/* 小组件显示支出和收入 */}
+          <View className="space-y-2">
+            {/* Net Worth View */}
+            <View className="flex flex-row justify-between items-center">
+              <Text className="text-sm font-medium text-gray-400">
+                {translations.home.monthlyIncome}
+              </Text>
+              <Text className="text-sm font-bold text-gray-400">
+                $ {monthlyIncome.toFixed(2)}
+              </Text>
+            </View>
+
+            {/* Loss View */}
+            <View className="flex flex-row justify-between items-center">
+              <Text className="text-sm font-medium text-gray-400">
+                {translations.home.monthlyExpense}
+              </Text>
+              <Text className="text-sm font-bold text-gray-400">
+                $ {monthlyExpense.toFixed(2)}
+              </Text>
+            </View>
           </View>
         </View>
 
-        {/* 第三个 View - 本月支出 */}
-        <View
-          className={`mt-6 p-6 rounded-2xl ${
-            isDark ? "border border-white" : "bg-blue-100"
-          }`}>
-          <Text
-            className={`text-2xl font-bold ${
-              isDark ? "text-white" : "text-gray-700"
-            }`}>
-            {translations.home.monthlyNetIncome}
-          </Text>
-          <Text
-            className={`text-5xl font-extrabold ${
-              monthlyIncome - monthlyExpense >= 0
-                ? "text-green-500"
-                : "text-red-500"
-            }`}>
-            ${(monthlyIncome - monthlyExpense).toFixed(2)}
-          </Text>
-        </View>
+{/* myBudget预算bar显示 */}
 
         {/* details */}
         <View
