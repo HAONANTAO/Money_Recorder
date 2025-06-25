@@ -33,9 +33,9 @@ const BudgetDisplayBar: React.FC<BudgetDisplayBarProps> = ({
       : "bg-green-500";
 
   const formatMoney = (amount: number) => {
-    return new Intl.NumberFormat("zh-CN", {
+    return new Intl.NumberFormat("en-AU", {
       style: "currency",
-      currency: "CNY",
+      currency: "AUD",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
