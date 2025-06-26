@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-06-24 22:15:23
+ * @LastEditTime: 2025-06-26 21:24:28
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
@@ -23,6 +23,7 @@ import DateChecker from "@/utils/dateChecker";
 
 import { demoRecords } from "@/constants/demoData";
 import BudgetDisplayBar from "@/components/BudgetDisplayBar";
+import HomeImageShow from "@/components/HomeImageShow";
 
 // 获取当前日期，只需要月份就可以了
 const getCurrentDate = () => {
@@ -149,7 +150,7 @@ const Home = () => {
           }`}>
           {getCurrentDate()}
         </Text>
-
+        <HomeImageShow />
         {/* 总金额View - 本月总和和明细 */}
         <View
           className={`mt-6 p-6 rounded-2xl space-y-4 ${
