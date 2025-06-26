@@ -1,15 +1,51 @@
-import { View, Image, StyleSheet } from "react-native";
-import React from "react";
+import { View, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
+import React, { useState } from "react";
+import * as ImagePicker from "expo-image-picker";
+import { uploadHomeImage } from "../services/homeImageStorageService";
 
 const HomeImageShow = () => {
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const pickImage = async () => {
+    try {
+      setIsLoading(true);
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+        base64: true,
+      });
+
+      if (!result.canceled && result.assets[0].base64) {
+        const base64Image = `data:image/jpeg;base64,${result.assets[0].base64}`;
+        const url = await uploadHomeImage(base64Image, imageUrl || undefined);
+        setImageUrl(url);
+      }
+    } catch (error) {
+      console.error("Error picking or uploading image:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image
-          source={require("../assets/images/DefaultUser.png")}
-          style={styles.image}
-        />
-      </View>
+      <TouchableOpacity style={styles.imageContainer} onPress={pickImage} disabled={isLoading}>
+        {isLoading ? (
+          <ActivityIndicator size="large" color="#0000ff" />
+        ) : (
+          <Image
+            source={
+              imageUrl
+                ? { uri: imageUrl }
+                : require("../assets/images/HomeImage.jpg")
+            }
+            style={styles.image}
+          />
+        )}
+      </TouchableOpacity>
     </View>
   );
 };
