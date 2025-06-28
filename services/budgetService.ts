@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-28 14:00:00
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-03-28 17:19:31
+ * @LastEditTime: 2025-06-28 16:27:34
  * @FilePath: /Money_Recorder/services/budgetService.ts
  */
 
@@ -51,19 +51,28 @@ export const createBudget = async (
     );
 
     if (existingBudgets.documents.length > 0) {
-      throw new Error(
-        `A budget for category "${category}" already exists for ${year}-${month}`,
+      // 如果预算已存在，更新它
+      const existingBudget = existingBudgets.documents[0];
+      const updatedBudget = await database.updateDocument(
+        DATABASE_ID,
+        BUDGET_COLLECTION_ID,
+        existingBudget.$id,
+        {
+          amount: budget.amount,
+          updateAt: new Date().toISOString(),
+        },
       );
+      return updatedBudget;
     }
 
     // Step 2: Create the new budget if no existing one
-    const now = new Date().toISOString();
     const newBudget = await database.createDocument(
       DATABASE_ID,
       BUDGET_COLLECTION_ID,
       ID.unique(),
       {
         ...budget,
+        createAt: new Date().toISOString(),
       },
     );
 
@@ -167,6 +176,72 @@ export const deleteBudget = async (budgetId: string) => {
     return true;
   } catch (error) {
     console.error("Error deleting budget:", error);
+    throw error;
+  }
+};
+
+// 获取用户的总预算
+export const getTotalBudget = async (userId: string) => {
+  try {
+    if (!DATABASE_ID || !BUDGET_COLLECTION_ID) {
+      throw new Error("Database configuration is missing");
+    }
+
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+
+    const budgets = await database.listDocuments(
+      DATABASE_ID,
+      BUDGET_COLLECTION_ID,
+      [
+        Query.equal("userId", userId),
+        Query.equal("category", "Total"),
+        Query.equal("year", currentYear),
+        Query.equal("month", currentMonth)
+      ],
+    );
+
+    if (budgets.documents.length === 0) {
+      // 如果没有找到当月总预算，返回0
+      return 0;
+    }
+
+    return budgets.documents[0].amount;
+  } catch (error) {
+    console.error("Error getting total budget:", error);
+    throw error;
+  }
+};
+
+// 更新用户的总预算
+export const updateTotalBudget = async (userId: string, amount: number) => {
+  try {
+    if (!DATABASE_ID || !BUDGET_COLLECTION_ID) {
+      throw new Error("Database configuration is missing");
+    }
+
+    const budgets = await database.listDocuments(
+      DATABASE_ID,
+      BUDGET_COLLECTION_ID,
+      [Query.equal("userId", userId), Query.equal("category", "Total")],
+    );
+
+    if (budgets.documents.length === 0) {
+      // 如果没有找到总预算，创建一个新的
+      return await createBudget({
+        userId,
+        category: "Total",
+        amount,
+        year: new Date().getFullYear(),
+        month: new Date().getMonth() + 1,
+      });
+    }
+
+    // 更新现有的总预算
+    return await updateBudget(budgets.documents[0].$id, { amount });
+  } catch (error) {
+    console.error("Error updating total budget:", error);
     throw error;
   }
 };

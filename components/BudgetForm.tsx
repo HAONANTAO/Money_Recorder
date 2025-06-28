@@ -61,14 +61,18 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
         note,
       };
 
-      await createBudget(budgetData);
-      setAmount("");
-      setCategory(BUDGET_CATEGORIES[0].value);
-      setNote("");
-      setError("");
-      setShowSuccessModal(true);
-      if (onSuccess) {
-        onSuccess();
+      // 创建预算并同步到云端
+      const result = await createBudget(budgetData);
+      
+      if (result) {
+        setAmount("");
+        setCategory(BUDGET_CATEGORIES[0].value);
+        setNote("");
+        setError("");
+        setShowSuccessModal(true);
+        if (onSuccess) {
+          onSuccess();
+        }
       }
     } catch (err) {
       setError(translations.alerts.createError);

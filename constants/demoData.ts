@@ -59,7 +59,7 @@ export const demoGoals = [
 ];
 
 export const demoBudget = [
-  { category: "total", budgetAmount: 3000 },
+  { category: "total", budgetAmount: 0 },
   { category: "eating", budgetAmount: 500 },
   { category: "traffic", budgetAmount: 300 },
   { category: "shopping", budgetAmount: 400 },

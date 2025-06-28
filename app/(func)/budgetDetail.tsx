@@ -5,6 +5,8 @@ import { useTheme } from "../../contexts/ThemeContext";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { deleteBudget, updateBudget } from "@/services/budgetService";
 import BackButton from "@/components/BackButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StorageKeys } from "@/utils/storageService";
 
 const BudgetDetail = () => {
   const { theme } = useTheme();
@@ -60,23 +62,36 @@ const BudgetDetail = () => {
           },
           {
             text: translations.common.confirm,
-            onPress: () => {
-              const updatedData = {
-                category: category as string,
-                amount: parseFloat(newAmount), // Update the amount
-              };
-              console.log("Update budget，ID:", budgetId);
+            onPress: async () => {
+              try {
+                const updatedData = {
+                  category: category as string,
+                  amount: parseFloat(newAmount),
+                  year: new Date().getFullYear(),
+                  month: new Date().getMonth() + 1
+                };
+                console.log("Updating budget with ID:", budgetId);
 
-              // Call the updateBudget function with the budgetId and updatedData
-              updateBudget(budgetId as string, updatedData)
-                .then(() => {
-                  // After successful update, save the new amount and switch off editing mode
+                const result = await updateBudget(budgetId as string, updatedData);
+                if (result) {
                   setIsEditing(false);
-                  setNewAmount(String(updatedData.amount)); // Update the state with the new amount
-                })
-                .catch((error) => {
-                  console.error("Update budget failed:", error);
-                });
+                  setNewAmount(String(updatedData.amount));
+                  // 清除缓存，强制下次进入统计页面时重新获取数据
+                  await AsyncStorage.removeItem(StorageKeys.MONTHLY_STATS);
+                  Alert.alert(
+                    translations.alerts.budget.updateTitle,
+                    translations.common.success
+                  );
+                  // 返回上一页，触发统计页面刷新
+                  router.back();
+                }
+              } catch (error) {
+                console.error("Update budget failed:", error);
+                Alert.alert(
+                  translations.alerts.budget.updateTitle,
+                  translations.common.error
+                );
+              }
             },
           },
         ],

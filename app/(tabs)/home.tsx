@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-06-28 15:59:04
+ * @LastEditTime: 2025-06-28 16:54:01
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
@@ -21,6 +21,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StorageKeys, StorageService } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
 import { getRecords } from "@/services/recordService";
+import {
+  getTotalBudget,
+  updateBudget,
+  createBudget,
+  getMonthlyBudget,
+} from "@/services/budgetService";
 import RecordShowBox from "@/components/RecordShowbox";
 import DateChecker from "@/utils/dateChecker";
 
@@ -50,7 +56,7 @@ const Home = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [monthlyIncome, setMonthlyIncome] = useState<number>(0);
   const [monthlyExpense, setMonthlyExpense] = useState<number>(0);
-  const [monthlyBudget, setMonthlyBudget] = useState<number>(2000);
+  const [monthlyBudget, setMonthlyBudget] = useState<number>(0);
   const [refreshing, setRefreshing] = useState(false);
   const [showBudgetModal, setShowBudgetModal] = useState(false);
   const [tempBudget, setTempBudget] = useState("");
@@ -60,10 +66,74 @@ const Home = () => {
     setShowBudgetModal(true);
   };
 
-  const handleConfirmBudget = () => {
+  const handleConfirmBudget = async () => {
     const newBudget = parseInt(tempBudget);
     if (!isNaN(newBudget) && newBudget > 0) {
-      setMonthlyBudget(newBudget);
+      try {
+        const isGuest = await StorageService.getIsGuest();
+        if (!isGuest) {
+          const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
+          if (email) {
+            const userData = await getUserByEmail(email);
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear();
+            const currentMonth = currentDate.getMonth() + 1;
+            const monthlyBudgets = await getMonthlyBudget(
+              userData.$id,
+              currentYear,
+              currentMonth,
+            );
+            const existingTotalBudget = monthlyBudgets.find(
+              (budget) => budget.category === "Total",
+            );
+            if (existingTotalBudget) {
+              await updateBudget(existingTotalBudget.budgetId, { amount: newBudget });
+            } else {
+              try {
+                await createBudget({
+                  userId: userData.$id,
+                  category: "Total",
+                  amount: newBudget,
+                  year: currentYear,
+                  month: currentMonth,
+                });
+              } catch (err: any) {
+                if (err.message?.includes("already exists")) {
+                  // 如果预算已存在，重新获取并更新
+                  const latestBudgets = await getMonthlyBudget(
+                    userData.$id,
+                    currentYear,
+                    currentMonth,
+                  );
+                  const existingBudget = latestBudgets.find(
+                    (budget) => budget.category === "Total",
+                  );
+                  if (existingBudget) {
+                    await updateBudget(existingBudget.budgetId, { amount: newBudget });
+                  }
+                } else {
+                  throw err;
+                }
+              }
+            }
+            // 清除月度统计缓存
+            await AsyncStorage.removeItem(StorageKeys.MONTHLY_STATS);
+            // 重新获取所有数据
+            const [newRecords, newTotalBudget] = await Promise.all([
+              getRecords(userData.$id),
+              getTotalBudget(userData.$id),
+            ]);
+            const filteredRecords = DateChecker(newRecords as unknown as MoneyRecord[]);
+            setRecords(filteredRecords);
+            calculateMonthlyStats(filteredRecords);
+            setMonthlyBudget(newTotalBudget);
+          }
+        } else {
+          setMonthlyBudget(newBudget);
+        }
+      } catch (err: any) {
+        console.error("Error updating budget:", err);
+      }
     }
     setShowBudgetModal(false);
   };
@@ -126,9 +196,10 @@ const Home = () => {
 
       // 无论是否有缓存，都异步获取最新数据
       const userData = await getUserByEmail(email);
-      const [user, records] = await Promise.all([
+      const [user, records, totalBudget] = await Promise.all([
         getUserByEmail(email),
         getRecords(userData.$id),
+        getTotalBudget(userData.$id),
       ]);
 
       const filteredRecords = DateChecker(records as unknown as MoneyRecord[]);
@@ -136,6 +207,7 @@ const Home = () => {
       await StorageService.cacheRecords(records);
 
       calculateMonthlyStats(filteredRecords);
+      setMonthlyBudget(totalBudget);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching user or records:", error);
@@ -150,7 +222,7 @@ const Home = () => {
 
   useEffect(() => {
     getInit();
-  }, [records]);
+  }, []);
 
   return (
     <ScrollView
@@ -225,8 +297,6 @@ const Home = () => {
             onBudgetChange={handleBudgetChange}
           />
         </View>
-
-
 
         {/* details */}
         <View
@@ -314,7 +384,7 @@ const Home = () => {
               keyboardType="numeric"
               value={tempBudget}
               onChangeText={setTempBudget}
-              placeholder="输入预算金额"
+              placeholder="enter total budget"
               placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
             />
             <View className="flex-row justify-end space-x-4">
@@ -326,13 +396,7 @@ const Home = () => {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => {
-                  const newBudget = Number(tempBudget);
-                  if (!isNaN(newBudget) && newBudget > 0) {
-                    setMonthlyBudget(newBudget);
-                    setShowBudgetModal(false);
-                  }
-                }}
+                onPress={handleConfirmBudget}
                 className="px-4 py-2 bg-blue-500 rounded-lg">
                 <Text className="font-medium text-white">
                   {translations.common.confirm}

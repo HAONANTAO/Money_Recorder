@@ -464,9 +464,10 @@ const Stats = () => {
             {translations.stats.total}
           </Text>
           {BUDGET_CATEGORIES.map((category) => {
-            const budget = (monthlyBudgets && monthlyBudgets.length > 0)
-              ? monthlyBudgets.find((b: any) => b.category === category.value)
-              : null;
+            const budget =
+              monthlyBudgets && monthlyBudgets.length > 0
+                ? monthlyBudgets.find((b: any) => b.category === category.value)
+                : null;
             const budgetData = budget || { budgetAmount: 0 };
             const expense = expensesByCategory?.[category.value] || 0;
 
