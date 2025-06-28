@@ -1,4 +1,4 @@
-import { View, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Image, TouchableOpacity, ActivityIndicator } from "react-native";
 import React, { useState, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { uploadHomeImage, fetchHomeImage } from "../services/homeImageStorageService";
@@ -62,10 +62,15 @@ const HomeImageShow = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.imageContainer} onPress={pickImage} disabled={isLoading}>
+    <View className="items-center justify-center">
+      <TouchableOpacity 
+        className="w-[120px] h-[120px] rounded-full overflow-hidden bg-gray-100 shadow-lg" 
+        onPress={pickImage} 
+        disabled={isLoading}>
         {isLoading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
+          <View className="flex-1 items-center justify-center">
+            <ActivityIndicator size="large" color="#666666" />
+          </View>
         ) : (
           <Image
             source={
@@ -73,7 +78,7 @@ const HomeImageShow = () => {
                 ? { uri: imageUrl }
                 : require("../assets/images/HomeImage.jpg")
             }
-            style={styles.image}
+            className="w-full h-full"
           />
         )}
       </TouchableOpacity>
@@ -81,27 +86,6 @@ const HomeImageShow = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  imageContainer: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    overflow: "hidden",
-    backgroundColor: "#f0f0f0",
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-  image: {
-    width: "100%",
-    height: "100%",
-  },
-});
+
 
 export default HomeImageShow;
