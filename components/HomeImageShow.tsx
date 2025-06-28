@@ -65,9 +65,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   imageContainer: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 220,
+    height: 220,
+    borderRadius: 120,
     overflow: "hidden",
     backgroundColor: "#f0f0f0",
     elevation: 3,

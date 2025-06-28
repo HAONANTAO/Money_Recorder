@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-06-26 21:24:28
+ * @LastEditTime: 2025-06-28 15:00:23
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
@@ -145,15 +145,17 @@ const Home = () => {
         } pt-10 px-4 `}>
         {/* 今天日期 */}
         <Text
-          className={`mt-8 text-2xl font-bold text-center ${
+          className={`mt-8 text-2xl font-bold text-center pb-8 ${
             isDark ? "text-white" : "text-gray-800"
           }`}>
           {getCurrentDate()}
         </Text>
         <HomeImageShow />
+
         {/* 总金额View - 本月总和和明细 */}
+
         <View
-          className={`mt-6 p-6 rounded-2xl space-y-4 ${
+          className={`mt-6 p-6 rounded-3xl space-y-8 ${
             isDark ? "border border-white" : "bg-gray-800"
           }`}>
           <View className="flex flex-row justify-between items-center">
@@ -173,7 +175,7 @@ const Home = () => {
             </Text>
           </View>
           {/* 小组件显示支出和收入 */}
-          <View className="space-y-2">
+          <View className="mt-4 space-y-6">
             {/* Net Worth View */}
             <View className="flex flex-row justify-between items-center">
               <Text className="text-sm font-medium text-gray-400">
@@ -197,7 +199,7 @@ const Home = () => {
         </View>
 
         {/* myBudget预算bar显示 */}
-        <View className="mt-6">
+        <View className="mt-4">
           <BudgetDisplayBar
             currentBudget={monthlyExpense}
             totalBudget={2000} // 设置一个固定的月度预算
