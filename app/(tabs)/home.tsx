@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-06-28 15:00:23
+ * @LastEditTime: 2025-06-28 15:59:04
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
@@ -10,6 +10,9 @@ import {
   ActivityIndicator,
   ScrollView,
   RefreshControl,
+  Modal,
+  TextInput,
+  TouchableOpacity,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -47,7 +50,23 @@ const Home = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [monthlyIncome, setMonthlyIncome] = useState<number>(0);
   const [monthlyExpense, setMonthlyExpense] = useState<number>(0);
+  const [monthlyBudget, setMonthlyBudget] = useState<number>(2000);
   const [refreshing, setRefreshing] = useState(false);
+  const [showBudgetModal, setShowBudgetModal] = useState(false);
+  const [tempBudget, setTempBudget] = useState("");
+
+  const handleBudgetChange = () => {
+    setTempBudget(monthlyBudget.toString());
+    setShowBudgetModal(true);
+  };
+
+  const handleConfirmBudget = () => {
+    const newBudget = parseInt(tempBudget);
+    if (!isNaN(newBudget) && newBudget > 0) {
+      setMonthlyBudget(newBudget);
+    }
+    setShowBudgetModal(false);
+  };
 
   const calculateMonthlyStats = (filteredRecords: MoneyRecord[]) => {
     const currentDate = new Date();
@@ -202,9 +221,13 @@ const Home = () => {
         <View className="mt-4">
           <BudgetDisplayBar
             currentBudget={monthlyExpense}
-            totalBudget={2000} // 设置一个固定的月度预算
+            totalBudget={monthlyBudget}
+            onBudgetChange={handleBudgetChange}
           />
         </View>
+
+
+
         {/* details */}
         <View
           className={`p-4 mt-6 rounded-2xl border ${
@@ -264,6 +287,61 @@ const Home = () => {
           </View>
         </View>
       </View>
+
+      {/* Budget Setting Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showBudgetModal}
+        onRequestClose={() => setShowBudgetModal(false)}>
+        <View className="flex-1 justify-center items-center">
+          <View
+            className={`p-6 rounded-2xl w-4/5 ${
+              isDark ? "bg-gray-800/90" : "bg-white/90"
+            }`}>
+            <Text
+              className={`text-lg font-bold mb-4 ${
+                isDark ? "text-white" : "text-gray-800"
+              }`}>
+              {translations.home.enterBudget}
+            </Text>
+            <TextInput
+              className={`border p-2 rounded-lg mb-4 ${
+                isDark
+                  ? "border-gray-600 text-white"
+                  : "border-gray-300 text-gray-800"
+              }`}
+              keyboardType="numeric"
+              value={tempBudget}
+              onChangeText={setTempBudget}
+              placeholder="输入预算金额"
+              placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
+            />
+            <View className="flex-row justify-end space-x-4">
+              <TouchableOpacity
+                onPress={() => setShowBudgetModal(false)}
+                className="px-4 py-2 bg-gray-500 rounded-lg">
+                <Text className="font-medium text-white">
+                  {translations.common.cancel}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  const newBudget = Number(tempBudget);
+                  if (!isNaN(newBudget) && newBudget > 0) {
+                    setMonthlyBudget(newBudget);
+                    setShowBudgetModal(false);
+                  }
+                }}
+                className="px-4 py-2 bg-blue-500 rounded-lg">
+                <Text className="font-medium text-white">
+                  {translations.common.confirm}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };

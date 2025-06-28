@@ -464,22 +464,23 @@ const Stats = () => {
             {translations.stats.total}
           </Text>
           {BUDGET_CATEGORIES.map((category) => {
-            const budget = monthlyBudgets?.find(
-              (b: any) => b.category === category.value,
-            ) || { budgetAmount: 0 };
+            const budget = (monthlyBudgets && monthlyBudgets.length > 0)
+              ? monthlyBudgets.find((b: any) => b.category === category.value)
+              : null;
+            const budgetData = budget || { budgetAmount: 0 };
             const expense = expensesByCategory?.[category.value] || 0;
 
             return (
               <TouchableOpacity
                 key={category.value}
                 onPress={() => {
-                  const budgetId = budget?.budgetId;
+                  const budgetId = budget ? budget.budgetId : null;
                   router.push({
                     pathname: "/(func)/budgetDetail",
                     params: {
                       budgetId,
                       category: category.value,
-                      amount: budget?.budgetAmount,
+                      amount: budgetData.budgetAmount,
                     },
                   });
                 }}
@@ -504,20 +505,20 @@ const Stats = () => {
                     className={`text-base font-semibold ${
                       theme === "dark" ? "text-secondary" : "text-gray-700"
                     }`}>
-                    ${expense}/{budget?.budgetAmount}
+                    ${expense}/{budgetData.budgetAmount}
                   </Text>
                   <Text
                     style={{
                       color:
-                        budget?.budgetAmount - expense > 0
+                        budgetData.budgetAmount - expense > 0
                           ? "green"
-                          : budget?.budgetAmount - expense < 0
+                          : budgetData.budgetAmount - expense < 0
                           ? "red"
                           : isDark
                           ? "white"
                           : "black",
                     }}>
-                    ${budget?.budgetAmount - expense}
+                    ${budgetData.budgetAmount - expense}
                   </Text>
                 </View>
               </TouchableOpacity>

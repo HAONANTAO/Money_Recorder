@@ -7,6 +7,14 @@
 // 定义所有界面文本的中英文翻译
 
 export const zhCN = {
+  home: {
+    search: "搜索",
+    monthlyIncome: "月收入",
+    monthlyExpense: "月支出",
+    recentRecords: "最近记录",
+    monthlyNetIncome: "月净收入",
+    enterBudget: "请输入新的预算金额：",
+  },
   goals: {
     title: "存款目标",
     noData: "暂无存款目标，点击右下角添加",
@@ -99,6 +107,14 @@ export const zhCN = {
 };
 
 export const enUS = {
+  home: {
+    search: "Search",
+    monthlyIncome: "Monthly Income",
+    monthlyExpense: "Monthly Expense",
+    recentRecords: "Recent Records",
+    monthlyNetIncome: "Monthly Net Income",
+    enterBudget: "Enter new budget amount:",
+  },
   goals: {
     title: "Deposit Goal",
     noData: "No deposit goals yet, click the button below to add",

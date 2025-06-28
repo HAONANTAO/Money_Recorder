@@ -1,26 +1,35 @@
 /*
  * @Date: 2025-06-24 22:17:35
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-06-24 22:28:45
+ * @LastEditTime: 2025-06-28 15:56:15
  * @FilePath: /Money_Recorder/components/BudgetDisplayBar.tsx
  */
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { useTheme } from "../contexts/ThemeContext";
 import { useLanguage } from "../contexts/LanguageContext";
+import { Ionicons } from "@expo/vector-icons";
 
 interface BudgetDisplayBarProps {
   currentBudget?: number;
   totalBudget?: number;
+  onBudgetChange?: (value: number) => void;
 }
 
 const BudgetDisplayBar: React.FC<BudgetDisplayBarProps> = ({
   currentBudget = 0,
-  totalBudget = 1000,
+  totalBudget = 2000,
+  onBudgetChange,
 }) => {
   const { theme } = useTheme();
   const { translations } = useLanguage();
   const isDark = theme === "dark";
+
+  const handleBudgetPress = () => {
+    if (onBudgetChange) {
+      onBudgetChange(totalBudget);
+    }
+  };
 
   const percentage = Math.min((currentBudget / totalBudget) * 100, 100);
   const barColor =
@@ -50,12 +59,27 @@ const BudgetDisplayBar: React.FC<BudgetDisplayBarProps> = ({
           }`}>
           {translations.BudgetUsage} ({percentage.toFixed(1)}%)
         </Text>
-        <Text
-          className={`text-sm font-bold ${
-            isDark ? "text-white" : "text-gray-800"
-          }`}>
-          {formatMoney(currentBudget)} / {formatMoney(totalBudget)}
-        </Text>
+        <View className="flex-row items-center">
+          <Text
+            className={`text-sm font-bold ${
+              isDark ? "text-white" : "text-gray-800"
+            }`}>
+            {formatMoney(currentBudget)} /
+            <Text
+              className={`${isDark ? "text-white" : "text-gray-800"}`}>
+              {formatMoney(totalBudget)}
+            </Text>
+          </Text>
+          <TouchableOpacity
+            onPress={handleBudgetPress}
+            className="ml-2 p-1">
+            <Ionicons
+              name="pencil"
+              size={16}
+              color={isDark ? "#fff" : "#1f2937"}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
       <View className="overflow-hidden w-full h-2 bg-gray-200 rounded-full">
         <View

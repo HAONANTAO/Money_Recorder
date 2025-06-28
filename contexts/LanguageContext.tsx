@@ -119,6 +119,7 @@ interface Translations {
     monthlyExpense: string;
     recentRecords: string;
     monthlyNetIncome: string;
+    enterBudget: string;
   };
   categories: {
     cash: string;
@@ -361,6 +362,7 @@ const enTranslations: Translations = {
     profile: "My",
   },
   home: {
+    enterBudget: "enterBudget",
     search: "Search your records...",
     monthlyIncome: "Total Income",
     monthlyExpense: "Total Expense",
@@ -596,6 +598,7 @@ const zhTranslations: Translations = {
     profile: "我的",
   },
   home: {
+    enterBudget: "输入预算目标",
     search: "搜索记录...",
     monthlyIncome: "本月收入",
     monthlyExpense: "本月支出",
