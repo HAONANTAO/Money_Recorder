@@ -24,6 +24,42 @@ const client = new Client()
 // 初始化Storage服务
 const storage = new Storage(client);
 
+// 获取主页图片
+export const fetchHomeImage = async (retryCount = 0): Promise<string | null> => {
+  try {
+    if (!HOME_IMAGE_BUCKET_ID) {
+      throw new Error("Storage configuration is missing");
+    }
+
+    // 获取存储桶中的文件列表
+    const files = await storage.listFiles(HOME_IMAGE_BUCKET_ID);
+    
+    // 如果有文件，获取最新的一个
+    if (files.files.length > 0) {
+      const latestFile = files.files[0];
+      const fileUrl = storage.getFilePreview(HOME_IMAGE_BUCKET_ID, latestFile.$id);
+      return fileUrl.toString();
+    }
+    return null;
+  } catch (error) {
+    console.error("Error fetching home image:", error);
+    
+    // 如果是网络错误且重试次数小于3次，则等待后重试
+    if (error instanceof Error && 
+        error.message.includes('502: Bad') && 
+        retryCount < 3) {
+      const retryDelay = Math.pow(2, retryCount) * 1000; // 指数退避策略
+      console.log(`Retrying in ${retryDelay}ms... (Attempt ${retryCount + 1}/3)`);
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          fetchHomeImage(retryCount + 1).then(resolve);
+        }, retryDelay);
+      });
+    }
+    throw error;
+  }
+};
+
 // 从URL中提取文件ID
 export const getFileIdFromUrl = (url: string): string | null => {
   const match = url.match(/files\/([^\/]+)\/preview/);
