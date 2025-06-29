@@ -181,15 +181,19 @@ export const deleteBudget = async (budgetId: string) => {
 };
 
 // 获取用户的总预算
-export const getTotalBudget = async (userId: string) => {
+export const getTotalBudget = async (userId: string, year?: number, month?: number) => {
   try {
     if (!DATABASE_ID || !BUDGET_COLLECTION_ID) {
       throw new Error("Database configuration is missing");
     }
 
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth() + 1;
+    const targetDate = new Date();
+    if (year !== undefined && month !== undefined) {
+      targetDate.setFullYear(year);
+      targetDate.setMonth(month - 1);
+    }
+    const targetYear = targetDate.getFullYear();
+     const targetMonth = targetDate.getMonth() + 1;
 
     const budgets = await database.listDocuments(
       DATABASE_ID,
@@ -197,8 +201,8 @@ export const getTotalBudget = async (userId: string) => {
       [
         Query.equal("userId", userId),
         Query.equal("category", "Total"),
-        Query.equal("year", currentYear),
-        Query.equal("month", currentMonth)
+        Query.equal("year", targetYear),
+        Query.equal("month", targetMonth)
       ],
     );
 

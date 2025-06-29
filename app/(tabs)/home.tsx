@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-06-29 13:35:53
+ * @LastEditTime: 2025-06-29 15:28:23
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
@@ -36,15 +36,12 @@ import BudgetDisplayBar from "@/components/BudgetDisplayBar";
 import HomeImageShow from "@/components/HomeImageShow";
 
 // 获取当前日期，只需要月份就可以了
-const getCurrentDate = () => {
-  const date = new Date();
+const getCurrentDate = (selectedDate: Date) => {
   const { language } = useLanguage();
   const locale = language === "zh" ? "zh-CN" : "en-US";
-  return date.toLocaleDateString(locale, {
-    // weekday: "long",
+  return selectedDate.toLocaleDateString(locale, {
     month: "long",
     year: "numeric",
-    // day: "numeric",
   });
 };
 
@@ -61,6 +58,59 @@ const Home = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [showBudgetModal, setShowBudgetModal] = useState(false);
   const [tempBudget, setTempBudget] = useState("");
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const date = new Date();
+    date.setDate(1); // 设置为月初
+    return date;
+  });
+
+  const handlePreviousMonth = useCallback(() => {
+    setSelectedDate((prev) => {
+      const newDate = new Date(prev);
+      newDate.setMonth(newDate.getMonth() - 1);
+      newDate.setDate(1); // 确保是月初
+      return newDate;
+    });
+  }, []);
+
+  const handleNextMonth = useCallback(() => {
+    const currentDate = new Date();
+    currentDate.setDate(1); // 确保比较的是月初
+    setSelectedDate((prev) => {
+      const newDate = new Date(prev);
+      newDate.setDate(1); // 确保是月初
+      if (
+        newDate.getMonth() < currentDate.getMonth() ||
+        newDate.getFullYear() < currentDate.getFullYear()
+      ) {
+        newDate.setMonth(newDate.getMonth() + 1);
+        return newDate;
+      }
+      return prev;
+    });
+  }, []);
+
+  const calculateMonthlyStats = useCallback((records: MoneyRecord[]) => {
+    console.log('计算月度统计，当前选中日期:', selectedDate.toISOString());
+    console.log('收到的记录数量:', records.length);
+
+    const totalIncome = records
+      .filter((record: any) => record.type === "income")
+      .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
+
+    const totalExpense = records
+      .filter((record: any) => record.type === "expense")
+      .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
+
+    console.log('计算结果 - 收入:', totalIncome, '支出:', totalExpense);
+    setMonthlyIncome(totalIncome);
+    setMonthlyExpense(totalExpense);
+  }, [selectedDate]);
+
+  // 监听选中日期变化，重新获取数据
+  useEffect(() => {
+    getInit();
+  }, [selectedDate, calculateMonthlyStats]);
 
   const handleBudgetChange = () => {
     setTempBudget(monthlyBudget.toString());
@@ -76,41 +126,44 @@ const Home = () => {
           const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
           if (email) {
             const userData = await getUserByEmail(email);
-            const currentDate = new Date();
-            const currentYear = currentDate.getFullYear();
-            const currentMonth = currentDate.getMonth() + 1;
+            const selectedYear = selectedDate.getFullYear();
+            const selectedMonth = selectedDate.getMonth() + 1;
             const monthlyBudgets = await getMonthlyBudget(
               userData.$id,
-              currentYear,
-              currentMonth,
+              selectedYear,
+              selectedMonth,
             );
             const existingTotalBudget = monthlyBudgets.find(
               (budget) => budget.category === "Total",
             );
             if (existingTotalBudget) {
-              await updateBudget(existingTotalBudget.budgetId, { amount: newBudget });
+              await updateBudget(existingTotalBudget.budgetId, {
+                amount: newBudget,
+              });
             } else {
               try {
                 await createBudget({
                   userId: userData.$id,
                   category: "Total",
                   amount: newBudget,
-                  year: currentYear,
-                  month: currentMonth,
+                  year: selectedYear,
+                  month: selectedMonth,
                 });
               } catch (err: any) {
                 if (err.message?.includes("already exists")) {
                   // 如果预算已存在，重新获取并更新
                   const latestBudgets = await getMonthlyBudget(
                     userData.$id,
-                    currentYear,
-                    currentMonth,
+                    selectedYear,
+                    selectedMonth,
                   );
                   const existingBudget = latestBudgets.find(
                     (budget) => budget.category === "Total",
                   );
                   if (existingBudget) {
-                    await updateBudget(existingBudget.budgetId, { amount: newBudget });
+                    await updateBudget(existingBudget.budgetId, {
+                      amount: newBudget,
+                    });
                   }
                 } else {
                   throw err;
@@ -121,12 +174,16 @@ const Home = () => {
             await AsyncStorage.removeItem(StorageKeys.MONTHLY_STATS);
             // 重新获取所有数据
             const [newRecords, newTotalBudget] = await Promise.all([
-              getRecords(userData.$id),
-              getTotalBudget(userData.$id),
+              getRecords(userData.$id, selectedDate.getFullYear(), selectedDate.getMonth() + 1),
+              getTotalBudget(
+                userData.$id,
+                selectedDate.getFullYear(),
+                selectedDate.getMonth() + 1,
+              ),
             ]);
-            const filteredRecords = DateChecker(newRecords as unknown as MoneyRecord[]);
-            setRecords(filteredRecords);
-            calculateMonthlyStats(filteredRecords);
+            const recordsData = newRecords as unknown as MoneyRecord[];
+            setRecords(recordsData);
+         calculateMonthlyStats(recordsData);
             setMonthlyBudget(newTotalBudget);
           }
         } else {
@@ -139,40 +196,13 @@ const Home = () => {
     setShowBudgetModal(false);
   };
 
-  const calculateMonthlyStats = (filteredRecords: MoneyRecord[]) => {
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth();
-    const currentYear = currentDate.getFullYear();
-
-    const monthlyRecords = filteredRecords.filter((record: any) => {
-      const recordDate = new Date(record.createAt);
-      return (
-        recordDate.getMonth() === currentMonth &&
-        recordDate.getFullYear() === currentYear
-      );
-    });
-
-    const totalIncome = monthlyRecords
-      .filter((record: any) => record.type === "income")
-      .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
-
-    const totalExpense = monthlyRecords
-      .filter((record: any) => record.type === "expense")
-      .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
-
-    setMonthlyIncome(totalIncome);
-    setMonthlyExpense(totalExpense);
-  };
-
-  const getInit = async () => {
+  const getInit = useCallback(async () => {
     try {
       const isGuest = await StorageService.getIsGuest();
       if (isGuest) {
-        const filteredRecords = DateChecker(
-          demoRecords as unknown as MoneyRecord[],
-        );
-        setRecords(filteredRecords);
-        calculateMonthlyStats(filteredRecords);
+        const recordsData = demoRecords as unknown as MoneyRecord[];
+        setRecords(recordsData);
+         calculateMonthlyStats(recordsData);
         setLoading(false);
         return;
       }
@@ -187,40 +217,39 @@ const Home = () => {
       // 尝试从缓存获取数据
       const cachedRecords = await StorageService.getCachedRecords();
       if (cachedRecords) {
-        const filteredRecords = DateChecker(
-          cachedRecords as unknown as MoneyRecord[],
-        );
-        setRecords(filteredRecords);
-        calculateMonthlyStats(filteredRecords);
-        setLoading(false);
+        const recordsData = cachedRecords as unknown as MoneyRecord[];
+        setRecords(recordsData);
+        calculateMonthlyStats(recordsData);
       }
 
       // 无论是否有缓存，都异步获取最新数据
       const userData = await getUserByEmail(email);
-      const [user, records, totalBudget] = await Promise.all([
-        getUserByEmail(email),
-        getRecords(userData.$id),
-        getTotalBudget(userData.$id),
+      const [records, totalBudget] = await Promise.all([
+        getRecords(userData.$id, selectedDate.getFullYear(), selectedDate.getMonth() + 1),
+        getTotalBudget(
+          userData.$id,
+          selectedDate.getFullYear(),
+          selectedDate.getMonth() + 1,
+        ),
       ]);
 
-      const filteredRecords = DateChecker(records as unknown as MoneyRecord[]);
-      setRecords(filteredRecords);
-      await StorageService.cacheRecords(records);
-
-      calculateMonthlyStats(filteredRecords);
+      const recordsData = records as unknown as MoneyRecord[];
+      setRecords(recordsData);
+      await StorageService.cacheRecords(recordsData);
+      calculateMonthlyStats(recordsData);
       setMonthlyBudget(totalBudget);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching user or records:", error);
       setLoading(false);
     }
-  };
+  }, [selectedDate]);
 
   // 下拉刷新
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     getInit().then(() => setRefreshing(false));
-  }, []);
+  }, [selectedDate]);
 
   // 监听路由参数变化
   const params = useLocalSearchParams();
@@ -228,7 +257,7 @@ const Home = () => {
   // 初始化数据
   useEffect(() => {
     getInit();
-  }, []);
+  }, [getInit]);
 
   // 监听路由参数变化，实现自动刷新
   useEffect(() => {
@@ -248,13 +277,49 @@ const Home = () => {
           isDark ? "bg-gray-900" : "bg-gray-100"
         } pt-10 px-4 `}>
         {/* 今天日期 */}
-        <Text
-          className={`mt-8 text-2xl font-bold text-center pb-8 ${
-            isDark ? "text-white" : "text-gray-800"
-          }`}>
-          {getCurrentDate()}
-        </Text>
-        <HomeImageShow />
+        <View className="pb-8 mt-8">
+          <View className="flex-row justify-center items-center mb-4">
+            <TouchableOpacity onPress={handlePreviousMonth} className="mr-4">
+              <Text
+                className={`text-2xl ${
+                  isDark ? "text-white" : "text-gray-800"
+                }`}>
+                ←
+              </Text>
+            </TouchableOpacity>
+            <Text
+              className={`text-2xl font-bold text-center ${
+                isDark ? "text-white" : "text-gray-800"
+              }`}>
+              {getCurrentDate(selectedDate)}
+            </Text>
+            <TouchableOpacity
+              onPress={handleNextMonth}
+              className="ml-4"
+              disabled={
+                selectedDate.getMonth() === new Date().getMonth() &&
+                selectedDate.getFullYear() === new Date().getFullYear()
+              }>
+              <Text
+                className={`text-2xl ${
+                  isDark
+                    ? selectedDate.getMonth() === new Date().getMonth() &&
+                      selectedDate.getFullYear() === new Date().getFullYear()
+                      ? "text-gray-600"
+                      : "text-white"
+                    : selectedDate.getMonth() === new Date().getMonth() &&
+                      selectedDate.getFullYear() === new Date().getFullYear()
+                    ? "text-gray-400"
+                    : "text-gray-800"
+                }`}>
+                →
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View className="flex items-center">
+            <HomeImageShow />
+          </View>
+        </View>
 
         {/* 总金额View - 本月总和和明细 */}
 
@@ -332,6 +397,13 @@ const Home = () => {
               <View className="flex-1 mt-6">
                 {Object.entries(
                   records
+                    .filter((record) => {
+                      const recordDate = new Date(record.createAt);
+                      return (
+                        recordDate.getMonth() === selectedDate.getMonth() &&
+                        recordDate.getFullYear() === selectedDate.getFullYear()
+                      );
+                    })
                     .sort(
                       (a, b) =>
                         new Date(b.createAt).getTime() -

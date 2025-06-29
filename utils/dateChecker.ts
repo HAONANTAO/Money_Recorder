@@ -12,10 +12,10 @@ const DateChecker = (
     return [];
   }
 
-  // 获取当前的月份和年份
-  const now = testDate || new Date();
-  const currentMonth = now.getMonth(); // 当前月份 (0-11)
-  const currentYear = now.getFullYear(); // 当前年份
+  // 获取目标月份和年份
+  const targetDate = testDate || new Date();
+  const targetMonth = targetDate.getMonth(); // 目标月份 (0-11)
+  const targetYear = targetDate.getFullYear(); // 目标年份
 
   const filteredRecords = records.filter((record: any) => {
     // 检查record是否为有效对象
@@ -47,8 +47,8 @@ const DateChecker = (
       const recordMonth = recordDate.getMonth();
       const recordYear = recordDate.getFullYear();
 
-      // 只选择当前月份和年份的记录
-      return recordMonth === currentMonth && recordYear === currentYear;
+      // 只选择目标月份和年份的记录
+      return recordMonth === targetMonth && recordYear === targetYear;
     } catch (error) {
       console.warn(`Error processing date for record: ${record.createAt}`);
       return false;

@@ -251,16 +251,27 @@ export const updateRecord = async (
  * - 查询操作失败
  * - 返回数据异常
  */
-export const getRecords = async (userId: string) => {
+export const getRecords = async (userId: string, year?: number, month?: number) => {
   try {
     if (!DATABASE_ID || !RECORDS_COLLECTION_ID) {
       throw new Error("Database configuration is missing");
     }
 
+    let queries = [Query.equal("userId", userId)];
+
+    if (year !== undefined && month !== undefined) {
+      const startDate = new Date(year, month - 1, 1);
+      const endDate = new Date(year, month, 0);
+      queries.push(
+        Query.greaterThanEqual("createAt", startDate.toISOString()),
+        Query.lessThanEqual("createAt", endDate.toISOString())
+      );
+    }
+
     const records = await database.listDocuments(
       DATABASE_ID,
       RECORDS_COLLECTION_ID,
-      [Query.equal("userId", userId)],
+      queries
     );
 
     return records.documents;
