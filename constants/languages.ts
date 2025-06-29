@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-31 22:36:55
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-05 15:59:37
+ * @LastEditTime: 2025-06-29 17:02:03
  * @FilePath: /Money_Recorder/constants/languages.ts
  */
 // 定义所有界面文本的中英文翻译
@@ -17,7 +17,7 @@ export const zhCN = {
   },
   goals: {
     title: "存款目标",
-    noData: "暂无存款目标，点击右下角添加",
+    noData: "暂无存款目标",
   },
   settings: {
     title: "设置",
@@ -158,7 +158,7 @@ export const enUS = {
     records: "Records",
     pieChart: "Category Distribution",
     barChart: "Monthly Trend",
-    noData: "No Data,create first",
+    noData: "No Created Data",
     refresh: "Refresh",
     loading: "Loading...",
     switchToIncome: "Switch to Income",

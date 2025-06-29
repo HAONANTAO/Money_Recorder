@@ -68,11 +68,14 @@ const BudgetDetail = () => {
                   category: category as string,
                   amount: parseFloat(newAmount),
                   year: new Date().getFullYear(),
-                  month: new Date().getMonth() + 1
+                  month: new Date().getMonth() + 1,
                 };
                 console.log("Updating budget with ID:", budgetId);
 
-                const result = await updateBudget(budgetId as string, updatedData);
+                const result = await updateBudget(
+                  budgetId as string,
+                  updatedData,
+                );
                 if (result) {
                   setIsEditing(false);
                   setNewAmount(String(updatedData.amount));
@@ -80,7 +83,7 @@ const BudgetDetail = () => {
                   await AsyncStorage.removeItem(StorageKeys.MONTHLY_STATS);
                   Alert.alert(
                     translations.alerts.budget.updateTitle,
-                    translations.common.success
+                    translations.common.success,
                   );
                   // 返回上一页，触发统计页面刷新
                   router.back();
@@ -89,7 +92,7 @@ const BudgetDetail = () => {
                 console.error("Update budget failed:", error);
                 Alert.alert(
                   translations.alerts.budget.updateTitle,
-                  translations.common.error
+                  translations.common.error,
                 );
               }
             },
@@ -107,9 +110,7 @@ const BudgetDetail = () => {
       className={`flex-1 p-8 justify-center items-center ${
         theme === "dark" ? "bg-dark-900" : "bg-gray-50"
       }`}>
-      <View className="absolute left-4 top-12 z-50">
-        <BackButton />
-      </View>
+      <BackButton />
 
       <Text
         className={`text-3xl font-bold mb-6 ${
@@ -171,10 +172,13 @@ const BudgetDetail = () => {
 
       {/* If the budget amount is 0, show the message */}
       {parseFloat(newAmount) === 0 && (
-        <View className="p-3 mt-6 w-full bg-red-100 rounded-xl shadow-md">
+        <View
+          className={`p-3 mt-6 w-full rounded-xl shadow-sm ${
+            theme === "dark" ? "bg-gray-800/30" : "bg-gray-100"
+          }`}>
           <Text
             className={`text-lg font-semibold ${
-              theme === "dark" ? "text-gray-200" : "text-gray-700"
+              theme === "dark" ? "text-gray-400" : "text-gray-500"
             }`}>
             {translations.stats.noData}
           </Text>
