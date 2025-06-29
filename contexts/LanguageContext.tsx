@@ -108,6 +108,7 @@ interface Translations {
     setBudget: string;
   };
   tabs: {
+    profileTab:string,
     home: string;
     stats: string;
     record: string;
@@ -369,6 +370,7 @@ const enTranslations: Translations = {
     stats: "Stats",
     record: "Record",
     goal: "Goal",
+    profileTab:"My",
     profile: "My Profile",
   },
   home: {
@@ -611,11 +613,12 @@ const zhTranslations: Translations = {
     setBudget: "设置预算",
   },
   tabs: {
+    profileTab:"我的",
     home: "主页",
     stats: "统计",
     record: "记录",
     goal: "目标",
-    profile: "我的",
+    profile: "个人",
   },
   home: {
     enterBudget: "输入预算目标",

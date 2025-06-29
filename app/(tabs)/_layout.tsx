@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-04-04 20:11:58
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-04 20:17:36
+ * @LastEditTime: 2025-06-29 16:49:42
  * @FilePath: /Money_Recorder/app/(tabs)/_layout.tsx
  */
 /*
@@ -140,7 +140,7 @@ export default function RootLayout() {
                     isDark ? "text-primary " : ""
                   } text-xs font-bold`}
                   numberOfLines={1}>
-                  {translations.tabs.profile}
+                  {translations.tabs.profileTab}
                 </Text>
               </View>
             ),
