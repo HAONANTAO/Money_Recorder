@@ -6,6 +6,7 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import React, { useCallback } from "react";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -79,11 +80,17 @@ const RecordDetail = () => {
       <View className="absolute left-4 top-12 z-50">
         <BackButton />
       </View>
+      <Text className="mt-20 w-full text-2xl font-bold text-center text-black">
+        Transaction Details
+      </Text>
       <View
-        className={`p-6 mt-36 w-full max-w-lg  rounded-3xl shadow-lg ${
+        className={`p-6 mt-16 w-full max-w-lg  rounded-3xl shadow-lg ${
           isDark ? "bg-gray-600" : "bg-white"
         }`}>
-        <Text className="mb-6 text-5xl font-extrabold text-center text-secondary">
+        <Text
+          className={`mb-6 text-5xl font-extrabold text-center ${
+            record.type === "income" ? "text-green-500" : "text-red-500"
+          }`}>
           ${record.moneyAmount.toLocaleString()}
         </Text>
 
@@ -92,55 +99,99 @@ const RecordDetail = () => {
             <Text className="text-lg font-semibold text-black">
               {translations.record.type}
             </Text>
-            <Text className="text-xl font-bold text-black">
-              {record.type === "income"
-                ? translations.record.income
-                : translations.record.expense}
-            </Text>
+            <View className="flex-row items-center space-x-3">
+              <Text className="text-xl font-bold text-black">
+                {record.type === "income"
+                  ? translations.record.income
+                  : translations.record.expense}
+              </Text>
+              <Ionicons
+                name={
+                  record.type === "income"
+                    ? "arrow-up-circle"
+                    : "arrow-down-circle"
+                }
+                size={24}
+                color={record.type === "income" ? "#10b981" : "#ef4444"}
+              />
+            </View>
           </View>
           <View className="flex-row justify-between items-center pb-3 border-b border-gray-300">
             <Text className="text-lg font-semibold text-black">
               {translations.categories.category}
             </Text>
-            <Text className="text-xl font-bold text-black">
-              {record.type === "income"
-                ? language === "en"
+            <View className="flex-row items-center space-x-3">
+              <Text className="text-xl font-bold text-black">
+                {record.type === "income"
+                  ? language === "en"
+                    ? INCOME_CATEGORIES.find(
+                        (cat) => cat.value === record.category,
+                      )?.label
+                    : INCOME_CATEGORIES2.find(
+                        (cat) => cat.value === record.category,
+                      )?.label
+                  : language === "en"
+                  ? EXPENSE_CATEGORIES.find(
+                      (cat) => cat.value === record.category,
+                    )?.label
+                  : EXPENSE_CATEGORIES2.find(
+                      (cat) => cat.value === record.category,
+                    )?.label}
+              </Text>
+              <Text className="text-xl">
+                {record.type === "income"
                   ? INCOME_CATEGORIES.find(
                       (cat) => cat.value === record.category,
-                    )?.label
-                  : INCOME_CATEGORIES2.find(
+                    )?.icon
+                  : EXPENSE_CATEGORIES.find(
                       (cat) => cat.value === record.category,
-                    )?.label
-                : language === "en"
-                ? EXPENSE_CATEGORIES.find(
-                    (cat) => cat.value === record.category,
-                  )?.label
-                : EXPENSE_CATEGORIES2.find(
-                    (cat) => cat.value === record.category,
-                  )?.label}
-            </Text>
+                    )?.icon}
+              </Text>
+            </View>
           </View>
 
           <View className="flex-row justify-between items-center pb-3 border-b border-gray-300">
             <Text className="text-lg font-semibold text-black">
               {translations.record.date}
             </Text>
-            <Text className="text-xl font-bold text-black">
-              {formatDate(record.createAt)}
-            </Text>
+            <View className="flex-row items-center space-x-3">
+              <Text className="text-xl font-bold text-black">
+                {formatDate(record.createAt)}
+              </Text>
+              <Ionicons name="calendar" size={24} color="#3b82f6" />
+            </View>
           </View>
 
           <View className="flex-row justify-between items-center pb-3 border-b border-gray-300">
             <Text className="text-lg font-semibold text-black">
               {translations.record.method}
             </Text>
-            <Text className="text-xl font-bold text-black">
-              {
-                translations.categories[
-                  record.paymentMethod.toLowerCase() as keyof typeof translations.categories
-                ]
-              }
-            </Text>
+            <View className="flex-row items-center space-x-3">
+              <Text className="text-xl font-bold text-black">
+                {
+                  translations.categories[
+                    record.paymentMethod.toLowerCase() as keyof typeof translations.categories
+                  ]
+                }
+              </Text>
+              <Ionicons
+                name={
+                  record.paymentMethod.toLowerCase() === "cash"
+                    ? "cash"
+                    : record.paymentMethod.toLowerCase() === "card"
+                    ? "card"
+                    : "swap-horizontal"
+                }
+                size={24}
+                color={
+                  record.paymentMethod.toLowerCase() === "cash"
+                    ? "#f59e0b"
+                    : record.paymentMethod.toLowerCase() === "card"
+                    ? "#0ea5e9"
+                    : "#ec4899"
+                }
+              />
+            </View>
           </View>
 
           <View className="flex-row justify-between items-center pb-3 border-b border-gray-300">
@@ -172,7 +223,7 @@ const RecordDetail = () => {
         </View>
       </View>
 
-      <View className="flex-row px-4 mt-8 space-x-4 w-full max-w-lg">
+      <View className="flex-row justify-evenly px-4 mt-8 w-full max-w-lg">
         {/* update button */}
         <TouchableOpacity
           onPress={() => {
@@ -181,18 +232,21 @@ const RecordDetail = () => {
               params: { id: record.$id },
             });
           }}
-          className="flex-1 px-6 py-4 bg-blue-600 rounded-full shadow-lg hover:bg-blue-500">
-          <Text className="text-lg font-semibold text-center text-white">
-            {translations.common.update}
-          </Text>
+          className="px-6 py-4 w-40 bg-blue-600 rounded-full shadow-lg hover:bg-blue-500">
+          <View className="flex-row justify-center items-center space-x-3">
+            <Ionicons name="pencil" size={24} color="#22c55e" />
+            <Text className="text-lg font-semibold text-center text-white">
+              {translations.common.update}
+            </Text>
+          </View>
         </TouchableOpacity>
 
         {/* delete button */}
         <TouchableOpacity
           onPress={() => {
             Alert.alert(
-              translations.alerts.clearCache.title,
-              translations.alerts.clearCache.message,
+              translations.alerts.deleteTransaction.title,
+              translations.alerts.deleteTransaction.message,
               [
                 { text: translations.common.cancel, style: "cancel" },
                 {
@@ -203,13 +257,13 @@ const RecordDetail = () => {
                       await deleteRecord(record.$id);
                       router.replace({
                         pathname: "/(tabs)/home",
-                        params: { refresh: "true" }
+                        params: { refresh: "true" },
                       });
                     } catch (error) {
                       console.error("Failed to delete record:", error);
                       Alert.alert(
                         translations.common.error,
-                        translations.alerts.clearCache.error,
+                        translations.alerts.deleteTransaction.error,
                       );
                     }
                   },
@@ -217,10 +271,13 @@ const RecordDetail = () => {
               ],
             );
           }}
-          className="flex-1 px-6 py-4 bg-red-600 rounded-full shadow-lg hover:bg-red-500">
-          <Text className="text-lg font-semibold text-center text-white">
-            {translations.common.clear}
-          </Text>
+          className="px-6 py-4 w-40 bg-red-600 rounded-full shadow-lg hover:bg-red-500">
+          <View className="flex-row justify-center items-center space-x-2">
+            <Ionicons name="trash" size={24} color="#fecaca" />
+            <Text className="text-lg font-semibold text-center text-white">
+              {translations.common.delete}
+            </Text>
+          </View>
         </TouchableOpacity>
       </View>
     </ScrollView>

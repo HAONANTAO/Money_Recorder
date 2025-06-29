@@ -94,6 +94,7 @@ interface Translations {
     tags: string;
     comment: string;
     none: string;
+    details: string;
   };
   stats: {
     title: string;
@@ -165,6 +166,7 @@ interface Translations {
     version: string;
   };
   common: {
+    delete: string;
     notice: string;
     search: string;
     settings: string;
@@ -193,6 +195,13 @@ interface Translations {
     createError: string;
     updateError: string;
     deleteError: string;
+
+    deleteTransaction: {
+      title: string;
+      message: string;
+      success: string;
+      error: string;
+    };
 
     clearCache: {
       title: string;
@@ -342,6 +351,7 @@ const enTranslations: Translations = {
     tags: "Tags",
     comment: "Comment",
     none: "None",
+    details: "Transaction Details",
   },
   stats: {
     title: "Data Stats",
@@ -413,6 +423,7 @@ const enTranslations: Translations = {
     version: "App Version",
   },
   common: {
+    delete: "Delete",
     notice: "Notice",
     search: "Search",
     settings: "Settings",
@@ -424,12 +435,20 @@ const enTranslations: Translations = {
     completed: "Completed",
     cancel: "Cancel",
     clear: "Clear",
+
     success: "Success",
     error: "Error",
     open: "Open Settings",
     update: "Update",
   },
   alerts: {
+    deleteTransaction: {
+      title: "Delete Transaction",
+      message:
+        "Are you sure you want to delete this transaction? This action cannot be undone.",
+      success: "Transaction deleted successfully!",
+      error: "Failed to delete transaction.",
+    },
     enableNotifications: "enableNotifications",
     deleteAccountError: "deleteAccountError",
     deleteAccountConfirm:
@@ -578,6 +597,7 @@ const zhTranslations: Translations = {
     tags: "标签",
     comment: "备注",
     none: "无",
+    details: "交易详情",
   },
   stats: {
     title: "统计",
@@ -649,6 +669,7 @@ const zhTranslations: Translations = {
     version: "应用版本",
   },
   common: {
+    delete: "删除",
     notice: "提示",
     search: "搜索",
     settings: "设置",
@@ -666,6 +687,12 @@ const zhTranslations: Translations = {
     update: "更新",
   },
   alerts: {
+    deleteTransaction: {
+      title: "删除交易",
+      message: "确定要删除此交易吗？此操作无法撤销。",
+      success: "交易删除成功！",
+      error: "删除交易失败。",
+    },
     enableNotifications: "启用通知",
     deleteAccountError: "删除账号异常",
     deleteAccountConfirm: "你确定要删除账号？所有账号的数据将会丢失",

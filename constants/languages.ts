@@ -67,12 +67,19 @@ export const zhCN = {
     clear: "清除",
   },
   alerts: {
+    deleteTransaction: {
+      title: "删除交易",
+      message: "确定要删除此交易吗？此操作无法撤销。",
+      success: "交易删除成功！",
+      error: "删除交易失败。",
+    },
     clearCache: {
       title: "清除缓存",
       message: "确定要清除缓存吗？此操作无法撤销。",
       success: "缓存清除成功！",
       error: "清除缓存失败。",
     },
+
     notifications: {
       title: "通知设置",
       message: "是否打开通知设置？",
@@ -167,6 +174,13 @@ export const enUS = {
     clear: "Clear",
   },
   alerts: {
+    deleteTransaction: {
+      title: "Delete Transaction",
+      message:
+        "Are you sure you want to delete this transaction? This action cannot be undone.",
+      success: "Transaction deleted successfully!",
+      error: "Failed to delete transaction.",
+    },
     clearCache: {
       title: "Clear Cache",
       message:
