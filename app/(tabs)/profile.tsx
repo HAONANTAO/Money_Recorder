@@ -141,7 +141,7 @@ const Profile = () => {
         <View className="flex justify-center items-center">
           <Text
             className={`mb-6 text-3xl font-bold ${
-              theme === "dark" ? "text-white" : "text-secondary"
+              theme === "dark" ? "text-white" : "text-black"
             }`}>
             {translations.tabs.profile}
           </Text>

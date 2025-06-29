@@ -128,13 +128,12 @@ const More = () => {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
-      <View className="absolute left-4 top-12 z-50">
-        <BackButton navigateTo="/(tabs)/profile" />
-      </View>
+      <BackButton navigateTo="/(tabs)/profile" />
+
       <View className="p-6 mt-20">
         <Text
-          className={`text-2xl font-bold mb-6 ${
-            isDark ? "text-white" : "text-secondary"
+          className={`text-2xl font-bold mb-6 text-center ${
+            isDark ? "text-white" : "text-black"
           }`}>
           {translations.profile.more}
         </Text>

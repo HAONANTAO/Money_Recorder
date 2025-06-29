@@ -6,8 +6,9 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
+import { Animated } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StorageKeys, StorageService } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
@@ -44,7 +45,52 @@ const Stats = () => {
   const [user, setUser] = useState<any>(null);
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [isIncome, setIsIncome] = useState<boolean>(false); // State to toggle between income and
+  const [isIncome, setIsIncome] = useState<boolean>(false); // State to toggle between income and expense
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const opacityAnim = useRef(new Animated.Value(1)).current;
+  const translateXAnim = useRef(new Animated.Value(0)).current;
+
+  const handleToggle = () => {
+    // 动画序列
+    Animated.sequence([
+      Animated.parallel([
+        Animated.timing(scaleAnim, {
+          toValue: 0.8,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+        Animated.timing(opacityAnim, {
+          toValue: 0,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+        Animated.timing(translateXAnim, {
+          toValue: isIncome ? 20 : -20,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+      ]),
+      Animated.parallel([
+        Animated.timing(scaleAnim, {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+        Animated.timing(opacityAnim, {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+        Animated.timing(translateXAnim, {
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+      ]),
+    ]).start();
+
+    setIsIncome(!isIncome);
+  };
   const [income, setIncome] = useState<number>(0);
   const [expense, setExpense] = useState<number>(0);
   const [eventLength, setEventLength] = useState<number>(0);
@@ -393,7 +439,7 @@ const Stats = () => {
           isDark ? "bg-gray-900" : "bg-white"
         }`}>
         <Text
-          className={`mt-20 text-4xl font-bold text-primary ${
+          className={`mt-20 text-4xl font-bold text-black ${
             isDark ? "text-white" : ""
           } `}>
           {translations.stats.title}
@@ -410,7 +456,9 @@ const Stats = () => {
                 }`}>
                 📅 {translations.stats.records}:
                 <Text
-                  className={` ${isDark ? "text-secondary" : "text-black"}`}>
+                  className={` ${
+                    isDark ? "text-secondary" : "text-secondary"
+                  }`}>
                   {eventLength}
                 </Text>
               </Text>
@@ -432,12 +480,63 @@ const Stats = () => {
 
             {/* Add Switch Button to toggle between income and expense pie chart */}
             <View className="flex flex-row justify-between items-center">
-              <TouchableOpacity onPress={() => setIsIncome(!isIncome)}>
-                <Text className="text-xl font-bold text-secondary">
-                  {isIncome
-                    ? translations.stats.switchToIncome
-                    : translations.stats.switchToExpense}
-                </Text>
+              <TouchableOpacity
+                onPress={handleToggle}
+                className={`px-6 py-3 rounded-full ${
+                  isDark
+                    ? "bg-gradient-to-r from-gray-700/40 to-gray-600/40"
+                    : "bg-gradient-to-r from-gray-100 to-gray-200"
+                } 
+                  active:opacity-80 transform transition-all duration-200 
+                  
+                  ${
+                    isDark
+                      ? "border border-gray-600/50"
+                      : "border border-gray-200"
+                  }`}>
+                <Animated.View
+                  className="flex-row items-center space-x-2"
+                  style={{
+                    transform: [{ scale: scaleAnim }],
+                  }}>
+                  <Animated.View
+                    style={{
+                      opacity: opacityAnim,
+                      transform: [{ translateX: translateXAnim }],
+                    }}>
+                    <Ionicons
+                      name={isIncome ? "arrow-up-circle" : "arrow-down-circle"}
+                      size={24}
+                      color={
+                        isDark
+                          ? isIncome
+                            ? "#bbf7d0"
+                            : "#bfdbfe"
+                          : isIncome
+                          ? "#15803d"
+                          : "#1d4ed8"
+                      }
+                    />
+                  </Animated.View>
+                  <Animated.Text
+                    className={`text-xl font-bold ${
+                      isDark
+                        ? isIncome
+                          ? "text-green-200"
+                          : "text-blue-200"
+                        : isIncome
+                        ? "text-green-700"
+                        : "text-blue-700"
+                    }`}
+                    style={{
+                      opacity: opacityAnim,
+                      transform: [{ translateX: translateXAnim }],
+                    }}>
+                    {isIncome
+                      ? translations.stats.switchToIncome
+                      : translations.stats.switchToExpense}
+                  </Animated.Text>
+                </Animated.View>
               </TouchableOpacity>
             </View>
 
