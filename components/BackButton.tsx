@@ -1,3 +1,9 @@
+/*
+ * @Date: 2025-04-02 22:38:48
+ * @LastEditors: 陶浩南 taoaaron5@gmail.com
+ * @LastEditTime: 2025-06-29 14:35:40
+ * @FilePath: /Money_Recorder/components/BackButton.tsx
+ */
 import React from "react";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,7 +20,7 @@ interface BackButtonProps {
 const BackButton: React.FC<BackButtonProps> = ({
   navigateTo,
   customStyle = "",
-  iconSize = 28,
+  iconSize = 32,
 }) => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
@@ -30,17 +36,17 @@ const BackButton: React.FC<BackButtonProps> = ({
   return (
     <TouchableOpacity
       onPress={handlePress}
-      className={`items-center justify-center px-2 py-2 absolute top-0 left-0 ${customStyle}`}
+      className={`items-center justify-center absolute top-12 left-2 p-2 z-50 ${customStyle}`}
       style={{
         backgroundColor: "transparent",
-        minWidth: 44,
-        minHeight: 44,
+        minWidth: 48,
+        minHeight: 48,
         zIndex: 10,
       }}>
       <Ionicons
         name="chevron-back"
         size={iconSize}
-        color={isDark ? "#fff" : "#007AFF"}
+        color={isDark ? "#fff" : "#0284c7"}
       />
     </TouchableOpacity>
   );

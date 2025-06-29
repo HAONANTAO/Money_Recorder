@@ -77,9 +77,7 @@ const RecordDetail = () => {
         padding: 16,
       }}
       className={`${isDark ? "bg-gray-900" : "bg-gray-100"} flex-1`}>
-      <View className="absolute left-4 top-12 z-50">
-        <BackButton />
-      </View>
+      <BackButton />
       <Text className="mt-20 w-full text-2xl font-bold text-center text-black">
         Transaction Details
       </Text>
