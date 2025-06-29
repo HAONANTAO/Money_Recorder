@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-21 21:26:12
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-06-28 16:54:01
+ * @LastEditTime: 2025-06-29 13:35:53
  * @FilePath: /Money_Recorder/app/(tabs)/home.tsx
  */
 import {
@@ -15,6 +15,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
+import { useLocalSearchParams, router } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useLanguage } from "../../contexts/LanguageContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -215,14 +216,26 @@ const Home = () => {
     }
   };
 
+  // 下拉刷新
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     getInit().then(() => setRefreshing(false));
   }, []);
 
+  // 监听路由参数变化
+  const params = useLocalSearchParams();
+
+  // 初始化数据
   useEffect(() => {
     getInit();
   }, []);
+
+  // 监听路由参数变化，实现自动刷新
+  useEffect(() => {
+    if (params?.refresh) {
+      getInit();
+    }
+  }, [params]); // 当 refresh 参数变化时重新获取数据
 
   return (
     <ScrollView

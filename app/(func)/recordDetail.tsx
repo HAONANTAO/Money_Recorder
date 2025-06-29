@@ -201,7 +201,10 @@ const RecordDetail = () => {
                   onPress: async () => {
                     try {
                       await deleteRecord(record.$id);
-                      router.back();
+                      router.replace({
+                        pathname: "/(tabs)/home",
+                        params: { refresh: "true" }
+                      });
                     } catch (error) {
                       console.error("Failed to delete record:", error);
                       Alert.alert(
