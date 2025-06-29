@@ -369,7 +369,7 @@ const enTranslations: Translations = {
     stats: "Stats",
     record: "Record",
     goal: "Goal",
-    profile: "My",
+    profile: "My Profile",
   },
   home: {
     enterBudget: "enterBudget",

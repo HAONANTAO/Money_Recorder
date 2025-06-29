@@ -91,8 +91,8 @@ const Home = () => {
   }, []);
 
   const calculateMonthlyStats = useCallback((records: MoneyRecord[]) => {
-    console.log('计算月度统计，当前选中日期:', selectedDate.toISOString());
-    console.log('收到的记录数量:', records.length);
+    // console.log('计算月度统计，当前选中日期:', selectedDate.toISOString());
+    // console.log('收到的记录数量:', records.length);
 
     const totalIncome = records
       .filter((record: any) => record.type === "income")
@@ -102,15 +102,64 @@ const Home = () => {
       .filter((record: any) => record.type === "expense")
       .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
 
-    console.log('计算结果 - 收入:', totalIncome, '支出:', totalExpense);
+    // console.log('计算结果 - 收入:', totalIncome, '支出:', totalExpense);
     setMonthlyIncome(totalIncome);
     setMonthlyExpense(totalExpense);
   }, [selectedDate]);
 
+  const getInit = useCallback(async () => {
+    try {
+      const isGuest = await StorageService.getIsGuest();
+      if (isGuest) {
+        const recordsData = demoRecords as unknown as MoneyRecord[];
+        setRecords(recordsData);
+        calculateMonthlyStats(recordsData);
+        setLoading(false);
+        return;
+      }
+
+      const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
+      if (!email) return;
+
+      // 检查用户是否已删除账号
+      const isDeleted = await StorageService.getIsDeleted();
+      if (isDeleted) return;
+
+      // 尝试从缓存获取数据
+      const cachedRecords = await StorageService.getCachedRecords();
+      if (cachedRecords) {
+        const recordsData = cachedRecords as unknown as MoneyRecord[];
+        setRecords(recordsData);
+        calculateMonthlyStats(recordsData);
+      }
+
+      // 无论是否有缓存，都异步获取最新数据
+      const userData = await getUserByEmail(email);
+      const [records, totalBudget] = await Promise.all([
+        getRecords(userData.$id, selectedDate.getFullYear(), selectedDate.getMonth() + 1),
+        getTotalBudget(
+          userData.$id,
+          selectedDate.getFullYear(),
+          selectedDate.getMonth() + 1,
+        ),
+      ]);
+
+      const recordsData = records as unknown as MoneyRecord[];
+      setRecords(recordsData);
+      await StorageService.cacheRecords(recordsData);
+      calculateMonthlyStats(recordsData);
+      setMonthlyBudget(totalBudget);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching user or records:", error);
+      setLoading(false);
+    }
+  }, [selectedDate, calculateMonthlyStats]);
+
   // 监听选中日期变化，重新获取数据
   useEffect(() => {
     getInit();
-  }, [selectedDate, calculateMonthlyStats]);
+  }, [getInit]);
 
   const handleBudgetChange = () => {
     setTempBudget(monthlyBudget.toString());
@@ -196,54 +245,7 @@ const Home = () => {
     setShowBudgetModal(false);
   };
 
-  const getInit = useCallback(async () => {
-    try {
-      const isGuest = await StorageService.getIsGuest();
-      if (isGuest) {
-        const recordsData = demoRecords as unknown as MoneyRecord[];
-        setRecords(recordsData);
-         calculateMonthlyStats(recordsData);
-        setLoading(false);
-        return;
-      }
 
-      const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
-      if (!email) return;
-
-      // 检查用户是否已删除账号
-      const isDeleted = await StorageService.getIsDeleted();
-      if (isDeleted) return;
-
-      // 尝试从缓存获取数据
-      const cachedRecords = await StorageService.getCachedRecords();
-      if (cachedRecords) {
-        const recordsData = cachedRecords as unknown as MoneyRecord[];
-        setRecords(recordsData);
-        calculateMonthlyStats(recordsData);
-      }
-
-      // 无论是否有缓存，都异步获取最新数据
-      const userData = await getUserByEmail(email);
-      const [records, totalBudget] = await Promise.all([
-        getRecords(userData.$id, selectedDate.getFullYear(), selectedDate.getMonth() + 1),
-        getTotalBudget(
-          userData.$id,
-          selectedDate.getFullYear(),
-          selectedDate.getMonth() + 1,
-        ),
-      ]);
-
-      const recordsData = records as unknown as MoneyRecord[];
-      setRecords(recordsData);
-      await StorageService.cacheRecords(recordsData);
-      calculateMonthlyStats(recordsData);
-      setMonthlyBudget(totalBudget);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching user or records:", error);
-      setLoading(false);
-    }
-  }, [selectedDate]);
 
   // 下拉刷新
   const onRefresh = useCallback(() => {

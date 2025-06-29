@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-23 22:04:47
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-09 16:33:12
+ * @LastEditTime: 2025-06-29 16:13:51
  * @FilePath: /Money_Recorder/app/(tabs)/profile.tsx
  */
 import {
@@ -41,30 +41,30 @@ const Profile = () => {
   const [userId, setUserId] = useState("");
   const [isGuest, setIsGuest] = useState<boolean>();
 
-  useEffect(() => {
-    const getEmailNow = async () => {
-      try {
-        const isGuest = await StorageService.getIsGuest();
-        setIsGuest(isGuest);
-        if (isGuest === true) {
-          setUsername("admin");
-          setEmail("admin@gmail.com");
-          return;
-        }
-        const email = await StorageService.getEmail();
-        // user info
-        const userInfo = await getUserByEmail(email as string);
-
-        setUsername(userInfo.username);
-        setEmail(userInfo.email);
-        setAvatar(userInfo.avatar);
-        setUserId(userInfo.$id);
-      } catch (error) {
-        console.log(error);
-        throw error;
+  const getEmailNow = async () => {
+    try {
+      const isGuest = await StorageService.getIsGuest();
+      setIsGuest(isGuest);
+      if (isGuest === true) {
+        setUsername("admin");
+        setEmail("admin@gmail.com");
+        return;
       }
-    };
-    // execute
+      const email = await StorageService.getEmail();
+      // user info
+      const userInfo = await getUserByEmail(email as string);
+
+      setUsername(userInfo.username);
+      setEmail(userInfo.email);
+      setAvatar(userInfo.avatar);
+      setUserId(userInfo.$id);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
     getEmailNow();
   }, []);
 
@@ -232,11 +232,21 @@ const Profile = () => {
                 color="#E63946"
               />
             ) : (
-              <Button
-                title={translations.common.save}
-                onPress={() => handleSave()}
-                color="#2c78e3"
-              />
+              <View className="flex-row justify-around mt-4">
+                <Button
+                  title={translations.common.save}
+                  onPress={() => handleSave()}
+                  color="#2c78e3"
+                />
+                <Button
+                  title={translations.common.cancel}
+                  onPress={() => {
+                    handleEdit();
+                    getEmailNow();
+                  }}
+                  color="#E63946"
+                />
+              </View>
             )}
           </>
         )}
