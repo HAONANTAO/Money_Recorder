@@ -51,9 +51,7 @@ const Author = () => {
       className={`flex-1 justify-center items-center p-6 ${
         isDark ? "bg-quaternary" : "bg-gray-100"
       }`}>
-      <View className="right-4 bottom-14">
-        <BackButton navigateTo="/(tabs)/profile" />
-      </View>
+      <BackButton navigateTo="/(tabs)/profile" />
       {/* 头像带放大和透明度动画 */}
       <Animated.View
         style={{

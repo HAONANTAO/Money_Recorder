@@ -52,9 +52,7 @@ const FAQ = () => {
 
   return (
     <View className={`flex-1 p-4 ${isDark ? "bg-quaternary" : "bg-white"}`}>
-      <View className="absolute left-4 top-12 z-50">
-        <BackButton />
-      </View>
+      <BackButton />
       <View className="flex justify-center items-center mt-24 mb-6">
         <Text
           className={`text-2xl font-bold ${

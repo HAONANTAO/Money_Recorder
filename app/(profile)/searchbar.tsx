@@ -82,9 +82,7 @@ const Searchbar = () => {
       className={`flex-1 p-6 pt-24 mb-12 ${
         isDark ? "bg-quaternary" : "bg-white"
       }`}>
-      <View className="relative bottom-14">
-        <BackButton />
-      </View>
+      <BackButton />
 
       <View className="mt-12 space-y-12">
         {/* 1 */}

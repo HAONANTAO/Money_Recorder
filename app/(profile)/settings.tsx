@@ -106,9 +106,7 @@ const Settings = () => {
 
   return (
     <View className={`flex-1 ${isDark ? "bg-quaternary" : "bg-gray-100"}`}>
-      <View className="absolute left-4 top-12 z-50">
-        <BackButton navigateTo="/(tabs)/profile" />
-      </View>
+      <BackButton navigateTo="/(tabs)/profile" />
       <ScrollView
         contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}>
         <View className="px-6 py-10">
