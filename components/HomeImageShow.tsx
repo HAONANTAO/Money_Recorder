@@ -43,7 +43,7 @@ const HomeImageShow = () => {
         onPress={pickImage}
         disabled={isLoading}>
         {isLoading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="small" color="#808080" style={styles.loader} />
         ) : (
           <Image
             source={
@@ -79,6 +79,12 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
+  },
+  loader: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: [{ translateX: -10 }, { translateY: -10 }],
   },
 });
 
