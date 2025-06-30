@@ -17,7 +17,7 @@ interface User {
 interface MoneyRecord {
   $id: string;
   userId: string; // 关联的用户ID
-  createAt: string; // 记录创建时间
+  $createdAt: string; // 记录创建时间
   moneyAmount: number; // 金额
   type: "income" | "expense"; // 收入或支出
   category: string; // 收支类别（如餐饮、交通等）
@@ -34,7 +34,7 @@ interface Budget {
   amount: number; // 预算金额
   year: number; // 预算年份
   month: number; // 预算月份（1-12）
-  createAt: string; // 创建时间
+  $createdAt: string; // 创建时间
   category?: string; // 可选：特定类别的预算
   note?: string; // 可选：预算备注
 }
@@ -48,7 +48,7 @@ interface Deposit {
   startMonth: number; // 预算月份（1-12）
   endYear: number;
   endMonth: number;
-  createAt: string; // 创建时间
+  $createdAt: string; // 创建时间
   category?: string; // 可选：特定类别的预算
   note: string; // 预算备注
   completed?: boolean; // 完成状态

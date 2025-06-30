@@ -87,7 +87,7 @@ const EditRecord = () => {
         moneyAmount: parseFloat(formData.moneyAmount),
       };
 
-      // 从 updatedRecord 中排除 $id、userId 和 createAt 字段
+      // 从 updatedRecord 中排除 $id、userId 和 $createdAt 字段
       const { ...updateData } = updatedRecord;
       // 确保 type 字段的值为 'income' 或 'expense'
       const validatedData = {
@@ -126,9 +126,9 @@ const EditRecord = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView
         className={`flex-1 ${isDark ? "bg-gray-700" : "bg-gray-100"}`}>
-        <View className="absolute left-4 top-12 z-50">
+      
           <BackButton />
-        </View>
+    
         <View className="p-5">
           <Text
             className={`mt-12 text-2xl font-bold mb-5 text-center ${

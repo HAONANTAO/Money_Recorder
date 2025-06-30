@@ -23,8 +23,8 @@ const database = new Databases(client);
 
 // 创建新记录
 export const createDeposit = async (
-  // Omit是一个工具类型，用于从一个类型中排除某些属性。在这里，record参数的类型是从MoneyRecord类型中排除了'$id'和'createAt'这两个属性的新类型。这意味着创建新记录时，不需要提供这两个字段，因为'$id'会由数据库自动生成，'createAt'会在函数内部设置为当前时间。
-  deposit: Omit<Deposit, "$id" | "createAt">,
+  // Omit是一个工具类型，用于从一个类型中排除某些属性。在这里，record参数的类型是从MoneyRecord类型中排除了'$id'和'$createdAt'这两个属性的新类型。这意味着创建新记录时，不需要提供这两个字段，因为'$id'会由数据库自动生成，'$createdAt'会在函数内部设置为当前时间。
+  deposit: Omit<Deposit, "$id" | "$createdAt">,
 ) => {
   try {
     console.log(DATABASE_ID, DEPOSIT_COLLECTION_ID);
@@ -38,7 +38,7 @@ export const createDeposit = async (
       ID.unique(),
       {
         ...deposit,
-        createAt: new Date().toISOString(),
+        $createdAt: new Date().toISOString(),
       },
     );
 
@@ -71,7 +71,7 @@ export const deleteDeposit = async (depositId: string) => {
 // 更新记录
 export const updateDeposit = async (
   depositId: string,
-  data: Partial<Omit<MoneyRecord, "$id" | "userId" | "createAt">>,
+  data: Partial<Omit<MoneyRecord, "$id" | "userId" | "$createdAt">>,
 ) => {
   try {
     if (!DATABASE_ID || !DEPOSIT_COLLECTION_ID) {

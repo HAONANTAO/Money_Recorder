@@ -1,5 +1,5 @@
 /*
- * @Date: 2025-03-30 12:28:24
+ * @日期: 2025-03-30 12:28:24
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
  * @LastEditTime: 2025-04-09 15:50:28
  * @FilePath: /Money_Recorder/app/(profile)/searchbar.tsx
@@ -17,6 +17,7 @@ import { Ionicons } from "@expo/vector-icons";
 import {
   searchRecordsByTags,
   searchRecordsByComments,
+  searchTotal,
 } from "@/services/recordService";
 
 import { getUserByEmail } from "@/services/userManagement";
@@ -31,8 +32,10 @@ const Searchbar = () => {
   const [userId, setUserId] = useState("");
   const [tagSearch, setTagSearch] = useState("");
   const [commentSearch, setCommentSearch] = useState("");
+  const [totalSearch, setTotalSearch] = useState("");
   const [tagResults, setTagResults] = useState<any | []>([]);
   const [commentResults, setCommentResults] = useState<any | []>([]);
+  const [totalResults, setTotalResults] = useState<any | []>([]);
 
   useEffect(() => {
     const getInitInfo = async () => {
@@ -85,7 +88,7 @@ const Searchbar = () => {
       <BackButton />
 
       <View className="mt-12 space-y-12">
-        {/* 1 */}
+        {/* 全局搜索 */}
         <View>
           <View className="flex-row items-center mb-8 space-x-2">
             <TextInput
@@ -94,13 +97,25 @@ const Searchbar = () => {
                   ? "border-gray-600 text-white bg-gray-900"
                   : "border-gray-300 text-black bg-gray-50"
               } shadow-sm`}
-              placeholder="Search by tags"
+              placeholder="Search for transaction"
               placeholderTextColor={isDark ? "#9ca3af" : "#6b7280"}
-              value={tagSearch}
-              onChangeText={setTagSearch}
+              value={totalSearch}
+              onChangeText={setTotalSearch}
             />
             <TouchableOpacity
-              onPress={handleTagSearch}
+              onPress={async () => {
+                if (!userId || !totalSearch.trim()) {
+                  setTotalResults([]);
+                  return;
+                }
+                try {
+                  const results = await searchTotal(userId, totalSearch);
+                  setTotalResults(results);
+                } catch (error) {
+                  console.error("error:", error);
+                  setTotalResults([]);
+                }
+              }}
               className={`ml-2 p-4 rounded-3xl ${
                 isDark ? "bg-blue-600" : "bg-blue-500"
               } shadow-sm`}>
@@ -108,8 +123,8 @@ const Searchbar = () => {
             </TouchableOpacity>
           </View>
           <ScrollView className="mt-2 max-h-56">
-            {tagResults.length > 0 ? (
-              tagResults.map((record: any) => (
+            {totalResults.length > 0 ? (
+              totalResults.map((record: any) => (
                 <View
                   key={record.$id}
                   className={`p-6 mb-6 rounded-3xl shadow-lg ${
@@ -147,7 +162,7 @@ const Searchbar = () => {
                           ? "text-red-100"
                           : "text-red-800"
                       }`}>
-                      {record.type === "income" ? "Income" : "Expense"}
+                      {record.type === "income" ? "收入" : "支出"}
                     </Text>
                   </View>
                   <View className="flex-row items-center mt-2 mb-3">
@@ -155,7 +170,7 @@ const Searchbar = () => {
                       className={`mr-3 text-sm ${
                         isDark ? "text-gray-300" : "text-gray-600"
                       }`}>
-                      Category:
+                      类别:
                     </Text>
                     <Text className={isDark ? "text-white" : "text-gray-800"}>
                       {record.category}
@@ -166,7 +181,7 @@ const Searchbar = () => {
                       className={`mr-3 text-sm ${
                         isDark ? "text-gray-300" : "text-gray-600"
                       }`}>
-                      Tags:
+                      标签:
                     </Text>
                     <View className="flex-row flex-wrap gap-2">
                       {Array.isArray(record.tags) &&
@@ -188,7 +203,7 @@ const Searchbar = () => {
                       className={`mr-3 text-sm ${
                         isDark ? "text-gray-300" : "text-gray-600"
                       }`}>
-                      Location:
+                      位置:
                     </Text>
                     <Text className={isDark ? "text-white" : "text-gray-800"}>
                       {record.location || "N/A"}
@@ -199,7 +214,7 @@ const Searchbar = () => {
                       className={`mr-3 text-sm ${
                         isDark ? "text-gray-300" : "text-gray-600"
                       }`}>
-                      Method:
+                      支付方式:
                     </Text>
                     <Text className={isDark ? "text-white" : "text-gray-800"}>
                       {record.paymentMethod}
@@ -210,10 +225,10 @@ const Searchbar = () => {
                       className={`mr-3 text-sm ${
                         isDark ? "text-gray-300" : "text-gray-600"
                       }`}>
-                      Date:
+                      日期:
                     </Text>
                     <Text className={isDark ? "text-white" : "text-gray-800"}>
-                      {new Date(record.createAt).toLocaleDateString()}
+                      {new Date(record.$createdAt).toLocaleDateString()}
                     </Text>
                   </View>
                   {record.comment && (
@@ -222,7 +237,151 @@ const Searchbar = () => {
                         className={`mr-3 text-sm ${
                           isDark ? "text-gray-300" : "text-gray-600"
                         }`}>
-                        Comment:
+                        备注:
+                      </Text>
+                      <Text
+                        className={`${
+                          isDark ? "text-gray-400" : "text-gray-600"
+                        }`}>
+                        {record.comment}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              ))
+            ) : totalSearch.trim() ? (
+              <Text
+                className={`text-center py-4 ${
+                  isDark ? "text-gray-400" : "text-gray-600"
+                }`}>
+                无搜索结果
+              </Text>
+            ) : null}
+          </ScrollView>
+        </View>
+
+        {/* 标签搜索
+        <View>
+          <View className="flex-row items-center mb-8 space-x-2">
+            <TextInput
+              className={`flex-1 p-4 rounded-xl border ${
+                isDark
+                  ? "border-gray-600 text-white bg-gray-900"
+                  : "border-gray-300 text-black bg-gray-50"
+              } shadow-sm`}
+              placeholder="按标签搜索"
+              placeholderTextColor={isDark ? "#9ca3af" : "#6b7280"}
+              value={tagSearch}
+              onChangeText={setTagSearch}
+            />
+            <TouchableOpacity
+              onPress={handleTagSearch}
+              className={`ml-2 p-4 rounded-3xl ${
+                isDark ? "bg-blue-600" : "bg-blue-500"
+              } shadow-sm`}>
+              <Ionicons name="search" size={24} color="white" />
+            </TouchableOpacity>
+          </View>
+          <ScrollView className="mt-2 max-h-56">
+            {tagResults.length > 0 ? (
+              tagResults.map((record: any) => (
+                <View
+                  key={record.$id}
+                  className={`p-6 mb-6 rounded-3xl shadow-lg ${
+                    isDark ? "bg-gray-900" : "bg-white"
+                  }`}
+                  style={{
+                    shadowColor: isDark ? "#000" : "#718096",
+                    shadowOffset: { width: 0, height: 6 },
+                    shadowOpacity: 0.35,
+                    shadowRadius: 8,
+                    elevation: 10,
+                  }}>
+                  <View className="flex-row justify-between items-center mb-2">
+                    <Text
+                      className={`text-2xl font-bold ${
+                        isDark ? "text-white" : "text-gray-800"
+                      }`}>
+                      ${record.moneyAmount.toLocaleString()}
+                    </Text>
+                    <Text
+                      className={`px-3 py-1 rounded-full ${record.type === "income" ? (isDark ? "bg-green-700" : "bg-green-100") : (isDark ? "bg-red-700" : "bg-red-100")} ${record.type === "income" ? (isDark ? "text-green-100" : "text-green-800") : (isDark ? "text-red-100" : "text-red-800")}`}>
+                      {record.type === "income" ? "收入" : "支出"}
+                    </Text>
+                  </View>
+                  <View className="flex-row items-center mt-2 mb-3">
+                    <Text
+                      className={`mr-3 text-sm ${
+                        isDark ? "text-gray-300" : "text-gray-600"
+                      }`}>
+                      类别:
+                    </Text>
+                    <Text className={isDark ? "text-white" : "text-gray-800"}>
+                      {record.category}
+                    </Text>
+                  </View>
+                  <View className="flex-row items-center mt-2 mb-3">
+                    <Text
+                      className={`mr-3 text-sm ${
+                        isDark ? "text-gray-300" : "text-gray-600"
+                      }`}>
+                      标签:
+                    </Text>
+                    <View className="flex-row flex-wrap gap-2">
+                      {Array.isArray(record.tags) &&
+                        record.tags.map((tag: string, index: number) => (
+                          <Text
+                            key={index}
+                            className={`px-3 py-1.5 rounded-full text-sm font-medium ${
+                              isDark
+                                ? "bg-gray-700 text-gray-300"
+                                : "bg-gray-200 text-gray-700"
+                            }`}>
+                            {tag}
+                          </Text>
+                        ))}
+                    </View>
+                  </View>
+                  <View className="flex-row items-center mt-2 mb-3">
+                    <Text
+                      className={`mr-3 text-sm ${
+                        isDark ? "text-gray-300" : "text-gray-600"
+                      }`}>
+                      位置:
+                    </Text>
+                    <Text className={isDark ? "text-white" : "text-gray-800"}>
+                      {record.location || "N/A"}
+                    </Text>
+                  </View>
+                  <View className="flex-row items-center mt-2 mb-3">
+                    <Text
+                      className={`mr-3 text-sm ${
+                        isDark ? "text-gray-300" : "text-gray-600"
+                      }`}>
+                      支付方式:
+                    </Text>
+                    <Text className={isDark ? "text-white" : "text-gray-800"}>
+                      {record.paymentMethod}
+                    </Text>
+                  </View>
+                  <View className="flex-row items-center mt-2 mb-3">
+                    <Text
+                      className={`mr-3 text-sm ${
+                        isDark ? "text-gray-300" : "text-gray-600"
+                      }`}>
+                      日期:
+                    </Text>
+                    <Text className={isDark ? "text-white" : "text-gray-800"}>
+                      {new Date(record.$createdAt).toLocaleDateString()}
+                    </Text>
+                  </View>
+                  {record.comment && (
+                    <View className="mt-1">
+                      <Text
+                        className={`mr-3 text-sm ${
+                          isDark ? "text-gray-300" : "text-gray-600"
+                        }`}>
+                        备注:
                       </Text>
                       <Text
                         className={`${
@@ -239,14 +398,14 @@ const Searchbar = () => {
                 className={`text-center py-4 ${
                   isDark ? "text-gray-400" : "text-gray-600"
                 }`}>
-                No results found for tags.
+                没有找到相关标签的记录
               </Text>
             ) : null}
           </ScrollView>
         </View>
 
         {/* 2 */}
-        <View className="mt-40">
+        {/* <View className="mt-40">
           <View>
             <View className="flex-row items-center mb-8 space-x-2">
               <TextInput
@@ -255,7 +414,7 @@ const Searchbar = () => {
                     ? "border-gray-600 text-white bg-gray-900"
                     : "border-gray-300 text-black bg-gray-50"
                 } shadow-sm`}
-                placeholder="Search by comments"
+                placeholder="按评论搜索"
                 placeholderTextColor={isDark ? "#9ca3af" : "#6b7280"}
                 value={commentSearch}
                 onChangeText={setCommentSearch}
@@ -291,24 +450,8 @@ const Searchbar = () => {
                         ${record.moneyAmount.toLocaleString()}
                       </Text>
                       <Text
-                        className={`px-4 py-2 rounded-full text-sm font-medium ${
-                          record.type === "income"
-                            ? isDark
-                              ? "bg-green-700"
-                              : "bg-green-100"
-                            : isDark
-                            ? "bg-red-700"
-                            : "bg-red-100"
-                        } ${
-                          record.type === "income"
-                            ? isDark
-                              ? "text-green-100"
-                              : "text-green-800"
-                            : isDark
-                            ? "text-red-100"
-                            : "text-red-800"
-                        }`}>
-                        {record.type === "income" ? "Income" : "Expense"}
+                        className={`px-4 py-2 rounded-full text-sm font-medium ${record.type === "income" ? (isDark ? "bg-green-700" : "bg-green-100") : (isDark ? "bg-red-700" : "bg-red-100")} ${record.type === "income" ? (isDark ? "text-green-100" : "text-green-800") : (isDark ? "text-red-100" : "text-red-800")}`}>
+                        {record.type === "income" ? "收入" : "支出"}
                       </Text>
                     </View>
                     <View className="flex-row items-center mt-2 mb-3">
@@ -316,7 +459,7 @@ const Searchbar = () => {
                         className={`mr-3 text-sm ${
                           isDark ? "text-gray-300" : "text-gray-600"
                         }`}>
-                        Category:
+                        类别:
                       </Text>
                       <Text className={isDark ? "text-white" : "text-gray-800"}>
                         {record.category}
@@ -327,7 +470,7 @@ const Searchbar = () => {
                         className={`mr-3 text-sm ${
                           isDark ? "text-gray-300" : "text-gray-600"
                         }`}>
-                        Tags:
+                        标签:
                       </Text>
                       <View className="flex-row flex-wrap gap-2">
                         {Array.isArray(record.tags) &&
@@ -349,7 +492,7 @@ const Searchbar = () => {
                         className={`mr-3 text-sm ${
                           isDark ? "text-gray-300" : "text-gray-600"
                         }`}>
-                        Location:
+                        位置:
                       </Text>
                       <Text className={isDark ? "text-white" : "text-gray-800"}>
                         {record.location || "N/A"}
@@ -360,7 +503,7 @@ const Searchbar = () => {
                         className={`mr-3 text-sm ${
                           isDark ? "text-gray-300" : "text-gray-600"
                         }`}>
-                        Method:
+                        支付方式:
                       </Text>
                       <Text className={isDark ? "text-white" : "text-gray-800"}>
                         {record.paymentMethod}
@@ -371,10 +514,10 @@ const Searchbar = () => {
                         className={`mr-3 text-sm ${
                           isDark ? "text-gray-300" : "text-gray-600"
                         }`}>
-                        Date:
+                        日期:
                       </Text>
                       <Text className={isDark ? "text-white" : "text-gray-800"}>
-                        {new Date(record.createAt).toLocaleDateString()}
+                        {new Date(record.$createdAt).toLocaleDateString()}
                       </Text>
                     </View>
                     {record.comment && (
@@ -383,7 +526,7 @@ const Searchbar = () => {
                           className={`mr-3 text-sm ${
                             isDark ? "text-gray-300" : "text-gray-600"
                           }`}>
-                          Comment:
+                          备注:
                         </Text>
                         <Text
                           className={`${
@@ -405,7 +548,7 @@ const Searchbar = () => {
               ) : null}
             </ScrollView>
           </View>
-        </View>
+        </View>  */}
       </View>
     </View>
   );

@@ -77,7 +77,7 @@ const RecordDetail = () => {
         padding: 16,
       }}
       className={`${isDark ? "bg-gray-900" : "bg-gray-100"} flex-1`}>
-      <BackButton />
+      <BackButton customStyle="absolute left-2 top-6" />
       <Text className="mt-20 w-full text-2xl font-bold text-center text-black">
         Transaction Details
       </Text>
@@ -154,7 +154,7 @@ const RecordDetail = () => {
             </Text>
             <View className="flex-row items-center space-x-3">
               <Text className="text-xl font-bold text-black">
-                {formatDate(record.createAt)}
+                {formatDate(record.$createdAt)}
               </Text>
               <Ionicons name="calendar" size={24} color="#3b82f6" />
             </View>

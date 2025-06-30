@@ -58,14 +58,14 @@ const More = () => {
         const lastUpdate =
           records.length > 0
             ? new Date(
-                Math.max(...records.map((r) => new Date(r.createAt).getTime())),
+                Math.max(...records.map((r) => new Date(r.$createdAt).getTime())),
               )
                 .toISOString()
                 .split("T")[0]
             : "";
 
         const uniqueDates = new Set(
-          records.map((r) => r.createAt.split("T")[0]),
+          records.map((r) => r.$createdAt.split("T")[0]),
         );
         const daysUsed = uniqueDates.size;
 

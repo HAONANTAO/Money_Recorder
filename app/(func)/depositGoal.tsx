@@ -91,7 +91,6 @@ const DepositGoal = () => {
   }, [depositId]);
   // check
 
-
   const handleDepositSubmit = async (goal: string, amount: string) => {
     if (!amount) {
       alert(translations.goals.depositGoal.enterAmount);
@@ -156,9 +155,8 @@ const DepositGoal = () => {
       keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View className={`flex-1 ${isDark ? "bg-gray-700" : "bg-gray-100"}`}>
-          <View className="absolute left-4 top-12 z-50">
-            <BackButton />
-          </View>
+          <BackButton />
+
           <ScrollView
             className="flex-1"
             contentContainerStyle={{

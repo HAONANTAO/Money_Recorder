@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-20 18:36:03
  * @LastEditors: 陶浩南 taoaaron5@gmail.com
- * @LastEditTime: 2025-04-07 12:51:40
+ * @LastEditTime: 2025-06-30 20:57:15
  * @FilePath: /Money_Recorder/services/recordService.ts
  * @Description: 记账服务模块，提供记账相关的所有数据库操作
  *
@@ -40,7 +40,7 @@ const database = new Databases(client);
 
 /**
  * 创建新的记账记录
- * @param record - 记账记录对象，不包含$id和createAt字段
+ * @param record - 记账记录对象，不包含$id和$createdAt字段
  * @returns 返回创建成功的记录对象
  * @description 创建新记录并更新本地缓存，同时更新月度统计数据
  *
@@ -59,7 +59,7 @@ const database = new Databases(client);
 
  */
 export const createRecord = async (
-  record: Omit<MoneyRecord, "$id" | "createAt">,
+  record: Omit<MoneyRecord, "$id" | "$createdAt">,
 ) => {
   try {
     if (!DATABASE_ID || !RECORDS_COLLECTION_ID) {
@@ -72,7 +72,7 @@ export const createRecord = async (
       ID.unique(),
       {
         ...record,
-        createAt: new Date().toISOString(),
+        $createdAt: new Date().toISOString(),
       },
     );
 
@@ -145,7 +145,7 @@ export const deleteRecord = async (recordId: string) => {
         await updateRecordCacheAndStats(
           updatedRecords,
           record.userId,
-          new Date(record.createAt),
+          new Date(record.$createdAt),
           getMonthlyExpensesByCategory,
         );
       } else {
@@ -188,7 +188,7 @@ export const deleteRecord = async (recordId: string) => {
  */
 export const updateRecord = async (
   recordId: string,
-  data: Partial<Omit<MoneyRecord, "$id" | "userId" | "createAt">>,
+  data: Partial<Omit<MoneyRecord, "$id" | "userId" | "$createdAt">>,
 ) => {
   try {
     if (!DATABASE_ID || !RECORDS_COLLECTION_ID) {
@@ -214,7 +214,7 @@ export const updateRecord = async (
         await updateRecordCacheAndStats(
           updatedRecords,
           updatedRecord.userId,
-          new Date(updatedRecord.createAt),
+          new Date(updatedRecord.$createdAt),
           getMonthlyExpensesByCategory,
         );
       } else {
@@ -251,7 +251,11 @@ export const updateRecord = async (
  * - 查询操作失败
  * - 返回数据异常
  */
-export const getRecords = async (userId: string, year?: number, month?: number) => {
+export const getRecords = async (
+  userId: string,
+  year?: number,
+  month?: number,
+) => {
   try {
     if (!DATABASE_ID || !RECORDS_COLLECTION_ID) {
       throw new Error("Database configuration is missing");
@@ -263,15 +267,15 @@ export const getRecords = async (userId: string, year?: number, month?: number) 
       const startDate = new Date(year, month - 1, 1);
       const endDate = new Date(year, month, 0);
       queries.push(
-        Query.greaterThanEqual("createAt", startDate.toISOString()),
-        Query.lessThanEqual("createAt", endDate.toISOString())
+        Query.greaterThanEqual("$createdAt", startDate.toISOString()),
+        Query.lessThanEqual("$createdAt", endDate.toISOString()),
       );
     }
 
     const records = await database.listDocuments(
       DATABASE_ID,
       RECORDS_COLLECTION_ID,
-      queries
+      queries,
     );
 
     return records.documents;
@@ -371,8 +375,8 @@ export const getMonthlyExpensesByCategory = async (
       [
         Query.equal("userId", userId),
         Query.equal("type", "expense"),
-        Query.greaterThanEqual("createAt", startDate),
-        Query.lessThanEqual("createAt", endDate),
+        Query.greaterThanEqual("$createdAt", startDate),
+        Query.lessThanEqual("$createdAt", endDate),
       ],
     );
 
@@ -543,12 +547,99 @@ export const searchRecordsByComments = async (
     const records = await database.listDocuments(
       DATABASE_ID,
       RECORDS_COLLECTION_ID,
-      [Query.equal("userId", userId), Query.equal("comment", searchText)],
+      [Query.equal("userId", userId), Query.search("comment", searchText)],
     );
 
     return records.documents;
   } catch (error) {
     console.error("Error searching records:", error);
+    throw error;
+  }
+};
+
+/**
+ * 全局搜索记账记录
+ * @param userId - 用户ID
+ * @param searchTerm - 搜索关键词
+ * @returns 返回匹配的记账记录列表
+ * @description 搜索所有可能匹配的记账记录，包括金额、标签和评论
+ *
+ * 实现细节：
+ * 1. 搜索范围：
+ *    - 金额匹配
+ *    - 标签匹配
+ *    - 评论内容匹配
+ * 2. 查询优化：
+ *    - 并行查询处理
+ *    - 结果去重合并
+ *    - 相关性排序
+ * 3. 结果处理：
+ *    - 统一数据格式
+ *    - 移除重复记录
+ *    - 按时间排序
+ */
+export const searchTotal = async (userId: string, searchTerm: string) => {
+  try {
+    if (!DATABASE_ID || !RECORDS_COLLECTION_ID) {
+      throw new Error("Database configuration is missing");
+    }
+
+    // 检查searchTerm是否为数字
+    const isNumber = !isNaN(Number(searchTerm));
+
+    // 构建查询条件
+    const queries = [Query.equal("userId", userId)];
+
+    // 如果是数字，添加金额搜索条件
+    if (isNumber) {
+      queries.push(
+        Query.or([
+          Query.equal("moneyAmount", Number(searchTerm)),
+          Query.search("tags", searchTerm),
+          Query.search("comment", searchTerm),
+        ]),
+      );
+    } else {
+      // 如果不是数字，搜索标签和评论
+      queries.push(
+        Query.or([
+          Query.search("tags", searchTerm),
+          Query.search("comment", searchTerm),
+        ]),
+      );
+    }
+
+    // 执行查询
+    const records = await database.listDocuments(
+      DATABASE_ID,
+      RECORDS_COLLECTION_ID,
+      queries,
+    );
+
+    // 处理返回的记录，确保tags字段是数组
+    const processedRecords = records.documents.map((record) => {
+      let tags = record.tags;
+      if (typeof tags === "string") {
+        tags = tags
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter((tag) => tag);
+      } else if (!Array.isArray(tags)) {
+        tags = [];
+      }
+      return {
+        ...record,
+        tags: tags,
+      };
+    });
+
+    // 按创建时间降序排序
+    return processedRecords.sort(
+      (a, b) =>
+        new Date(b.$createdAt).getTime() - new Date(a.$createdAt).getTime(),
+    );
+  } catch (error) {
+    console.error("Error in total search:", error);
     throw error;
   }
 };

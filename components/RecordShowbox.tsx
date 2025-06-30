@@ -61,7 +61,7 @@ const RecordShowBox: React.FC<RecordShowBoxProps> = ({ record }) => {
           className="overflow-hidden text-sm text-gray-600 dark:text-gray-400 text-ellipsis">
           <Text className="text-secondary">{translations.record.date}: </Text>
           <Text className={`${isDark ? "text-white" : ""}`}>
-            {formatDate(record.createAt)}
+            {formatDate(record.$createdAt)}
           </Text>
         </Text>
 

@@ -22,7 +22,7 @@ const database = new Databases(client);
 
 // 创建新预算
 export const createBudget = async (
-  budget: Omit<Budget, "$id" | "createAt">,
+  budget: Omit<Budget, "$id" | "$createdAt">,
 ) => {
   try {
     if (!DATABASE_ID || !BUDGET_COLLECTION_ID) {
@@ -72,7 +72,7 @@ export const createBudget = async (
       ID.unique(),
       {
         ...budget,
-        createAt: new Date().toISOString(),
+        $createdAt: new Date().toISOString(),
       },
     );
 
@@ -141,7 +141,7 @@ export const getMonthlyBudget = async (
 // 更新预算
 export const updateBudget = async (
   documentId: string,
-  data: Partial<Omit<Budget, "$id" | "userId" | "createAt" | "updateAt">>,
+  data: Partial<Omit<Budget, "$id" | "userId" | "$createdAt" | "updateAt">>,
 ) => {
   try {
     if (!DATABASE_ID || !BUDGET_COLLECTION_ID) {

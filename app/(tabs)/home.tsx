@@ -400,7 +400,7 @@ const Home = () => {
                 {Object.entries(
                   records
                     .filter((record) => {
-                      const recordDate = new Date(record.createAt);
+                      const recordDate = new Date(record.$createdAt);
                       return (
                         recordDate.getMonth() === selectedDate.getMonth() &&
                         recordDate.getFullYear() === selectedDate.getFullYear()
@@ -408,13 +408,13 @@ const Home = () => {
                     })
                     .sort(
                       (a, b) =>
-                        new Date(b.createAt).getTime() -
-                        new Date(a.createAt).getTime(),
+                        new Date(b.$createdAt).getTime() -
+        new Date(a.$createdAt).getTime(),
                     )
                     .reduce(
                       (groups: { [key: string]: MoneyRecord[] }, record) => {
                         const date = new Date(
-                          record.createAt,
+                          record.$createdAt,
                         ).toLocaleDateString();
                         if (!groups[date]) {
                           groups[date] = [];

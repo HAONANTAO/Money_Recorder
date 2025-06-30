@@ -15,7 +15,7 @@ export const demoRecords = [
     location: "Melbourne",
     tags: ["Food"],
     comment: "with friend",
-    createAt: new Date(2025, 3, 1).toISOString(),
+    $createdAt: new Date(2025, 3, 1).toISOString(),
   },
   {
     $id: "demo2",
@@ -26,7 +26,7 @@ export const demoRecords = [
     location: "Company",
     tags: ["Salary"],
     comment: "Monthly salary",
-    createAt: new Date(2025, 3, 1).toISOString(),
+    $createdAt: new Date(2025, 3, 1).toISOString(),
   },
   {
     $id: "demo3",
@@ -37,7 +37,7 @@ export const demoRecords = [
     location: "Mall",
     tags: ["beauty"],
     comment: "New clothes",
-    createAt: new Date(2025, 3, 2).toISOString(),
+    $createdAt: new Date(2025, 3, 2).toISOString(),
   },
 ];
 
