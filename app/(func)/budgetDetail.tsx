@@ -155,8 +155,8 @@ const BudgetDetail = () => {
             className="px-8 py-4 bg-green-600 rounded-lg shadow-lg transition duration-200 ease-in-out hover:bg-green-500">
             <Text className="text-lg font-semibold text-white">
               {isEditing
-                ? translations.common.confirm
-                : translations.common.confirm}
+                ? translations.common.update
+                : translations.common.edit}
             </Text>
           </TouchableOpacity>
 
