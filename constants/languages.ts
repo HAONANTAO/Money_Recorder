@@ -65,6 +65,9 @@ export const zhCN = {
     error: "错误",
     open: "打开",
     clear: "清除",
+    all: "全部",
+    income: "收入",
+    expense: "支出",
   },
   alerts: {
     deleteTransaction: {
@@ -172,6 +175,9 @@ export const enUS = {
     error: "Error",
     open: "Open",
     clear: "Clear",
+    all: "All",
+    income: "Income",
+    expense: "Expense",
   },
   alerts: {
     deleteTransaction: {

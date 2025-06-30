@@ -58,6 +58,7 @@ const Home = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [showBudgetModal, setShowBudgetModal] = useState(false);
   const [tempBudget, setTempBudget] = useState("");
+  const [filterType, setFilterType] = useState<'all' | 'income' | 'expense'>('all');
   const [selectedDate, setSelectedDate] = useState(() => {
     const date = new Date();
     date.setDate(1); // 设置为月初
@@ -397,14 +398,38 @@ const Home = () => {
               </View>
             ) : (
               <View className="flex-1 mt-6">
+                {/* 筛选按钮 */}
+                <View className="flex-row justify-center space-x-4 mb-4">
+                  <TouchableOpacity
+                    onPress={() => setFilterType('all')}
+                    className={`px-4 py-2 rounded-lg ${filterType === 'all' ? 'bg-blue-500' : (isDark ? 'bg-gray-700' : 'bg-gray-200')}`}>
+                    <Text className={`font-medium ${filterType === 'all' ? 'text-white' : (isDark ? 'text-white' : 'text-gray-800')}`}>
+                      {translations.stats.total}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => setFilterType('income')}
+                    className={`px-4 py-2 rounded-lg ${filterType === 'income' ? 'bg-green-500' : (isDark ? 'bg-gray-700' : 'bg-gray-200')}`}>
+                    <Text className={`font-medium ${filterType === 'income' ? 'text-white' : (isDark ? 'text-white' : 'text-gray-800')}`}>
+                      {translations.record.income}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => setFilterType('expense')}
+                    className={`px-4 py-2 rounded-lg ${filterType === 'expense' ? 'bg-red-500' : (isDark ? 'bg-gray-700' : 'bg-gray-200')}`}>
+                    <Text className={`font-medium ${filterType === 'expense' ? 'text-white' : (isDark ? 'text-white' : 'text-gray-800')}`}>
+                      {translations.record.expense}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
                 {Object.entries(
                   records
                     .filter((record) => {
                       const recordDate = new Date(record.$createdAt);
-                      return (
-                        recordDate.getMonth() === selectedDate.getMonth() &&
-                        recordDate.getFullYear() === selectedDate.getFullYear()
-                      );
+                      const dateMatch = recordDate.getMonth() === selectedDate.getMonth() &&
+                        recordDate.getFullYear() === selectedDate.getFullYear();
+                      const typeMatch = filterType === 'all' ? true : record.type === filterType;
+                      return dateMatch && typeMatch;
                     })
                     .sort(
                       (a, b) =>
