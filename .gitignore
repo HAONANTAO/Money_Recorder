@@ -42,3 +42,28 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+
+# iOS
+*.xcodeproj
+*.xcworkspace
+*.pbxproj
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcuserstate
+project.xcworkspace/
+xcuserdata/
+DerivedData/
+*.hmap
+*.ipa
+
+# React Native
+.buck/
+.build/
+.gradle/
+local.properties
+*.keystore
+!debug.keystore
+.cxx/
+*.dSYM.zip
+*.dSYM
