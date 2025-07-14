@@ -88,13 +88,12 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
       keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView>
+          <BackButton />
           <View
             className={`mt-16 p-6 rounded-lg ${
               isDark ? "bg-transparent" : "bg-white"
             }`}>
-            <View className="absolute top-2 left-2 z-50">
-              <BackButton />
-            </View>
+            <View className="absolute top-2 left-2 z-50"></View>
             <Text
               className={`text-center text-lg font-bold mb-6 ${
                 isDark ? "text-white" : "text-secondary"
@@ -102,7 +101,6 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
               {translations.budget.title}
             </Text>
 
-       
             <View className="mb-6">
               <Text className={`mb-2 ${isDark ? "text-white" : "text-black"}`}>
                 {translations.budget.amount}

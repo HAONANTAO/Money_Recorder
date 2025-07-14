@@ -200,7 +200,7 @@ export const getTotalBudget = async (userId: string, year?: number, month?: numb
       BUDGET_COLLECTION_ID,
       [
         Query.equal("userId", userId),
-        Query.equal("category", "Total"),
+        Query.equal("category", "total"),
         Query.equal("year", targetYear),
         Query.equal("month", targetMonth)
       ],

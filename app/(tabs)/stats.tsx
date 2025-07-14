@@ -33,7 +33,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { demoRecords, demoBudget } from "@/constants/demoData";
 import CHART_COLORS from "@/constants/colors";
-import { ID } from "react-native-appwrite";
+// import { ID } from "react-native-appwrite";
 
 const Stats = () => {
   const { theme } = useTheme();
@@ -209,7 +209,7 @@ const Stats = () => {
           getMonthlyExpensesByCategory(userData.$id, currentYear, currentMonth),
           getRecords(userData.$id),
         ]);
-
+        console.log('展示预算：', JSON.stringify(budgets, null, 2));
         // 根据type分类叠加
         const filteredRecords = DateChecker(
           records as unknown as MoneyRecord[],

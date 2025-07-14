@@ -112,7 +112,7 @@ const BudgetDetail = () => {
         className={`flex-1 p-8 justify-center items-center ${
           theme === "dark" ? "bg-dark-900" : "bg-gray-50"
         }`}>
-       
+      
 
         <Text
           className={`text-3xl font-bold mb-6 ${
