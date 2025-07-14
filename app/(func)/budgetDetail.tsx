@@ -106,85 +106,88 @@ const BudgetDetail = () => {
   };
 
   return (
-    <View
-      className={`flex-1 p-8 justify-center items-center ${
-        theme === "dark" ? "bg-dark-900" : "bg-gray-50"
-      }`}>
-      <BackButton />
-
-      <Text
-        className={`text-3xl font-bold mb-6 ${
-          theme === "dark" ? "text-white" : "text-gray-900"
-        }`}>
-        {translations.stats.total}
-      </Text>
-
+    <>
+      <BackButton customStyle="top-12 left-4" />
       <View
-        className={`p-6 rounded-2xl shadow-2xl ${
-          theme === "dark" ? "bg-dark-800" : "bg-white"
+        className={`flex-1 p-8 justify-center items-center ${
+          theme === "dark" ? "bg-dark-900" : "bg-gray-50"
         }`}>
+       
+
         <Text
-          className={`text-lg mb-3 font-medium ${
-            theme === "dark" ? "text-gray-300" : "text-gray-700"
+          className={`text-3xl font-bold mb-6 ${
+            theme === "dark" ? "text-white" : "text-gray-900"
           }`}>
-          Category: {category}
+          {translations.stats.total}
         </Text>
 
-        {isEditing ? (
-          <TextInput
-            value={newAmount}
-            onChangeText={setNewAmount}
-            keyboardType="numeric"
-            className="p-3 mb-6 text-xl rounded-lg border border-gray-300 shadow-sm"
-          />
-        ) : (
-          <Text
-            className={`text-lg mb-3 ${
-              theme === "dark" ? "text-gray-300" : "text-gray-700"
-            }`}>
-            {translations.stats.total}: ${newAmount}
-          </Text>
-        )}
-      </View>
-
-      {/* Conditional rendering for the buttons */}
-      {parseFloat(newAmount) !== 0 && (
-        <View className="flex-row justify-between mt-8 w-full">
-          <TouchableOpacity
-            onPress={handleUpdate}
-            className="px-8 py-4 bg-green-600 rounded-lg shadow-lg transition duration-200 ease-in-out hover:bg-green-500">
-            <Text className="text-lg font-semibold text-white">
-              {isEditing
-                ? translations.common.update
-                : translations.common.edit}
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={handleDelete}
-            className="px-8 py-4 bg-red-600 rounded-lg shadow-lg transition duration-200 ease-in-out hover:bg-red-500">
-            <Text className="text-lg font-semibold text-white">
-              {translations.common.clear}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {/* If the budget amount is 0, show the message */}
-      {parseFloat(newAmount) === 0 && (
         <View
-          className={`p-3 mt-6 w-full rounded-xl shadow-sm ${
-            theme === "dark" ? "bg-gray-800/30" : "bg-gray-100"
+          className={`p-6 rounded-2xl shadow-2xl ${
+            theme === "dark" ? "bg-dark-800" : "bg-white"
           }`}>
           <Text
-            className={`text-lg font-semibold ${
-              theme === "dark" ? "text-gray-400" : "text-gray-500"
+            className={`text-lg mb-3 font-medium ${
+              theme === "dark" ? "text-gray-300" : "text-gray-700"
             }`}>
-            {translations.stats.noData}
+            Category: {category}
           </Text>
+
+          {isEditing ? (
+            <TextInput
+              value={newAmount}
+              onChangeText={setNewAmount}
+              keyboardType="numeric"
+              className="p-3 mb-6 text-xl rounded-lg border border-gray-300 shadow-sm"
+            />
+          ) : (
+            <Text
+              className={`text-lg mb-3 ${
+                theme === "dark" ? "text-gray-300" : "text-gray-700"
+              }`}>
+              {translations.stats.total}: ${newAmount}
+            </Text>
+          )}
         </View>
-      )}
-    </View>
+
+        {/* Conditional rendering for the buttons */}
+        {parseFloat(newAmount) !== 0 && (
+          <View className="flex-row justify-between mt-8 w-full">
+            <TouchableOpacity
+              onPress={handleUpdate}
+              className="px-8 py-4 bg-green-600 rounded-lg shadow-lg transition duration-200 ease-in-out hover:bg-green-500">
+              <Text className="text-lg font-semibold text-white">
+                {isEditing
+                  ? translations.common.update
+                  : translations.common.edit}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={handleDelete}
+              className="px-8 py-4 bg-red-600 rounded-lg shadow-lg transition duration-200 ease-in-out hover:bg-red-500">
+              <Text className="text-lg font-semibold text-white">
+                {translations.common.clear}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {/* If the budget amount is 0, show the message */}
+        {parseFloat(newAmount) === 0 && (
+          <View
+            className={`p-3 mt-6 w-full rounded-xl shadow-sm ${
+              theme === "dark" ? "bg-gray-800/30" : "bg-gray-100"
+            }`}>
+            <Text
+              className={`text-lg font-semibold ${
+                theme === "dark" ? "text-gray-400" : "text-gray-500"
+              }`}>
+              {translations.stats.noData}
+            </Text>
+          </View>
+        )}
+      </View>
+    </>
   );
 };
 
