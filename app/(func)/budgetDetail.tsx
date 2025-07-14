@@ -52,7 +52,7 @@ const BudgetDetail = () => {
   const handleUpdate = () => {
     if (isEditing && newAmount !== String(amount)) {
       Alert.alert(
-        translations.alerts.budget.updateTitle,
+        translations.alerts.budget.updateBudget,
         translations.alerts.budget.updateMessage,
         [
           {
@@ -82,7 +82,7 @@ const BudgetDetail = () => {
                   // 清除缓存，强制下次进入统计页面时重新获取数据
                   await AsyncStorage.removeItem(StorageKeys.MONTHLY_STATS);
                   Alert.alert(
-                    translations.alerts.budget.updateTitle,
+                    translations.alerts.budget.updateBudget,
                     translations.common.success,
                   );
                   // 返回上一页，触发统计页面刷新
@@ -91,7 +91,7 @@ const BudgetDetail = () => {
               } catch (error) {
                 console.error("Update budget failed:", error);
                 Alert.alert(
-                  translations.alerts.budget.updateTitle,
+                  translations.alerts.budget.updateBudget,
                   translations.common.error,
                 );
               }

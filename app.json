@@ -15,6 +15,11 @@
         "UIBackgroundModes": ["remote-notification"],
         "aps-environment": "development",
         "NSUserNotificationAlertUsageDescription": "We need permission to send you notifications."
+      },
+      "config": {
+        "appwrite": {
+          "origin": "com.aarontao.haonanmoneyrecorder"
+        }
       }
     },
     "android": {
@@ -30,13 +35,13 @@
       "favicon": "./assets/images/icon.svg"
     },
     "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    },
     "splash": {
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
-    },
-    "experiments": {
-      "typedRoutes": true
     }
   }
 }

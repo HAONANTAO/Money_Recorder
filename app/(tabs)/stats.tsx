@@ -641,7 +641,7 @@ const Stats = () => {
                 className={`ml-4 text-lg font-semibold ${
                   isDark ? "text-white" : "text-gray-700"
                 }`}>
-                {translations.alerts.budget.updateTitle}
+                {translations.alerts.budget.updateBudget}
               </Text>
             </TouchableOpacity>
           </View>

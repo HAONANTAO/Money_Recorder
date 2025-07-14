@@ -91,7 +91,7 @@ export const zhCN = {
     budget: {
       deleteTitle: "删除预算",
       deleteMessage: "确定要删除此预算吗？此操作无法撤销。",
-      updateTitle: "更新预算",
+      updateBudget: "更新预算",
       updateMessage: "确定要保存这些更改吗？",
     },
   },
@@ -203,7 +203,7 @@ export const enUS = {
       deleteTitle: "Delete Budget",
       deleteMessage:
         "Are you sure you want to delete this budget? This action cannot be undone.",
-      updateTitle: "Update Budget",
+      updateBudget: "Update Budget",
       updateMessage: "Are you sure you want to save these changes?",
     },
   },

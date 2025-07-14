@@ -218,7 +218,7 @@ interface Translations {
     budget: {
       deleteTitle: string;
       deleteMessage: string;
-      updateTitle: string;
+      updateBudget: string;
       updateMessage: string;
     };
   };
@@ -477,8 +477,8 @@ const enTranslations: Translations = {
     budget: {
       deleteTitle: "Delete Title",
       deleteMessage: "Delete Message",
-      updateTitle: "Update Title",
-      updateMessage: "update Message",
+      updateBudget: "Update Budget",
+      updateMessage: "Update Message",
     },
   },
 };
@@ -720,7 +720,7 @@ const zhTranslations: Translations = {
     budget: {
       deleteTitle: "删除标题",
       deleteMessage: "删除信息",
-      updateTitle: "更新标题",
+      updateBudget: "更新预算",
       updateMessage: "更新信息",
     },
   },

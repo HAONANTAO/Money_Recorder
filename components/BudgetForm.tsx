@@ -102,36 +102,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
               {translations.budget.title}
             </Text>
 
-            <View className="mb-6">
-              <Text className={`mb-2 ${isDark ? "text-white" : "text-black"}`}>
-                {translations.budget.date}
-              </Text>
-              <TouchableOpacity
-                onPress={() => setShowDatePicker(true)}
-                className={`p-3 border rounded-md ${
-                  isDark
-                    ? "border-gray-600 bg-tertiary"
-                    : "border-gray-300 bg-white"
-                }`}>
-                <Text className={isDark ? "text-white" : "text-black"}>
-                  {`${date.getFullYear()}/ ${date.getMonth() + 1}`}
-                </Text>
-              </TouchableOpacity>
-              {showDatePicker && (
-                <DateTimePicker
-                  value={date}
-                  mode="date"
-                  display="spinner"
-                  onChange={(event, selectedDate) => {
-                    setShowDatePicker(false);
-                    if (selectedDate) {
-                      setDate(selectedDate);
-                    }
-                  }}
-                />
-              )}
-            </View>
-
+       
             <View className="mb-6">
               <Text className={`mb-2 ${isDark ? "text-white" : "text-black"}`}>
                 {translations.budget.amount}
