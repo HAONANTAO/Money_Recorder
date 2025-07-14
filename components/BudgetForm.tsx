@@ -11,12 +11,14 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
+
 import { useTheme } from "../contexts/ThemeContext";
 import { useLanguage } from "../contexts/LanguageContext";
 import { createBudget } from "../services/budgetService";
 import { BUDGET_CATEGORIES } from "../constants/categories";
 import BackButton from "./BackButton";
+import { router } from "expo-router";
+import Stats from '../app/(tabs)/stats';
 
 interface BudgetFormProps {
   userId: string;
@@ -81,6 +83,10 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
     }
   };
 
+  const handleConfirm =()=>{
+    setShowSuccessModal(false);
+    router.push("/(tabs)/stats");
+  }
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -217,7 +223,7 @@ const BudgetForm: React.FC<BudgetFormProps> = ({
                   </Text>
                   <TouchableOpacity
                     className="px-4 py-2 rounded-md bg-primary"
-                    onPress={() => setShowSuccessModal(false)}>
+                    onPress={() => handleConfirm()}>
                     <Text className="text-center text-white">
                       {translations.common.confirm}
                     </Text>

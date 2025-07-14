@@ -456,7 +456,7 @@ const enTranslations: Translations = {
     deleteAccountConfirm:
       "Are you sure you want to delete your account? All account data will be lost",
     updateSuccess: "Update Record Success",
-    createSuccess: "Create Record Success",
+    createSuccess: "Create Budget Success",
     fillAmountCategory: "Please fill in the amount and category.",
     record: "Record",
     createError: "Create Record Failed",

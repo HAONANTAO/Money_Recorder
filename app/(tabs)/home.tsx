@@ -15,7 +15,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { useLocalSearchParams, router } from "expo-router";
+import { useLocalSearchParams, router, useFocusEffect } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useLanguage } from "../../contexts/LanguageContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -158,9 +158,11 @@ const Home = () => {
   }, [selectedDate, calculateMonthlyStats]);
 
   // 监听选中日期变化，重新获取数据
-  useEffect(() => {
-    getInit();
-  }, [getInit]);
+  useFocusEffect(
+    useCallback(() => {
+      getInit();
+    }, [getInit])
+  );
 
   const handleBudgetChange = () => {
     setTempBudget(monthlyBudget.toString());
@@ -263,11 +265,11 @@ const Home = () => {
   }, [getInit]);
 
   // 监听路由参数变化，实现自动刷新
-  useEffect(() => {
-    if (params?.refresh) {
+  useFocusEffect(
+    useCallback(() => {
       getInit();
-    }
-  }, [params]); // 当 refresh 参数变化时重新获取数据
+    }, [getInit])
+  );
 
   return (
     <ScrollView
