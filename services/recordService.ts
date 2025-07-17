@@ -61,7 +61,6 @@ const database = new Databases(client);
 export const createRecord = async (
   record: Omit<MoneyRecord, "$id" | "$createdAt">,
 ) => {
-  const nowISOString = new Date().toISOString(); // 👈 生成符合 Appwrite datetime 的字符串
 
   try {
     if (!DATABASE_ID || !RECORDS_COLLECTION_ID) {
@@ -73,8 +72,8 @@ export const createRecord = async (
       RECORDS_COLLECTION_ID,
       ID.unique(),
       {
-        ...record,
-        createAt: nowISOString,
+        ...record
+       
       },
     );
 
