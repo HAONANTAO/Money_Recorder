@@ -29,7 +29,6 @@ import {
   getMonthlyBudget,
 } from "@/services/budgetService";
 import RecordShowBox from "@/components/RecordShowbox";
-import DateChecker from "@/utils/dateChecker";
 
 import { demoRecords } from "@/constants/demoData";
 import BudgetDisplayBar from "@/components/BudgetDisplayBar";
@@ -58,13 +57,30 @@ const Home = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [showBudgetModal, setShowBudgetModal] = useState(false);
   const [tempBudget, setTempBudget] = useState("");
-  const [filterType, setFilterType] = useState<'all' | 'income' | 'expense'>('all');
+  const [filterType, setFilterType] = useState<"all" | "income" | "expense">(
+    "all",
+  );
   const [selectedDate, setSelectedDate] = useState(() => {
     const date = new Date();
     date.setDate(1); // 设置为月初
     return date;
-  });
-
+  }); // 加载缓存的 selectedDate
+  useEffect(() => {
+    const loadStoredDate = async () => {
+      const storedDate = await AsyncStorage.getItem("selectedDate");
+      if (storedDate) {
+        const parsedDate = new Date(storedDate);
+        parsedDate.setDate(1);
+        setSelectedDate(parsedDate);
+      }
+    };
+    loadStoredDate();
+  }, []);
+  // write the month into storage
+  useEffect(() => {
+    AsyncStorage.setItem("selectedDate", selectedDate.toISOString());
+  }, [selectedDate]);
+  
   const handlePreviousMonth = useCallback(() => {
     setSelectedDate((prev) => {
       const newDate = new Date(prev);
@@ -91,22 +107,25 @@ const Home = () => {
     });
   }, []);
 
-  const calculateMonthlyStats = useCallback((records: MoneyRecord[]) => {
-    // console.log('计算月度统计，当前选中日期:', selectedDate.toISOString());
-    // console.log('收到的记录数量:', records.length);
+  const calculateMonthlyStats = useCallback(
+    (records: MoneyRecord[]) => {
+      // console.log('计算月度统计，当前选中日期:', selectedDate.toISOString());
+      // console.log('收到的记录数量:', records.length);
 
-    const totalIncome = records
-      .filter((record: any) => record.type === "income")
-      .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
+      const totalIncome = records
+        .filter((record: any) => record.type === "income")
+        .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
 
-    const totalExpense = records
-      .filter((record: any) => record.type === "expense")
-      .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
+      const totalExpense = records
+        .filter((record: any) => record.type === "expense")
+        .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
 
-    // console.log('计算结果 - 收入:', totalIncome, '支出:', totalExpense);
-    setMonthlyIncome(totalIncome);
-    setMonthlyExpense(totalExpense);
-  }, [selectedDate]);
+      // console.log('计算结果 - 收入:', totalIncome, '支出:', totalExpense);
+      setMonthlyIncome(totalIncome);
+      setMonthlyExpense(totalExpense);
+    },
+    [selectedDate],
+  );
 
   const getInit = useCallback(async () => {
     try {
@@ -137,7 +156,11 @@ const Home = () => {
       // 无论是否有缓存，都异步获取最新数据
       const userData = await getUserByEmail(email);
       const [records, totalBudget] = await Promise.all([
-        getRecords(userData.$id, selectedDate.getFullYear(), selectedDate.getMonth() + 1),
+        getRecords(
+          userData.$id,
+          selectedDate.getFullYear(),
+          selectedDate.getMonth() + 1,
+        ),
         getTotalBudget(
           userData.$id,
           selectedDate.getFullYear(),
@@ -161,7 +184,7 @@ const Home = () => {
   useFocusEffect(
     useCallback(() => {
       getInit();
-    }, [getInit])
+    }, [getInit]),
   );
 
   const handleBudgetChange = () => {
@@ -226,7 +249,11 @@ const Home = () => {
             await AsyncStorage.removeItem(StorageKeys.MONTHLY_STATS);
             // 重新获取所有数据
             const [newRecords, newTotalBudget] = await Promise.all([
-              getRecords(userData.$id, selectedDate.getFullYear(), selectedDate.getMonth() + 1),
+              getRecords(
+                userData.$id,
+                selectedDate.getFullYear(),
+                selectedDate.getMonth() + 1,
+              ),
               getTotalBudget(
                 userData.$id,
                 selectedDate.getFullYear(),
@@ -235,7 +262,7 @@ const Home = () => {
             ]);
             const recordsData = newRecords as unknown as MoneyRecord[];
             setRecords(recordsData);
-         calculateMonthlyStats(recordsData);
+            calculateMonthlyStats(recordsData);
             setMonthlyBudget(newTotalBudget);
           }
         } else {
@@ -247,8 +274,6 @@ const Home = () => {
     }
     setShowBudgetModal(false);
   };
-
-
 
   // 下拉刷新
   const onRefresh = useCallback(() => {
@@ -268,7 +293,7 @@ const Home = () => {
   useFocusEffect(
     useCallback(() => {
       getInit();
-    }, [getInit])
+    }, [getInit]),
   );
 
   return (
@@ -401,25 +426,64 @@ const Home = () => {
             ) : (
               <View className="flex-1 mt-6">
                 {/* 筛选按钮 */}
-                <View className="flex-row justify-center space-x-4 mb-4">
+                <View className="flex-row justify-center mb-4 space-x-4">
                   <TouchableOpacity
-                    onPress={() => setFilterType('all')}
-                    className={`px-4 py-2 rounded-lg ${filterType === 'all' ? 'bg-blue-500' : (isDark ? 'bg-gray-700' : 'bg-gray-200')}`}>
-                    <Text className={`font-medium ${filterType === 'all' ? 'text-white' : (isDark ? 'text-white' : 'text-gray-800')}`}>
+                    onPress={() => setFilterType("all")}
+                    className={`px-4 py-2 rounded-lg ${
+                      filterType === "all"
+                        ? "bg-blue-500"
+                        : isDark
+                        ? "bg-gray-700"
+                        : "bg-gray-200"
+                    }`}>
+                    <Text
+                      className={`font-medium ${
+                        filterType === "all"
+                          ? "text-white"
+                          : isDark
+                          ? "text-white"
+                          : "text-gray-800"
+                      }`}>
                       {translations.stats.total}
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => setFilterType('income')}
-                    className={`px-4 py-2 rounded-lg ${filterType === 'income' ? 'bg-green-500' : (isDark ? 'bg-gray-700' : 'bg-gray-200')}`}>
-                    <Text className={`font-medium ${filterType === 'income' ? 'text-white' : (isDark ? 'text-white' : 'text-gray-800')}`}>
+                    onPress={() => setFilterType("income")}
+                    className={`px-4 py-2 rounded-lg ${
+                      filterType === "income"
+                        ? "bg-green-500"
+                        : isDark
+                        ? "bg-gray-700"
+                        : "bg-gray-200"
+                    }`}>
+                    <Text
+                      className={`font-medium ${
+                        filterType === "income"
+                          ? "text-white"
+                          : isDark
+                          ? "text-white"
+                          : "text-gray-800"
+                      }`}>
                       {translations.record.income}
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => setFilterType('expense')}
-                    className={`px-4 py-2 rounded-lg ${filterType === 'expense' ? 'bg-red-500' : (isDark ? 'bg-gray-700' : 'bg-gray-200')}`}>
-                    <Text className={`font-medium ${filterType === 'expense' ? 'text-white' : (isDark ? 'text-white' : 'text-gray-800')}`}>
+                    onPress={() => setFilterType("expense")}
+                    className={`px-4 py-2 rounded-lg ${
+                      filterType === "expense"
+                        ? "bg-red-500"
+                        : isDark
+                        ? "bg-gray-700"
+                        : "bg-gray-200"
+                    }`}>
+                    <Text
+                      className={`font-medium ${
+                        filterType === "expense"
+                          ? "text-white"
+                          : isDark
+                          ? "text-white"
+                          : "text-gray-800"
+                      }`}>
                       {translations.record.expense}
                     </Text>
                   </TouchableOpacity>
@@ -428,15 +492,19 @@ const Home = () => {
                   records
                     .filter((record) => {
                       const recordDate = new Date(record.$createdAt);
-                      const dateMatch = recordDate.getMonth() === selectedDate.getMonth() &&
+                      const dateMatch =
+                        recordDate.getMonth() === selectedDate.getMonth() &&
                         recordDate.getFullYear() === selectedDate.getFullYear();
-                      const typeMatch = filterType === 'all' ? true : record.type === filterType;
+                      const typeMatch =
+                        filterType === "all"
+                          ? true
+                          : record.type === filterType;
                       return dateMatch && typeMatch;
                     })
                     .sort(
                       (a, b) =>
                         new Date(b.$createdAt).getTime() -
-        new Date(a.$createdAt).getTime(),
+                        new Date(a.$createdAt).getTime(),
                     )
                     .reduce(
                       (groups: { [key: string]: MoneyRecord[] }, record) => {

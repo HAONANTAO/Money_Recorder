@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
 import { Animated } from "react-native";
@@ -92,6 +93,8 @@ const Stats = () => {
     setIsIncome(!isIncome);
   };
   const [income, setIncome] = useState<number>(0);
+  const [storedDate, setStoredDate] = useState<Date | null>(null);
+
   const [expense, setExpense] = useState<number>(0);
   const [eventLength, setEventLength] = useState<number>(0);
   const [expenseCategories, setExpenseCategories] = useState<any[]>([]);
@@ -99,149 +102,47 @@ const Stats = () => {
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   const { language } = useLanguage();
+  const getInit = async () => {
+    try {
+      // get the selectedDate
+      // 1. 先读取之前存储的日期字符串
+      const storedDateStr = await AsyncStorage.getItem("selectedDate");
+      let selectedDate: Date | null = null;
+      if (storedDateStr) {
+        selectedDate = new Date(storedDateStr);
+        console.log("get the selectedDate:", selectedDate);
 
-  useEffect(() => {
-    const getInit = async () => {
-      try {
-        const isGuest = await StorageService.getIsGuest();
-        if (isGuest) {
-          // 使用演示数据
-          const filteredRecords = DateChecker(
-            demoRecords as unknown as MoneyRecord[],
-          );
-          setRecords(filteredRecords);
-          setEventLength(demoRecords.length);
+        setStoredDate(selectedDate);
+      } else {
+        console.log("not get the selectedDate in AsyncStorage");
+      }
 
-          // 计算收入和支出
-          const incomeTotal = demoRecords
-            .filter((record: any) => record.type === "income")
-            .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
-
-          const expenseTotal = demoRecords
-            .filter((record: any) => record.type === "expense")
-            .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
-
-          setIncome(incomeTotal);
-          setExpense(expenseTotal);
-
-          // 设置预算数据
-          setMonthlyBudgets(demoBudget);
-
-          // 计算每个类别的支出
-          const expenseCategoryData = demoRecords
-            .filter((record: any) => record.type === "expense")
-            .reduce((categories: any, record: any) => {
-              const category = record.category;
-              if (categories[category]) {
-                categories[category] += record.moneyAmount;
-              } else {
-                categories[category] = record.moneyAmount;
-              }
-              return categories;
-            }, {});
-
-          setExpensesByCategory(expenseCategoryData);
-
-          // 设置分类数据
-          const pieChartExpenseData = (
-            language === "zh" ? EXPENSE_CATEGORIES2 : EXPENSE_CATEGORIES
-          ).map((category) => ({
-            name: category.label,
-            population: expenseCategoryData[category.value] || 0,
-            color: getRandomColor(),
-            legendFontColor: "#7f7f7f",
-            legendFontSize: 15,
-            icon: category.icon,
-          }));
-
-          const incomeCategoryData = demoRecords
-            .filter((record: any) => record.type === "income")
-            .reduce((categories: any, record: any) => {
-              const category = record.category;
-              if (categories[category]) {
-                categories[category] += record.moneyAmount;
-              } else {
-                categories[category] = record.moneyAmount;
-              }
-              return categories;
-            }, {});
-
-          const pieChartIncomeData = (
-            language === "zh" ? INCOME_CATEGORIES2 : INCOME_CATEGORIES
-          ).map((category) => ({
-            name: category.label,
-            population: incomeCategoryData[category.value] || 0,
-            color: getRandomColor(),
-            legendFontColor: "#7f7f7f",
-            legendFontSize: 15,
-            icon: category.icon,
-          }));
-
-          setExpenseCategories(pieChartExpenseData);
-          setIncomeCategories(pieChartIncomeData);
-          setLoading(false);
-          return;
-        }
-
-        const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
-        if (!email) return;
-
-        // 尝试从缓存获取统计数据
-        const cachedStats = await StorageService.getCachedMonthlyStats();
-        if (cachedStats) {
-          const { budgets, expenses, records, incomeTotal, expenseTotal } =
-            cachedStats;
-          setMonthlyBudgets(budgets);
-          setExpensesByCategory(expenses);
-          setRecords(records);
-          setEventLength(records.length);
-          setIncome(incomeTotal);
-          setExpense(expenseTotal);
-          setLoading(false);
-        }
-
-        // 无论是否有缓存，都异步获取最新数据
-        const userData = await getUserByEmail(email);
-        const currentYear = new Date().getFullYear();
-        const currentMonth = new Date().getMonth() + 1;
-        const [budgets, expenses, records] = await Promise.all([
-          getMonthlyBudget(userData.$id, currentYear, currentMonth),
-          getMonthlyExpensesByCategory(userData.$id, currentYear, currentMonth),
-          getRecords(userData.$id),
-        ]);
-        console.log('展示预算：', JSON.stringify(budgets, null, 2));
-        // 根据type分类叠加
+      const isGuest = await StorageService.getIsGuest();
+      if (isGuest) {
+        // 使用演示数据
         const filteredRecords = DateChecker(
-          records as unknown as MoneyRecord[],
+          demoRecords as unknown as MoneyRecord[],
         );
-        const incomeTotal = filteredRecords
+        setRecords(filteredRecords);
+        setEventLength(demoRecords.length);
+
+        // 计算收入和支出
+        const incomeTotal = demoRecords
           .filter((record: any) => record.type === "income")
           .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
 
-        const expenseTotal = filteredRecords
+        const expenseTotal = demoRecords
           .filter((record: any) => record.type === "expense")
           .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
 
-        // 更新状态和缓存
-        setMonthlyBudgets(budgets);
-        setExpensesByCategory(expenses);
-        setRecords(filteredRecords);
-        setEventLength(records.length);
         setIncome(incomeTotal);
         setExpense(expenseTotal);
-        setLoading(false);
 
-        // 缓存最新数据
-        await StorageService.cacheMonthlyStats({
-          budgets,
-          expenses,
-          records: filteredRecords,
-          incomeTotal,
-          expenseTotal,
-        });
+        // 设置预算数据
+        setMonthlyBudgets(demoBudget);
 
-        // categoryData
-        const categoryData = filteredRecords
+        // 计算每个类别的支出
+        const expenseCategoryData = demoRecords
           .filter((record: any) => record.type === "expense")
           .reduce((categories: any, record: any) => {
             const category = record.category;
@@ -252,26 +153,22 @@ const Stats = () => {
             }
             return categories;
           }, {});
-        //
+
+        setExpensesByCategory(expenseCategoryData);
+
+        // 设置分类数据
         const pieChartExpenseData = (
           language === "zh" ? EXPENSE_CATEGORIES2 : EXPENSE_CATEGORIES
         ).map((category) => ({
-          name: category.label, // 使用 category.label 作为名称
-          population: categoryData[category.value] || 0,
+          name: category.label,
+          population: expenseCategoryData[category.value] || 0,
           color: getRandomColor(),
           legendFontColor: "#7f7f7f",
           legendFontSize: 15,
           icon: category.icon,
         }));
-        // const pieChartExpenseData = EXPENSE_CATEGORIES.map((category) => ({
-        //   name: translations.categories[category.value],
-        //   population: categoryData[category.value] || 0,
-        //   color: getRandomColor(),
-        //   legendFontColor: "#7f7f7f",
-        //   legendFontSize: 15,
-        //   icon: category.icon,
-        // }));
-        const incomeCategoryData = filteredRecords
+
+        const incomeCategoryData = demoRecords
           .filter((record: any) => record.type === "income")
           .reduce((categories: any, record: any) => {
             const category = record.category;
@@ -282,6 +179,7 @@ const Stats = () => {
             }
             return categories;
           }, {});
+
         const pieChartIncomeData = (
           language === "zh" ? INCOME_CATEGORIES2 : INCOME_CATEGORIES
         ).map((category) => ({
@@ -292,26 +190,145 @@ const Stats = () => {
           legendFontSize: 15,
           icon: category.icon,
         }));
-        // const pieChartIncomeData = INCOME_CATEGORIES.map((category) => ({
-        //   name: translations.categories[category.value],
-        //   population: incomeCategoryData[category.value] || 0,
-        //   color: getRandomColor(),
-        //   legendFontColor: "#7f7f7f",
-        //   legendFontSize: 15,
-        //   icon: category.icon,
-        // }));
+
         setExpenseCategories(pieChartExpenseData);
         setIncomeCategories(pieChartIncomeData);
-
         setLoading(false);
-      } catch (error) {
-        console.error("Error fetching user or records:", error);
+        return;
+      }
+
+      const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
+      if (!email) return;
+
+      // 尝试从缓存获取统计数据
+      const cachedStats = await StorageService.getCachedMonthlyStats();
+      if (cachedStats) {
+        const { budgets, expenses, records, incomeTotal, expenseTotal } =
+          cachedStats;
+        setMonthlyBudgets(budgets);
+        setExpensesByCategory(expenses);
+        setRecords(records);
+        setEventLength(records.length);
+        setIncome(incomeTotal);
+        setExpense(expenseTotal);
         setLoading(false);
       }
-    };
 
-    getInit();
-  }, []);
+      // 无论是否有缓存，都异步获取最新数据
+      const userData = await getUserByEmail(email);
+      const currentYear = selectedDate!.getFullYear();
+      const currentMonth = selectedDate!.getMonth() + 1; // getMonth()从0开始，需要+1
+      console.log(currentYear, currentMonth);
+      const [budgets, expenses, records] = await Promise.all([
+        getMonthlyBudget(userData.$id, currentYear, currentMonth),
+        getMonthlyExpensesByCategory(userData.$id, currentYear, currentMonth),
+        getRecords(userData.$id),
+      ]);
+      console.log("show budget", JSON.stringify(budgets, null, 2));
+      // 根据type分类叠加
+      const filteredRecords = DateChecker(records as unknown as MoneyRecord[]);
+      const incomeTotal = filteredRecords
+        .filter((record: any) => record.type === "income")
+        .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
+
+      const expenseTotal = filteredRecords
+        .filter((record: any) => record.type === "expense")
+        .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
+
+      // 更新状态和缓存
+      setMonthlyBudgets(budgets);
+      setExpensesByCategory(expenses);
+      setRecords(filteredRecords);
+      setEventLength(records.length);
+      setIncome(incomeTotal);
+      setExpense(expenseTotal);
+      setLoading(false);
+
+      // 缓存最新数据
+      await StorageService.cacheMonthlyStats({
+        budgets,
+        expenses,
+        records: filteredRecords,
+        incomeTotal,
+        expenseTotal,
+      });
+
+      // categoryData
+      const categoryData = filteredRecords
+        .filter((record: any) => record.type === "expense")
+        .reduce((categories: any, record: any) => {
+          const category = record.category;
+          if (categories[category]) {
+            categories[category] += record.moneyAmount;
+          } else {
+            categories[category] = record.moneyAmount;
+          }
+          return categories;
+        }, {});
+      //
+      const pieChartExpenseData = (
+        language === "zh" ? EXPENSE_CATEGORIES2 : EXPENSE_CATEGORIES
+      ).map((category) => ({
+        name: category.label, // 使用 category.label 作为名称
+        population: categoryData[category.value] || 0,
+        color: getRandomColor(),
+        legendFontColor: "#7f7f7f",
+        legendFontSize: 15,
+        icon: category.icon,
+      }));
+      // const pieChartExpenseData = EXPENSE_CATEGORIES.map((category) => ({
+      //   name: translations.categories[category.value],
+      //   population: categoryData[category.value] || 0,
+      //   color: getRandomColor(),
+      //   legendFontColor: "#7f7f7f",
+      //   legendFontSize: 15,
+      //   icon: category.icon,
+      // }));
+      const incomeCategoryData = filteredRecords
+        .filter((record: any) => record.type === "income")
+        .reduce((categories: any, record: any) => {
+          const category = record.category;
+          if (categories[category]) {
+            categories[category] += record.moneyAmount;
+          } else {
+            categories[category] = record.moneyAmount;
+          }
+          return categories;
+        }, {});
+      const pieChartIncomeData = (
+        language === "zh" ? INCOME_CATEGORIES2 : INCOME_CATEGORIES
+      ).map((category) => ({
+        name: category.label,
+        population: incomeCategoryData[category.value] || 0,
+        color: getRandomColor(),
+        legendFontColor: "#7f7f7f",
+        legendFontSize: 15,
+        icon: category.icon,
+      }));
+      // const pieChartIncomeData = INCOME_CATEGORIES.map((category) => ({
+      //   name: translations.categories[category.value],
+      //   population: incomeCategoryData[category.value] || 0,
+      //   color: getRandomColor(),
+      //   legendFontColor: "#7f7f7f",
+      //   legendFontSize: 15,
+      //   icon: category.icon,
+      // }));
+      setExpenseCategories(pieChartExpenseData);
+      setIncomeCategories(pieChartIncomeData);
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching user or records:", error);
+      setLoading(false);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      // 页面每次聚焦时调用 getInit 刷新数据
+      getInit();
+    }, []),
+  );
 
   const getRandomColor = () => {
     // 随机获取一个颜色
