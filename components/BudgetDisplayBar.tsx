@@ -31,7 +31,9 @@ const BudgetDisplayBar: React.FC<BudgetDisplayBarProps> = ({
     }
   };
 
-  const percentage = Math.min((currentBudget / totalBudget) * 100, 100);
+  const percentage =
+    totalBudget > 0 ? Math.min((currentBudget / totalBudget) * 100, 100) : 0;
+
   const barColor =
     percentage > 90
       ? "bg-red-500"
@@ -72,7 +74,7 @@ const BudgetDisplayBar: React.FC<BudgetDisplayBarProps> = ({
           </Text>
           <TouchableOpacity
             onPress={handleBudgetPress}
-            className="ml-2 p-1">
+            className="p-1 ml-2">
             <Ionicons
               name="pencil"
               size={16}

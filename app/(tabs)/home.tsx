@@ -14,6 +14,8 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import { useDate } from "../../contexts/DateContext"; 
+
 import React, { useCallback, useEffect, useState } from "react";
 import { useLocalSearchParams, router, useFocusEffect } from "expo-router";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -48,6 +50,8 @@ const Home = () => {
   const { theme } = useTheme();
   const { translations } = useLanguage();
   const isDark = theme === "dark";
+  // 用 useDate 上下文管理日期状态
+  const { selectedDate, setSelectedDate } = useDate();
 
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -60,42 +64,21 @@ const Home = () => {
   const [filterType, setFilterType] = useState<"all" | "income" | "expense">(
     "all",
   );
-  const [selectedDate, setSelectedDate] = useState(() => {
-    const date = new Date();
-    date.setDate(1); // 设置为月初
-    return date;
-  }); // 加载缓存的 selectedDate
-  useEffect(() => {
-    const loadStoredDate = async () => {
-      const storedDate = await AsyncStorage.getItem("selectedDate");
-      if (storedDate) {
-        const parsedDate = new Date(storedDate);
-        parsedDate.setDate(1);
-        setSelectedDate(parsedDate);
-      }
-    };
-    loadStoredDate();
-  }, []);
-  // write the month into storage
-  useEffect(() => {
-    AsyncStorage.setItem("selectedDate", selectedDate.toISOString());
-  }, [selectedDate]);
-  
   const handlePreviousMonth = useCallback(() => {
     setSelectedDate((prev) => {
       const newDate = new Date(prev);
       newDate.setMonth(newDate.getMonth() - 1);
-      newDate.setDate(1); // 确保是月初
+      newDate.setDate(1);
       return newDate;
     });
-  }, []);
+  }, [setSelectedDate]);
 
   const handleNextMonth = useCallback(() => {
     const currentDate = new Date();
-    currentDate.setDate(1); // 确保比较的是月初
+    currentDate.setDate(1);
     setSelectedDate((prev) => {
       const newDate = new Date(prev);
-      newDate.setDate(1); // 确保是月初
+      newDate.setDate(1);
       if (
         newDate.getMonth() < currentDate.getMonth() ||
         newDate.getFullYear() < currentDate.getFullYear()
@@ -105,28 +88,22 @@ const Home = () => {
       }
       return prev;
     });
+  }, [setSelectedDate]);
+  // 计算收入支出
+  const calculateMonthlyStats = useCallback((records: MoneyRecord[]) => {
+    const totalIncome = records
+      .filter((record) => record.type === "income")
+      .reduce((sum, record) => sum + record.moneyAmount, 0);
+
+    const totalExpense = records
+      .filter((record) => record.type === "expense")
+      .reduce((sum, record) => sum + record.moneyAmount, 0);
+
+    setMonthlyIncome(totalIncome);
+    setMonthlyExpense(totalExpense);
   }, []);
 
-  const calculateMonthlyStats = useCallback(
-    (records: MoneyRecord[]) => {
-      // console.log('计算月度统计，当前选中日期:', selectedDate.toISOString());
-      // console.log('收到的记录数量:', records.length);
-
-      const totalIncome = records
-        .filter((record: any) => record.type === "income")
-        .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
-
-      const totalExpense = records
-        .filter((record: any) => record.type === "expense")
-        .reduce((sum: number, record: any) => sum + record.moneyAmount, 0);
-
-      // console.log('计算结果 - 收入:', totalIncome, '支出:', totalExpense);
-      setMonthlyIncome(totalIncome);
-      setMonthlyExpense(totalExpense);
-    },
-    [selectedDate],
-  );
-
+  // 初始化加载数据，依赖 selectedDate
   const getInit = useCallback(async () => {
     try {
       const isGuest = await StorageService.getIsGuest();
@@ -141,11 +118,9 @@ const Home = () => {
       const email = await AsyncStorage.getItem(StorageKeys.EMAIL);
       if (!email) return;
 
-      // 检查用户是否已删除账号
       const isDeleted = await StorageService.getIsDeleted();
       if (isDeleted) return;
 
-      // 尝试从缓存获取数据
       const cachedRecords = await StorageService.getCachedRecords();
       if (cachedRecords) {
         const recordsData = cachedRecords as unknown as MoneyRecord[];
@@ -153,7 +128,6 @@ const Home = () => {
         calculateMonthlyStats(recordsData);
       }
 
-      // 无论是否有缓存，都异步获取最新数据
       const userData = await getUserByEmail(email);
       const [records, totalBudget] = await Promise.all([
         getRecords(
@@ -180,7 +154,7 @@ const Home = () => {
     }
   }, [selectedDate, calculateMonthlyStats]);
 
-  // 监听选中日期变化，重新获取数据
+  // 监听日期变化刷新
   useFocusEffect(
     useCallback(() => {
       getInit();
@@ -279,7 +253,7 @@ const Home = () => {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     getInit().then(() => setRefreshing(false));
-  }, [selectedDate]);
+  }, [getInit]);
 
   // 监听路由参数变化
   const params = useLocalSearchParams();

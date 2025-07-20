@@ -59,7 +59,7 @@ export default function Index() {
 
   // auto jump with countdown when login success
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    let timer: number | undefined;
     if (showSuccessModal) {
       if (isLogin && countdown > 0) {
         timer = setInterval(() => {
