@@ -153,7 +153,12 @@ const DepositGoal = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1 }}
       keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss();
+          setShowStartDatePicker(false);
+          setShowEndDatePicker(false);
+        }}>
         <View className={`flex-1 ${isDark ? "bg-gray-700" : "bg-gray-100"}`}>
           <BackButton />
 
@@ -276,7 +281,10 @@ const DepositGoal = () => {
                   </Text>
 
                   <TouchableOpacity
-                    onPress={() => setShowStartDatePicker(true)}
+                    onPress={() => {
+                      setShowStartDatePicker(true);
+                      setShowEndDatePicker(false);
+                    }}
                     className={`p-3 border rounded-md ${
                       isDark
                         ? "border-gray-600 bg-tertiary"
@@ -290,12 +298,13 @@ const DepositGoal = () => {
                     <DateTimePicker
                       value={startDate}
                       mode="date"
-                      display="spinner"
+                      display="default" // iOS弹窗效果，Android默认也OK
+                      themeVariant={isDark ? "dark" : "light"}
                       onChange={(event, selectedDate) => {
-                        setShowStartDatePicker(false);
-                        if (selectedDate) {
+                        if (event.type === "set" && selectedDate) {
                           setStartDate(selectedDate);
                         }
+                        setShowStartDatePicker(false); // 无论确定或取消，都关闭弹窗
                       }}
                     />
                   )}
@@ -309,7 +318,10 @@ const DepositGoal = () => {
                     {translations.goals.depositGoal.endDate}
                   </Text>
                   <TouchableOpacity
-                    onPress={() => setShowEndDatePicker(true)}
+                    onPress={() => {
+                      setShowEndDatePicker(true);
+                      setShowStartDatePicker(false);
+                    }}
                     className={`p-3 border rounded-md ${
                       isDark
                         ? "border-gray-600 bg-tertiary"
@@ -323,12 +335,13 @@ const DepositGoal = () => {
                     <DateTimePicker
                       value={endDate}
                       mode="date"
-                      display="spinner"
+                      display="default"
+                      themeVariant={isDark ? "dark" : "light"}
                       onChange={(event, selectedDate) => {
-                        setShowEndDatePicker(false);
-                        if (selectedDate) {
+                        if (event.type === "set" && selectedDate) {
                           setEndDate(selectedDate);
                         }
+                        setShowEndDatePicker(false);
                       }}
                     />
                   )}
