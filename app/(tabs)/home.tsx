@@ -465,6 +465,12 @@ const Home = () => {
                 {Object.entries(
                   records
                     .filter((record) => {
+                      if (record.isDemo) {
+                        // 但仍要筛选类型
+                        return filterType === "all"
+                          ? true
+                          : record.type === filterType;
+                      }
                       const recordDate = new Date(record.$createdAt);
                       const dateMatch =
                         recordDate.getMonth() === selectedDate.getMonth() &&

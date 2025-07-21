@@ -8,7 +8,7 @@
 export const demoRecords = [
   {
     $id: "demo1",
-    moneyAmount: 25.99,
+    moneyAmount: 12,
     type: "expense",
     category: "eating",
     paymentMethod: "Cash",
@@ -26,17 +26,19 @@ export const demoRecords = [
     location: "Company",
     tags: ["Salary"],
     comment: "Monthly salary",
+    isDemo: true,
     $createdAt: new Date(2025, 3, 1).toISOString(),
   },
   {
     $id: "demo3",
-    moneyAmount: 45.5,
+    moneyAmount: 33,
     type: "expense",
     category: "shopping",
     paymentMethod: "Credit Card",
     location: "Mall",
     tags: ["beauty"],
     comment: "New clothes",
+    isDemo: true,
     $createdAt: new Date(2025, 3, 2).toISOString(),
   },
 ];
@@ -60,11 +62,11 @@ export const demoGoals = [
 
 export const demoBudget = [
   { category: "total", budgetAmount: 0 },
-  { category: "eating", budgetAmount: 500 },
-  { category: "traffic", budgetAmount: 300 },
-  { category: "shopping", budgetAmount: 400 },
+  { category: "eating", budgetAmount: 100 },
+  { category: "traffic", budgetAmount: 100 },
+  { category: "shopping", budgetAmount: 100 },
   { category: "entertainment", budgetAmount: 300 },
-  { category: "living", budgetAmount: 800 },
+  { category: "living", budgetAmount: 200 },
   { category: "medication", budgetAmount: 200 },
-  { category: "education", budgetAmount: 500 },
+  { category: "education", budgetAmount: 400 },
 ];
