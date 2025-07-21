@@ -262,7 +262,8 @@ export const getRecords = async (
       throw new Error("Database configuration is missing");
     }
 
-    let queries = [Query.equal("userId", userId)];
+    // TODO:超过100记录要改动下面代码
+    let queries = [Query.equal("userId", userId), Query.limit(100)];
 
     if (year !== undefined && month !== undefined) {
       const startDate = new Date(year, month - 1, 1);
@@ -282,6 +283,29 @@ export const getRecords = async (
     return records.documents;
   } catch (error) {
     console.error("Error fetching records:", error);
+    throw error;
+  }
+};
+export const getAllRecords = async (userId: string) => {
+  try {
+    if (!DATABASE_ID || !RECORDS_COLLECTION_ID) {
+      throw new Error("Database configuration is missing");
+    }
+
+    const queries = [
+      Query.equal("userId", userId),
+      Query.limit(100), // 加入queries里
+    ];
+
+    const records = await database.listDocuments(
+      DATABASE_ID,
+      RECORDS_COLLECTION_ID,
+      queries, // 只有三个参数
+    );
+
+    return records.documents;
+  } catch (error) {
+    console.error("Error fetching all records:", error);
     throw error;
   }
 };

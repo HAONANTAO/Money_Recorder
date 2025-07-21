@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState, useCallback } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
-import { getRecords } from "@/services/recordService";
+import { getAllRecords } from "@/services/recordService";
 import { StorageService } from "@/utils/storageService";
 import { getUserByEmail } from "@/services/userManagement";
 import { backupUserData, restoreUserData } from "@/services/cloudBackupService";
@@ -40,7 +40,8 @@ const More = () => {
       const email = await StorageService.getEmail();
       if (email) {
         const userInfo = await getUserByEmail(email);
-        const records = await getRecords(userInfo.$id);
+        const records = await getAllRecords(userInfo.$id);
+        console.log("records shows:", records.length);
         const backupData = await StorageService.getBackupInfo();
 
         // 更新备份信息
@@ -110,10 +111,7 @@ const More = () => {
     {
       title: translations.stats.title,
       items: [
-        {
-          label: translations.stats.records,
-          value: `${usageStats.daysUsed} ${translations.stats.records}`,
-        },
+      
         {
           label: translations.stats.total,
           value: `${usageStats.totalRecords} ${translations.stats.records}`,
